@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 
 namespace Kilometros_WebApp.Controllers {
-    public class HomeController : Controller {
+    public class EntryController : Controller {
         public ActionResult Index() {
             return View();
         }

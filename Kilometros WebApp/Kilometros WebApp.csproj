@@ -115,28 +115,41 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\EntryController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\bootstrap.css" />
-    <Content Include="Content\bootstrap.min.css" />
     <Content Include="favicon.ico" />
-    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="FrontendBundle\Styles\Lib\960_16_col.css" />
+    <Content Include="FrontendBundle\Styles\Lib\reset.css" />
+    <Content Include="FrontendBundle\Styles\Lib\text.css" />
+    <Content Include="FrontendBundle\Styles\Navigation.css">
+      <DependentUpon>Navigation.less</DependentUpon>
+    </Content>
+    <Content Include="FrontendBundle\Styles\Navigation.min.css">
+      <DependentUpon>Navigation.less</DependentUpon>
+    </Content>
+    <Content Include="FrontendBundle\Styles\Shared.css">
+      <DependentUpon>Shared.less</DependentUpon>
+    </Content>
+    <Content Include="FrontendBundle\Styles\Shared.min.css">
+      <DependentUpon>Shared.less</DependentUpon>
+    </Content>
+    <Content Include="FrontendBundle\Styles\Variables.css">
+      <DependentUpon>Variables.less</DependentUpon>
+    </Content>
     <Content Include="Global.asax" />
-    <Content Include="Content\Site.css" />
-    <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Scripts\bootstrap.min.js" />
-    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
-    <Content Include="Scripts\jquery-1.10.2.js" />
-    <Content Include="Scripts\jquery-1.10.2.min.js" />
-    <Content Include="Scripts\modernizr-2.6.2.js" />
-    <Content Include="Scripts\respond.js" />
-    <Content Include="Scripts\respond.min.js" />
-    <Content Include="Scripts\_references.js" />
+    <None Include="FrontendBundle\Scripts\Lib\jquery-1.10.2.intellisense.js" />
+    <Content Include="FrontendBundle\Scripts\Lib\jquery-1.10.2.js" />
+    <Content Include="FrontendBundle\Scripts\Lib\jquery-1.10.2.min.js" />
+    <Content Include="FrontendBundle\Scripts\Lib\modernizr-2.6.2.js" />
+    <Content Include="FrontendBundle\Scripts\Lib\respond.js" />
+    <Content Include="FrontendBundle\Scripts\Lib\respond.min.js" />
+    <Content Include="FrontendBundle\Scripts\Lib\_references.js" />
+    <Content Include="Images\Header.KmsLogo.png" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -151,13 +164,18 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="FrontendBundle\Scripts\Lib\jquery-1.10.2.min.map" />
+    <Content Include="FrontendBundle\Styles\Shared.less" />
+    <Content Include="FrontendBundle\Styles\Navigation.less" />
+    <Content Include="FrontendBundle\Styles\Variables.less" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <Content Include="fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <ProjectReference Include="..\Kilometros Database\Kilometros Database.csproj">
+      <Project>{af2a5b08-71b1-410a-9dfb-31a037851d33}</Project>
+      <Name>Kilometros Database</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>
   <PropertyGroup>

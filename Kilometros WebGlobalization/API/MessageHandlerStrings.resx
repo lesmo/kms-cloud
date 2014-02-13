@@ -117,10 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Warning401_DeviceIdInvalid" xml:space="preserve">
-    <value>Device Id is invalid</value>
+  <data name="Warning101_RequestSignatureInvalid" xml:space="preserve">
+    <value>Request Signature was not received or is invalid</value>
   </data>
-  <data name="Warning404_DeviceNotFound" xml:space="preserve">
-    <value>Device not found or not currently owned by User</value>
+  <data name="Warning102_ApiKeyInvalid" xml:space="preserve">
+    <value>API Key was not received, non existant or invalid</value>
+  </data>
+  <data name="Warning103_SessionTokenInvalid" xml:space="preserve">
+    <value>Session Token not received, is expired or invalid</value>
+  </data>
+  <data name="Warning104_EncodingInvalid" xml:space="preserve">
+    <value>Encoding {0} is not supported</value>
   </data>
 </root>

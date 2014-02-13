@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Kilometros_WebAPI.Helpers;
+using Kilometros_WebGlobalization.API;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
@@ -24,6 +26,17 @@ namespace Kilometros_WebAPI.MessageHandlers {
                         request.Headers.AcceptEncoding.Count > 0
                     ) {
                         string encodingType = request.Headers.AcceptEncoding.First().Value;
+
+                        if ( encodingType != "gzip" && encodingType != "deflate" ) {
+                            response.StatusCode = HttpStatusCode.NotAcceptable;
+                            response.Headers.TryAddWithoutValidation(
+                                "Warning",
+                                "102 " + string.Format(MessageHandlerStrings.Warning104_EncodingInvalid, encodingType)
+                            );
+
+                            return response;
+                        }
+
                         response.Content = new CompressedContent(response.Content, encodingType);
                     }
 
@@ -46,9 +59,6 @@ namespace Kilometros_WebAPI.MessageHandlers {
 
                 originalContent = content;
                 this.encodingType = encodingType.ToLowerInvariant();
-
-                if (this.encodingType != "gzip" && this.encodingType != "deflate")
-                    throw new InvalidOperationException(string.Format("Encoding '{0}' is not supported. Only supports gzip or deflate encoding.", this.encodingType));
 
                 // copy the headers from the original content
                 foreach (KeyValuePair<string, IEnumerable<string>> header in originalContent.Headers)

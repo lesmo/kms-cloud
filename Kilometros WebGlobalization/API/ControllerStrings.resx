@@ -117,10 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Warning201_UserNotFound" xml:space="preserve">
-    <value>The User requested could not be found</value>
+  <data name="Warning101_UserNotFound" xml:space="preserve">
+    <value>The User {0} requested could not be found</value>
   </data>
-  <data name="Warning401_TokenNotFound" xml:space="preserve">
-    <value>The Token requested could not be found</value>
+  <data name="Warning102_TokenNotFound" xml:space="preserve">
+    <value>The Token {0} requested could not be found</value>
+  </data>
+  <data name="Warning401_DeviceIdInvalid" xml:space="preserve">
+    <value>Device ID {0} is invalid, non existant or currently not owned by the User</value>
   </data>
 </root>

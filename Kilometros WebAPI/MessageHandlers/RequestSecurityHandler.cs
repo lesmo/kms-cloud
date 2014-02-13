@@ -14,6 +14,8 @@ using System.Text;
 using System.Security.Cryptography;
 using Kilometros_WebAPI.Security;
 using System.Security.Principal;
+using Kilometros_WebGlobalization.API;
+using Kilometros_WebAPI.Helpers;
 
 namespace Kilometros_WebAPI.MessageHandlers {
     public class RequestSecurityHandler : DelegatingHandler {
@@ -21,7 +23,7 @@ namespace Kilometros_WebAPI.MessageHandlers {
             = new KilometrosDatabase.Abstraction.WorkUnit();
 
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken) {
-            Helpers.HttpRequestMessageHeadersHelper reqHeadersHelper
+            HttpRequestMessageHeadersHelper reqHeadersHelper
                 = new Helpers.HttpRequestMessageHeadersHelper(request);
 
             /** Validar que se recibió Firma de Petición **/
@@ -35,10 +37,10 @@ namespace Kilometros_WebAPI.MessageHandlers {
                     = new HttpResponseMessage(HttpStatusCode.Forbidden);
                 response.Headers.TryAddWithoutValidation(
                     "Warning",
-                    "402 " + Resources.RequestSecurityHandler.Warning402_RequestSignatureMissing
+                    "101 " + MessageHandlerStrings.Warning101_RequestSignatureInvalid
                 );
 
-                return this.SendResponseAndHalt(response);
+                return MiscHelper.ReturnResponseAndHalt(response);
             }
 
             /** Validar que el API-Key exista en BD **/
@@ -52,10 +54,10 @@ namespace Kilometros_WebAPI.MessageHandlers {
                     = new HttpResponseMessage(HttpStatusCode.Forbidden);
                 response.Headers.TryAddWithoutValidation(
                     "Warning",
-                    "403 " + Resources.RequestSecurityHandler.Warning403_ApiKeyNotFound
+                    "102 " + MessageHandlerStrings.Warning102_ApiKeyInvalid
                 );
 
-                return this.SendResponseAndHalt(response);
+                return MiscHelper.ReturnResponseAndHalt(response);
             }
 
 
@@ -70,10 +72,10 @@ namespace Kilometros_WebAPI.MessageHandlers {
                     = new HttpResponseMessage(HttpStatusCode.Forbidden);
                 response.Headers.TryAddWithoutValidation(
                     "Warning",
-                    "401 " + Resources.RequestSecurityHandler.Warning404_SessionTokenInvalid
+                    "401 " + MessageHandlerStrings.Warning103_SessionTokenInvalid
                 );
 
-                return this.SendResponseAndHalt(response);
+                return MiscHelper.ReturnResponseAndHalt(response);
             }
 
             /** Validar que el API-Request-Signature sea correcto **/
@@ -103,10 +105,10 @@ namespace Kilometros_WebAPI.MessageHandlers {
                     = new HttpResponseMessage(HttpStatusCode.Forbidden);
                 response.Headers.TryAddWithoutValidation(
                     "Warning",
-                    "401 " + Resources.RequestSecurityHandler.Warning401_RequestSignatureIncorrect
+                    "101 " + MessageHandlerStrings.Warning101_RequestSignatureInvalid
                 );
 
-                return this.SendResponseAndHalt(response);
+                return MiscHelper.ReturnResponseAndHalt(response);
             }
 
             /** Establecer contexto de Seguridad **/
@@ -121,14 +123,6 @@ namespace Kilometros_WebAPI.MessageHandlers {
             HttpContext.Current.User = principal;
 
  	        return base.SendAsync(request, cancellationToken);
-        }
-
-        private Task<HttpResponseMessage> SendResponseAndHalt(HttpResponseMessage response) {
-            TaskCompletionSource<HttpResponseMessage> task
-                = new TaskCompletionSource<HttpResponseMessage>();
-            task.SetResult(response);
-
-            return task.Task;
         }
 
         private ApiKey GetApiKey(string apiKeyString) {

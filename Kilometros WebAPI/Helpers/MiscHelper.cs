@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Security.Principal;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace Kilometros_WebAPI.Helpers {
@@ -39,11 +41,19 @@ namespace Kilometros_WebAPI.Helpers {
             return true;
         }
 
-        public static void SetPrincipal(IPrincipal principal) {
+        internal static void SetPrincipal(IPrincipal principal) {
             Thread.CurrentPrincipal = principal;
 
             if ( HttpContext.Current != null )
                 HttpContext.Current.User = principal;
+        }
+
+        internal static Task<HttpResponseMessage> ReturnResponseAndHalt(HttpResponseMessage response) {
+            TaskCompletionSource<HttpResponseMessage> task
+                = new TaskCompletionSource<HttpResponseMessage>();
+            task.SetResult(response);
+
+            return task.Task;
         }
     }
 }

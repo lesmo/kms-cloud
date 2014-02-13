@@ -147,21 +147,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_GlobalResources\Controllers\DataController.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>DataController.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\Controllers\SessionController.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>SessionController.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\MessageHandlers\RequestSecurityHandler.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>RequestSecurityHandler.resx</DependentUpon>
-    </Compile>
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
@@ -212,27 +197,13 @@
       <Project>{af2a5b08-71b1-410a-9dfb-31a037851d33}</Project>
       <Name>Kilometros Database</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="App_GlobalResources\MessageHandlers\RequestSecurityHandler.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>RequestSecurityHandler.designer.cs</LastGenOutput>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="App_GlobalResources\Controllers\SessionController.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>SessionController.Designer.cs</LastGenOutput>
-    </Content>
+    <ProjectReference Include="..\Kilometros WebGlobalization\Kilometros WebGlobalization.csproj">
+      <Project>{9aaf5681-cf18-414d-9853-a20fffa64eba}</Project>
+      <Name>Kilometros WebGlobalization</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="App_GlobalResources\Controllers\DataController.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>DataController.Designer.cs</LastGenOutput>
-    </Content>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
