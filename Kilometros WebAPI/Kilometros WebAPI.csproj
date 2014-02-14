@@ -157,6 +157,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Global\GlobalObjects.cs" />
+    <Compile Include="Helpers\HttpResponseMessageHeadersHelper.cs" />
     <Compile Include="Helpers\HttpRequestMessageHeadersHelper.cs" />
     <Compile Include="Helpers\MiscHelper.cs" />
     <Compile Include="Models\HttpGet\UserController\AccountResponse.cs" />

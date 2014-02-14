@@ -10,11 +10,14 @@ using System.Web;
 using Kilometros_WebAPI.Models.HttpPost.SessionController;
 using Kilometros_WebGlobalization.API;
 using Kilometros_WebAPI.Models.HttpGet.SessionController;
+using System.Globalization;
 
 namespace Kilometros_WebAPI.Controllers {
     public class SessionController : ApiController {
-        public KilometrosDatabase.Abstraction.WorkUnit _db
+        public KilometrosDatabase.Abstraction.WorkUnit Database
             = new KilometrosDatabase.Abstraction.WorkUnit();
+        private HttpServerUtility _httpServerUtility
+            = new HttpServerUtility();
 
         [HttpPost]
         [Route("session/kms")]
@@ -23,27 +26,31 @@ namespace Kilometros_WebAPI.Controllers {
             if ( this.User.Identity.IsAuthenticated ) {
                 HttpResponseMessage response
                     = Request.CreateResponse(HttpStatusCode.Forbidden);
+                string warningString
+                    = string.Format(ControllerStrings.Warning100_CannotLoginAgain, this.User.Identity.Name);
 
                 response.Headers.TryAddWithoutValidation(
                     "Warning",
-                    "100" + string.Format(ControllerStrings.Warning100_CannotLoginAgain, this.User.Identity.Name)
+                    "100" + this._httpServerUtility.UrlEncode(warningString)
                 );
 
                 return response;
             }
 
             /** Buscar al Usuario y validar contraseña **/
-            User user = this._db.UserStore.GetAll(
+            User user = this.Database.UserStore.GetAll(
                 u => u.Email == userPost.Email
             ).FirstOrDefault();
 
             if ( user == null || userPost.AccessHash != user.PasswordString ) {
                 HttpResponseMessage response
                     = Request.CreateResponse(HttpStatusCode.Unauthorized);
+                string warningString
+                    = ControllerStrings.Warning101_UserNotFound;
 
                 response.Headers.Add(
                     "Warning",
-                    "101 " + ControllerStrings.Warning101_UserNotFound
+                    "101 " + this._httpServerUtility.UrlEncode(warningString)
                 );
 
                 return response;
@@ -61,8 +68,8 @@ namespace Kilometros_WebAPI.Controllers {
                 ExpirationDate = DateTime.Now.AddDays(30)
             };
 
-            this._db.TokenStore.Add(token);
-            this._db.SaveChanges();
+            this.Database.TokenStore.Add(token);
+            this.Database.SaveChanges();
 
             /** Preparar y enviar respuesta **/
             TokenResponse tokenResponse = new TokenResponse() {
@@ -91,27 +98,40 @@ namespace Kilometros_WebAPI.Controllers {
         [HttpGet]
         [Route("session/{tokenString}")]
         public HttpResponseMessage GetToken(string tokenString) {
-            HttpResponseMessage response = Request.CreateResponse();
+            HttpResponseMessage response
+                = Request.CreateResponse();
 
             byte[] tokenBytes
                 = Convert.FromBase64String(tokenString);
             Guid tokenGuid
                 = new Guid(tokenBytes);
             Token token
-                = this._db.TokenStore.Get(tokenGuid);
+                = this.Database.TokenStore.Get(tokenGuid);
 
             if ( token == null ) {
+                string warningString
+                    = string.Format(ControllerStrings.Warning102_TokenNotFound, tokenString);
+
                 response.StatusCode = HttpStatusCode.NotFound;
                 response.Headers.Add(
                     "Warning",
-                    "102 " + string.Format(ControllerStrings.Warning102_TokenNotFound, tokenString)
+                    "102 " + this._httpServerUtility.UrlEncode(warningString)
                 );
             } else {
-                token.ExpirationDate
-                    = token.ExpirationDate.Value.AddMonths(3);
+                if ( token.ExpirationDate.HasValue ) {
+                    token.ExpirationDate
+                        = token.ExpirationDate.Value.AddDays(90);
 
-                this._db.TokenStore.Update(token);
-                this._db.SaveChanges();
+                    this.Database.TokenStore.Update(token);
+                    this.Database.SaveChanges();
+
+                    response.Headers.TryAddWithoutValidation(
+                        "Expires",
+                        token.ExpirationDate.Value.ToString(
+                            DateTimeFormatInfo.InvariantInfo.RFC1123Pattern
+                        )
+                    );
+                }
 
                 response.StatusCode = HttpStatusCode.OK;
             }
@@ -129,16 +149,19 @@ namespace Kilometros_WebAPI.Controllers {
             Guid tokenGuid  
                 = new Guid(tokenBytes);
             Token token
-                = this._db.TokenStore.Get(tokenGuid);
+                = this.Database.TokenStore.Get(tokenGuid);
 
             if ( token == null ) {
+                string warningString
+                    = string.Format(ControllerStrings.Warning102_TokenNotFound, tokenString);
+
                 response.StatusCode = HttpStatusCode.NotFound;
                 response.Headers.Add(
                     "Warning",
-                    "102 " + string.Format(ControllerStrings.Warning102_TokenNotFound, tokenString)
+                    "102 " + this._httpServerUtility.UrlEncode(warningString)
                 );
             } else {
-                this._db.TokenStore.Delete(tokenGuid);
+                this.Database.TokenStore.Delete(tokenGuid);
                 response.StatusCode = HttpStatusCode.NoContent;
             }
 
