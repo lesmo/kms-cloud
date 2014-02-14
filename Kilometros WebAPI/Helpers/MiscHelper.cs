@@ -48,6 +48,13 @@ namespace Kilometros_WebAPI.Helpers {
                 HttpContext.Current.User = principal;
         }
 
+        internal static PrincipalType GetPrincipal<PrincipalType>() {
+            if ( Thread.CurrentPrincipal != null )
+                return (PrincipalType)Thread.CurrentPrincipal;
+            else
+                return (PrincipalType)HttpContext.Current.User;
+        }
+
         internal static Task<HttpResponseMessage> ReturnResponseAndHalt(HttpResponseMessage response) {
             TaskCompletionSource<HttpResponseMessage> task
                 = new TaskCompletionSource<HttpResponseMessage>();
