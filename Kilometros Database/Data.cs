@@ -17,6 +17,6 @@ namespace KilometrosDatabase
         public System.DateTime TimeStamp { get; set; }
         public int Steps { get; set; }
     
-        public virtual WristBandUserOwnership WristBandUserOwnership { get; set; }
+        public virtual User User { get; set; }
     }
 }

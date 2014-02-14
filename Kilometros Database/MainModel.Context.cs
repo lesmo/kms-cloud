@@ -44,8 +44,6 @@ namespace KilometrosDatabase
         public DbSet<RewardGiftGlobalization> RewardGiftGlobalizationSet { get; set; }
         public DbSet<UserMotionLevelHistory> UserMotionLevelHistorySet { get; set; }
         public DbSet<UserEarnedReward> UserEarnedRewardSet { get; set; }
-        public DbSet<WristBand> WristBandSet { get; set; }
-        public DbSet<WristBandUserOwnership> WristBandUserOwnershipSet { get; set; }
         public DbSet<ContactInfo> ContactInfoSet { get; set; }
         public DbSet<ShippingInformation> ShippingInformationSet { get; set; }
         public DbSet<RewardGiftImage> RewardGiftImageSet { get; set; }

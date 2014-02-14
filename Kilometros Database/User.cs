@@ -19,7 +19,7 @@ namespace KilometrosDatabase
             this.Token = new HashSet<Token>();
             this.UserMotionLevelHistory = new HashSet<UserMotionLevelHistory>();
             this.UserEarnedReward = new HashSet<UserEarnedReward>();
-            this.WristBandUserOwnership = new HashSet<WristBandUserOwnership>();
+            this.Data = new HashSet<Data>();
         }
     
         public System.Guid Guid { get; private set; }
@@ -34,9 +34,9 @@ namespace KilometrosDatabase
         public virtual RewardGiftToken RewardGiftToken { get; set; }
         public virtual ICollection<UserMotionLevelHistory> UserMotionLevelHistory { get; set; }
         public virtual ICollection<UserEarnedReward> UserEarnedReward { get; set; }
-        public virtual ICollection<WristBandUserOwnership> WristBandUserOwnership { get; set; }
         public virtual ContactInfo ContactInfo { get; set; }
         public virtual ShippingInformation ShippingInformation { get; set; }
         public virtual SocialIdentity SocialIdentity { get; set; }
+        public virtual ICollection<Data> Data { get; set; }
     }
 }

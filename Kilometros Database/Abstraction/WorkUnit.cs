@@ -97,33 +97,7 @@ namespace KilometrosDatabase.Abstraction {
         #endregion
 
 
-        #region User Wristband Device Ownership Storage
-        /// <summary>
-        /// Almacén de Histórico de Propiedad de Dispositivo
-        /// </summary>
-        public GenericRepository<WristBandUserOwnership> WristBandUserOwnershipStore {
-            get {
-                if ( this._wristBandUserOwnershipRepository == null )
-                    this._wristBandUserOwnershipRepository = new GenericRepository<WristBandUserOwnership>(this._context);
-
-                return this._wristBandUserOwnershipRepository;
-            }
-        }
-        private GenericRepository<WristBandUserOwnership> _wristBandUserOwnershipRepository = null;
-
-        /// <summary>
-        /// Almacén de información de Dispositivos
-        /// </summary>
-        public GenericRepository<WristBand> WristBandStore {
-            get {
-                if ( this._wristBandRepository == null )
-                    this._wristBandRepository = new GenericRepository<WristBand>(this._context);
-
-                return this._wristBandRepository;
-            }
-        }
-        private GenericRepository<WristBand> _wristBandRepository = null;
-
+        #region User Data Storage
         /// <summary>
         /// Almacén de Información de Actividad
         /// </summary>

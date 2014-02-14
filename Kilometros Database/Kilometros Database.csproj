@@ -150,12 +150,6 @@
     <Compile Include="UserMotionLevelHistory.cs">
       <DependentUpon>MainModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="WristBand.cs">
-      <DependentUpon>MainModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="WristBandUserOwnership.cs">
-      <DependentUpon>MainModel.tt</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="MainModel.edmx">

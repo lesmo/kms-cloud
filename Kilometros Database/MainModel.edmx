@@ -25,8 +25,6 @@
     <EntitySet Name="RewardGiftGlobalizationSet" EntityType="MainModel.Store.RewardGiftGlobalizationSet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="UserMotionLevelHistorySet" EntityType="MainModel.Store.UserMotionLevelHistorySet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="UserEarnedRewardSet" EntityType="MainModel.Store.UserEarnedRewardSet" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="WristBandSet" EntityType="MainModel.Store.WristBandSet" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="WristBandUserOwnershipSet" EntityType="MainModel.Store.WristBandUserOwnershipSet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="ContactInfoSet" EntityType="MainModel.Store.ContactInfoSet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="ShippingInformationSet" EntityType="MainModel.Store.ShippingInformationSet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="RewardGiftImageSet" EntityType="MainModel.Store.RewardGiftImageSet" store:Type="Tables" Schema="dbo" />
@@ -104,18 +102,6 @@
     <AssociationSet Name="UserEarnedRewardReward" Association="MainModel.Store.UserEarnedRewardReward">
       <End Role="UserEarnedReward" EntitySet="UserEarnedRewardSet" />
       <End Role="Reward" EntitySet="RewardSet" />
-    </AssociationSet>
-    <AssociationSet Name="UserWristBandUserOwnership" Association="MainModel.Store.UserWristBandUserOwnership">
-      <End Role="User" EntitySet="UserSet" />
-      <End Role="WristBandUserOwnership" EntitySet="WristBandUserOwnershipSet" />
-    </AssociationSet>
-    <AssociationSet Name="WristBandUserOwnershipData" Association="MainModel.Store.WristBandUserOwnershipData">
-      <End Role="WristBandUserOwnership" EntitySet="WristBandUserOwnershipSet" />
-      <End Role="Data" EntitySet="DataSet" />
-    </AssociationSet>
-    <AssociationSet Name="WristBandUserOwnershipWristBand" Association="MainModel.Store.WristBandUserOwnershipWristBand">
-      <End Role="WristBandUserOwnership" EntitySet="WristBandUserOwnershipSet" />
-      <End Role="WristBand" EntitySet="WristBandSet" />
     </AssociationSet>
     <AssociationSet Name="ContactInfoUser" Association="MainModel.Store.ContactInfoUser">
       <End Role="ContactInfo" EntitySet="ContactInfoSet" />
@@ -331,23 +317,6 @@
     <Property Name="EarnDate" Type="datetime" Nullable="false" />
     <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
     <Property Name="Reward_Guid" Type="uniqueidentifier" Nullable="false" />
-  </EntityType>
-  <EntityType Name="WristBandSet">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="bigint" Nullable="false" />
-    <Property Name="ColorArgb" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="Version" Type="float" Nullable="false" />
-  </EntityType>
-  <EntityType Name="WristBandUserOwnershipSet">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="AssociationDate" Type="datetime" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
-    <Property Name="WristBand_Id" Type="bigint" Nullable="false" />
   </EntityType>
   <EntityType Name="ContactInfoSet">
     <Key>
@@ -656,48 +625,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="UserWristBandUserOwnership">
-    <End Role="User" Type="MainModel.Store.UserSet" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Role="WristBandUserOwnership" Type="MainModel.Store.WristBandUserOwnershipSet" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="User">
-        <PropertyRef Name="Guid" />
-      </Principal>
-      <Dependent Role="WristBandUserOwnership">
-        <PropertyRef Name="User_Guid" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="WristBandUserOwnershipData">
-    <End Role="WristBandUserOwnership" Type="MainModel.Store.WristBandUserOwnershipSet" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Role="Data" Type="MainModel.Store.DataSet" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="WristBandUserOwnership">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="Data">
-        <PropertyRef Name="WristBandUserOwnership_Id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="WristBandUserOwnershipWristBand">
-    <End Role="WristBandUserOwnership" Type="MainModel.Store.WristBandUserOwnershipSet" Multiplicity="*" />
-    <End Role="WristBand" Type="MainModel.Store.WristBandSet" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <ReferentialConstraint>
-      <Principal Role="WristBand">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="WristBandUserOwnership">
-        <PropertyRef Name="WristBand_Id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="ContactInfoUser">
     <End Role="ContactInfo" Type="MainModel.Store.ContactInfoSet" Multiplicity="*" />
     <End Role="User" Type="MainModel.Store.UserSet" Multiplicity="1">
@@ -868,20 +795,6 @@
             <End Role="UserEarnedReward" EntitySet="UserEarnedRewardSet" />
             <End Role="Reward" EntitySet="RewardSet" />
           </AssociationSet>
-          <EntitySet Name="WristBandSet" EntityType="MainModel.WristBand" />
-          <EntitySet Name="WristBandUserOwnershipSet" EntityType="MainModel.WristBandUserOwnership" />
-          <AssociationSet Name="UserWristBandUserOwnership" Association="MainModel.UserWristBandUserOwnership">
-            <End Role="User" EntitySet="UserSet" />
-            <End Role="WristBandUserOwnership" EntitySet="WristBandUserOwnershipSet" />
-          </AssociationSet>
-          <AssociationSet Name="WristBandUserOwnershipData" Association="MainModel.WristBandUserOwnershipData">
-            <End Role="WristBandUserOwnership" EntitySet="WristBandUserOwnershipSet" />
-            <End Role="Data" EntitySet="DataSet" />
-          </AssociationSet>
-          <AssociationSet Name="WristBandUserOwnershipWristBand" Association="MainModel.WristBandUserOwnershipWristBand">
-            <End Role="WristBandUserOwnership" EntitySet="WristBandUserOwnershipSet" />
-            <End Role="WristBand" EntitySet="WristBandSet" />
-          </AssociationSet>
           <EntitySet Name="ContactInfoSet" EntityType="MainModel.ContactInfo" />
           <AssociationSet Name="ContactInfoUser" Association="MainModel.ContactInfoUser">
             <End Role="ContactInfo" EntitySet="ContactInfoSet" />
@@ -911,6 +824,10 @@
           <AssociationSet Name="ApiKeyHistory" Association="MainModel.ApiKeyHistory">
             <End Role="ApiKey" EntitySet="ApiKeySet" />
             <End Role="ApiKey1" EntitySet="ApiKeySet" />
+          </AssociationSet>
+          <AssociationSet Name="UserData" Association="MainModel.UserData">
+            <End Role="User" EntitySet="UserSet" />
+            <End Role="Data" EntitySet="DataSet" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="User">
@@ -971,11 +888,6 @@
               <Summary>Recompensas ganadas por el Usuario.</Summary>
             </Documentation>
           </NavigationProperty>
-          <NavigationProperty Name="WristBandUserOwnership" Relationship="MainModel.UserWristBandUserOwnership" FromRole="User" ToRole="WristBandUserOwnership" >
-            <Documentation>
-              <Summary>Histórico de Dispositivo(s) de los que ha sido propietario el Usuario.</Summary>
-            </Documentation>
-          </NavigationProperty>
           <NavigationProperty Name="ContactInfo" Relationship="MainModel.ContactInfoUser" FromRole="User" ToRole="ContactInfo" >
             <Documentation>
               <Summary>Información de Contacto del Usuario.</Summary>
@@ -992,6 +904,7 @@
               <Summary>Código de Cultura (Idioma) preferido por el Usuario</Summary>
             </Documentation>
           </Property>
+          <NavigationProperty Name="Data" Relationship="MainModel.UserData" FromRole="User" ToRole="Data" />
         </EntityType>
         <EntityType Name="Token">
           <Documentation>
@@ -1252,11 +1165,7 @@
           </Key>
           <Property Type="DateTime" Name="TimeStamp" Nullable="false" cg:SetterAccess="Public" annotation:StoreGeneratedPattern="None" />
           <Property Type="Int32" Name="Steps" Nullable="false" />
-          <NavigationProperty Name="WristBandUserOwnership" Relationship="MainModel.WristBandUserOwnershipData" FromRole="Data" ToRole="WristBandUserOwnership" >
-            <Documentation>
-              <Summary>Asociación de éste Dato Crudo y el Dispositivo que lo originó, y el Usuario propietario del mismo.</Summary>
-            </Documentation>
-          </NavigationProperty>
+          <NavigationProperty Name="User" Relationship="MainModel.UserData" FromRole="Data" ToRole="User" />
         </EntityType>
         <EntityType Name="UserBody">
           <Documentation>
@@ -1546,82 +1455,6 @@
             <OnDelete Action="Cascade" />
           </End>
         </Association>
-        <EntityType Name="WristBand">
-          <Documentation>
-            <Summary>Almacén de Dispositivos.</Summary>
-          </Documentation>
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Type="Int64" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="None" >
-            <Documentation>
-              <Summary>Dirección Mac del Dispositivo (cadena con ":" incluidos).</Summary>
-            </Documentation>
-          </Property>
-          <NavigationProperty Name="WristBandUserOwnership" Relationship="MainModel.WristBandUserOwnershipWristBand" FromRole="WristBand" ToRole="WristBandUserOwnership" >
-            <Documentation>
-              <Summary>Información histórica de propiedad del Dispositivo.</Summary>
-            </Documentation>
-          </NavigationProperty>
-          <Property Type="String" Name="ColorArgb" Nullable="false" >
-            <Documentation>
-              <Summary>Color del Dispositivo, según lo devuelto por System.Drawing.Color.ToArgb().</Summary>
-            </Documentation>
-          </Property>
-          <Property Type="Double" Name="Version" Nullable="false" >
-            <Documentation>
-              <Summary>Versión del dispositivo (soporta únicamente Major y Minor).</Summary>
-            </Documentation>
-          </Property>
-        </EntityType>
-        <EntityType Name="WristBandUserOwnership">
-          <Documentation>
-            <Summary>Almacén del Historial de propiedady uso de los Dispositivos.</Summary>
-          </Documentation>
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Type="Int64" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <NavigationProperty Name="User" Relationship="MainModel.UserWristBandUserOwnership" FromRole="WristBandUserOwnership" ToRole="User" >
-            <Documentation>
-              <Summary>Usuario asociado a la propiedad.</Summary>
-            </Documentation>
-          </NavigationProperty>
-          <NavigationProperty Name="Data" Relationship="MainModel.WristBandUserOwnershipData" FromRole="WristBandUserOwnership" ToRole="Data" >
-            <Documentation>
-              <Summary>Datos crudos recabados por las lecturas del Dispositivo., en éste momento de propiedad</Summary>
-            </Documentation>
-          </NavigationProperty>
-          <NavigationProperty Name="WristBand" Relationship="MainModel.WristBandUserOwnershipWristBand" FromRole="WristBandUserOwnership" ToRole="WristBand" >
-            <Documentation>
-              <Summary>Dispositivo asociado a la propiedad.</Summary>
-            </Documentation>
-          </NavigationProperty>
-          <Property Type="DateTime" Name="AssociationDate" Nullable="false" annotation:StoreGeneratedPattern="Identity" >
-            <Documentation>
-              <Summary>Fecha en la que se generó ésta asociación.</Summary>
-            </Documentation>
-          </Property>
-        </EntityType>
-        <Association Name="UserWristBandUserOwnership">
-          <End Type="MainModel.User" Role="User" Multiplicity="1" >
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="MainModel.WristBandUserOwnership" Role="WristBandUserOwnership" Multiplicity="*" />
-        </Association>
-        <Association Name="WristBandUserOwnershipData">
-          <End Type="MainModel.WristBandUserOwnership" Role="WristBandUserOwnership" Multiplicity="1" >
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="MainModel.Data" Role="Data" Multiplicity="*" />
-        </Association>
-        <Association Name="WristBandUserOwnershipWristBand">
-          <End Type="MainModel.WristBandUserOwnership" Role="WristBandUserOwnership" Multiplicity="1" >
-          </End>
-          <End Type="MainModel.WristBand" Role="WristBand" Multiplicity="1" >
-            <OnDelete Action="Cascade" />
-          </End>
-        </Association>
         <EntityType Name="ContactInfo">
           <Documentation>
             <Summary>Almacén de Información de Contacto del Usuario.</Summary>
@@ -1762,6 +1595,10 @@
         <Association Name="ApiKeyHistory">
           <End Type="MainModel.ApiKey" Role="ApiKey" Multiplicity="0..1" />
           <End Type="MainModel.ApiKey" Role="ApiKey1" Multiplicity="0..1" />
+        </Association>
+        <Association Name="UserData">
+          <End Type="MainModel.User" Role="User" Multiplicity="1" />
+          <End Type="MainModel.Data" Role="Data" Multiplicity="*" />
         </Association>
       </Schema>
     </edmx:ConceptualModels>
@@ -1955,23 +1792,6 @@
         <MappingFragment StoreEntitySet="UserEarnedRewardSet">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="EarnDate" ColumnName="EarnDate" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="WristBandSet">
-      <EntityTypeMapping TypeName="IsTypeOf(MainModel.WristBand)">
-        <MappingFragment StoreEntitySet="WristBandSet">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="ColorArgb" ColumnName="ColorArgb" />
-          <ScalarProperty Name="Version" ColumnName="Version" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="WristBandUserOwnershipSet">
-      <EntityTypeMapping TypeName="IsTypeOf(MainModel.WristBandUserOwnership)">
-        <MappingFragment StoreEntitySet="WristBandUserOwnershipSet">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="AssociationDate" ColumnName="AssociationDate" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -2182,30 +2002,6 @@
         <ScalarProperty Name="Guid" ColumnName="Reward_Guid" />
       </EndProperty>
       <EndProperty Name="UserEarnedReward">
-        <ScalarProperty Name="Id" ColumnName="Id" />
-      </EndProperty>
-    </AssociationSetMapping>
-    <AssociationSetMapping Name="UserWristBandUserOwnership" TypeName="MainModel.UserWristBandUserOwnership" StoreEntitySet="WristBandUserOwnershipSet">
-      <EndProperty Name="User">
-        <ScalarProperty Name="Guid" ColumnName="User_Guid" />
-      </EndProperty>
-      <EndProperty Name="WristBandUserOwnership">
-        <ScalarProperty Name="Id" ColumnName="Id" />
-      </EndProperty>
-    </AssociationSetMapping>
-    <AssociationSetMapping Name="WristBandUserOwnershipData" TypeName="MainModel.WristBandUserOwnershipData" StoreEntitySet="DataSet">
-      <EndProperty Name="WristBandUserOwnership">
-        <ScalarProperty Name="Id" ColumnName="WristBandUserOwnership_Id" />
-      </EndProperty>
-      <EndProperty Name="Data">
-        <ScalarProperty Name="TimeStamp" ColumnName="TimeStamp" />
-      </EndProperty>
-    </AssociationSetMapping>
-    <AssociationSetMapping Name="WristBandUserOwnershipWristBand" TypeName="MainModel.WristBandUserOwnershipWristBand" StoreEntitySet="WristBandUserOwnershipSet">
-      <EndProperty Name="WristBand">
-        <ScalarProperty Name="Id" ColumnName="WristBand_Id" />
-      </EndProperty>
-      <EndProperty Name="WristBandUserOwnership">
         <ScalarProperty Name="Id" ColumnName="Id" />
       </EndProperty>
     </AssociationSetMapping>
