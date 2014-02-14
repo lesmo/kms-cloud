@@ -151,6 +151,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\DataController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\SessionController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -158,10 +159,13 @@
     <Compile Include="Global\GlobalObjects.cs" />
     <Compile Include="Helpers\HttpRequestMessageHeadersHelper.cs" />
     <Compile Include="Helpers\MiscHelper.cs" />
-    <Compile Include="HttpPostModels\DataController\DataPost.cs" />
-    <Compile Include="HttpPostModels\SessionController\KmsLoginPost.cs" />
+    <Compile Include="Models\HttpGet\UserController\AccountResponse.cs" />
+    <Compile Include="Models\HttpGet\SessionController\TokenResponse.cs" />
+    <Compile Include="Models\HttpPost\DataController\DataPost.cs" />
+    <Compile Include="Models\HttpPost\SessionController\LoginPost.cs" />
     <Compile Include="MessageHandlers\RequestSecurityHandler.cs" />
     <Compile Include="MessageHandlers\ResponseEncoder.cs" />
+    <Compile Include="Models\HttpPost\UserController\AccountPost.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\KmsIdentity.cs" />
   </ItemGroup>
