@@ -1,4 +1,4 @@
-﻿using Kilometros_WebAPI.HttpPostModels.DataController;
+﻿using Kilometros_WebAPI.Models.HttpPost.DataController;
 using Kilometros_WebAPI.Security;
 using KilometrosDatabase.Helpers;
 using KilometrosDatabase.Abstraction;
@@ -18,58 +18,13 @@ namespace Kilometros_WebAPI.Controllers {
         private WorkUnit _db = new WorkUnit();
 
         [HttpPost]
-        [Route("data/{deviceIdString}/single")]
-        public HttpResponseMessage Post(string deviceIdString, [FromBody]DataPost dataPost) {
-            return this.Post(deviceIdString, new DataPost[]{dataPost});
-        }
-
-        [HttpPost]
-        [Route("data/{deviceIdString}")]
-        public HttpResponseMessage Post(string deviceIdString, [FromBody]DataPost[] dataPost) {
-            /** Validar que ID de Dispositivo sea válido **/
-            HttpResponseMessage response = Request.CreateResponse();
-            long deviceId = 0;
-
-            try {
-                deviceId = Base36Encoder.Decode(deviceIdString);
-            } catch {
-                response.StatusCode = HttpStatusCode.BadRequest;
-                response.Headers.TryAddWithoutValidation(
-                    "Warning",
-                    "401 " + string.Format(ControllerStrings.Warning401_DeviceIdInvalid, deviceIdString)
-                );
-                
-                return response;
-            }
-
-            /** Validar propiedad del Dispositivo **/
-            KmsIdentity kmsIdentity = (KmsIdentity)this.User.Identity;
-            User kmsUser = kmsIdentity.UserData;
-            
-            IEnumerable<WristBand> deviceResult
-                = from wb in kmsUser.WristBandUserOwnership
-                  where
-                    wb.User.Guid == kmsUser.Guid
-                    && wb.WristBand.Id == Base36Encoder.Decode(deviceIdString)
-                  select wb.WristBand;
-
-            if ( deviceResult.Count() == 0 ) {
-                response.StatusCode = HttpStatusCode.NotFound;
-                response.Headers.TryAddWithoutValidation(
-                    "Warning",
-                    "402 " + string.Format(ControllerStrings.Warning402_DeviceNotOwned, deviceIdString)
-                );
-
-                return response;
-            }
-
+        [Route("data")]
+        public HttpResponseMessage Post([FromBody]DataPost[] dataPost) {
             /** Determinar la última fecha registrada **/
-            WristBandUserOwnership owner
-                = deviceResult
-                    .FirstOrDefault()
-                    .WristBandUserOwnership;
+            KmsIdentity identity
+                = (KmsIdentity)User.Identity;
             Data lastData
-                = owner.Data
+                = identity.UserData.Data
                     .OrderByDescending(data => data.TimeStamp)
                     .Take(1)
                     .FirstOrDefault();
@@ -88,17 +43,15 @@ namespace Kilometros_WebAPI.Controllers {
             foreach ( DataPost data in finalPost ) {
                 Data newData = new Data(){
                      TimeStamp = data.Timestamp,
-                     Steps = data.Steps,
-                     WristBandUserOwnership = owner
+                     Steps = data.Steps
                 };
 
                 this._db.DataStore.Add(newData);
             }
             
             int savedRecords = this._db.SaveChanges();
-            response.StatusCode = HttpStatusCode.Created;
             
-            return response;
+            return Request.CreateResponse(HttpStatusCode.Created);
         }
     }
 }
