@@ -16,6 +16,7 @@ namespace KilometrosDatabase
     {
         public ApiKey()
         {
+            this.DebugEnabled = false;
             this.Token = new HashSet<Token>();
         }
     
@@ -25,6 +26,7 @@ namespace KilometrosDatabase
         public System.Guid Guid { get; set; }
         public System.Guid Secret { get; set; }
         public string TokenUpgradeRequired { get; set; }
+        public bool DebugEnabled { get; set; }
     
         public virtual ICollection<Token> Token { get; set; }
         public virtual ApiKey ApiKeyPrevious { get; set; }

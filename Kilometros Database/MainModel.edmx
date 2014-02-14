@@ -127,6 +127,10 @@
       <End Role="ApiKey" EntitySet="ApiKeySet" />
       <End Role="ApiKey1" EntitySet="ApiKeySet" />
     </AssociationSet>
+    <AssociationSet Name="UserData" Association="MainModel.Store.UserData">
+      <End Role="User" EntitySet="UserSet" />
+      <End Role="Data" EntitySet="DataSet" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="UserSet">
     <Key>
@@ -219,7 +223,7 @@
     </Key>
     <Property Name="TimeStamp" Type="datetime" Nullable="false" />
     <Property Name="Steps" Type="int" Nullable="false" />
-    <Property Name="WristBandUserOwnership_Id" Type="bigint" Nullable="false" />
+    <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
   </EntityType>
   <EntityType Name="UserBodySet">
     <Key>
@@ -699,6 +703,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="UserData">
+    <End Role="User" Type="MainModel.Store.UserSet" Multiplicity="1" />
+    <End Role="Data" Type="MainModel.Store.DataSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Guid" />
+      </Principal>
+      <Dependent Role="Data">
+        <PropertyRef Name="User_Guid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -989,6 +1005,7 @@
           </Property>
           <NavigationProperty Name="ApiKeyPrevious" Relationship="MainModel.ApiKeyHistory" FromRole="ApiKey" ToRole="ApiKey1" />
           <NavigationProperty Name="ApiKeyNext" Relationship="MainModel.ApiKeyHistory" FromRole="ApiKey1" ToRole="ApiKey" />
+          <Property Name="DebugEnabled" Type="Boolean" Nullable="false" DefaultValue="False" />
         </EntityType>
         <EntityType Name="Tip">
           <Documentation>
@@ -2053,6 +2070,14 @@
         <ScalarProperty Name="Guid" ColumnName="Guid" />
       </EndProperty>
       <Condition ColumnName="ApiKeyNext_Guid" IsNull="false" />
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="UserData" TypeName="MainModel.UserData" StoreEntitySet="DataSet">
+      <EndProperty Name="User">
+        <ScalarProperty Name="Guid" ColumnName="User_Guid" />
+      </EndProperty>
+      <EndProperty Name="Data">
+        <ScalarProperty Name="TimeStamp" ColumnName="TimeStamp" />
+      </EndProperty>
     </AssociationSetMapping>
   </EntityContainerMapping>
 </Mapping></edmx:Mappings>

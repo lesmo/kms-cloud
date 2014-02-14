@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 02/10/2014 00:15:41
+-- Date Created: 02/14/2014 16:08:46
 -- Generated from EDMX file: F:\Sharp Dynamics\Kilometros\Kilometros Database\MainModel.edmx
 -- --------------------------------------------------
 
@@ -70,15 +70,6 @@ IF OBJECT_ID(N'[dbo].[FK_UserUserEarnedReward]', 'F') IS NOT NULL
 GO
 IF OBJECT_ID(N'[dbo].[FK_UserEarnedRewardReward]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[UserEarnedRewardSet] DROP CONSTRAINT [FK_UserEarnedRewardReward];
-GO
-IF OBJECT_ID(N'[dbo].[FK_UserWristBandUserOwnership]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[WristBandUserOwnershipSet] DROP CONSTRAINT [FK_UserWristBandUserOwnership];
-GO
-IF OBJECT_ID(N'[dbo].[FK_WristBandUserOwnershipData]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[DataSet] DROP CONSTRAINT [FK_WristBandUserOwnershipData];
-GO
-IF OBJECT_ID(N'[dbo].[FK_WristBandUserOwnershipWristBand]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[WristBandUserOwnershipSet] DROP CONSTRAINT [FK_WristBandUserOwnershipWristBand];
 GO
 IF OBJECT_ID(N'[dbo].[FK_ContactInfoUser]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[ContactInfoSet] DROP CONSTRAINT [FK_ContactInfoUser];
@@ -159,12 +150,6 @@ IF OBJECT_ID(N'[dbo].[UserMotionLevelHistorySet]', 'U') IS NOT NULL
 GO
 IF OBJECT_ID(N'[dbo].[UserEarnedRewardSet]', 'U') IS NOT NULL
     DROP TABLE [dbo].[UserEarnedRewardSet];
-GO
-IF OBJECT_ID(N'[dbo].[WristBandSet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[WristBandSet];
-GO
-IF OBJECT_ID(N'[dbo].[WristBandUserOwnershipSet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[WristBandUserOwnershipSet];
 GO
 IF OBJECT_ID(N'[dbo].[ContactInfoSet]', 'U') IS NOT NULL
     DROP TABLE [dbo].[ContactInfoSet];
@@ -278,7 +263,7 @@ GO
 CREATE TABLE [dbo].[DataSet] (
     [TimeStamp] datetime  NOT NULL,
     [Steps] int  NOT NULL,
-    [WristBandUserOwnership_Id] bigint  NOT NULL
+    [User_Guid] uniqueidentifier  NOT NULL
 );
 GO
 
@@ -376,23 +361,6 @@ CREATE TABLE [dbo].[UserEarnedRewardSet] (
     [EarnDate] datetime  NOT NULL,
     [User_Guid] uniqueidentifier  NOT NULL,
     [Reward_Guid] uniqueidentifier  NOT NULL
-);
-GO
-
--- Creating table 'WristBandSet'
-CREATE TABLE [dbo].[WristBandSet] (
-    [Id] bigint  NOT NULL,
-    [ColorArgb] nvarchar(max)  NOT NULL,
-    [Version] float  NOT NULL
-);
-GO
-
--- Creating table 'WristBandUserOwnershipSet'
-CREATE TABLE [dbo].[WristBandUserOwnershipSet] (
-    [Id] bigint IDENTITY(1,1) NOT NULL,
-    [AssociationDate] datetime  NOT NULL,
-    [User_Guid] uniqueidentifier  NOT NULL,
-    [WristBand_Id] bigint  NOT NULL
 );
 GO
 
@@ -576,18 +544,6 @@ GO
 -- Creating primary key on [Id] in table 'UserEarnedRewardSet'
 ALTER TABLE [dbo].[UserEarnedRewardSet]
 ADD CONSTRAINT [PK_UserEarnedRewardSet]
-    PRIMARY KEY CLUSTERED ([Id] ASC);
-GO
-
--- Creating primary key on [Id] in table 'WristBandSet'
-ALTER TABLE [dbo].[WristBandSet]
-ADD CONSTRAINT [PK_WristBandSet]
-    PRIMARY KEY CLUSTERED ([Id] ASC);
-GO
-
--- Creating primary key on [Id] in table 'WristBandUserOwnershipSet'
-ALTER TABLE [dbo].[WristBandUserOwnershipSet]
-ADD CONSTRAINT [PK_WristBandUserOwnershipSet]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
@@ -883,48 +839,6 @@ ON [dbo].[UserEarnedRewardSet]
     ([Reward_Guid]);
 GO
 
--- Creating foreign key on [User_Guid] in table 'WristBandUserOwnershipSet'
-ALTER TABLE [dbo].[WristBandUserOwnershipSet]
-ADD CONSTRAINT [FK_UserWristBandUserOwnership]
-    FOREIGN KEY ([User_Guid])
-    REFERENCES [dbo].[UserSet]
-        ([Guid])
-    ON DELETE CASCADE ON UPDATE NO ACTION;
-
--- Creating non-clustered index for FOREIGN KEY 'FK_UserWristBandUserOwnership'
-CREATE INDEX [IX_FK_UserWristBandUserOwnership]
-ON [dbo].[WristBandUserOwnershipSet]
-    ([User_Guid]);
-GO
-
--- Creating foreign key on [WristBandUserOwnership_Id] in table 'DataSet'
-ALTER TABLE [dbo].[DataSet]
-ADD CONSTRAINT [FK_WristBandUserOwnershipData]
-    FOREIGN KEY ([WristBandUserOwnership_Id])
-    REFERENCES [dbo].[WristBandUserOwnershipSet]
-        ([Id])
-    ON DELETE CASCADE ON UPDATE NO ACTION;
-
--- Creating non-clustered index for FOREIGN KEY 'FK_WristBandUserOwnershipData'
-CREATE INDEX [IX_FK_WristBandUserOwnershipData]
-ON [dbo].[DataSet]
-    ([WristBandUserOwnership_Id]);
-GO
-
--- Creating foreign key on [WristBand_Id] in table 'WristBandUserOwnershipSet'
-ALTER TABLE [dbo].[WristBandUserOwnershipSet]
-ADD CONSTRAINT [FK_WristBandUserOwnershipWristBand]
-    FOREIGN KEY ([WristBand_Id])
-    REFERENCES [dbo].[WristBandSet]
-        ([Id])
-    ON DELETE CASCADE ON UPDATE NO ACTION;
-
--- Creating non-clustered index for FOREIGN KEY 'FK_WristBandUserOwnershipWristBand'
-CREATE INDEX [IX_FK_WristBandUserOwnershipWristBand]
-ON [dbo].[WristBandUserOwnershipSet]
-    ([WristBand_Id]);
-GO
-
 -- Creating foreign key on [User_Guid] in table 'ContactInfoSet'
 ALTER TABLE [dbo].[ContactInfoSet]
 ADD CONSTRAINT [FK_ContactInfoUser]
@@ -1007,6 +921,20 @@ ADD CONSTRAINT [FK_ApiKeyHistory]
 CREATE INDEX [IX_FK_ApiKeyHistory]
 ON [dbo].[ApiKeySet]
     ([ApiKeyNext_Guid]);
+GO
+
+-- Creating foreign key on [User_Guid] in table 'DataSet'
+ALTER TABLE [dbo].[DataSet]
+ADD CONSTRAINT [FK_UserData]
+    FOREIGN KEY ([User_Guid])
+    REFERENCES [dbo].[UserSet]
+        ([Guid])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_UserData'
+CREATE INDEX [IX_FK_UserData]
+ON [dbo].[DataSet]
+    ([User_Guid]);
 GO
 
 -- --------------------------------------------------
