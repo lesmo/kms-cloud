@@ -24,7 +24,7 @@ namespace Kilometros_WebAPI.MessageHandlers {
 
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken) {
             HttpRequestMessageHeadersHelper reqHeadersHelper
-                = new Helpers.HttpRequestMessageHeadersHelper(request);
+                = new HttpRequestMessageHeadersHelper(request);
 
             /** Validar que se recibió Firma de Petición **/
             string requestSignatureString
@@ -35,6 +35,7 @@ namespace Kilometros_WebAPI.MessageHandlers {
             if ( requestSignatureBytes == null ) {
                 HttpResponseMessage response
                     = new HttpResponseMessage(HttpStatusCode.Forbidden);
+
                 response.Headers.TryAddWithoutValidation(
                     "Warning",
                     "101 " + MessageHandlerStrings.Warning101_RequestSignatureInvalid
@@ -79,7 +80,7 @@ namespace Kilometros_WebAPI.MessageHandlers {
             }
 
             /** Validar que el API-Request-Signature sea correcto **/
-            SHA1 sha1 = new SHA1CryptoServiceProvider();
+            SHA256 sha1 = new SHA256CryptoServiceProvider();
 
             // Obtener URL
             string urlString = request.RequestUri.PathAndQuery;
