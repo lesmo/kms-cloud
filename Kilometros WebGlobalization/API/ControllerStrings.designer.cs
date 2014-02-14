@@ -61,7 +61,16 @@ namespace Kilometros_WebGlobalization.API {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The User {0} requested could not be found.
+        ///   Looks up a localized string similar to User {0} is already logged in.
+        /// </summary>
+        public static string Warning100_CannotLoginAgain {
+            get {
+                return ResourceManager.GetString("Warning100_CannotLoginAgain", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The User {0} requested could not be found, or password is incorrect.
         /// </summary>
         public static string Warning101_UserNotFound {
             get {
@@ -79,20 +88,11 @@ namespace Kilometros_WebGlobalization.API {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Device ID {0} is invalid or non existant.
+        ///   Looks up a localized string similar to Account Data received is invalid.
         /// </summary>
-        public static string Warning401_DeviceIdInvalid {
+        public static string Warning501_AccountDataInvalid {
             get {
-                return ResourceManager.GetString("Warning401_DeviceIdInvalid", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Device ID {0} is not currently owned by the user.
-        /// </summary>
-        public static string Warning402_DeviceNotOwned {
-            get {
-                return ResourceManager.GetString("Warning402_DeviceNotOwned", resourceCulture);
+                return ResourceManager.GetString("Warning501_AccountDataInvalid", resourceCulture);
             }
         }
     }
