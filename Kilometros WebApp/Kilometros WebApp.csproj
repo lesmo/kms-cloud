@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -109,27 +110,36 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\EntryController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Views\LayoutValues.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="favicon.ico" />
-    <Content Include="FrontendBundle\Styles\Lib\960_16_col.css" />
-    <Content Include="FrontendBundle\Styles\Lib\reset.css" />
-    <Content Include="FrontendBundle\Styles\Lib\text.css" />
-    <Content Include="FrontendBundle\Styles\Navigation.css">
+    <Content Include="FrontendBundle\Scripts\Lib\jquery-ui-1.10.4.js" />
+    <Content Include="FrontendBundle\Styles\Layout\Footer.css">
+      <DependentUpon>Footer.less</DependentUpon>
+    </Content>
+    <Content Include="FrontendBundle\Styles\Layout\Footer.min.css">
+      <DependentUpon>Footer.less</DependentUpon>
+    </Content>
+    <Content Include="FrontendBundle\Styles\Layout\Navigation.min.css">
       <DependentUpon>Navigation.less</DependentUpon>
     </Content>
-    <Content Include="FrontendBundle\Styles\Navigation.min.css">
+    <Content Include="FrontendBundle\Styles\Lib\960_16_col.css" />
+    <Content Include="FrontendBundle\Styles\Lib\jquery-ui.css" />
+    <Content Include="FrontendBundle\Styles\Lib\reset.css" />
+    <Content Include="FrontendBundle\Styles\Lib\text.css" />
+    <Content Include="FrontendBundle\Styles\Layout\Navigation.css">
       <DependentUpon>Navigation.less</DependentUpon>
     </Content>
     <Content Include="FrontendBundle\Styles\Shared.css">
@@ -149,7 +159,15 @@
     <Content Include="FrontendBundle\Scripts\Lib\respond.js" />
     <Content Include="FrontendBundle\Scripts\Lib\respond.min.js" />
     <Content Include="FrontendBundle\Scripts\Lib\_references.js" />
-    <Content Include="Images\Header.KmsLogo.png" />
+    <Content Include="Images\Gui\ui-icons_3399ff_0.png" />
+    <Content Include="Images\Gui\ui-icons_525252_0.png" />
+    <Content Include="Images\Gui\ui-icons_66B3FF_0.png" />
+    <Content Include="Images\Gui\ui-icons_d4d4d4_0.png" />
+    <Content Include="Images\Gui\ui-icons_ffffff_0.png" />
+    <Content Include="Images\Header\Header.Messages.png" />
+    <Content Include="Images\Header\Header.MessagesUnread.png" />
+    <Content Include="Images\Header\Header.SearchBox.png" />
+    <Content Include="Images\Header\Header.KmsLogo.png" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -161,28 +179,40 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Entry\About.cshtml" />
+    <Content Include="Views\Entry\Contact.cshtml" />
+    <Content Include="Views\Entry\Index.cshtml" />
     <Content Include="FrontendBundle\Scripts\Lib\jquery-1.10.2.min.map" />
     <Content Include="FrontendBundle\Styles\Shared.less" />
-    <Content Include="FrontendBundle\Styles\Navigation.less" />
+    <Content Include="FrontendBundle\Styles\Layout\Navigation.less" />
     <Content Include="FrontendBundle\Styles\Variables.less" />
+    <Content Include="FrontendBundle\Styles\Layout\Footer.less" />
+    <Content Include="Views\Login\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Kilometros Database\Kilometros Database.csproj">
       <Project>{af2a5b08-71b1-410a-9dfb-31a037851d33}</Project>
       <Name>Kilometros Database</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Kilometros WebGlobalization\Kilometros WebGlobalization.csproj">
+      <Project>{9aaf5681-cf18-414d-9853-a20fffa64eba}</Project>
+      <Name>Kilometros WebGlobalization</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="FrontendBundle\Scripts\HeaderSearch.ts" />
+    <TypeScriptCompile Include="Scripts\typings\jqueryui\jqueryui.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">

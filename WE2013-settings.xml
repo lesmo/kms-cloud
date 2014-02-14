@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <webessentials version="1.9">
   <settings>
+    <AllMessagesToOutputWindow>false</AllMessagesToOutputWindow>
     <CoffeeScriptCompileOnBuild>true</CoffeeScriptCompileOnBuild>
     <CoffeeScriptCompileToFolder>false</CoffeeScriptCompileToFolder>
+    <CoffeeScriptCompileToLocation />
     <CoffeeScriptGenerateJsFile>true</CoffeeScriptGenerateJsFile>
     <CoffeeScriptMinify>false</CoffeeScriptMinify>
     <CoffeeScriptShowPreviewWindow>false</CoffeeScriptShowPreviewWindow>
+    <CoffeeScriptSourceMaps>false</CoffeeScriptSourceMaps>
     <CoffeeScriptWrapClosure>true</CoffeeScriptWrapClosure>
     <CssEnableGzipping>false</CssEnableGzipping>
     <CssEnableMinification>false</CssEnableMinification>
     <CssErrorLocation>0</CssErrorLocation>
+    <CssPreserveRelativePathsOnMinify>false</CssPreserveRelativePathsOnMinify>
     <CssShowBrowserTooltip>true</CssShowBrowserTooltip>
     <CssShowInitialInherit>false</CssShowInitialInherit>
     <CssShowUnsupported>true</CssShowUnsupported>
@@ -17,8 +21,12 @@
     <CSSValidateOverQualifiedSelector>true</CSSValidateOverQualifiedSelector>
     <CssValidateStarSelector>true</CssValidateStarSelector>
     <CssValidateZeroUnit>true</CssValidateZeroUnit>
+    <EnableAngularValidation>false</EnableAngularValidation>
     <EnableBrowserLinkMenu>true</EnableBrowserLinkMenu>
     <EnableEnterFormat>true</EnableEnterFormat>
+    <HtmlEnableMinification>false</HtmlEnableMinification>
+    <JavaScriptCamelCaseClassNames>false</JavaScriptCamelCaseClassNames>
+    <JavaScriptCamelCasePropertyNames>false</JavaScriptCamelCasePropertyNames>
     <JavaScriptEnableGzipping>false</JavaScriptEnableGzipping>
     <JavaScriptEnableMinification>false</JavaScriptEnableMinification>
     <JavaScriptGenerateSourceMaps>true</JavaScriptGenerateSourceMaps>
@@ -85,11 +93,13 @@
     <KeepImportantComments>true</KeepImportantComments>
     <LessCompileOnBuild>true</LessCompileOnBuild>
     <LessCompileToFolder>false</LessCompileToFolder>
+    <LessCompileToLocation />
     <LessGenerateCssFile>true</LessGenerateCssFile>
     <LessMinify>false</LessMinify>
     <LessShowPreviewWindow>false</LessShowPreviewWindow>
     <LessSourceMaps>false</LessSourceMaps>
     <PixelPushing_OnByDefault>True</PixelPushing_OnByDefault>
+    <SvgShowPreviewWindow>false</SvgShowPreviewWindow>
     <UnusedCss_IgnorePatterns>bootstrap*; reset.css; normalize.css; jquery*; toastr*; foundation*; animate*; inuit*; elements*; ratchet*; hint*; flat-ui*; 960*; skeleton*</UnusedCss_IgnorePatterns>
     <ValidateVendorSpecifics>true</ValidateVendorSpecifics>
   </settings>

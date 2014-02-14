@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Kilometros_WebGlobalization.API {
+namespace Kilometros_WebGlobalization.WebApp {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace Kilometros_WebGlobalization.API {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class ControllerStrings {
+    public class LayoutStrings {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal ControllerStrings() {
+        internal LayoutStrings() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace Kilometros_WebGlobalization.API {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Kilometros_WebGlobalization.API.ControllerStrings", typeof(ControllerStrings).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Kilometros_WebGlobalization.WebApp.LayoutStrings", typeof(LayoutStrings).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,38 +61,56 @@ namespace Kilometros_WebGlobalization.API {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The User {0} requested could not be found.
+        ///   Looks up a localized string similar to Compare.
         /// </summary>
-        public static string Warning101_UserNotFound {
+        public static string Compare {
             get {
-                return ResourceManager.GetString("Warning101_UserNotFound", resourceCulture);
+                return ResourceManager.GetString("Compare", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Token {0} requested could not be found.
+        ///   Looks up a localized string similar to Home.
         /// </summary>
-        public static string Warning102_TokenNotFound {
+        public static string Home {
             get {
-                return ResourceManager.GetString("Warning102_TokenNotFound", resourceCulture);
+                return ResourceManager.GetString("Home", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Device ID {0} is invalid or non existant.
+        ///   Looks up a localized string similar to My Profile.
         /// </summary>
-        public static string Warning401_DeviceIdInvalid {
+        public static string MyProfile {
             get {
-                return ResourceManager.GetString("Warning401_DeviceIdInvalid", resourceCulture);
+                return ResourceManager.GetString("MyProfile", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Device ID {0} is not currently owned by the user.
+        ///   Looks up a localized string similar to Rewards.
         /// </summary>
-        public static string Warning402_DeviceNotOwned {
+        public static string Rewards {
             get {
-                return ResourceManager.GetString("Warning402_DeviceNotOwned", resourceCulture);
+                return ResourceManager.GetString("Rewards", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type here to search ....
+        /// </summary>
+        public static string SearchPlaceholder {
+            get {
+                return ResourceManager.GetString("SearchPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tips.
+        /// </summary>
+        public static string Tips {
+            get {
+                return ResourceManager.GetString("Tips", resourceCulture);
             }
         }
     }

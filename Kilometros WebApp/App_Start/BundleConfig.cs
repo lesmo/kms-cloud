@@ -5,14 +5,17 @@ namespace Kilometros_WebApp {
     public class BundleConfig {
         // For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles) {
-            bundles.Add(new ScriptBundle("~/lib/jquery").Include(
-                "~/FrontendBundle/Scripts/Lib/jquery-{version}.js"
-            ));
+            bundles.Add(new ScriptBundle("~/js").Include(
+                // jQuery + jQuery UI (Metro)
+                "~/FrontendBundle/Scripts/Lib/jquery-1.10.2.js",
+                "~/FrontendBundle/Scripts/Lib/jquery-ui-1.10.4.js",
+                
+                // Some other misc libraries
+                "~/FrontendBundle/Scripts/Lib/respond.js",
 
-            //// Use the development version of Modernizr to develop with and learn from. Then, when you're
-            //// ready for production, use the build tool at http://modernizr.com to pick only the tests you need.
-            //bundles.Add(new ScriptBundle("~/lib/modernizr").Include(
-            //            "~/FrontendBundle/Scripts/Lib/modernizr-*"));
+                // KMS Scripts
+                "~/FrontendBundle/Scripts/HeaderSearch.js"
+            ));
             
             bundles.Add(new StyleBundle("~/css").Include(
                 // 960.gs
@@ -20,9 +23,15 @@ namespace Kilometros_WebApp {
                 "~/FrontendBundle/Styles/Lib/reset.css",
                 "~/FrontendBundle/Styles/Lib/text.css", // se eliminó el selector "body" para evitar conflicto con {Shared.css}
 
-                // KMS
+                // jQuery UI (Metro)
+                "~/FrontendBundle/Styles/Lib/jquery-ui.css",
+
+                // KMS Common
                 "~/FrontendBundle/Styles/Shared.css",
-                "~/FrontendBundle/Styles/Navigation.css"
+
+                // KMS Layout
+                "~/FrontendBundle/Styles/Layout/Navigation.css",
+                "~/FrontendBundle/Styles/Layout/Footer.css"
             ));
         }
     }

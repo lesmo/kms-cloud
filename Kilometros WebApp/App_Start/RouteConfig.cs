@@ -14,7 +14,7 @@ namespace Kilometros_WebApp {
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new {
-                    controller = "Home",
+                    controller = "Entry",
                     action = "Index",
                     id = UrlParameter.Optional
                 }

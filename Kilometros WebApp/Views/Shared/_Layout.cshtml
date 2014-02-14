@@ -1,56 +1,139 @@
-﻿<!DOCTYPE html>
+﻿@{
+    LayoutValues layoutValues
+        = (LayoutValues)ViewData["LayoutValues"];
+
+    layoutValues = layoutValues ?? new LayoutValues();
+}
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
+    <meta name="description" content="The description of my page" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KMS :: @ViewBag.Title</title>
+
+    <title>KMS :: @(ViewBag.Title ?? "Mueve al mundo")</title>
 
     @* Styles *@
     @Styles.Render("~/css")
-
-    @* Scripts *@
-    @*Scripts.Render("~/lib/modernizr")*@
-    @Scripts.Render("~/lib/jquery")
 </head>
 <body>
     <header>
-        <span id="kms-head-logo"></span>
+        <a href="@Url.Action("Index", "Entry")">
+            <span id="kms-head-logo"></span>
+        </a>
 
         <div>
+            @using ( Html.BeginForm("Index", "Search", FormMethod.Get) ) {
+                <input type="text" name="kms-q" placeholder="@LayoutStrings.SearchPlaceholder" />
+                <input type="submit" value="Search" />
+            }
+
             <ul>
-                <li>@Html.ActionLink("{{Home}}","Index","Entry");</li>
+                <li>
+                    @Html.ActionLink(
+                        LayoutStrings.Home,
+                        "Index",
+                        "Entry",
+                        null, new {
+                            @class = layoutValues.Section == LayoutValues.MainSection.Home ? "active" : ""
+                        }
+                    )
+                </li>
+                <li>
+                    @Html.ActionLink(
+                        LayoutStrings.Tips,
+                        "Index",
+                        "Entry",
+                        null, new {
+                            @class = layoutValues.Section == LayoutValues.MainSection.Tips ? "active" : ""
+                        }
+                    )
+                </li>
+                <li>
+                    @Html.ActionLink(
+                        LayoutStrings.Compare,
+                        "Index",
+                        "Entry",
+                        null, new {
+                            @class = layoutValues.Section == LayoutValues.MainSection.Compare ? "active" : ""
+                        }
+                    )
+                </li>
+                <li>
+                    @Html.ActionLink(
+                        LayoutStrings.Rewards,
+                        "Index",
+                        "Entry",
+                        null, new {
+                            @class = layoutValues.Section == LayoutValues.MainSection.Rewards ? "active" : ""
+                        }
+                    )
+                </li>
+                <li>
+                    @Html.ActionLink(
+                        LayoutStrings.MyProfile,
+                        "Index",
+                        "Entry",
+                        null, new {
+                            @class = layoutValues.Section == LayoutValues.MainSection.MyProfile ? "active" : ""
+                        }
+                    )
+                </li>
             </ul>
+
+            @if ( layoutValues.UnreadMessages > 0 ) {
+                <span id="messages-icon" class="unread">
+                    <span>@layoutValues.UnreadMessages</span>
+                </span>
+            } else {
+                <span id="messages-icon"></span>
+            }
+
+            <span id="user-icon">
+                <span class="icon">
+                    <span></span>
+                </span>
+                @if ( layoutValues.UserNameKnown ) {
+                    <span class="name">
+                        @layoutValues.UserName<br/>
+                        <small>@layoutValues.UserLastname</small>
+                    </span>
+                }
+            </span>
         </div>
     </header>
 
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Application name", "Index", "Home", null, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
-    <div class="container body-content">
+    <div id="body" class="container_16">
         @RenderBody()
-        <hr />
     </div>
 
-    <footer>
-        <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+    <footer class="container_16">
+        <div class="grid_2">
+            <h4>Producto</h4>
+        </div>
+        <div class="grid_2">
+            <h4>Servicios</h4>
+        </div>
+        <div class="grid_2">
+            <h4>Tiendas</h4>
+        </div>
+        <div class="grid_2">
+            <h4>KMS</h4>
+        </div>
+        <div class="grid_6">
+            <h4>Redes</h4>
+        </div>
+        <div class="clear"></div>
+
+        <div class="grid_12">
+            <small>&copy; @DateTime.Now.Year - Sharp Dynamics S de RL de CV</small>
+        </div>
     </footer>
+
+    @* Scripts *@
+    @*Scripts.Render("~/lib/modernizr")*@
+    @Scripts.Render("~/js")
 
     @* Footer Scripts (Optional) *@
     @RenderSection("scripts", required: false)

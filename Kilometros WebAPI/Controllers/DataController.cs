@@ -10,6 +10,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Data.Entity.Validation;
+using Kilometros_WebGlobalization.API;
 
 namespace Kilometros_WebAPI.Controllers {
     [Authorize]
@@ -35,7 +36,7 @@ namespace Kilometros_WebAPI.Controllers {
                 response.StatusCode = HttpStatusCode.BadRequest;
                 response.Headers.TryAddWithoutValidation(
                     "Warning",
-                    "401 " + Resources.DataController.Warning401_DeviceIdInvalid
+                    "401 " + string.Format(ControllerStrings.Warning401_DeviceIdInvalid, deviceIdString)
                 );
                 
                 return response;
@@ -56,7 +57,7 @@ namespace Kilometros_WebAPI.Controllers {
                 response.StatusCode = HttpStatusCode.NotFound;
                 response.Headers.TryAddWithoutValidation(
                     "Warning",
-                    "404 " + Resources.DataController.Warning404_DeviceNotFound
+                    "402 " + string.Format(ControllerStrings.Warning402_DeviceNotOwned, deviceIdString)
                 );
 
                 return response;

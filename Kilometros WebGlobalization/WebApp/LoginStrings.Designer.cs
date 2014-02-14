@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Kilometros_WebGlobalization.API {
+namespace Kilometros_WebGlobalization.WebApp {
     using System;
     
     
@@ -22,24 +22,24 @@ namespace Kilometros_WebGlobalization.API {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class ControllerStrings {
+    internal class LoginStrings {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal ControllerStrings() {
+        internal LoginStrings() {
         }
         
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
+        internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Kilometros_WebGlobalization.API.ControllerStrings", typeof(ControllerStrings).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Kilometros_WebGlobalization.WebApp.LoginStrings", typeof(LoginStrings).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -51,7 +51,7 @@ namespace Kilometros_WebGlobalization.API {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
+        internal static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,38 +61,11 @@ namespace Kilometros_WebGlobalization.API {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The User {0} requested could not be found.
+        ///   Looks up a localized string similar to Login.
         /// </summary>
-        public static string Warning101_UserNotFound {
+        internal static string Login {
             get {
-                return ResourceManager.GetString("Warning101_UserNotFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The Token {0} requested could not be found.
-        /// </summary>
-        public static string Warning102_TokenNotFound {
-            get {
-                return ResourceManager.GetString("Warning102_TokenNotFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Device ID {0} is invalid or non existant.
-        /// </summary>
-        public static string Warning401_DeviceIdInvalid {
-            get {
-                return ResourceManager.GetString("Warning401_DeviceIdInvalid", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Device ID {0} is not currently owned by the user.
-        /// </summary>
-        public static string Warning402_DeviceNotOwned {
-            get {
-                return ResourceManager.GetString("Warning402_DeviceNotOwned", resourceCulture);
+                return ResourceManager.GetString("Login", resourceCulture);
             }
         }
     }
