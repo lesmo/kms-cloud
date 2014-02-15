@@ -129,4 +129,7 @@
   <data name="Warning501_AccountDataInvalid" xml:space="preserve">
     <value>Account Data received is invalid</value>
   </data>
+  <data name="Warning502_AccountDataNotChanged" xml:space="preserve">
+    <value>Account Data received is not different to current data</value>
+  </data>
 </root>

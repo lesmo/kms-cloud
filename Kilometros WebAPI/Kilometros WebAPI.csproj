@@ -151,7 +151,9 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\DataController.cs" />
-    <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\MyAccountController.cs" />
+    <Compile Include="Controllers\MyContactInfoController.cs" />
+    <Compile Include="Controllers\MyPhysiqueController.cs" />
     <Compile Include="Controllers\SessionController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -160,13 +162,17 @@
     <Compile Include="Helpers\HttpResponseMessageHeadersHelper.cs" />
     <Compile Include="Helpers\HttpRequestMessageHeadersHelper.cs" />
     <Compile Include="Helpers\MiscHelper.cs" />
-    <Compile Include="Models\HttpGet\UserController\AccountResponse.cs" />
+    <Compile Include="Models\HttpGet\My_Controllers\AccountResponse.cs" />
+    <Compile Include="Models\HttpGet\My_Controllers\ContactInfoResponse.cs" />
+    <Compile Include="Models\HttpGet\My_Controllers\PhysiqueResponse.cs" />
     <Compile Include="Models\HttpGet\SessionController\TokenResponse.cs" />
     <Compile Include="Models\HttpPost\DataController\DataPost.cs" />
+    <Compile Include="Models\HttpPost\My_Controller\ContactInfoPost.cs" />
+    <Compile Include="Models\HttpPost\My_Controller\PhysiquePost.cs" />
     <Compile Include="Models\HttpPost\SessionController\LoginPost.cs" />
     <Compile Include="MessageHandlers\RequestSecurityHandler.cs" />
     <Compile Include="MessageHandlers\ResponseEncoder.cs" />
-    <Compile Include="Models\HttpPost\UserController\AccountPost.cs" />
+    <Compile Include="Models\HttpPost\My_Controller\AccountPost.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\KmsIdentity.cs" />
   </ItemGroup>

@@ -95,5 +95,14 @@ namespace Kilometros_WebGlobalization.API {
                 return ResourceManager.GetString("Warning501_AccountDataInvalid", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Account Data received is not different to current data.
+        /// </summary>
+        public static string Warning502_AccountDataNotChanged {
+            get {
+                return ResourceManager.GetString("Warning502_AccountDataNotChanged", resourceCulture);
+            }
+        }
     }
 }

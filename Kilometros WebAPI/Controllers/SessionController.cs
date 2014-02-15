@@ -63,9 +63,9 @@ namespace Kilometros_WebAPI.Controllers {
                 User = user,
                 Guid = Guid.NewGuid(),
 
-                CreationDate = DateTime.Now,
-                LastUseDate = DateTime.Now,
-                ExpirationDate = DateTime.Now.AddDays(30)
+                CreationDate = DateTime.UtcNow,
+                LastUseDate = DateTime.UtcNow,
+                ExpirationDate = DateTime.UtcNow.AddDays(30)
             };
 
             this.Database.TokenStore.Add(token);
@@ -73,7 +73,7 @@ namespace Kilometros_WebAPI.Controllers {
 
             /** Preparar y enviar respuesta **/
             TokenResponse tokenResponse = new TokenResponse() {
-                Expires = DateTime.Now.AddDays(30),
+                Expires = DateTime.UtcNow.AddDays(30),
                 Token = Convert.ToBase64String(token.Guid.ToByteArray()),
                 Pending = {}
             };
