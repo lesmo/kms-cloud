@@ -29,7 +29,7 @@ namespace Kilometros_WebAPI.Controllers {
             UserBody physique
                 = identity.UserData.UserBody;
 
-            /** Validar si existe Información de Contacto registrada **/
+            /** Validar si existe Perfil Físico **/
             if ( physique == null ) {
                 return Request.CreateResponse(
                     HttpStatusCode.NoContent
@@ -47,6 +47,7 @@ namespace Kilometros_WebAPI.Controllers {
                     );
             }
 
+            /** Preparar y devolver respuesta **/
             PhysiqueResponse responseContent
                 = new PhysiqueResponse() {
                     Age

@@ -12,7 +12,6 @@ using System.Threading.Tasks;
 using System.Web;
 
 namespace Kilometros_WebAPI.MessageHandlers {
-
     public class ResponseEncoder : DelegatingHandler {
 
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken) {
@@ -74,7 +73,7 @@ namespace Kilometros_WebAPI.MessageHandlers {
                     compressedStream = new GZipStream(stream, CompressionMode.Compress, leaveOpen: true);
                 else if (encodingType == "deflate")
                     compressedStream = new DeflateStream(stream, CompressionMode.Compress, leaveOpen: true);
-
+                
                 return originalContent.CopyToAsync(compressedStream).ContinueWith(
                     tsk => {
                         if (compressedStream != null)
