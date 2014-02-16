@@ -156,7 +156,8 @@
     <Compile Include="Controllers\MyPhysiqueController.cs" />
     <Compile Include="Controllers\RegisterController.cs" />
     <Compile Include="Controllers\SessionController.cs" />
-    <Compile Include="ExceptionFilters\GenericHttpExceptionFilter.cs" />
+    <Compile Include="ExceptionFilters\HttpNotModifiedExceptionFilter.cs" />
+    <Compile Include="Exceptions\HttpNotModifiedException.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
