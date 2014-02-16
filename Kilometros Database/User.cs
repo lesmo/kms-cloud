@@ -17,9 +17,11 @@ namespace KilometrosDatabase
         public User()
         {
             this.Token = new HashSet<Token>();
+            this.RewardGiftToken = new HashSet<RewardGiftToken>();
             this.UserMotionLevelHistory = new HashSet<UserMotionLevelHistory>();
             this.UserEarnedReward = new HashSet<UserEarnedReward>();
             this.Data = new HashSet<Data>();
+            this.RewardGiftUserClaimed = new HashSet<RewardGiftUserClaimed>();
         }
     
         public System.Guid Guid { get; private set; }
@@ -31,12 +33,13 @@ namespace KilometrosDatabase
     
         public virtual ICollection<Token> Token { get; set; }
         public virtual UserBody UserBody { get; set; }
-        public virtual RewardGiftToken RewardGiftToken { get; set; }
+        public virtual ICollection<RewardGiftToken> RewardGiftToken { get; set; }
         public virtual ICollection<UserMotionLevelHistory> UserMotionLevelHistory { get; set; }
         public virtual ICollection<UserEarnedReward> UserEarnedReward { get; set; }
         public virtual ContactInfo ContactInfo { get; set; }
         public virtual ShippingInformation ShippingInformation { get; set; }
         public virtual SocialIdentity SocialIdentity { get; set; }
         public virtual ICollection<Data> Data { get; set; }
+        public virtual ICollection<RewardGiftUserClaimed> RewardGiftUserClaimed { get; set; }
     }
 }

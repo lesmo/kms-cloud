@@ -17,7 +17,7 @@ namespace KilometrosDatabase {
             // > Validar la Fecha de Expiración
             if (
                    this.ExpirationDate.HasValue
-                && DateTime.Compare((DateTime)this.ExpirationDate, DateTime.UtcNow) < 0
+                && DateTime.Compare((DateTime)this.ExpirationDate.Value, DateTime.UtcNow) < 0
             ) {
                 validationErrors.Add(
                     new ValidationResult("Expiration Date is in the past, time machines don't exist yet", new[] { "ExpirationDate" })

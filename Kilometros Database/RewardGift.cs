@@ -27,5 +27,6 @@ namespace KilometrosDatabase
         public virtual ICollection<RewardGiftGlobalization> RewardGiftGlobalization { get; set; }
         public virtual ICollection<RewardGiftToken> RewardGiftToken { get; set; }
         public virtual ICollection<RewardGiftImage> RewardGiftImage { get; set; }
+        public virtual RewardGiftUserClaimed RewardGiftUserClaimed { get; set; }
     }
 }

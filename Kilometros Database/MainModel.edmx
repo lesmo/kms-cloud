@@ -31,6 +31,7 @@
     <EntitySet Name="SocialIdentitySet" EntityType="MainModel.Store.SocialIdentitySet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="RegionSet" EntityType="MainModel.Store.RegionSet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="RegionSubdivisionSet" EntityType="MainModel.Store.RegionSubdivisionSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="RewardGiftUserClaimedSet" EntityType="MainModel.Store.RewardGiftUserClaimedSet" store:Type="Tables" Schema="dbo" />
     <AssociationSet Name="ApiKeyToken" Association="MainModel.Store.ApiKeyToken">
       <End Role="ApiKey" EntitySet="ApiKeySet" />
       <End Role="Token" EntitySet="TokenSet" />
@@ -131,6 +132,14 @@
       <End Role="User" EntitySet="UserSet" />
       <End Role="Data" EntitySet="DataSet" />
     </AssociationSet>
+    <AssociationSet Name="RewardGiftUserClaimedUser" Association="MainModel.Store.RewardGiftUserClaimedUser">
+      <End Role="RewardGiftUserClaimed" EntitySet="RewardGiftUserClaimedSet" />
+      <End Role="User" EntitySet="UserSet" />
+    </AssociationSet>
+    <AssociationSet Name="RewardGiftUserClaimedRewardGift" Association="MainModel.Store.RewardGiftUserClaimedRewardGift">
+      <End Role="RewardGiftUserClaimed" EntitySet="RewardGiftUserClaimedSet" />
+      <End Role="RewardGift" EntitySet="RewardGiftSet" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="UserSet">
     <Key>
@@ -142,7 +151,6 @@
     <Property Name="Password" Type="varbinary(max)" Nullable="true" />
     <Property Name="RegionCode" Type="nchar" Nullable="true" MaxLength="5" />
     <Property Name="PreferredCultureCode" Type="nvarchar" Nullable="true" MaxLength="16" />
-    <Property Name="RewardGiftToken_Guid" Type="uniqueidentifier" Nullable="false" />
   </EntityType>
   <EntityType Name="TokenSet">
     <Key>
@@ -165,6 +173,7 @@
     <Property Name="Guid" Type="uniqueidentifier" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Secret" Type="uniqueidentifier" Nullable="false" />
     <Property Name="TokenUpgradeRequired" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="DebugEnabled" Type="bit" Nullable="false" DefaultValue="false" />
     <Property Name="ApiKeyNext_Guid" Type="uniqueidentifier" Nullable="true" />
   </EntityType>
   <EntityType Name="TipSet">
@@ -284,6 +293,7 @@
     <Property Name="RedeemGraphic" Type="varbinary(max)" Nullable="true" />
     <Property Name="RedeemGraphicMimeType" Type="nvarchar(max)" Nullable="true" />
     <Property Name="RewardGift_Guid" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="RedeemedByUser_Guid" Type="uniqueidentifier" Nullable="false" />
   </EntityType>
   <EntityType Name="RewardRegionalizationSet">
     <Key>
@@ -386,6 +396,14 @@
     <Property Name="IsoCode" Type="nvarchar(max)" Nullable="false" />
     <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
     <Property Name="Region_Id" Type="bigint" Nullable="false" />
+  </EntityType>
+  <EntityType Name="RewardGiftUserClaimedSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="RewardGift_Guid" Type="uniqueidentifier" Nullable="false" />
   </EntityType>
   <Association Name="ApiKeyToken">
     <End Role="ApiKey" Type="MainModel.Store.ApiKeySet" Multiplicity="1">
@@ -564,14 +582,14 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="RewardGiftTokenUser">
-    <End Role="RewardGiftToken" Type="MainModel.Store.RewardGiftTokenSet" Multiplicity="1" />
-    <End Role="User" Type="MainModel.Store.UserSet" Multiplicity="*" />
+    <End Role="RewardGiftToken" Type="MainModel.Store.RewardGiftTokenSet" Multiplicity="*" />
+    <End Role="User" Type="MainModel.Store.UserSet" Multiplicity="1" />
     <ReferentialConstraint>
-      <Principal Role="RewardGiftToken">
+      <Principal Role="User">
         <PropertyRef Name="Guid" />
       </Principal>
-      <Dependent Role="User">
-        <PropertyRef Name="RewardGiftToken_Guid" />
+      <Dependent Role="RewardGiftToken">
+        <PropertyRef Name="RedeemedByUser_Guid" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -715,6 +733,30 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="RewardGiftUserClaimedUser">
+    <End Role="RewardGiftUserClaimed" Type="MainModel.Store.RewardGiftUserClaimedSet" Multiplicity="*" />
+    <End Role="User" Type="MainModel.Store.UserSet" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Guid" />
+      </Principal>
+      <Dependent Role="RewardGiftUserClaimed">
+        <PropertyRef Name="User_Guid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="RewardGiftUserClaimedRewardGift">
+    <End Role="RewardGiftUserClaimed" Type="MainModel.Store.RewardGiftUserClaimedSet" Multiplicity="*" />
+    <End Role="RewardGift" Type="MainModel.Store.RewardGiftSet" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="RewardGift">
+        <PropertyRef Name="Guid" />
+      </Principal>
+      <Dependent Role="RewardGiftUserClaimed">
+        <PropertyRef Name="RewardGift_Guid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -845,6 +887,15 @@
             <End Role="User" EntitySet="UserSet" />
             <End Role="Data" EntitySet="DataSet" />
           </AssociationSet>
+          <EntitySet Name="RewardGiftUserClaimedSet" EntityType="MainModel.RewardGiftUserClaimed" />
+          <AssociationSet Name="RewardGiftUserClaimedUser" Association="MainModel.RewardGiftUserClaimedUser">
+            <End Role="RewardGiftUserClaimed" EntitySet="RewardGiftUserClaimedSet" />
+            <End Role="User" EntitySet="UserSet" />
+          </AssociationSet>
+          <AssociationSet Name="RewardGiftUserClaimedRewardGift" Association="MainModel.RewardGiftUserClaimedRewardGift">
+            <End Role="RewardGiftUserClaimed" EntitySet="RewardGiftUserClaimedSet" />
+            <End Role="RewardGift" EntitySet="RewardGiftSet" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="User">
           <Documentation>
@@ -921,6 +972,7 @@
             </Documentation>
           </Property>
           <NavigationProperty Name="Data" Relationship="MainModel.UserData" FromRole="User" ToRole="Data" />
+          <NavigationProperty Name="RewardGiftUserClaimed" Relationship="MainModel.RewardGiftUserClaimedUser" FromRole="User" ToRole="RewardGiftUserClaimed" />
         </EntityType>
         <EntityType Name="Token">
           <Documentation>
@@ -1287,12 +1339,13 @@
               <Summary>Imagen(es) del Regalo.</Summary>
             </Documentation>
           </NavigationProperty>
+          <NavigationProperty Name="RewardGiftUserClaimed" Relationship="MainModel.RewardGiftUserClaimedRewardGift" FromRole="RewardGift" ToRole="RewardGiftUserClaimed" />
         </EntityType>
         <Association Name="RewardRewardGift">
           <End Type="MainModel.Reward" Role="Reward" Multiplicity="1" >
             <OnDelete Action="Cascade" />
           </End>
-          <End Type="MainModel.RewardGift" Role="RewardGift" Multiplicity="0..1" >
+          <End Type="MainModel.RewardGift" Role="RewardGift" Multiplicity="*" >
           </End>
         </Association>
         <EntityType Name="RewardGlobalization">
@@ -1410,8 +1463,8 @@
           <End Type="MainModel.RewardGiftToken" Role="RewardGiftToken" Multiplicity="*" />
         </Association>
         <Association Name="RewardGiftTokenUser">
-          <End Type="MainModel.RewardGiftToken" Role="RewardGiftToken" Multiplicity="1" />
-          <End Type="MainModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="MainModel.RewardGiftToken" Role="RewardGiftToken" Multiplicity="*" />
+          <End Type="MainModel.User" Role="User" Multiplicity="1" />
         </Association>
         <EntityType Name="UserMotionLevelHistory">
           <Documentation>
@@ -1617,6 +1670,22 @@
           <End Type="MainModel.User" Role="User" Multiplicity="1" />
           <End Type="MainModel.Data" Role="Data" Multiplicity="*" />
         </Association>
+        <EntityType Name="RewardGiftUserClaimed">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="User" Relationship="MainModel.RewardGiftUserClaimedUser" FromRole="RewardGiftUserClaimed" ToRole="User" />
+          <NavigationProperty Name="RewardGift" Relationship="MainModel.RewardGiftUserClaimedRewardGift" FromRole="RewardGiftUserClaimed" ToRole="RewardGift" />
+        </EntityType>
+        <Association Name="RewardGiftUserClaimedUser">
+          <End Type="MainModel.RewardGiftUserClaimed" Role="RewardGiftUserClaimed" Multiplicity="*" />
+          <End Type="MainModel.User" Role="User" Multiplicity="1" />
+        </Association>
+        <Association Name="RewardGiftUserClaimedRewardGift">
+          <End Type="MainModel.RewardGiftUserClaimed" Role="RewardGiftUserClaimed" Multiplicity="1" />
+          <End Type="MainModel.RewardGift" Role="RewardGift" Multiplicity="1" />
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1654,6 +1723,7 @@
           <ScalarProperty Name="Description" ColumnName="Description" />
           <ScalarProperty Name="Secret" ColumnName="Secret" />
           <ScalarProperty Name="TokenUpgradeRequired" ColumnName="TokenUpgradeRequired" />
+          <ScalarProperty Name="DebugEnabled" ColumnName="DebugEnabled" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -1878,6 +1948,13 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="RewardGiftUserClaimedSet">
+      <EntityTypeMapping TypeName="IsTypeOf(MainModel.RewardGiftUserClaimed)">
+        <MappingFragment StoreEntitySet="RewardGiftUserClaimedSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <AssociationSetMapping Name="ApiKeyToken" TypeName="MainModel.ApiKeyToken" StoreEntitySet="TokenSet">
       <EndProperty Name="ApiKey">
         <ScalarProperty Name="Guid" ColumnName="ApiKey_Guid" />
@@ -1982,11 +2059,11 @@
         <ScalarProperty Name="Guid" ColumnName="Guid" />
       </EndProperty>
     </AssociationSetMapping>
-    <AssociationSetMapping Name="RewardGiftTokenUser" TypeName="MainModel.RewardGiftTokenUser" StoreEntitySet="UserSet">
-      <EndProperty Name="RewardGiftToken">
-        <ScalarProperty Name="Guid" ColumnName="RewardGiftToken_Guid" />
-      </EndProperty>
+    <AssociationSetMapping Name="RewardGiftTokenUser" TypeName="MainModel.RewardGiftTokenUser" StoreEntitySet="RewardGiftTokenSet">
       <EndProperty Name="User">
+        <ScalarProperty Name="Guid" ColumnName="RedeemedByUser_Guid" />
+      </EndProperty>
+      <EndProperty Name="RewardGiftToken">
         <ScalarProperty Name="Guid" ColumnName="Guid" />
       </EndProperty>
     </AssociationSetMapping>
@@ -2077,6 +2154,22 @@
       </EndProperty>
       <EndProperty Name="Data">
         <ScalarProperty Name="TimeStamp" ColumnName="TimeStamp" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="RewardGiftUserClaimedUser" TypeName="MainModel.RewardGiftUserClaimedUser" StoreEntitySet="RewardGiftUserClaimedSet">
+      <EndProperty Name="User">
+        <ScalarProperty Name="Guid" ColumnName="User_Guid" />
+      </EndProperty>
+      <EndProperty Name="RewardGiftUserClaimed">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="RewardGiftUserClaimedRewardGift" TypeName="MainModel.RewardGiftUserClaimedRewardGift" StoreEntitySet="RewardGiftUserClaimedSet">
+      <EndProperty Name="RewardGift">
+        <ScalarProperty Name="Guid" ColumnName="RewardGift_Guid" />
+      </EndProperty>
+      <EndProperty Name="RewardGiftUserClaimed">
+        <ScalarProperty Name="Id" ColumnName="Id" />
       </EndProperty>
     </AssociationSetMapping>
   </EntityContainerMapping>

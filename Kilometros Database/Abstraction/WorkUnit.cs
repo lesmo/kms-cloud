@@ -248,6 +248,19 @@ namespace KilometrosDatabase.Abstraction {
             }
         }
         private GenericRepository<RewardGiftToken> _rewardGiftTokenRepository = null;
+
+        /// <summary>
+        /// Almacén de asociación entre Regalos y Usuario que han reclamado esos regalos
+        /// </summary>
+        public GenericRepository<RewardGiftUserClaimed> RewardGiftUserClaimedStore {
+            get {
+                if ( this._rewardGiftUserClaimedRepository == null )
+                    this._rewardGiftUserClaimedRepository = new GenericRepository<RewardGiftUserClaimed>(this._context);
+
+                return this._rewardGiftUserClaimedRepository;
+            }
+        }
+        private GenericRepository<RewardGiftUserClaimed> _rewardGiftUserClaimedRepository = null;
         #endregion
 
         #region Globalization Storage

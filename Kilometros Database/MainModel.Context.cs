@@ -50,5 +50,6 @@ namespace KilometrosDatabase
         public DbSet<SocialIdentity> SocialIdentitySet { get; set; }
         public DbSet<Region> RegionSet { get; set; }
         public DbSet<RegionSubdivision> RegionSubdivisionSet { get; set; }
+        public DbSet<RewardGiftUserClaimed> RewardGiftUserClaimedSet { get; set; }
     }
 }

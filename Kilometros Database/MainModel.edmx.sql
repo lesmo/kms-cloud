@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 02/14/2014 16:08:46
+-- Date Created: 02/15/2014 18:16:59
 -- Generated from EDMX file: F:\Sharp Dynamics\Kilometros\Kilometros Database\MainModel.edmx
 -- --------------------------------------------------
 
@@ -88,6 +88,9 @@ IF OBJECT_ID(N'[dbo].[FK_RegionRegionSubdivision]', 'F') IS NOT NULL
 GO
 IF OBJECT_ID(N'[dbo].[FK_ApiKeyHistory]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[ApiKeySet] DROP CONSTRAINT [FK_ApiKeyHistory];
+GO
+IF OBJECT_ID(N'[dbo].[FK_UserData]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[DataSet] DROP CONSTRAINT [FK_UserData];
 GO
 
 -- --------------------------------------------------
@@ -181,8 +184,7 @@ CREATE TABLE [dbo].[UserSet] (
     [Email] nvarchar(max)  NOT NULL,
     [Password] varbinary(max)  NULL,
     [RegionCode] nchar(5)  NULL,
-    [PreferredCultureCode] nvarchar(16)  NULL,
-    [RewardGiftToken_Guid] uniqueidentifier  NOT NULL
+    [PreferredCultureCode] nvarchar(16)  NULL
 );
 GO
 
@@ -205,6 +207,7 @@ CREATE TABLE [dbo].[ApiKeySet] (
     [Guid] uniqueidentifier  NOT NULL,
     [Secret] uniqueidentifier  NOT NULL,
     [TokenUpgradeRequired] nvarchar(max)  NOT NULL,
+    [DebugEnabled] bit  NOT NULL,
     [ApiKeyNext_Guid] uniqueidentifier  NULL
 );
 GO
@@ -323,7 +326,8 @@ CREATE TABLE [dbo].[RewardGiftTokenSet] (
     [RedeemCode] nvarchar(max)  NOT NULL,
     [RedeemGraphic] varbinary(max)  NULL,
     [RedeemGraphicMimeType] nvarchar(max)  NULL,
-    [RewardGift_Guid] uniqueidentifier  NOT NULL
+    [RewardGift_Guid] uniqueidentifier  NOT NULL,
+    [RedeemedByUser_Guid] uniqueidentifier  NOT NULL
 );
 GO
 
@@ -426,6 +430,14 @@ CREATE TABLE [dbo].[RegionSubdivisionSet] (
     [IsoCode] nvarchar(max)  NOT NULL,
     [Name] nvarchar(max)  NOT NULL,
     [Region_Id] bigint  NOT NULL
+);
+GO
+
+-- Creating table 'RewardGiftUserClaimedSet'
+CREATE TABLE [dbo].[RewardGiftUserClaimedSet] (
+    [Id] bigint IDENTITY(1,1) NOT NULL,
+    [User_Guid] uniqueidentifier  NOT NULL,
+    [RewardGift_Guid] uniqueidentifier  NOT NULL
 );
 GO
 
@@ -580,6 +592,12 @@ GO
 -- Creating primary key on [Id] in table 'RegionSubdivisionSet'
 ALTER TABLE [dbo].[RegionSubdivisionSet]
 ADD CONSTRAINT [PK_RegionSubdivisionSet]
+    PRIMARY KEY CLUSTERED ([Id] ASC);
+GO
+
+-- Creating primary key on [Id] in table 'RewardGiftUserClaimedSet'
+ALTER TABLE [dbo].[RewardGiftUserClaimedSet]
+ADD CONSTRAINT [PK_RewardGiftUserClaimedSet]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
@@ -769,18 +787,18 @@ ON [dbo].[RewardGiftTokenSet]
     ([RewardGift_Guid]);
 GO
 
--- Creating foreign key on [RewardGiftToken_Guid] in table 'UserSet'
-ALTER TABLE [dbo].[UserSet]
+-- Creating foreign key on [RedeemedByUser_Guid] in table 'RewardGiftTokenSet'
+ALTER TABLE [dbo].[RewardGiftTokenSet]
 ADD CONSTRAINT [FK_RewardGiftTokenUser]
-    FOREIGN KEY ([RewardGiftToken_Guid])
-    REFERENCES [dbo].[RewardGiftTokenSet]
+    FOREIGN KEY ([RedeemedByUser_Guid])
+    REFERENCES [dbo].[UserSet]
         ([Guid])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_RewardGiftTokenUser'
 CREATE INDEX [IX_FK_RewardGiftTokenUser]
-ON [dbo].[UserSet]
-    ([RewardGiftToken_Guid]);
+ON [dbo].[RewardGiftTokenSet]
+    ([RedeemedByUser_Guid]);
 GO
 
 -- Creating foreign key on [User_Guid] in table 'UserMotionLevelHistorySet'
@@ -935,6 +953,34 @@ ADD CONSTRAINT [FK_UserData]
 CREATE INDEX [IX_FK_UserData]
 ON [dbo].[DataSet]
     ([User_Guid]);
+GO
+
+-- Creating foreign key on [User_Guid] in table 'RewardGiftUserClaimedSet'
+ALTER TABLE [dbo].[RewardGiftUserClaimedSet]
+ADD CONSTRAINT [FK_RewardGiftUserClaimedUser]
+    FOREIGN KEY ([User_Guid])
+    REFERENCES [dbo].[UserSet]
+        ([Guid])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_RewardGiftUserClaimedUser'
+CREATE INDEX [IX_FK_RewardGiftUserClaimedUser]
+ON [dbo].[RewardGiftUserClaimedSet]
+    ([User_Guid]);
+GO
+
+-- Creating foreign key on [RewardGift_Guid] in table 'RewardGiftUserClaimedSet'
+ALTER TABLE [dbo].[RewardGiftUserClaimedSet]
+ADD CONSTRAINT [FK_RewardGiftUserClaimedRewardGift]
+    FOREIGN KEY ([RewardGift_Guid])
+    REFERENCES [dbo].[RewardGiftSet]
+        ([Guid])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_RewardGiftUserClaimedRewardGift'
+CREATE INDEX [IX_FK_RewardGiftUserClaimedRewardGift]
+ON [dbo].[RewardGiftUserClaimedSet]
+    ([RewardGift_Guid]);
 GO
 
 -- --------------------------------------------------

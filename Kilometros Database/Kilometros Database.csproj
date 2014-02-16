@@ -65,7 +65,6 @@
     <Compile Include="EntityValidation\Users\Token.cs" />
     <Compile Include="EntityValidation\Users\User.cs" />
     <Compile Include="EntityValidation\Users\UserBody.cs" />
-    <Compile Include="EntityValidation\Users\WristBand.cs" />
     <Compile Include="Helpers\Base36Encoder.cs" />
     <Compile Include="Helpers\Crc64.cs" />
     <Compile Include="MainModel.Context.cs">
@@ -109,6 +108,9 @@
       <DependentUpon>MainModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RewardGiftToken.cs">
+      <DependentUpon>MainModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RewardGiftUserClaimed.cs">
       <DependentUpon>MainModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RewardGlobalization.cs">
