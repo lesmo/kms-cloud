@@ -57,20 +57,20 @@ namespace Kilometros_WebAPI.Controllers {
                 = identity.UserData;
 
             try {
-                if ( accountPost.PreferredCultureCode.HasValue ) {
+                if ( accountPost.PreferredCultureCode != null ) {
                     CultureInfo cultureInfo
-                        = new CultureInfo(accountPost.PreferredCultureCode.Value.ToLowerInvariant());
+                        = new CultureInfo(accountPost.PreferredCultureCode.ToLowerInvariant());
                     user.PreferredCultureInfo
                         = cultureInfo;
                 }
 
-                if ( accountPost.RegionCode.HasValue )
+                if ( accountPost.RegionCode != null )
                     user.RegionCode
-                        = accountPost.RegionCode.Value.ToLowerInvariant();
+                        = accountPost.RegionCode.ToLowerInvariant();
 
-                if ( accountPost.Email.HasValue )
+                if ( accountPost.Email != null )
                     user.Email
-                        = accountPost.Email.Value.ToLowerInvariant();
+                        = accountPost.Email.ToLowerInvariant();
                 
                 this.Database.UserStore.Update(user);
                 this.Database.SaveChanges();
