@@ -19,7 +19,7 @@ namespace Kilometros_WebAPI.Controllers {
         public KilometrosDatabase.Abstraction.WorkUnit Database
             = new KilometrosDatabase.Abstraction.WorkUnit();
         private HttpServerUtility _httpServerUtility
-            = new HttpServerUtility();
+            = HttpContext.Current.Server;
 
         [HttpGet]
         [Route("my/physique")]
@@ -57,9 +57,7 @@ namespace Kilometros_WebAPI.Controllers {
                     Weight
                         = physique.Weight,
                     Sex
-                        = physique.Sex,
-                    LastEdit
-                        = physique.LastEditDate
+                        = physique.Sex
                 };
 
             HttpResponseMessage response

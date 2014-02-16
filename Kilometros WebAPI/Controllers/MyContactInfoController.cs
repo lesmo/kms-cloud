@@ -19,7 +19,7 @@ namespace Kilometros_WebAPI.Controllers {
         public KilometrosDatabase.Abstraction.WorkUnit Database
             = new KilometrosDatabase.Abstraction.WorkUnit();
         private HttpServerUtility _httpServerUtility
-            = new HttpServerUtility();
+            = HttpContext.Current.Server;
 
         [HttpGet]
         [Route("my/contact-info")]
@@ -47,7 +47,7 @@ namespace Kilometros_WebAPI.Controllers {
                     );
             }
 
-                /** Preparar respuesta **/
+            /** Preparar respuesta **/
             ContactInfoResponse responseContent
                 = new ContactInfoResponse() {
                     HomePhone
@@ -55,9 +55,7 @@ namespace Kilometros_WebAPI.Controllers {
                     MobilePhone
                         = contactInfo.MobilePhone,
                     WorkPhone
-                        = contactInfo.WorkPhone,
-                    LastEdit
-                        = contactInfo.LastEditDate
+                        = contactInfo.WorkPhone
                 };
 
             HttpResponseMessage response

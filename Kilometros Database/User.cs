@@ -25,7 +25,7 @@ namespace KilometrosDatabase
         }
     
         public System.Guid Guid { get; private set; }
-        public System.DateTimeOffset CreationDate { get; set; }
+        public System.DateTime CreationDate { get; set; }
         public string Email { get; set; }
         public byte[] Password { get; set; }
         public string RegionCode { get; set; }

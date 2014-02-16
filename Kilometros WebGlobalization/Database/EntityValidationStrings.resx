@@ -117,28 +117,34 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="GenericValidationError" xml:space="preserve">
-    <value>Validation error: {0}</value>
+  <data name="EmailInvalid" xml:space="preserve">
+    <value>Email address is invalid</value>
   </data>
-  <data name="Warning100_CannotLoginAgain" xml:space="preserve">
-    <value>User [{0}] is already logged in</value>
+  <data name="ExpirationDateIsPast" xml:space="preserve">
+    <value>Expiration Date is in the past, time machines don't exist (yet)</value>
   </data>
-  <data name="Warning101_UserNotFound" xml:space="preserve">
-    <value>User [{0}] requested could not be found, or password is incorrect</value>
+  <data name="GenderInvalid" xml:space="preserve">
+    <value>Sex is invalid, it must be "m"or "f"</value>
   </data>
-  <data name="Warning102_TokenNotFound" xml:space="preserve">
-    <value>Token [{0}] requested could not be found or is invalid</value>
+  <data name="PreferredCultureInvalid" xml:space="preserve">
+    <value>Preferred Culture is invalid</value>
   </data>
-  <data name="Warning201_CannotCreateUserWithSessionOpen" xml:space="preserve">
-    <value>User [{0}] is logged in and cannot register a new account</value>
+  <data name="UserTooHeavy" xml:space="preserve">
+    <value>It's important that you're honest, but that's just not real</value>
   </data>
-  <data name="Warning202_PasswordHashInvalid" xml:space="preserve">
-    <value>Password Hash [{0}] invalid</value>
+  <data name="UserTooLight" xml:space="preserve">
+    <value>Be honest, you don't weight that and you know it!</value>
   </data>
-  <data name="Warning501_AccountDataInvalid" xml:space="preserve">
-    <value>Account Data received is invalid</value>
+  <data name="UserTooOld" xml:space="preserve">
+    <value>You're too old (like dead)</value>
   </data>
-  <data name="Warning502_AccountDataNotChanged" xml:space="preserve">
-    <value>Account Data received is not different to current data</value>
+  <data name="UserTooShort" xml:space="preserve">
+    <value>You're lying about your height, you can't be so short!</value>
+  </data>
+  <data name="UserTooTall" xml:space="preserve">
+    <value>It's impossible that you're that tall!</value>
+  </data>
+  <data name="UserTooYoung" xml:space="preserve">
+    <value>You're too young (a baby)</value>
   </data>
 </root>

@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq.Expressions;
 using System.Reflection;
+using KilometrosDatabase.Helpers;
 
 namespace KilometrosDatabase.Abstraction.Interfaces {
     public abstract class IRepository<TEntity> where TEntity : class {
@@ -37,19 +38,31 @@ namespace KilometrosDatabase.Abstraction.Interfaces {
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             string[] include = null
         ) {
-            IQueryable<TEntity> query = (IQueryable<TEntity>)this._dbSet.AsQueryable();
+            IQueryable<TEntity> query
+                = (IQueryable<TEntity>)this._dbSet.AsQueryable();
 
             if ( filter != null)
                 query = query.Where(filter);
 
-            if ( include != null && include.Length > 0)
+            if ( include != null && include.Length > 0 ) {
                 foreach ( string includeItem in include )
-                    query = query.Include(includeItem);
+                    query
+                        = query.Include(includeItem);
+            }
 
-            if ( orderBy != null )
-                return (IEnumerable<TEntity>)orderBy(query).ToList();
-            else
-                return (IEnumerable<TEntity>)query.ToList();
+            List<TEntity>returnValue
+                = orderBy != null
+                ? orderBy(query).ToList()
+                : query.ToList();
+
+            for ( int i = 0; i < returnValue.Count; i++ ) {
+                returnValue[i]
+                    = EntityDatesUtcKind.ConvertDatesKindToUtc<TEntity>(
+                        returnValue[i]
+                    );
+            }
+
+            return (IEnumerable<TEntity>)returnValue;    
         }
 
         /// <summary>
@@ -58,7 +71,9 @@ namespace KilometrosDatabase.Abstraction.Interfaces {
         /// <param name="id">ID de la Entidad</param>
         /// <returns>Entidad</returns>
         public virtual TEntity Get(Int64 id) {
-            return (TEntity)this._dbSet.Find(id);
+            return EntityDatesUtcKind.ConvertDatesKindToUtc<TEntity>(
+                (TEntity)this._dbSet.Find(id)
+            );
         }
         
         /// <summary>
@@ -67,7 +82,9 @@ namespace KilometrosDatabase.Abstraction.Interfaces {
         /// <param name="guid">GUID de la Entidad</param>
         /// <returns>Entidad</returns>
         public virtual TEntity Get(Guid guid) {
-            return (TEntity)this._dbSet.Find(guid);
+            return EntityDatesUtcKind.ConvertDatesKindToUtc<TEntity>(
+                (TEntity)this._dbSet.Find(guid)
+            );
         }
 
         /// <summary>
@@ -84,16 +101,16 @@ namespace KilometrosDatabase.Abstraction.Interfaces {
                 select thisProperty;
 
             // Establecer el valor de las propiedades
-            Type dateTimeOffsetType = typeof(DateTimeOffset);
+            Type dateTimeType = typeof(DateTime);
 
             foreach ( PropertyInfo property in setDateProperties ) {
                 dynamic value = property.GetValue(entity);
 
                 if ( 
-                    value.GetType() == dateTimeOffsetType
+                    value.GetType() == dateTimeType
                     && value == null
                 ) {
-                    property.SetValue(entity, DateTimeOffset.Now);
+                    property.SetValue(entity, DateTime.UtcNow);
                 }
             }
 
@@ -145,16 +162,16 @@ namespace KilometrosDatabase.Abstraction.Interfaces {
                 select thisProperty;
 
             // Establecer el valor de las propiedades
-            Type dateTimeOffsetType
-                = typeof(DateTimeOffset);
+            Type dateTimeType
+                = typeof(DateTime);
             foreach ( PropertyInfo property in setDateProperties ) {
                 dynamic value = property.GetValue(entity);
 
                 if (
-                    value.GetType() == dateTimeOffsetType
+                    value.GetType() == dateTimeType
                     && value == null
                 ) {
-                    property.SetValue(entity, DateTimeOffset.Now);
+                    property.SetValue(entity, DateTime.UtcNow);
                 }
             }
 

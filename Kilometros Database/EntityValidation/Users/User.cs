@@ -8,6 +8,7 @@ using System.Security.Cryptography;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using KilometrosDatabase.Helpers;
+using Kilometros_WebGlobalization.Database;
 
 namespace KilometrosDatabase {
     public partial class User : IValidatableObject {
@@ -80,14 +81,20 @@ namespace KilometrosDatabase {
                 var e = new System.Net.Mail.MailAddress(this.Email);
             } catch {
                 validationErrors.Add(
-                    new ValidationResult("Email address is invalid", new [] {"Email"})
+                    new ValidationResult(
+                        EntityValidationStrings.EmailInvalid,
+                        new [] {"Email"}
+                    )
                 );
             }
 
             // > Validar Cultura (Idioma) preferida
             if ( this.PreferredCultureInfo == null ) {
                 validationErrors.Add(
-                    new ValidationResult("Preferred Culture is invalid", new[] { "PreferredCultureCode" })
+                    new ValidationResult(
+                        EntityValidationStrings.PreferredCultureInvalid,
+                        new[] { "PreferredCultureCode" }
+                    )
                 );
             }
 

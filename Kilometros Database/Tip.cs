@@ -21,7 +21,7 @@ namespace KilometrosDatabase
         }
     
         public System.Guid Guid { get; set; }
-        public System.DateTimeOffset CreationDate { get; set; }
+        public System.DateTime CreationDate { get; set; }
         public string DistanceTrigger { get; set; }
         public string DaysTrigger { get; set; }
         public string Source { get; set; }

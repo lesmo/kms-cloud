@@ -15,7 +15,7 @@ namespace KilometrosDatabase
     public partial class UserEarnedReward
     {
         public long Id { get; set; }
-        public System.DateTimeOffset CreationDate { get; set; }
+        public System.DateTime CreationDate { get; set; }
     
         public virtual User User { get; set; }
         public virtual Reward Reward { get; set; }

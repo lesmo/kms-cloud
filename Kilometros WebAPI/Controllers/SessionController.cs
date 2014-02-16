@@ -17,12 +17,12 @@ namespace Kilometros_WebAPI.Controllers {
         public KilometrosDatabase.Abstraction.WorkUnit Database
             = new KilometrosDatabase.Abstraction.WorkUnit();
         private HttpServerUtility _httpServerUtility
-            = new HttpServerUtility();
+            = HttpContext.Current.Server;
 
         [HttpPost]
         [Route("session/kms")]
         public HttpResponseMessage KmsLogin([FromBody]LoginPost userPost) {
-            /** Evitar doble login **/
+            /** Evitar doble Login **/
             if ( this.User.Identity.IsAuthenticated ) {
                 HttpResponseMessage response
                     = Request.CreateResponse(HttpStatusCode.Forbidden);

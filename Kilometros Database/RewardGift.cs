@@ -22,7 +22,7 @@ namespace KilometrosDatabase
         }
     
         public System.Guid Guid { get; set; }
-        public System.DateTimeOffset CreationDate { get; set; }
+        public System.DateTime CreationDate { get; set; }
         public int Stock { get; set; }
     
         public virtual Reward Reward { get; set; }

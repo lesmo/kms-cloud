@@ -13,11 +13,12 @@ using Kilometros_WebAPI.Helpers;
 using System.Web;
 
 namespace Kilometros_WebAPI.Controllers {
+    [Authorize]
     public class MyAccountController : ApiController {
         public KilometrosDatabase.Abstraction.WorkUnit Database
             = new KilometrosDatabase.Abstraction.WorkUnit();
         private HttpServerUtility _httpServerUtility
-            = new HttpServerUtility();
+            = HttpContext.Current.Server;
 
         [HttpGet]
         [Route("my/account")]
@@ -80,7 +81,6 @@ namespace Kilometros_WebAPI.Controllers {
             } catch {
                 string warningString
                     = ControllerStrings.Warning501_AccountDataInvalid;
-
                 response.StatusCode
                     = HttpStatusCode.BadRequest;
 

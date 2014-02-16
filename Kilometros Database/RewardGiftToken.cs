@@ -15,8 +15,8 @@ namespace KilometrosDatabase
     public partial class RewardGiftToken
     {
         public System.Guid Guid { get; set; }
-        public System.DateTimeOffset CreationDate { get; set; }
-        public Nullable<System.DateTimeOffset> ExpirationDate { get; set; }
+        public System.DateTime CreationDate { get; set; }
+        public Nullable<System.DateTime> ExpirationDate { get; set; }
         public string RedeemCode { get; set; }
         public byte[] RedeemGraphic { get; set; }
         public string RedeemGraphicMimeType { get; set; }

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Kilometros_WebGlobalization.API {
+namespace Kilometros_WebGlobalization.Database {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace Kilometros_WebGlobalization.API {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class ControllerStrings {
+    public class EntityValidationStrings {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal ControllerStrings() {
+        internal EntityValidationStrings() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace Kilometros_WebGlobalization.API {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Kilometros_WebGlobalization.API.ControllerStrings", typeof(ControllerStrings).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Kilometros_WebGlobalization.Database.EntityValidationStrings", typeof(EntityValidationStrings).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,74 +61,92 @@ namespace Kilometros_WebGlobalization.API {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Validation error: {0}.
+        ///   Looks up a localized string similar to Email address is invalid.
         /// </summary>
-        public static string GenericValidationError {
+        public static string EmailInvalid {
             get {
-                return ResourceManager.GetString("GenericValidationError", resourceCulture);
+                return ResourceManager.GetString("EmailInvalid", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User [{0}] is already logged in.
+        ///   Looks up a localized string similar to Expiration Date is in the past, time machines don&apos;t exist (yet).
         /// </summary>
-        public static string Warning100_CannotLoginAgain {
+        public static string ExpirationDateIsPast {
             get {
-                return ResourceManager.GetString("Warning100_CannotLoginAgain", resourceCulture);
+                return ResourceManager.GetString("ExpirationDateIsPast", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User [{0}] requested could not be found, or password is incorrect.
+        ///   Looks up a localized string similar to Sex is invalid, it must be &quot;m&quot;or &quot;f&quot;.
         /// </summary>
-        public static string Warning101_UserNotFound {
+        public static string GenderInvalid {
             get {
-                return ResourceManager.GetString("Warning101_UserNotFound", resourceCulture);
+                return ResourceManager.GetString("GenderInvalid", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Token [{0}] requested could not be found or is invalid.
+        ///   Looks up a localized string similar to Preferred Culture is invalid.
         /// </summary>
-        public static string Warning102_TokenNotFound {
+        public static string PreferredCultureInvalid {
             get {
-                return ResourceManager.GetString("Warning102_TokenNotFound", resourceCulture);
+                return ResourceManager.GetString("PreferredCultureInvalid", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User [{0}] is logged in and cannot register a new account.
+        ///   Looks up a localized string similar to It&apos;s important that you&apos;re honest, but that&apos;s just not real.
         /// </summary>
-        public static string Warning201_CannotCreateUserWithSessionOpen {
+        public static string UserTooHeavy {
             get {
-                return ResourceManager.GetString("Warning201_CannotCreateUserWithSessionOpen", resourceCulture);
+                return ResourceManager.GetString("UserTooHeavy", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Password Hash [{0}] invalid.
+        ///   Looks up a localized string similar to Be honest, you don&apos;t weight that and you know it!.
         /// </summary>
-        public static string Warning202_PasswordHashInvalid {
+        public static string UserTooLight {
             get {
-                return ResourceManager.GetString("Warning202_PasswordHashInvalid", resourceCulture);
+                return ResourceManager.GetString("UserTooLight", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Account Data received is invalid.
+        ///   Looks up a localized string similar to You&apos;re too old (like dead).
         /// </summary>
-        public static string Warning501_AccountDataInvalid {
+        public static string UserTooOld {
             get {
-                return ResourceManager.GetString("Warning501_AccountDataInvalid", resourceCulture);
+                return ResourceManager.GetString("UserTooOld", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Account Data received is not different to current data.
+        ///   Looks up a localized string similar to You&apos;re lying about your height, you can&apos;t be so short!.
         /// </summary>
-        public static string Warning502_AccountDataNotChanged {
+        public static string UserTooShort {
             get {
-                return ResourceManager.GetString("Warning502_AccountDataNotChanged", resourceCulture);
+                return ResourceManager.GetString("UserTooShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It&apos;s impossible that you&apos;re that tall!.
+        /// </summary>
+        public static string UserTooTall {
+            get {
+                return ResourceManager.GetString("UserTooTall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You&apos;re too young (a baby).
+        /// </summary>
+        public static string UserTooYoung {
+            get {
+                return ResourceManager.GetString("UserTooYoung", resourceCulture);
             }
         }
     }

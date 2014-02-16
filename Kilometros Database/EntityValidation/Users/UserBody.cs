@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
+using Kilometros_WebGlobalization.Database;
 
 namespace KilometrosDatabase {
     partial class UserBody : IValidatableObject {
@@ -19,38 +20,59 @@ namespace KilometrosDatabase {
             // > Validar que la Edad esté entre 0 y 110
             if ( this.Age < 0)
                 validationErrors.Add(
-                    new ValidationResult("User is too young", new[] { "Age" })
+                    new ValidationResult(
+                        EntityValidationStrings.UserTooYoung,
+                        new[] { "Age" }
+                    )
                 );
             if ( this.Age > 110 )
                 validationErrors.Add(
-                    new ValidationResult("User is too old", new[] { "Age" })
+                    new ValidationResult(
+                        EntityValidationStrings.UserTooOld,
+                        new[] { "Age" }
+                    )
                 );
 
             // > Validar que la Altura del usuario sea entre 40cm y 300cm
             if ( this.Height < 40 )
                 validationErrors.Add(
-                    new ValidationResult("User is too short", new[] { "Height" })
+                    new ValidationResult(
+                        EntityValidationStrings.UserTooShort,
+                        new[] { "Height" }
+                    )
                 );
             if ( this.Height > 300 )
                 validationErrors.Add(
-                    new ValidationResult("User is too tall", new[] { "Height" })
+                    new ValidationResult(
+                        EntityValidationStrings.UserTooTall,
+                        new[] { "Height" }
+                    )
                 );
 
             // > Validar el Peso del Usuario
             if ( this.Weight < 2000 )
                 validationErrors.Add(
-                    new ValidationResult("User is too light", new[] { "Weight" })
+                    new ValidationResult(
+                        EntityValidationStrings.UserTooLight,
+                        new[] { "Weight" }
+                    )
                 );
-            if ( this.Weight > 300000 )
+            if ( this.Weight > 400000 )
                 validationErrors.Add(
-                    new ValidationResult("User is too heavy", new[] { "Weight" })
+                    new ValidationResult(
+                        EntityValidationStrings.UserTooHeavy,
+                        new[] { "Weight" }
+                    )
                 );
 
             // > Validar el sexo del Usuario
             this.Sex = this.Sex.ToLowerInvariant();
             if ( this.Sex != "m" && this.Sex != "f" )
                 validationErrors.Add(
-                    new ValidationResult("Invalid Sex", new[] { "Sex" })
+                    new ValidationResult(
+                        EntityValidationStrings.GenderInvalid,
+                        new[] { "Sex" }
+                    )
                 );
 
             return validationErrors;

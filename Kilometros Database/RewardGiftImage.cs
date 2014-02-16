@@ -15,7 +15,7 @@ namespace KilometrosDatabase
     public partial class RewardGiftImage
     {
         public long Id { get; internal set; }
-        public System.DateTimeOffset CreationDate { get; set; }
+        public System.DateTime CreationDate { get; set; }
         public byte[] Image { get; set; }
         public string ImageMimeType { get; set; }
     

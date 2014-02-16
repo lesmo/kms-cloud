@@ -154,11 +154,12 @@
     <Compile Include="Controllers\MyAccountController.cs" />
     <Compile Include="Controllers\MyContactInfoController.cs" />
     <Compile Include="Controllers\MyPhysiqueController.cs" />
+    <Compile Include="Controllers\RegisterController.cs" />
     <Compile Include="Controllers\SessionController.cs" />
+    <Compile Include="ExceptionFilters\GenericHttpExceptionFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Global\GlobalObjects.cs" />
     <Compile Include="Helpers\HttpResponseMessageHeadersHelper.cs" />
     <Compile Include="Helpers\HttpRequestMessageHeadersHelper.cs" />
     <Compile Include="Helpers\MiscHelper.cs" />
@@ -169,6 +170,7 @@
     <Compile Include="Models\HttpPost\DataController\DataPost.cs" />
     <Compile Include="Models\HttpPost\My_Controller\ContactInfoPost.cs" />
     <Compile Include="Models\HttpPost\My_Controller\PhysiquePost.cs" />
+    <Compile Include="Models\HttpPost\RegisterController\RegisterKmsPost.cs" />
     <Compile Include="Models\HttpPost\SessionController\LoginPost.cs" />
     <Compile Include="MessageHandlers\RequestSecurityHandler.cs" />
     <Compile Include="MessageHandlers\ResponseEncoder.cs" />
@@ -186,19 +188,6 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Images\accent.png" />
-    <Content Include="Images\bullet.png" />
-    <Content Include="Images\heroAccent.png" />
-    <Content Include="Images\orderedList0.png" />
-    <Content Include="Images\orderedList1.png" />
-    <Content Include="Images\orderedList2.png" />
-    <Content Include="Images\orderedList3.png" />
-    <Content Include="Images\orderedList4.png" />
-    <Content Include="Images\orderedList5.png" />
-    <Content Include="Images\orderedList6.png" />
-    <Content Include="Images\orderedList7.png" />
-    <Content Include="Images\orderedList8.png" />
-    <Content Include="Images\orderedList9.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

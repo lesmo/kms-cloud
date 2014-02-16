@@ -25,24 +25,24 @@ namespace Kilometros_WebAPI.Controllers {
                 = (KmsIdentity)User.Identity;
             Data lastData
                 = identity.UserData.Data
-                    .OrderByDescending(data => data.TimeStamp)
+                    .OrderByDescending(data => data.Timestamp)
                     .Take(1)
                     .FirstOrDefault();
-            DateTime lastDataTimeStamp
-                = lastData == null ? DateTime.MinValue : lastData.TimeStamp;
+            DateTime lastDataTimestamp
+                = lastData == null ? DateTime.MinValue : lastData.Timestamp;
 
             /** Determinar los registros que se almacenarán en BD **/
             // TODO: Incluir un algoritmo que mejore la solución al problema
-            //       de datos replicados.
+            //       de datos replicados y sincronía.
             IEnumerable<DataPost> finalPost
                 = from d in dataPost
-                  where d.Timestamp > lastDataTimeStamp
+                  where d.Timestamp > lastDataTimestamp
                   select d;
 
             /** Almacenar los nuevos registros **/
             foreach ( DataPost data in finalPost ) {
                 Data newData = new Data(){
-                     TimeStamp = data.Timestamp,
+                     Timestamp = data.Timestamp,
                      Steps = data.Steps
                 };
 

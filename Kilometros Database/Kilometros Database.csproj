@@ -68,6 +68,7 @@
     <Compile Include="EntityValidation\Users\UserBody.cs" />
     <Compile Include="Helpers\Base36Encoder.cs" />
     <Compile Include="Helpers\Crc64.cs" />
+    <Compile Include="Helpers\EntityDatesUtcKind.cs" />
     <Compile Include="MainModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -182,6 +183,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="MainModel.edmx.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Kilometros WebGlobalization\Kilometros WebGlobalization.csproj">
+      <Project>{9aaf5681-cf18-414d-9853-a20fffa64eba}</Project>
+      <Name>Kilometros WebGlobalization</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

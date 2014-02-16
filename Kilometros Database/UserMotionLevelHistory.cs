@@ -15,7 +15,7 @@ namespace KilometrosDatabase
     public partial class UserMotionLevelHistory
     {
         public long Id { get; internal set; }
-        public System.DateTimeOffset CreationDate { get; set; }
+        public System.DateTime CreationDate { get; set; }
     
         public virtual User User { get; set; }
         public virtual MotionLevel MotionLevel { get; set; }

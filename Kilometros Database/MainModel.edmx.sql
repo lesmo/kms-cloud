@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 02/15/2014 23:42:12
+-- Date Created: 02/16/2014 00:18:28
 -- Generated from EDMX file: F:\Sharp Dynamics\Kilometros\Kilometros Database\MainModel.edmx
 -- --------------------------------------------------
 
@@ -189,7 +189,7 @@ GO
 -- Creating table 'UserSet'
 CREATE TABLE [dbo].[UserSet] (
     [Guid] uniqueidentifier  NOT NULL,
-    [CreationDate] datetimeoffset  NOT NULL,
+    [CreationDate] datetime  NOT NULL,
     [Email] nvarchar(max)  NOT NULL,
     [Password] varbinary(max)  NULL,
     [RegionCode] nchar(5)  NULL,
@@ -199,8 +199,8 @@ GO
 
 -- Creating table 'TokenSet'
 CREATE TABLE [dbo].[TokenSet] (
-    [CreationDate] datetimeoffset  NOT NULL,
-    [ExpirationDate] datetimeoffset  NULL,
+    [CreationDate] datetime  NOT NULL,
+    [ExpirationDate] datetime  NULL,
     [Guid] uniqueidentifier  NOT NULL,
     [LastUseDate] datetime  NULL,
     [ApiKey_Guid] uniqueidentifier  NOT NULL,
@@ -210,7 +210,7 @@ GO
 
 -- Creating table 'ApiKeySet'
 CREATE TABLE [dbo].[ApiKeySet] (
-    [CreationDate] datetimeoffset  NOT NULL,
+    [CreationDate] datetime  NOT NULL,
     [Platform] nvarchar(64)  NOT NULL,
     [Description] nvarchar(64)  NULL,
     [Guid] uniqueidentifier  NOT NULL,
@@ -224,7 +224,7 @@ GO
 -- Creating table 'TipSet'
 CREATE TABLE [dbo].[TipSet] (
     [Guid] uniqueidentifier  NOT NULL,
-    [CreationDate] datetimeoffset  NOT NULL,
+    [CreationDate] datetime  NOT NULL,
     [DistanceTrigger] nvarchar(max)  NULL,
     [DaysTrigger] nvarchar(max)  NOT NULL,
     [Source] nvarchar(max)  NULL,
@@ -273,7 +273,7 @@ GO
 
 -- Creating table 'DataSet'
 CREATE TABLE [dbo].[DataSet] (
-    [Timestamp] datetimeoffset  NOT NULL,
+    [Timestamp] datetime  NOT NULL,
     [Steps] int  NOT NULL,
     [User_Guid] uniqueidentifier  NOT NULL
 );
@@ -312,7 +312,7 @@ GO
 -- Creating table 'RewardGiftSet'
 CREATE TABLE [dbo].[RewardGiftSet] (
     [Guid] uniqueidentifier  NOT NULL,
-    [CreationDate] datetimeoffset  NOT NULL,
+    [CreationDate] datetime  NOT NULL,
     [Stock] int  NOT NULL,
     [Reward_Guid] uniqueidentifier  NOT NULL
 );
@@ -332,8 +332,8 @@ GO
 -- Creating table 'RewardGiftTokenSet'
 CREATE TABLE [dbo].[RewardGiftTokenSet] (
     [Guid] uniqueidentifier  NOT NULL,
-    [CreationDate] datetimeoffset  NOT NULL,
-    [ExpirationDate] datetimeoffset  NULL,
+    [CreationDate] datetime  NOT NULL,
+    [ExpirationDate] datetime  NULL,
     [RedeemCode] nvarchar(max)  NOT NULL,
     [RedeemGraphic] varbinary(max)  NULL,
     [RedeemGraphicMimeType] nvarchar(max)  NULL,
@@ -364,7 +364,7 @@ GO
 -- Creating table 'UserMotionLevelHistorySet'
 CREATE TABLE [dbo].[UserMotionLevelHistorySet] (
     [Id] bigint IDENTITY(1,1) NOT NULL,
-    [CreationDate] datetimeoffset  NOT NULL,
+    [CreationDate] datetime  NOT NULL,
     [User_Guid] uniqueidentifier  NOT NULL,
     [MotionLevel_Guid] uniqueidentifier  NOT NULL
 );
@@ -373,7 +373,7 @@ GO
 -- Creating table 'UserEarnedRewardSet'
 CREATE TABLE [dbo].[UserEarnedRewardSet] (
     [Id] bigint IDENTITY(1,1) NOT NULL,
-    [CreationDate] datetimeoffset  NOT NULL,
+    [CreationDate] datetime  NOT NULL,
     [User_Guid] uniqueidentifier  NOT NULL,
     [Reward_Guid] uniqueidentifier  NOT NULL
 );
@@ -397,7 +397,7 @@ CREATE TABLE [dbo].[ShippingInformationSet] (
     [Address] nvarchar(max)  NOT NULL,
     [Latitude] float  NOT NULL,
     [Longitude] float  NOT NULL,
-    [LastEditDate] datetimeoffset  NOT NULL,
+    [LastEditDate] datetime  NOT NULL,
     [User_Guid] uniqueidentifier  NOT NULL
 );
 GO
@@ -405,7 +405,7 @@ GO
 -- Creating table 'RewardGiftImageSet'
 CREATE TABLE [dbo].[RewardGiftImageSet] (
     [Id] bigint IDENTITY(1,1) NOT NULL,
-    [CreationDate] datetimeoffset  NOT NULL,
+    [CreationDate] datetime  NOT NULL,
     [Image] varbinary(max)  NOT NULL,
     [ImageMimeType] nvarchar(max)  NOT NULL,
     [RewardGift_Guid] uniqueidentifier  NOT NULL
@@ -448,7 +448,7 @@ GO
 -- Creating table 'RewardGiftUserClaimedSet'
 CREATE TABLE [dbo].[RewardGiftUserClaimedSet] (
     [Id] bigint IDENTITY(1,1) NOT NULL,
-    [CreationDate] datetimeoffset  NOT NULL,
+    [CreationDate] datetime  NOT NULL,
     [User_Guid] uniqueidentifier  NOT NULL,
     [RewardGift_Guid] uniqueidentifier  NOT NULL
 );

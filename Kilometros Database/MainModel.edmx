@@ -146,7 +146,7 @@
       <PropertyRef Name="Guid" />
     </Key>
     <Property Name="Guid" Type="uniqueidentifier" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="CreationDate" Type="datetimeoffset" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CreationDate" Type="datetime" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Email" Type="nvarchar(max)" Nullable="false" />
     <Property Name="Password" Type="varbinary(max)" Nullable="true" />
     <Property Name="RegionCode" Type="nchar" Nullable="true" MaxLength="5" />
@@ -156,8 +156,8 @@
     <Key>
       <PropertyRef Name="Guid" />
     </Key>
-    <Property Name="CreationDate" Type="datetimeoffset" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="ExpirationDate" Type="datetimeoffset" StoreGeneratedPattern="Identity" Nullable="true" />
+    <Property Name="CreationDate" Type="datetime" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ExpirationDate" Type="datetime" StoreGeneratedPattern="Identity" Nullable="true" />
     <Property Name="Guid" Type="uniqueidentifier" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="LastUseDate" Type="datetime" Nullable="true" />
     <Property Name="ApiKey_Guid" Type="uniqueidentifier" Nullable="false" />
@@ -167,7 +167,7 @@
     <Key>
       <PropertyRef Name="Guid" />
     </Key>
-    <Property Name="CreationDate" Type="datetimeoffset" StoreGeneratedPattern="Computed" Nullable="false" />
+    <Property Name="CreationDate" Type="datetime" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Platform" Type="nvarchar" Nullable="false" MaxLength="64" />
     <Property Name="Description" Type="nvarchar" Nullable="true" MaxLength="64" />
     <Property Name="Guid" Type="uniqueidentifier" StoreGeneratedPattern="Identity" Nullable="false" />
@@ -181,7 +181,7 @@
       <PropertyRef Name="Guid" />
     </Key>
     <Property Name="Guid" Type="uniqueidentifier" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="CreationDate" Type="datetimeoffset" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CreationDate" Type="datetime" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="DistanceTrigger" Type="nvarchar(max)" Nullable="true" />
     <Property Name="DaysTrigger" Type="nvarchar(max)" Nullable="false" />
     <Property Name="Source" Type="nvarchar(max)" Nullable="true" />
@@ -230,7 +230,7 @@
     <Key>
       <PropertyRef Name="Timestamp" />
     </Key>
-    <Property Name="Timestamp" Type="datetimeoffset" Nullable="false" />
+    <Property Name="Timestamp" Type="datetime" Nullable="false" />
     <Property Name="Steps" Type="int" Nullable="false" />
     <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
   </EntityType>
@@ -243,7 +243,7 @@
     <Property Name="Height" Type="smallint" Nullable="false" />
     <Property Name="Weight" Type="int" Nullable="false" />
     <Property Name="Sex" Type="nchar" Nullable="false" MaxLength="1" />
-    <Property Name="LastEditDate" Type="datetime" StoreGeneratedPattern="Computed" Nullable="false" />
+    <Property Name="LastEditDate" Type="datetime" Nullable="false" />
     <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
   </EntityType>
   <EntityType Name="MotionLevelGlobalizationSet">
@@ -269,7 +269,7 @@
       <PropertyRef Name="Guid" />
     </Key>
     <Property Name="Guid" Type="uniqueidentifier" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="CreationDate" Type="datetimeoffset" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CreationDate" Type="datetime" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Stock" Type="int" Nullable="false" />
     <Property Name="Reward_Guid" Type="uniqueidentifier" Nullable="false" />
   </EntityType>
@@ -289,8 +289,8 @@
       <PropertyRef Name="Guid" />
     </Key>
     <Property Name="Guid" Type="uniqueidentifier" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="CreationDate" Type="datetimeoffset" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="ExpirationDate" Type="datetimeoffset" Nullable="true" />
+    <Property Name="CreationDate" Type="datetime" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ExpirationDate" Type="datetime" Nullable="true" />
     <Property Name="RedeemCode" Type="nvarchar(max)" Nullable="false" />
     <Property Name="RedeemGraphic" Type="varbinary(max)" Nullable="true" />
     <Property Name="RedeemGraphicMimeType" Type="nvarchar(max)" Nullable="true" />
@@ -321,7 +321,7 @@
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="CreationDate" Type="datetimeoffset" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CreationDate" Type="datetime" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
     <Property Name="MotionLevel_Guid" Type="uniqueidentifier" Nullable="false" />
   </EntityType>
@@ -330,7 +330,7 @@
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="CreationDate" Type="datetimeoffset" Nullable="false" />
+    <Property Name="CreationDate" Type="datetime" Nullable="false" />
     <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
     <Property Name="Reward_Guid" Type="uniqueidentifier" Nullable="false" />
   </EntityType>
@@ -342,7 +342,7 @@
     <Property Name="HomePhone" Type="nvarchar" Nullable="true" MaxLength="16" />
     <Property Name="MobilePhone" Type="nvarchar" Nullable="true" MaxLength="16" />
     <Property Name="WorkPhone" Type="nvarchar(max)" Nullable="true" />
-    <Property Name="LastEditDate" Type="datetime" StoreGeneratedPattern="Computed" Nullable="false" />
+    <Property Name="LastEditDate" Type="datetime" Nullable="false" />
     <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
   </EntityType>
   <EntityType Name="ShippingInformationSet">
@@ -354,7 +354,7 @@
     <Property Name="Address" Type="nvarchar(max)" Nullable="false" />
     <Property Name="Latitude" Type="float" Nullable="false" />
     <Property Name="Longitude" Type="float" Nullable="false" />
-    <Property Name="LastEditDate" Type="datetimeoffset" StoreGeneratedPattern="Computed" Nullable="false" />
+    <Property Name="LastEditDate" Type="datetime" Nullable="false" />
     <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
   </EntityType>
   <EntityType Name="RewardGiftImageSet">
@@ -362,7 +362,7 @@
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="CreationDate" Type="datetimeoffset" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CreationDate" Type="datetime" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Image" Type="varbinary(max)" Nullable="false" />
     <Property Name="ImageMimeType" Type="nvarchar(max)" Nullable="false" />
     <Property Name="RewardGift_Guid" Type="uniqueidentifier" Nullable="false" />
@@ -405,7 +405,7 @@
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="CreationDate" Type="datetimeoffset" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CreationDate" Type="datetime" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
     <Property Name="RewardGift_Guid" Type="uniqueidentifier" Nullable="false" />
   </EntityType>
@@ -913,7 +913,7 @@
               <Summary>Guid que representa al Usuario.</Summary>
             </Documentation>
           </Property>
-          <Property Type="DateTimeOffset" Name="CreationDate" Nullable="false" cg:SetterAccess="Public" annotation:StoreGeneratedPattern="Identity" >
+          <Property Type="DateTime" Name="CreationDate" Nullable="false" cg:SetterAccess="Public" annotation:StoreGeneratedPattern="Identity" >
             <Documentation>
               <Summary>Fecha de Creación del Usuario</Summary>
             </Documentation>
@@ -985,7 +985,7 @@
           <Key>
             <PropertyRef Name="Guid" />
           </Key>
-          <Property Type="DateTimeOffset" Name="CreationDate" Nullable="false" annotation:StoreGeneratedPattern="Identity" >
+          <Property Type="DateTime" Name="CreationDate" Nullable="false" annotation:StoreGeneratedPattern="Identity" >
             <Documentation>
               <Summary>Fecha y Hora de Inicio de Sesión del Usuario.</Summary>
             </Documentation>
@@ -1000,7 +1000,7 @@
               <Summary>Usuario que generó éste Token.</Summary>
             </Documentation>
           </NavigationProperty>
-          <Property Type="DateTimeOffset" Name="ExpirationDate" Nullable="true" annotation:StoreGeneratedPattern="Identity" >
+          <Property Type="DateTime" Name="ExpirationDate" Nullable="true" annotation:StoreGeneratedPattern="Identity" >
             <Documentation>
               <Summary>Fecha de expiración de la Sesión.</Summary>
             </Documentation>
@@ -1020,7 +1020,7 @@
           <Key>
             <PropertyRef Name="Guid" />
           </Key>
-          <Property Type="DateTimeOffset" Name="CreationDate" Nullable="false" annotation:StoreGeneratedPattern="Computed" >
+          <Property Type="DateTime" Name="CreationDate" Nullable="false" annotation:StoreGeneratedPattern="Identity" >
             <Documentation>
               <Summary>Fecha de Creación del Api-Key</Summary>
             </Documentation>
@@ -1075,7 +1075,7 @@
               <Summary>Guid del Tip.</Summary>
             </Documentation>
           </Property>
-          <Property Type="DateTimeOffset" Name="CreationDate" Nullable="false" annotation:StoreGeneratedPattern="Identity" >
+          <Property Type="DateTime" Name="CreationDate" Nullable="false" annotation:StoreGeneratedPattern="Identity" >
             <Documentation>
               <Summary>Fecha de Creación del Tip.</Summary>
             </Documentation>
@@ -1236,7 +1236,7 @@
           <Key>
             <PropertyRef Name="Timestamp" />
           </Key>
-          <Property Type="DateTimeOffset" Name="Timestamp" Nullable="false" cg:SetterAccess="Public" annotation:StoreGeneratedPattern="None" />
+          <Property Type="DateTime" Name="Timestamp" Nullable="false" cg:SetterAccess="Public" annotation:StoreGeneratedPattern="None" />
           <Property Type="Int32" Name="Steps" Nullable="false" />
           <NavigationProperty Name="User" Relationship="MainModel.UserData" FromRole="Data" ToRole="User" />
         </EntityType>
@@ -1270,7 +1270,7 @@
               <LongDescription>El carácter F es Femenino, el carácter M es masculino.</LongDescription>
             </Documentation>
           </Property>
-          <Property Type="DateTime" Name="LastEditDate" Nullable="false" annotation:StoreGeneratedPattern="Computed" >
+          <Property Type="DateTime" Name="LastEditDate" Nullable="false" annotation:StoreGeneratedPattern="None" >
             <Documentation>
               <Summary>Última fecha de modificación de la Complexión Física del Usuario.</Summary>
             </Documentation>
@@ -1344,7 +1344,7 @@
             </Documentation>
           </NavigationProperty>
           <NavigationProperty Name="RewardGiftUserClaimed" Relationship="MainModel.RewardGiftUserClaimedRewardGift" FromRole="RewardGift" ToRole="RewardGiftUserClaimed" />
-          <Property Name="CreationDate" Type="DateTimeOffset" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CreationDate" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Stock" Type="Int32" Nullable="false" />
         </EntityType>
         <Association Name="RewardRewardGift">
@@ -1394,12 +1394,12 @@
               <Summary>Regalo al que pertence el Código de Canje.</Summary>
             </Documentation>
           </NavigationProperty>
-          <Property Type="DateTimeOffset" Name="CreationDate" Nullable="false" annotation:StoreGeneratedPattern="Identity" cg:SetterAccess="Public" >
+          <Property Type="DateTime" Name="CreationDate" Nullable="false" annotation:StoreGeneratedPattern="Identity" cg:SetterAccess="Public" >
             <Documentation>
               <Summary>Fecha de Creación de éste Código de Canje.</Summary>
             </Documentation>
           </Property>
-          <Property Type="DateTimeOffset" Name="ExpirationDate" Nullable="true" >
+          <Property Type="DateTime" Name="ExpirationDate" Nullable="true" >
             <Documentation>
               <Summary>Fecha de Expiración de éste Código de Canje.</Summary>
             </Documentation>
@@ -1481,7 +1481,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Type="Int64" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" cg:SetterAccess="Internal" />
-          <Property Type="DateTimeOffset" Name="CreationDate" Nullable="false" annotation:StoreGeneratedPattern="Identity" >
+          <Property Type="DateTime" Name="CreationDate" Nullable="false" annotation:StoreGeneratedPattern="Identity" >
             <Documentation>
               <Summary>Fecha en la que se consiguió éste Nivel de Actividad.</Summary>
             </Documentation>
@@ -1515,7 +1515,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Type="Int64" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="DateTimeOffset" Name="CreationDate" Nullable="false" />
+          <Property Type="DateTime" Name="CreationDate" Nullable="false" />
           <NavigationProperty Name="User" Relationship="MainModel.UserUserEarnedReward" FromRole="UserEarnedReward" ToRole="User" />
           <NavigationProperty Name="Reward" Relationship="MainModel.UserEarnedRewardReward" FromRole="UserEarnedReward" ToRole="Reward" />
         </EntityType>
@@ -1559,7 +1559,7 @@
               <Summary>Teléfono del Trabajo del Usuario (en formato &lt;Número&gt; x &lt;Extensión&gt;)</Summary>
             </Documentation>
           </Property>
-          <Property Type="DateTime" Name="LastEditDate" Nullable="false" annotation:StoreGeneratedPattern="Computed" >
+          <Property Type="DateTime" Name="LastEditDate" Nullable="false" annotation:StoreGeneratedPattern="None" >
             <Documentation>
               <Summary>Última fecha de modificación de la Información de Contacto.</Summary>
             </Documentation>
@@ -1584,7 +1584,7 @@
           <Property Type="Double" Name="Latitude" Nullable="false" />
           <Property Type="Double" Name="Longitude" Nullable="false" />
           <NavigationProperty Name="User" Relationship="MainModel.UserShippingInformation" FromRole="ShippingInformation" ToRole="User" />
-          <Property Type="DateTimeOffset" Name="LastEditDate" Nullable="false" annotation:StoreGeneratedPattern="Computed" >
+          <Property Type="DateTime" Name="LastEditDate" Nullable="false" annotation:StoreGeneratedPattern="None" >
             <Documentation>
               <Summary>Última fecha de modificación de la Información de Envío del Usuario.</Summary>
             </Documentation>
@@ -1602,7 +1602,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Type="Int64" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" cg:SetterAccess="Internal" />
-          <Property Type="DateTimeOffset" Name="CreationDate" Nullable="false" annotation:StoreGeneratedPattern="Identity" cg:SetterAccess="Public" >
+          <Property Type="DateTime" Name="CreationDate" Nullable="false" annotation:StoreGeneratedPattern="Identity" cg:SetterAccess="Public" >
             <Documentation>
               <Summary>Fecha en la que se añadió la Imágen.</Summary>
             </Documentation>
@@ -1684,7 +1684,7 @@
           <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="User" Relationship="MainModel.RewardGiftUserClaimedUser" FromRole="RewardGiftUserClaimed" ToRole="User" />
           <NavigationProperty Name="RewardGift" Relationship="MainModel.RewardGiftUserClaimedRewardGift" FromRole="RewardGiftUserClaimed" ToRole="RewardGift" />
-          <Property Name="CreationDate" Type="DateTimeOffset" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CreationDate" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
         </EntityType>
         <Association Name="RewardGiftUserClaimedUser">
           <End Type="MainModel.RewardGiftUserClaimed" Role="RewardGiftUserClaimed" Multiplicity="*" />

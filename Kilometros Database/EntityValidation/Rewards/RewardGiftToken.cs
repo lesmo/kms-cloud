@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using System.ComponentModel.DataAnnotations;
+using Kilometros_WebGlobalization.Database;
 
 namespace KilometrosDatabase {
     public partial class RewardGiftToken : IValidatableObject {
@@ -20,7 +21,10 @@ namespace KilometrosDatabase {
                 && this.ExpirationDate.Value < DateTimeOffset.Now
             ) {
                 validationErrors.Add(
-                    new ValidationResult("Expiration Date is in the past, time machines don't exist yet", new[] { "ExpirationDate" })
+                    new ValidationResult(
+                        EntityValidationStrings.ExpirationDateIsPast,
+                        new[] { "ExpirationDate" }
+                    )
                 );
             }
 
