@@ -7,12 +7,13 @@ using System.Threading.Tasks;
 using System.Security.Cryptography;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
+using KilometrosDatabase.Helpers;
 
 namespace KilometrosDatabase {
     public partial class User : IValidatableObject {
         /// <summary>
         /// Genera el Hash de la cadena que se asigne, o devuelve la representación
-        /// en Texto del Hash en {User.Password}
+        /// en Texto del Hash en {User.Password}. La contraseña se trata como UTF-8.
         /// </summary>
         public string PasswordString {
             get {
@@ -30,12 +31,17 @@ namespace KilometrosDatabase {
             }
             set {
                 // > Calcular Hash y establecer el valor a almacenarse en BD
-                SHA256 hashing      = SHA256.Create();
-                byte[] stringBytes  = Encoding.UTF8.GetBytes(value);
-                byte[] computedHash = hashing.ComputeHash(stringBytes);
+                SHA256 hashing
+                    = SHA256.Create();
+                byte[] stringBytes
+                    = Encoding.UTF8.GetBytes(value);
+                byte[] computedHash
+                    = hashing.ComputeHash(stringBytes);
+                byte[] computedHash2
+                    = hashing.ComputeHash(computedHash);
                 
                 // > Almacenar nuevos valores
-                this.Password = computedHash;
+                this.Password = computedHash2;
                 this._passwordHashString = null; // Forzar la re-conversión del Hash a Texto
             }
         }

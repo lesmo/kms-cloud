@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Abstraction\Functional\GenericRepository.cs" />
     <Compile Include="Abstraction\Interfaces\IRepository.cs" />
+    <Compile Include="Abstraction\RepositoryConfig.cs" />
     <Compile Include="Abstraction\UnitTesting\IRepository.cs" />
     <Compile Include="Abstraction\WorkUnit.cs" />
     <Compile Include="ApiKey.cs">

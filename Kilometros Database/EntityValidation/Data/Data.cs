@@ -15,7 +15,7 @@ namespace KilometrosDatabase {
             List<ValidationResult> validationErrors = new List<ValidationResult>();
 
             // > Validar que la Estampa de Tiempo no sea en el Futuro
-            if ( DateTime.Compare((DateTime)this.TimeStamp, DateTime.UtcNow) > 0 )
+            if ( this.Timestamp > DateTimeOffset.Now )
                 validationErrors.Add(
                     new ValidationResult("Activity Data can't be in the future, there's not time machines yet.", new[] { "TimeStamp" })
                 );

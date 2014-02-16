@@ -14,8 +14,8 @@ namespace KilometrosDatabase
     
     public partial class Token
     {
-        public System.DateTime CreationDate { get; set; }
-        public Nullable<System.DateTime> ExpirationDate { get; set; }
+        public System.DateTimeOffset CreationDate { get; set; }
+        public Nullable<System.DateTimeOffset> ExpirationDate { get; set; }
         public System.Guid Guid { get; set; }
         public Nullable<System.DateTime> LastUseDate { get; set; }
     

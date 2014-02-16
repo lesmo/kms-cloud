@@ -20,7 +20,7 @@ namespace KilometrosDatabase
             this.Token = new HashSet<Token>();
         }
     
-        public System.DateTime CreationDate { get; set; }
+        public System.DateTimeOffset CreationDate { get; set; }
         public string Platform { get; set; }
         public string Description { get; set; }
         public System.Guid Guid { get; set; }

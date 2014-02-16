@@ -61,7 +61,7 @@ namespace Kilometros_WebGlobalization.API {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User {0} is already logged in.
+        ///   Looks up a localized string similar to User [{0}] is already logged in.
         /// </summary>
         public static string Warning100_CannotLoginAgain {
             get {
@@ -70,7 +70,7 @@ namespace Kilometros_WebGlobalization.API {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The User {0} requested could not be found, or password is incorrect.
+        ///   Looks up a localized string similar to User [{0}] requested could not be found, or password is incorrect.
         /// </summary>
         public static string Warning101_UserNotFound {
             get {
@@ -79,11 +79,29 @@ namespace Kilometros_WebGlobalization.API {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Token {0} requested could not be found.
+        ///   Looks up a localized string similar to Token [{0}] requested could not be found or is invalid.
         /// </summary>
         public static string Warning102_TokenNotFound {
             get {
                 return ResourceManager.GetString("Warning102_TokenNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User [{0}] is logged in and cannot register a new account.
+        /// </summary>
+        public static string Warning201_CannotCreateUserWithSessionOpen {
+            get {
+                return ResourceManager.GetString("Warning201_CannotCreateUserWithSessionOpen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password Hash [{0}] invalid.
+        /// </summary>
+        public static string Warning202_PasswordHashInvalid {
+            get {
+                return ResourceManager.GetString("Warning202_PasswordHashInvalid", resourceCulture);
             }
         }
         

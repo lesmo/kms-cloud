@@ -14,7 +14,7 @@ namespace KilometrosDatabase
     
     public partial class Data
     {
-        public System.DateTime TimeStamp { get; set; }
+        public System.DateTimeOffset Timestamp { get; set; }
         public int Steps { get; set; }
     
         public virtual User User { get; set; }

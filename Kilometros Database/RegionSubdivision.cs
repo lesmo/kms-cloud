@@ -17,6 +17,7 @@ namespace KilometrosDatabase
         public long Id { get; set; }
         public string IsoCode { get; set; }
         public string Name { get; set; }
+        public short UtcOffset { get; set; }
     
         public virtual Region Region { get; set; }
     }

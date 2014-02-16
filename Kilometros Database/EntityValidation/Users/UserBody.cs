@@ -13,7 +13,8 @@ namespace KilometrosDatabase {
         /// Ejecutar validación de Complexión Física del Usuario
         /// </summary>
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext) {
-            List<ValidationResult> validationErrors = new List<ValidationResult>();
+            List<ValidationResult> validationErrors
+                = new List<ValidationResult>();
 
             // > Validar que la Edad esté entre 0 y 110
             if ( this.Age < 0)

@@ -19,7 +19,7 @@ namespace KilometrosDatabase
         public string Address { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
-        public System.DateTime LastEditDate { get; set; }
+        public System.DateTimeOffset LastEditDate { get; set; }
     
         public virtual User User { get; set; }
     }

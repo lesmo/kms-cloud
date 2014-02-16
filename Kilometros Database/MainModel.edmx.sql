@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 02/15/2014 18:16:59
+-- Date Created: 02/15/2014 23:42:12
 -- Generated from EDMX file: F:\Sharp Dynamics\Kilometros\Kilometros Database\MainModel.edmx
 -- --------------------------------------------------
 
@@ -57,7 +57,7 @@ IF OBJECT_ID(N'[dbo].[FK_RewardGiftRewardGiftToken]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[RewardGiftTokenSet] DROP CONSTRAINT [FK_RewardGiftRewardGiftToken];
 GO
 IF OBJECT_ID(N'[dbo].[FK_RewardGiftTokenUser]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[UserSet] DROP CONSTRAINT [FK_RewardGiftTokenUser];
+    ALTER TABLE [dbo].[RewardGiftTokenSet] DROP CONSTRAINT [FK_RewardGiftTokenUser];
 GO
 IF OBJECT_ID(N'[dbo].[FK_UserUserMotionLevelHistory]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[UserMotionLevelHistorySet] DROP CONSTRAINT [FK_UserUserMotionLevelHistory];
@@ -91,6 +91,12 @@ IF OBJECT_ID(N'[dbo].[FK_ApiKeyHistory]', 'F') IS NOT NULL
 GO
 IF OBJECT_ID(N'[dbo].[FK_UserData]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[DataSet] DROP CONSTRAINT [FK_UserData];
+GO
+IF OBJECT_ID(N'[dbo].[FK_RewardGiftUserClaimedUser]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[RewardGiftUserClaimedSet] DROP CONSTRAINT [FK_RewardGiftUserClaimedUser];
+GO
+IF OBJECT_ID(N'[dbo].[FK_RewardGiftUserClaimedRewardGift]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[RewardGiftUserClaimedSet] DROP CONSTRAINT [FK_RewardGiftUserClaimedRewardGift];
 GO
 
 -- --------------------------------------------------
@@ -172,6 +178,9 @@ GO
 IF OBJECT_ID(N'[dbo].[RegionSubdivisionSet]', 'U') IS NOT NULL
     DROP TABLE [dbo].[RegionSubdivisionSet];
 GO
+IF OBJECT_ID(N'[dbo].[RewardGiftUserClaimedSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[RewardGiftUserClaimedSet];
+GO
 
 -- --------------------------------------------------
 -- Creating all tables
@@ -180,7 +189,7 @@ GO
 -- Creating table 'UserSet'
 CREATE TABLE [dbo].[UserSet] (
     [Guid] uniqueidentifier  NOT NULL,
-    [CreationDate] datetime  NOT NULL,
+    [CreationDate] datetimeoffset  NOT NULL,
     [Email] nvarchar(max)  NOT NULL,
     [Password] varbinary(max)  NULL,
     [RegionCode] nchar(5)  NULL,
@@ -190,8 +199,8 @@ GO
 
 -- Creating table 'TokenSet'
 CREATE TABLE [dbo].[TokenSet] (
-    [CreationDate] datetime  NOT NULL,
-    [ExpirationDate] datetime  NULL,
+    [CreationDate] datetimeoffset  NOT NULL,
+    [ExpirationDate] datetimeoffset  NULL,
     [Guid] uniqueidentifier  NOT NULL,
     [LastUseDate] datetime  NULL,
     [ApiKey_Guid] uniqueidentifier  NOT NULL,
@@ -201,7 +210,7 @@ GO
 
 -- Creating table 'ApiKeySet'
 CREATE TABLE [dbo].[ApiKeySet] (
-    [CreationDate] datetime  NOT NULL,
+    [CreationDate] datetimeoffset  NOT NULL,
     [Platform] nvarchar(64)  NOT NULL,
     [Description] nvarchar(64)  NULL,
     [Guid] uniqueidentifier  NOT NULL,
@@ -215,7 +224,7 @@ GO
 -- Creating table 'TipSet'
 CREATE TABLE [dbo].[TipSet] (
     [Guid] uniqueidentifier  NOT NULL,
-    [CreationDate] datetime  NOT NULL,
+    [CreationDate] datetimeoffset  NOT NULL,
     [DistanceTrigger] nvarchar(max)  NULL,
     [DaysTrigger] nvarchar(max)  NOT NULL,
     [Source] nvarchar(max)  NULL,
@@ -264,7 +273,7 @@ GO
 
 -- Creating table 'DataSet'
 CREATE TABLE [dbo].[DataSet] (
-    [TimeStamp] datetime  NOT NULL,
+    [Timestamp] datetimeoffset  NOT NULL,
     [Steps] int  NOT NULL,
     [User_Guid] uniqueidentifier  NOT NULL
 );
@@ -303,6 +312,8 @@ GO
 -- Creating table 'RewardGiftSet'
 CREATE TABLE [dbo].[RewardGiftSet] (
     [Guid] uniqueidentifier  NOT NULL,
+    [CreationDate] datetimeoffset  NOT NULL,
+    [Stock] int  NOT NULL,
     [Reward_Guid] uniqueidentifier  NOT NULL
 );
 GO
@@ -321,8 +332,8 @@ GO
 -- Creating table 'RewardGiftTokenSet'
 CREATE TABLE [dbo].[RewardGiftTokenSet] (
     [Guid] uniqueidentifier  NOT NULL,
-    [CreationDate] datetime  NOT NULL,
-    [ExpirationDate] datetime  NULL,
+    [CreationDate] datetimeoffset  NOT NULL,
+    [ExpirationDate] datetimeoffset  NULL,
     [RedeemCode] nvarchar(max)  NOT NULL,
     [RedeemGraphic] varbinary(max)  NULL,
     [RedeemGraphicMimeType] nvarchar(max)  NULL,
@@ -353,7 +364,7 @@ GO
 -- Creating table 'UserMotionLevelHistorySet'
 CREATE TABLE [dbo].[UserMotionLevelHistorySet] (
     [Id] bigint IDENTITY(1,1) NOT NULL,
-    [EarnDate] datetime  NOT NULL,
+    [CreationDate] datetimeoffset  NOT NULL,
     [User_Guid] uniqueidentifier  NOT NULL,
     [MotionLevel_Guid] uniqueidentifier  NOT NULL
 );
@@ -362,7 +373,7 @@ GO
 -- Creating table 'UserEarnedRewardSet'
 CREATE TABLE [dbo].[UserEarnedRewardSet] (
     [Id] bigint IDENTITY(1,1) NOT NULL,
-    [EarnDate] datetime  NOT NULL,
+    [CreationDate] datetimeoffset  NOT NULL,
     [User_Guid] uniqueidentifier  NOT NULL,
     [Reward_Guid] uniqueidentifier  NOT NULL
 );
@@ -386,7 +397,7 @@ CREATE TABLE [dbo].[ShippingInformationSet] (
     [Address] nvarchar(max)  NOT NULL,
     [Latitude] float  NOT NULL,
     [Longitude] float  NOT NULL,
-    [LastEditDate] datetime  NOT NULL,
+    [LastEditDate] datetimeoffset  NOT NULL,
     [User_Guid] uniqueidentifier  NOT NULL
 );
 GO
@@ -394,7 +405,7 @@ GO
 -- Creating table 'RewardGiftImageSet'
 CREATE TABLE [dbo].[RewardGiftImageSet] (
     [Id] bigint IDENTITY(1,1) NOT NULL,
-    [CreationDate] datetime  NOT NULL,
+    [CreationDate] datetimeoffset  NOT NULL,
     [Image] varbinary(max)  NOT NULL,
     [ImageMimeType] nvarchar(max)  NOT NULL,
     [RewardGift_Guid] uniqueidentifier  NOT NULL
@@ -429,6 +440,7 @@ CREATE TABLE [dbo].[RegionSubdivisionSet] (
     [Id] bigint IDENTITY(1,1) NOT NULL,
     [IsoCode] nvarchar(max)  NOT NULL,
     [Name] nvarchar(max)  NOT NULL,
+    [UtcOffset] smallint  NOT NULL,
     [Region_Id] bigint  NOT NULL
 );
 GO
@@ -436,6 +448,7 @@ GO
 -- Creating table 'RewardGiftUserClaimedSet'
 CREATE TABLE [dbo].[RewardGiftUserClaimedSet] (
     [Id] bigint IDENTITY(1,1) NOT NULL,
+    [CreationDate] datetimeoffset  NOT NULL,
     [User_Guid] uniqueidentifier  NOT NULL,
     [RewardGift_Guid] uniqueidentifier  NOT NULL
 );
@@ -493,10 +506,10 @@ ADD CONSTRAINT [PK_TipGlobalizationSet]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
--- Creating primary key on [TimeStamp] in table 'DataSet'
+-- Creating primary key on [Timestamp] in table 'DataSet'
 ALTER TABLE [dbo].[DataSet]
 ADD CONSTRAINT [PK_DataSet]
-    PRIMARY KEY CLUSTERED ([TimeStamp] ASC);
+    PRIMARY KEY CLUSTERED ([Timestamp] ASC);
 GO
 
 -- Creating primary key on [Id] in table 'UserBodySet'

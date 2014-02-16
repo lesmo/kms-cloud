@@ -118,13 +118,19 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Warning100_CannotLoginAgain" xml:space="preserve">
-    <value>User {0} is already logged in</value>
+    <value>User [{0}] is already logged in</value>
   </data>
   <data name="Warning101_UserNotFound" xml:space="preserve">
-    <value>The User {0} requested could not be found, or password is incorrect</value>
+    <value>User [{0}] requested could not be found, or password is incorrect</value>
   </data>
   <data name="Warning102_TokenNotFound" xml:space="preserve">
-    <value>The Token {0} requested could not be found</value>
+    <value>Token [{0}] requested could not be found or is invalid</value>
+  </data>
+  <data name="Warning201_CannotCreateUserWithSessionOpen" xml:space="preserve">
+    <value>User [{0}] is logged in and cannot register a new account</value>
+  </data>
+  <data name="Warning202_PasswordHashInvalid" xml:space="preserve">
+    <value>Password Hash [{0}] invalid</value>
   </data>
   <data name="Warning501_AccountDataInvalid" xml:space="preserve">
     <value>Account Data received is invalid</value>

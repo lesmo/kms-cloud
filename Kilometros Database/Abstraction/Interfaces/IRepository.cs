@@ -4,6 +4,7 @@ using System.Linq;
 using System.Data;
 using System.Data.Entity;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace KilometrosDatabase.Abstraction.Interfaces {
     public abstract class IRepository<TEntity> where TEntity : class {
@@ -12,6 +13,8 @@ namespace KilometrosDatabase.Abstraction.Interfaces {
         /// </summary>
         internal DbSet _dbSet;
         internal MainModelContainer _context;
+
+        private Type _type = typeof(TEntity);
 
         /// <summary>
         /// Inicializar el Contexto de Base de Datos utilizado por éste Repositorio.
@@ -72,6 +75,28 @@ namespace KilometrosDatabase.Abstraction.Interfaces {
         /// </summary>
         /// <param name="entity">Entidad a añadir</param>
         public virtual void Add(TEntity entity) {
+            // Obtener sólo las propiedades configuradas a establecerse con fecha y hora actuales
+            IEnumerable<PropertyInfo> setDateProperties =
+                from thisProperty in this._type.GetProperties()
+                join dateProperty
+                    in RepositoryConfig.DateTimeEntityPropertiesConfig.AutosetOnInsert
+                    on thisProperty.Name equals dateProperty
+                select thisProperty;
+
+            // Establecer el valor de las propiedades
+            Type dateTimeOffsetType = typeof(DateTimeOffset);
+
+            foreach ( PropertyInfo property in setDateProperties ) {
+                dynamic value = property.GetValue(entity);
+
+                if ( 
+                    value.GetType() == dateTimeOffsetType
+                    && value == null
+                ) {
+                    property.SetValue(entity, DateTimeOffset.Now);
+                }
+            }
+
             this._dbSet.Add(entity);
         }
 
@@ -111,8 +136,31 @@ namespace KilometrosDatabase.Abstraction.Interfaces {
         /// </summary>
         /// <param name="entity">Entidad con la información modificada</param>
         public virtual void Update(TEntity entity) {
+            // Obtener sólo las propiedades configuradas a establecerse con fecha y hora actuales
+            IEnumerable<PropertyInfo> setDateProperties =
+                from thisProperty in this._type.GetProperties()
+                join dateProperty
+                    in RepositoryConfig.DateTimeEntityPropertiesConfig.AutosetOnUpdate
+                    on thisProperty.Name equals dateProperty
+                select thisProperty;
+
+            // Establecer el valor de las propiedades
+            Type dateTimeOffsetType
+                = typeof(DateTimeOffset);
+            foreach ( PropertyInfo property in setDateProperties ) {
+                dynamic value = property.GetValue(entity);
+
+                if (
+                    value.GetType() == dateTimeOffsetType
+                    && value == null
+                ) {
+                    property.SetValue(entity, DateTimeOffset.Now);
+                }
+            }
+
             this._dbSet.Attach(entity);
-            this._context.Entry(entity).State = EntityState.Modified;
+            this._context.Entry(entity).State
+                = EntityState.Modified;
         }
     }
 }
