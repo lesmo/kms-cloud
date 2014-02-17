@@ -149,5 +149,14 @@ namespace Kilometros_WebGlobalization.API {
                 return ResourceManager.GetString("Warning502_AccountDataNotChanged", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tip requested could not be found, or ID is invalid.
+        /// </summary>
+        public static string Warning801_TipNotFound {
+            get {
+                return ResourceManager.GetString("Warning801_TipNotFound", resourceCulture);
+            }
+        }
     }
 }

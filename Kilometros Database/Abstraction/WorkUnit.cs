@@ -138,6 +138,19 @@ namespace KilometrosDatabase.Abstraction {
             }
         }
         private GenericRepository<TipCategory> _tipCategoryRepository = null;
+
+        /// <summary>
+        /// Almacén de Historial de Tips de Usuario
+        /// </summary>
+        public GenericRepository<UserTipHistory> UserTipHistoryStore {
+            get {
+                if ( this._userTipHistoryStore == null )
+                    this._userTipHistoryStore = new GenericRepository<UserTipHistory>(this._context);
+
+                return this._userTipHistoryStore;
+            }
+        }
+        private GenericRepository<UserTipHistory> _userTipHistoryStore = null;
         #endregion
 
         #region Motion Level and History
@@ -306,15 +319,15 @@ namespace KilometrosDatabase.Abstraction {
         /// <summary>
         /// Almacén de Cadenas de Traducción de Categorías de TIps
         /// </summary>
-        public GenericRepository<TipCategoryGlobalization> TipCategoryGlobalization {
+        public GenericRepository<TipCategoryGlobalization> TipCategoryGlobalizationStore {
             get {
-                if ( this._tipCategoryGlobalization == null )
-                    this._tipCategoryGlobalization = new GenericRepository<TipCategoryGlobalization>(this._context);
+                if ( this._tipCategoryGlobalizationStore == null )
+                    this._tipCategoryGlobalizationStore = new GenericRepository<TipCategoryGlobalization>(this._context);
 
-                return this._tipCategoryGlobalization;
+                return this._tipCategoryGlobalizationStore;
             }
         }
-        private GenericRepository<TipCategoryGlobalization> _tipCategoryGlobalization = null;
+        private GenericRepository<TipCategoryGlobalization> _tipCategoryGlobalizationStore = null;
 
         /// <summary>
         /// Almacén de Cadenas de Traducción de Tips

@@ -29,5 +29,6 @@ namespace KilometrosDatabase
         public virtual TipCategory TipCategory { get; set; }
         public virtual ICollection<TipGlobalization> TipGlobalization { get; set; }
         public virtual ICollection<MotionLevel> TipMotionLevel { get; set; }
+        public virtual UserTipHistory UserTipHistory { get; set; }
     }
 }

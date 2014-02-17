@@ -147,4 +147,7 @@
   <data name="Warning502_AccountDataNotChanged" xml:space="preserve">
     <value>Account Data received is not different to current data</value>
   </data>
+  <data name="Warning801_TipNotFound" xml:space="preserve">
+    <value>Tip requested could not be found, or ID is invalid</value>
+  </data>
 </root>

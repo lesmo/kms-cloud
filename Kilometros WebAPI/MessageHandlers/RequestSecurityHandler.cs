@@ -41,7 +41,7 @@ namespace Kilometros_WebAPI.MessageHandlers {
                     "101 " + MessageHandlerStrings.Warning101_RequestSignatureInvalid
                 );
 
-                return MiscHelper.ReturnResponseAndHalt(response);
+                return MiscHelper.ReturnHttpResponseAndHalt(response);
             }
 
             /** Validar que el API-Key exista en BD **/
@@ -58,7 +58,7 @@ namespace Kilometros_WebAPI.MessageHandlers {
                     "102 " + MessageHandlerStrings.Warning102_ApiKeyInvalid
                 );
 
-                return MiscHelper.ReturnResponseAndHalt(response);
+                return MiscHelper.ReturnHttpResponseAndHalt(response);
             }
 
 
@@ -76,7 +76,7 @@ namespace Kilometros_WebAPI.MessageHandlers {
                     "401 " + MessageHandlerStrings.Warning103_SessionTokenInvalid
                 );
 
-                return MiscHelper.ReturnResponseAndHalt(response);
+                return MiscHelper.ReturnHttpResponseAndHalt(response);
             }
 
             /** Validar que el API-Request-Signature sea correcto **/
@@ -109,7 +109,7 @@ namespace Kilometros_WebAPI.MessageHandlers {
                     "101 " + MessageHandlerStrings.Warning101_RequestSignatureInvalid
                 );
 
-                return MiscHelper.ReturnResponseAndHalt(response);
+                return MiscHelper.ReturnHttpResponseAndHalt(response);
             }
 
             /** Establecer contexto de Seguridad **/

@@ -12,10 +12,12 @@ namespace KilometrosDatabase
     using System;
     using System.Collections.Generic;
     
-    public partial class MotionLevelGlobalization : IGlobalization
+    public partial class UserTipHistory
     {
-        public string Tag { get; set; }
+        public System.Guid Guid { get; set; }
+        public System.DateTime CreationDate { get; set; }
     
-        public virtual MotionLevel MotionLevel { get; set; }
+        public virtual User User { get; set; }
+        public virtual Tip Tip { get; set; }
     }
 }

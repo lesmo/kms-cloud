@@ -22,6 +22,7 @@ namespace KilometrosDatabase
             this.UserEarnedReward = new HashSet<UserEarnedReward>();
             this.Data = new HashSet<Data>();
             this.RewardGiftUserClaimed = new HashSet<RewardGiftUserClaimed>();
+            this.UserTipHistory = new HashSet<UserTipHistory>();
         }
     
         public System.Guid Guid { get; private set; }
@@ -41,5 +42,6 @@ namespace KilometrosDatabase
         public virtual SocialIdentity SocialIdentity { get; set; }
         public virtual ICollection<Data> Data { get; set; }
         public virtual ICollection<RewardGiftUserClaimed> RewardGiftUserClaimed { get; set; }
+        public virtual ICollection<UserTipHistory> UserTipHistory { get; set; }
     }
 }

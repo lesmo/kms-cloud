@@ -156,6 +156,7 @@
     <Compile Include="Controllers\MyPhysiqueController.cs" />
     <Compile Include="Controllers\RegisterController.cs" />
     <Compile Include="Controllers\SessionController.cs" />
+    <Compile Include="Controllers\TipsController.cs" />
     <Compile Include="ExceptionFilters\HttpStatusExceptionFilter.cs" />
     <Compile Include="ExceptionFilters\DbValidationExceptionFilter.cs" />
     <Compile Include="ExceptionFilters\UnhandledExceptionFilter.cs" />
@@ -168,7 +169,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\HttpResponseMessageHeadersHelper.cs" />
     <Compile Include="Helpers\HttpRequestMessageHeadersHelper.cs" />
     <Compile Include="Helpers\MiscHelper.cs" />
     <Compile Include="MessageHandlers\ResponseLastModifiedHandler.cs" />
@@ -177,6 +177,8 @@
     <Compile Include="Models\HttpGet\My_Controllers\ContactInfoResponse.cs" />
     <Compile Include="Models\HttpGet\My_Controllers\PhysiqueResponse.cs" />
     <Compile Include="Models\HttpGet\SessionController\TokenResponse.cs" />
+    <Compile Include="Models\HttpGet\Tips\TipCategoryResponse.cs" />
+    <Compile Include="Models\HttpGet\Tips\TipResponse.cs" />
     <Compile Include="Models\HttpPost\DataController\DataPost.cs" />
     <Compile Include="Models\HttpPost\My_Controller\ContactInfoPost.cs" />
     <Compile Include="Models\HttpPost\My_Controller\PhysiquePost.cs" />

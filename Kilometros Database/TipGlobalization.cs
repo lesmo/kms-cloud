@@ -12,10 +12,8 @@ namespace KilometrosDatabase
     using System;
     using System.Collections.Generic;
     
-    public partial class TipGlobalization
+    public partial class TipGlobalization : IGlobalization
     {
-        public long Id { get; internal set; }
-        public string CultureCode { get; set; }
         public string Text { get; set; }
         public string Source { get; set; }
     

@@ -69,6 +69,9 @@
     <Compile Include="Helpers\Base36Encoder.cs" />
     <Compile Include="Helpers\Crc64.cs" />
     <Compile Include="Helpers\EntityDatesUtcKind.cs" />
+    <Compile Include="IGlobalization.cs">
+      <DependentUpon>MainModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="MainModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -152,6 +155,9 @@
       <DependentUpon>MainModel.tt</DependentUpon>
     </Compile>
     <Compile Include="UserMotionLevelHistory.cs">
+      <DependentUpon>MainModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserTipHistory.cs">
       <DependentUpon>MainModel.tt</DependentUpon>
     </Compile>
   </ItemGroup>

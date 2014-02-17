@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 02/16/2014 00:18:28
+-- Date Created: 02/17/2014 02:52:29
 -- Generated from EDMX file: F:\Sharp Dynamics\Kilometros\Kilometros Database\MainModel.edmx
 -- --------------------------------------------------
 
@@ -251,26 +251,6 @@ CREATE TABLE [dbo].[TipCategorySet] (
 );
 GO
 
--- Creating table 'TipCategoryGlobalizationSet'
-CREATE TABLE [dbo].[TipCategoryGlobalizationSet] (
-    [Id] bigint IDENTITY(1,1) NOT NULL,
-    [CultureCode] nvarchar(16)  NOT NULL,
-    [Name] nvarchar(max)  NOT NULL,
-    [Description] nvarchar(max)  NULL,
-    [TipCategory_Guid] uniqueidentifier  NOT NULL
-);
-GO
-
--- Creating table 'TipGlobalizationSet'
-CREATE TABLE [dbo].[TipGlobalizationSet] (
-    [Id] bigint IDENTITY(1,1) NOT NULL,
-    [CultureCode] nvarchar(16)  NOT NULL,
-    [Text] nvarchar(max)  NOT NULL,
-    [Source] nvarchar(max)  NULL,
-    [Tip_Guid] uniqueidentifier  NOT NULL
-);
-GO
-
 -- Creating table 'DataSet'
 CREATE TABLE [dbo].[DataSet] (
     [Timestamp] datetime  NOT NULL,
@@ -288,15 +268,6 @@ CREATE TABLE [dbo].[UserBodySet] (
     [Sex] nchar(1)  NOT NULL,
     [LastEditDate] datetime  NOT NULL,
     [User_Guid] uniqueidentifier  NOT NULL
-);
-GO
-
--- Creating table 'MotionLevelGlobalizationSet'
-CREATE TABLE [dbo].[MotionLevelGlobalizationSet] (
-    [Id] bigint IDENTITY(1,1) NOT NULL,
-    [CultureCode] nvarchar(16)  NOT NULL,
-    [Tag] nvarchar(max)  NOT NULL,
-    [MotionLevel_Guid] uniqueidentifier  NOT NULL
 );
 GO
 
@@ -449,8 +420,55 @@ GO
 CREATE TABLE [dbo].[RewardGiftUserClaimedSet] (
     [Id] bigint IDENTITY(1,1) NOT NULL,
     [CreationDate] datetime  NOT NULL,
+    [ClaimLocation] geography  NOT NULL,
     [User_Guid] uniqueidentifier  NOT NULL,
     [RewardGift_Guid] uniqueidentifier  NOT NULL
+);
+GO
+
+-- Creating table 'UserTipHistorySet'
+CREATE TABLE [dbo].[UserTipHistorySet] (
+    [Guid] uniqueidentifier  NOT NULL,
+    [CreationDate] datetime  NOT NULL,
+    [User_Guid] uniqueidentifier  NOT NULL,
+    [Tip_Guid] uniqueidentifier  NOT NULL
+);
+GO
+
+-- Creating table 'TipCategoryGlobalizationSet'
+CREATE TABLE [dbo].[TipCategoryGlobalizationSet] (
+    [Id] bigint IDENTITY(1,1) NOT NULL,
+    [CultureCode] nvarchar(16)  NOT NULL,
+    [Name] nvarchar(max)  NOT NULL,
+    [Description] nvarchar(max)  NULL,
+    [CreationDate] datetime  NOT NULL,
+    [TipCategory_Guid] uniqueidentifier  NOT NULL
+);
+GO
+
+-- Creating table 'MotionLevelGlobalizationSet'
+CREATE TABLE [dbo].[MotionLevelGlobalizationSet] (
+    [Id] bigint IDENTITY(1,1) NOT NULL,
+    [CultureCode] nvarchar(16)  NOT NULL,
+    [Tag] nvarchar(max)  NOT NULL,
+    [MotionLevel_Guid] uniqueidentifier  NOT NULL
+);
+GO
+
+-- Creating table 'IGlobalizationSet'
+CREATE TABLE [dbo].[IGlobalizationSet] (
+    [Id] bigint IDENTITY(1,1) NOT NULL,
+    [CultureCode] nvarchar(16)  NOT NULL,
+    [CreationDate] datetime  NOT NULL
+);
+GO
+
+-- Creating table 'IGlobalizationSet_TipGlobalization'
+CREATE TABLE [dbo].[IGlobalizationSet_TipGlobalization] (
+    [Text] nvarchar(max)  NOT NULL,
+    [Source] nvarchar(max)  NULL,
+    [Id] bigint  NOT NULL,
+    [Tip_Guid] uniqueidentifier  NOT NULL
 );
 GO
 
@@ -494,18 +512,6 @@ ADD CONSTRAINT [PK_TipCategorySet]
     PRIMARY KEY CLUSTERED ([Guid] ASC);
 GO
 
--- Creating primary key on [Id] in table 'TipCategoryGlobalizationSet'
-ALTER TABLE [dbo].[TipCategoryGlobalizationSet]
-ADD CONSTRAINT [PK_TipCategoryGlobalizationSet]
-    PRIMARY KEY CLUSTERED ([Id] ASC);
-GO
-
--- Creating primary key on [Id] in table 'TipGlobalizationSet'
-ALTER TABLE [dbo].[TipGlobalizationSet]
-ADD CONSTRAINT [PK_TipGlobalizationSet]
-    PRIMARY KEY CLUSTERED ([Id] ASC);
-GO
-
 -- Creating primary key on [Timestamp] in table 'DataSet'
 ALTER TABLE [dbo].[DataSet]
 ADD CONSTRAINT [PK_DataSet]
@@ -515,12 +521,6 @@ GO
 -- Creating primary key on [Id] in table 'UserBodySet'
 ALTER TABLE [dbo].[UserBodySet]
 ADD CONSTRAINT [PK_UserBodySet]
-    PRIMARY KEY CLUSTERED ([Id] ASC);
-GO
-
--- Creating primary key on [Id] in table 'MotionLevelGlobalizationSet'
-ALTER TABLE [dbo].[MotionLevelGlobalizationSet]
-ADD CONSTRAINT [PK_MotionLevelGlobalizationSet]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
@@ -614,6 +614,36 @@ ADD CONSTRAINT [PK_RewardGiftUserClaimedSet]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
+-- Creating primary key on [Guid] in table 'UserTipHistorySet'
+ALTER TABLE [dbo].[UserTipHistorySet]
+ADD CONSTRAINT [PK_UserTipHistorySet]
+    PRIMARY KEY CLUSTERED ([Guid] ASC);
+GO
+
+-- Creating primary key on [Id] in table 'TipCategoryGlobalizationSet'
+ALTER TABLE [dbo].[TipCategoryGlobalizationSet]
+ADD CONSTRAINT [PK_TipCategoryGlobalizationSet]
+    PRIMARY KEY CLUSTERED ([Id] ASC);
+GO
+
+-- Creating primary key on [Id] in table 'MotionLevelGlobalizationSet'
+ALTER TABLE [dbo].[MotionLevelGlobalizationSet]
+ADD CONSTRAINT [PK_MotionLevelGlobalizationSet]
+    PRIMARY KEY CLUSTERED ([Id] ASC);
+GO
+
+-- Creating primary key on [Id] in table 'IGlobalizationSet'
+ALTER TABLE [dbo].[IGlobalizationSet]
+ADD CONSTRAINT [PK_IGlobalizationSet]
+    PRIMARY KEY CLUSTERED ([Id] ASC);
+GO
+
+-- Creating primary key on [Id] in table 'IGlobalizationSet_TipGlobalization'
+ALTER TABLE [dbo].[IGlobalizationSet_TipGlobalization]
+ADD CONSTRAINT [PK_IGlobalizationSet_TipGlobalization]
+    PRIMARY KEY CLUSTERED ([Id] ASC);
+GO
+
 -- --------------------------------------------------
 -- Creating all FOREIGN KEY constraints
 -- --------------------------------------------------
@@ -674,8 +704,8 @@ ON [dbo].[TipSet]
     ([TipCategory_Guid]);
 GO
 
--- Creating foreign key on [Tip_Guid] in table 'TipGlobalizationSet'
-ALTER TABLE [dbo].[TipGlobalizationSet]
+-- Creating foreign key on [Tip_Guid] in table 'IGlobalizationSet_TipGlobalization'
+ALTER TABLE [dbo].[IGlobalizationSet_TipGlobalization]
 ADD CONSTRAINT [FK_TipTipGlobalization]
     FOREIGN KEY ([Tip_Guid])
     REFERENCES [dbo].[TipSet]
@@ -684,7 +714,7 @@ ADD CONSTRAINT [FK_TipTipGlobalization]
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_TipTipGlobalization'
 CREATE INDEX [IX_FK_TipTipGlobalization]
-ON [dbo].[TipGlobalizationSet]
+ON [dbo].[IGlobalizationSet_TipGlobalization]
     ([Tip_Guid]);
 GO
 
@@ -994,6 +1024,43 @@ ADD CONSTRAINT [FK_RewardGiftUserClaimedRewardGift]
 CREATE INDEX [IX_FK_RewardGiftUserClaimedRewardGift]
 ON [dbo].[RewardGiftUserClaimedSet]
     ([RewardGift_Guid]);
+GO
+
+-- Creating foreign key on [User_Guid] in table 'UserTipHistorySet'
+ALTER TABLE [dbo].[UserTipHistorySet]
+ADD CONSTRAINT [FK_UserTipHistoryUser]
+    FOREIGN KEY ([User_Guid])
+    REFERENCES [dbo].[UserSet]
+        ([Guid])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_UserTipHistoryUser'
+CREATE INDEX [IX_FK_UserTipHistoryUser]
+ON [dbo].[UserTipHistorySet]
+    ([User_Guid]);
+GO
+
+-- Creating foreign key on [Tip_Guid] in table 'UserTipHistorySet'
+ALTER TABLE [dbo].[UserTipHistorySet]
+ADD CONSTRAINT [FK_UserTipHistoryTip]
+    FOREIGN KEY ([Tip_Guid])
+    REFERENCES [dbo].[TipSet]
+        ([Guid])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_UserTipHistoryTip'
+CREATE INDEX [IX_FK_UserTipHistoryTip]
+ON [dbo].[UserTipHistorySet]
+    ([Tip_Guid]);
+GO
+
+-- Creating foreign key on [Id] in table 'IGlobalizationSet_TipGlobalization'
+ALTER TABLE [dbo].[IGlobalizationSet_TipGlobalization]
+ADD CONSTRAINT [FK_TipGlobalization_inherits_IGlobalization]
+    FOREIGN KEY ([Id])
+    REFERENCES [dbo].[IGlobalizationSet]
+        ([Id])
+    ON DELETE CASCADE ON UPDATE NO ACTION;
 GO
 
 -- --------------------------------------------------

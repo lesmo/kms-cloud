@@ -6,16 +6,56 @@ using System.Data.Entity;
 using System.Linq.Expressions;
 using System.Reflection;
 using KilometrosDatabase.Helpers;
+using System.Globalization;
 
 namespace KilometrosDatabase.Abstraction.Interfaces {
     public abstract class IRepository<TEntity> where TEntity : class {
         /// <summary>
         /// Contexto actual de la Base de Datos.
         /// </summary>
-        internal DbSet _dbSet;
-        internal MainModelContainer _context;
+        protected DbSet _dbSet;
+        protected MainModelContainer _context;
 
         private Type _type = typeof(TEntity);
+
+        /// <summary>
+        /// Devuelve la Entidad que representa los valores y textos en el
+        /// idioma y cultura especificados.
+        /// </summary>
+        /// <param name="entity">Entidad de la cuál se desprenderá la Globalización</param>
+        /// <param name="culture">Cultura e Idioma que se intentará obtener</param>
+        /// <returns>Entidad de Globalización o {null} si no se encontró ninguna</returns>
+        public IGlobalization GetGlobalization(
+            TEntity entity,
+            CultureInfo culture = null
+        ) {
+            if ( culture == null )
+                culture = CultureInfo.CurrentCulture;
+
+            string currentCultureCode
+                = culture.Name.ToLowerInvariant();
+
+            PropertyInfo globalizationProperty = (
+                from thisProperty in this._type.GetProperties()
+                where thisProperty.GetType() == typeof(ICollection<IGlobalization>)
+                select thisProperty
+            ).FirstOrDefault();
+
+            if ( globalizationProperty == null )
+                throw new ArgumentException("Entity does not support globalization");
+
+            ICollection<IGlobalization> entityGlobalizationCollection
+                = globalizationProperty.GetValue(entity) as ICollection<IGlobalization>;
+                
+            return (
+                from IGlobalization eg in entityGlobalizationCollection
+                where eg.CultureCode == currentCultureCode
+                    || eg.CultureCode.StartsWith(
+                        CultureInfo.CurrentCulture.TwoLetterISOLanguageName
+                    )
+                select eg
+            ).FirstOrDefault();
+        }
 
         /// <summary>
         /// Inicializar el Contexto de Base de Datos utilizado por éste Repositorio.
@@ -63,6 +103,32 @@ namespace KilometrosDatabase.Abstraction.Interfaces {
             }
 
             return (IEnumerable<TEntity>)returnValue;    
+        }
+
+        public virtual TEntity GetFirst(
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            string[] include = null
+        ) {
+            IQueryable<TEntity> query
+                = (IQueryable<TEntity>)this._dbSet.AsQueryable();
+
+            if ( include != null && include.Length > 0 ) {
+                foreach ( string includeItem in include )
+                    query
+                        = query.Include(includeItem);
+            }
+
+            TEntity returnValue
+                = orderBy != null
+                ? orderBy(query).Take(1).FirstOrDefault()
+                : query.Take(1).FirstOrDefault();
+
+            returnValue
+                = EntityDatesUtcKind.ConvertDatesKindToUtc<TEntity>(
+                    returnValue
+                );
+
+            return returnValue;
         }
 
         /// <summary>

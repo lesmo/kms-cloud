@@ -12,11 +12,8 @@
     <EntitySet Name="TipSet" EntityType="MainModel.Store.TipSet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="MotionLevelSet" EntityType="MainModel.Store.MotionLevelSet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="TipCategorySet" EntityType="MainModel.Store.TipCategorySet" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="TipCategoryGlobalizationSet" EntityType="MainModel.Store.TipCategoryGlobalizationSet" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="TipGlobalizationSet" EntityType="MainModel.Store.TipGlobalizationSet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="DataSet" EntityType="MainModel.Store.DataSet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="UserBodySet" EntityType="MainModel.Store.UserBodySet" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="MotionLevelGlobalizationSet" EntityType="MainModel.Store.MotionLevelGlobalizationSet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="RewardSet" EntityType="MainModel.Store.RewardSet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="RewardGiftSet" EntityType="MainModel.Store.RewardGiftSet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="RewardGlobalizationSet" EntityType="MainModel.Store.RewardGlobalizationSet" store:Type="Tables" Schema="dbo" />
@@ -32,6 +29,11 @@
     <EntitySet Name="RegionSet" EntityType="MainModel.Store.RegionSet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="RegionSubdivisionSet" EntityType="MainModel.Store.RegionSubdivisionSet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="RewardGiftUserClaimedSet" EntityType="MainModel.Store.RewardGiftUserClaimedSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="UserTipHistorySet" EntityType="MainModel.Store.UserTipHistorySet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="TipCategoryGlobalizationSet" EntityType="MainModel.Store.TipCategoryGlobalizationSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="MotionLevelGlobalizationSet" EntityType="MainModel.Store.MotionLevelGlobalizationSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="IGlobalizationSet" EntityType="MainModel.Store.IGlobalizationSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="IGlobalizationSet_TipGlobalization" EntityType="MainModel.Store.IGlobalizationSet_TipGlobalization" store:Type="Tables" Schema="dbo" />
     <AssociationSet Name="ApiKeyToken" Association="MainModel.Store.ApiKeyToken">
       <End Role="ApiKey" EntitySet="ApiKeySet" />
       <End Role="Token" EntitySet="TokenSet" />
@@ -50,7 +52,7 @@
     </AssociationSet>
     <AssociationSet Name="TipTipGlobalization" Association="MainModel.Store.TipTipGlobalization">
       <End Role="Tip" EntitySet="TipSet" />
-      <End Role="TipGlobalization" EntitySet="TipGlobalizationSet" />
+      <End Role="TipGlobalization" EntitySet="IGlobalizationSet_TipGlobalization" />
     </AssociationSet>
     <AssociationSet Name="TipTipMotionLevel" Association="MainModel.Store.TipTipMotionLevel">
       <End Role="Tip" EntitySet="TipSet" />
@@ -140,6 +142,18 @@
       <End Role="RewardGiftUserClaimed" EntitySet="RewardGiftUserClaimedSet" />
       <End Role="RewardGift" EntitySet="RewardGiftSet" />
     </AssociationSet>
+    <AssociationSet Name="UserTipHistoryUser" Association="MainModel.Store.UserTipHistoryUser">
+      <End Role="UserTipHistory" EntitySet="UserTipHistorySet" />
+      <End Role="User" EntitySet="UserSet" />
+    </AssociationSet>
+    <AssociationSet Name="UserTipHistoryTip" Association="MainModel.Store.UserTipHistoryTip">
+      <End Role="UserTipHistory" EntitySet="UserTipHistorySet" />
+      <End Role="Tip" EntitySet="TipSet" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TipGlobalization_inherits_IGlobalization" Association="MainModel.Store.FK_TipGlobalization_inherits_IGlobalization">
+      <End Role="IGlobalization" EntitySet="IGlobalizationSet" />
+      <End Role="TipGlobalization" EntitySet="IGlobalizationSet_TipGlobalization" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="UserSet">
     <Key>
@@ -206,26 +220,6 @@
     <Property Name="Icon" Type="varbinary(max)" Nullable="false" />
     <Property Name="IconMimeType" Type="nvarchar(max)" Nullable="false" />
   </EntityType>
-  <EntityType Name="TipCategoryGlobalizationSet">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="CultureCode" Type="nvarchar" Nullable="false" MaxLength="16" />
-    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="Description" Type="nvarchar(max)" Nullable="true" />
-    <Property Name="TipCategory_Guid" Type="uniqueidentifier" Nullable="false" />
-  </EntityType>
-  <EntityType Name="TipGlobalizationSet">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="CultureCode" Type="nvarchar" Nullable="false" MaxLength="16" />
-    <Property Name="Text" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="Source" Type="nvarchar(max)" Nullable="true" />
-    <Property Name="Tip_Guid" Type="uniqueidentifier" Nullable="false" />
-  </EntityType>
   <EntityType Name="DataSet">
     <Key>
       <PropertyRef Name="Timestamp" />
@@ -245,15 +239,6 @@
     <Property Name="Sex" Type="nchar" Nullable="false" MaxLength="1" />
     <Property Name="LastEditDate" Type="datetime" Nullable="false" />
     <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
-  </EntityType>
-  <EntityType Name="MotionLevelGlobalizationSet">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="CultureCode" Type="nvarchar" Nullable="false" MaxLength="16" />
-    <Property Name="Tag" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="MotionLevel_Guid" Type="uniqueidentifier" Nullable="false" />
   </EntityType>
   <EntityType Name="RewardSet">
     <Key>
@@ -406,8 +391,55 @@
     </Key>
     <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="CreationDate" Type="datetime" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ClaimLocation" Type="geography" StoreGeneratedPattern="Identity" Nullable="false" SRID="4326" />
     <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
     <Property Name="RewardGift_Guid" Type="uniqueidentifier" Nullable="false" />
+  </EntityType>
+  <EntityType Name="UserTipHistorySet">
+    <Key>
+      <PropertyRef Name="Guid" />
+    </Key>
+    <Property Name="Guid" Type="uniqueidentifier" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CreationDate" Type="datetime" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="Tip_Guid" Type="uniqueidentifier" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TipCategoryGlobalizationSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CultureCode" Type="nvarchar" Nullable="false" MaxLength="16" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Description" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="CreationDate" Type="datetime" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TipCategory_Guid" Type="uniqueidentifier" Nullable="false" />
+  </EntityType>
+  <EntityType Name="MotionLevelGlobalizationSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CultureCode" Type="nvarchar" Nullable="false" MaxLength="16" />
+    <Property Name="Tag" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="MotionLevel_Guid" Type="uniqueidentifier" Nullable="false" />
+  </EntityType>
+  <EntityType Name="IGlobalizationSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CultureCode" Type="nvarchar" StoreGeneratedPattern="Identity" Nullable="false" MaxLength="16" />
+    <Property Name="CreationDate" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="IGlobalizationSet_TipGlobalization">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Text" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Source" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Id" Type="bigint" Nullable="false" />
+    <Property Name="Tip_Guid" Type="uniqueidentifier" Nullable="false" />
   </EntityType>
   <Association Name="ApiKeyToken">
     <End Role="ApiKey" Type="MainModel.Store.ApiKeySet" Multiplicity="1">
@@ -469,7 +501,7 @@
     <End Role="Tip" Type="MainModel.Store.TipSet" Multiplicity="1">
       <OnDelete Action="Cascade" />
     </End>
-    <End Role="TipGlobalization" Type="MainModel.Store.TipGlobalizationSet" Multiplicity="*" />
+    <End Role="TipGlobalization" Type="MainModel.Store.IGlobalizationSet_TipGlobalization" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Tip">
         <PropertyRef Name="Guid" />
@@ -761,6 +793,44 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="UserTipHistoryUser">
+    <End Role="UserTipHistory" Type="MainModel.Store.UserTipHistorySet" Multiplicity="*" />
+    <End Role="User" Type="MainModel.Store.UserSet" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Guid" />
+      </Principal>
+      <Dependent Role="UserTipHistory">
+        <PropertyRef Name="User_Guid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="UserTipHistoryTip">
+    <End Role="UserTipHistory" Type="MainModel.Store.UserTipHistorySet" Multiplicity="*" />
+    <End Role="Tip" Type="MainModel.Store.TipSet" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Tip">
+        <PropertyRef Name="Guid" />
+      </Principal>
+      <Dependent Role="UserTipHistory">
+        <PropertyRef Name="Tip_Guid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TipGlobalization_inherits_IGlobalization">
+    <End Role="IGlobalization" Type="MainModel.Store.IGlobalizationSet" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="TipGlobalization" Type="MainModel.Store.IGlobalizationSet_TipGlobalization" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="IGlobalization">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="TipGlobalization">
+        <PropertyRef Name="Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -780,19 +850,17 @@
             <End Role="Token" EntitySet="TokenSet" />
           </AssociationSet>
           <EntitySet Name="TipCategorySet" EntityType="MainModel.TipCategory" />
-          <EntitySet Name="TipCategoryGlobalizationSet" EntityType="MainModel.TipCategoryGlobalization" />
           <AssociationSet Name="TipCategoryTipCategoryGlobalization" Association="MainModel.TipCategoryTipCategoryGlobalization">
             <End Role="TipCategory" EntitySet="TipCategorySet" />
-            <End Role="TipCategoryGlobalization" EntitySet="TipCategoryGlobalizationSet" />
+            <End Role="TipCategoryGlobalization" EntitySet="IGlobalizationSet" />
           </AssociationSet>
           <AssociationSet Name="TipCategoryTip" Association="MainModel.TipCategoryTip">
             <End Role="TipCategory" EntitySet="TipCategorySet" />
             <End Role="Tip" EntitySet="TipSet" />
           </AssociationSet>
-          <EntitySet Name="TipGlobalizationSet" EntityType="MainModel.TipGlobalization" />
           <AssociationSet Name="TipTipGlobalization" Association="MainModel.TipTipGlobalization">
             <End Role="Tip" EntitySet="TipSet" />
-            <End Role="TipGlobalization" EntitySet="TipGlobalizationSet" />
+            <End Role="TipGlobalization" EntitySet="IGlobalizationSet" />
           </AssociationSet>
           <AssociationSet Name="TipTipMotionLevel" Association="MainModel.TipTipMotionLevel">
             <End Role="Tip" EntitySet="TipSet" />
@@ -804,10 +872,9 @@
             <End Role="User" EntitySet="UserSet" />
             <End Role="UserBody" EntitySet="UserBodySet" />
           </AssociationSet>
-          <EntitySet Name="MotionLevelGlobalizationSet" EntityType="MainModel.MotionLevelGlobalization" />
           <AssociationSet Name="TipMotionLevelTipMotionLevelGlobalization" Association="MainModel.TipMotionLevelTipMotionLevelGlobalization">
             <End Role="TipMotionLevel" EntitySet="MotionLevelSet" />
-            <End Role="TipMotionLevelGlobalization" EntitySet="MotionLevelGlobalizationSet" />
+            <End Role="TipMotionLevelGlobalization" EntitySet="IGlobalizationSet" />
           </AssociationSet>
           <EntitySet Name="RewardSet" EntityType="MainModel.Reward" />
           <EntitySet Name="RewardGiftSet" EntityType="MainModel.RewardGift" />
@@ -815,10 +882,9 @@
             <End Role="Reward" EntitySet="RewardSet" />
             <End Role="RewardGift" EntitySet="RewardGiftSet" />
           </AssociationSet>
-          <EntitySet Name="RewardGlobalizationSet" EntityType="MainModel.RewardGlobalization" />
           <AssociationSet Name="RewardRewardGlobalization" Association="MainModel.RewardRewardGlobalization">
             <End Role="Reward" EntitySet="RewardSet" />
-            <End Role="RewardGlobalization" EntitySet="RewardGlobalizationSet" />
+            <End Role="RewardGlobalization" EntitySet="IGlobalizationSet" />
           </AssociationSet>
           <EntitySet Name="RewardGiftTokenSet" EntityType="MainModel.RewardGiftToken" />
           <EntitySet Name="RewardRegionalizationSet" EntityType="MainModel.RewardRegionalization" />
@@ -826,10 +892,9 @@
             <End Role="Reward" EntitySet="RewardSet" />
             <End Role="RewardRegionalization" EntitySet="RewardRegionalizationSet" />
           </AssociationSet>
-          <EntitySet Name="RewardGiftGlobalizationSet" EntityType="MainModel.RewardGiftGlobalization" />
           <AssociationSet Name="RewardGiftRewardGiftGlobalization" Association="MainModel.RewardGiftRewardGiftGlobalization">
             <End Role="RewardGift" EntitySet="RewardGiftSet" />
-            <End Role="RewardGiftGlobalization" EntitySet="RewardGiftGlobalizationSet" />
+            <End Role="RewardGiftGlobalization" EntitySet="IGlobalizationSet" />
           </AssociationSet>
           <AssociationSet Name="RewardGiftRewardGiftToken" Association="MainModel.RewardGiftRewardGiftToken">
             <End Role="RewardGift" EntitySet="RewardGiftSet" />
@@ -900,6 +965,16 @@
             <End Role="RewardGiftUserClaimed" EntitySet="RewardGiftUserClaimedSet" />
             <End Role="RewardGift" EntitySet="RewardGiftSet" />
           </AssociationSet>
+          <EntitySet Name="UserTipHistorySet" EntityType="MainModel.UserTipHistory" />
+          <AssociationSet Name="UserTipHistoryUser" Association="MainModel.UserTipHistoryUser">
+            <End Role="UserTipHistory" EntitySet="UserTipHistorySet" />
+            <End Role="User" EntitySet="UserSet" />
+          </AssociationSet>
+          <AssociationSet Name="UserTipHistoryTip" Association="MainModel.UserTipHistoryTip">
+            <End Role="UserTipHistory" EntitySet="UserTipHistorySet" />
+            <End Role="Tip" EntitySet="TipSet" />
+          </AssociationSet>
+          <EntitySet Name="IGlobalizationSet" EntityType="MainModel.IGlobalization" />
         </EntityContainer>
         <EntityType Name="User">
           <Documentation>
@@ -977,6 +1052,7 @@
           </Property>
           <NavigationProperty Name="Data" Relationship="MainModel.UserData" FromRole="User" ToRole="Data" />
           <NavigationProperty Name="RewardGiftUserClaimed" Relationship="MainModel.RewardGiftUserClaimedUser" FromRole="User" ToRole="RewardGiftUserClaimed" />
+          <NavigationProperty Name="UserTipHistory" Relationship="MainModel.UserTipHistoryUser" FromRole="User" ToRole="UserTipHistory" />
         </EntityType>
         <EntityType Name="Token">
           <Documentation>
@@ -1111,6 +1187,7 @@
               <LongDescription>Las Fuentes de los Tips que estén disponibles en más de un Idioma deben dejar en blanco ésta fuente, y almacenar la fuente en el registro de las Cadenas de Traducción correspondiente.</LongDescription>
             </Documentation>
           </Property>
+          <NavigationProperty Name="UserTipHistory" Relationship="MainModel.UserTipHistoryTip" FromRole="Tip" ToRole="UserTipHistory" />
         </EntityType>
         <EntityType Name="MotionLevel">
           <Documentation>
@@ -1176,15 +1253,10 @@
             </Documentation>
           </Property>
         </EntityType>
-        <EntityType Name="TipCategoryGlobalization">
+        <EntityType Name="TipCategoryGlobalization" BaseType="MainModel.IGlobalization">
           <Documentation>
             <Summary>Cadenas de Traducción de las Categorías.</Summary>
           </Documentation>
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" Type="Int64" cg:SetterAccess="Internal" />
-          <Property Type="String" Name="CultureCode" Nullable="false" FixedLength="false" MaxLength="16" />
           <Property Type="String" Name="Name" Nullable="false" Unicode="true" />
           <Property Type="String" Name="Description" Nullable="true" Unicode="true" >
             <Documentation>
@@ -1209,15 +1281,10 @@
           </End>
           <End Type="MainModel.Tip" Role="Tip" Multiplicity="*" />
         </Association>
-        <EntityType Name="TipGlobalization">
+        <EntityType Name="TipGlobalization" BaseType="MainModel.IGlobalization">
           <Documentation>
             <Summary>Almacén de Cadenas de Traducción de los Tips.</Summary>
           </Documentation>
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" Type="Int64" cg:SetterAccess="Internal" />
-          <Property Type="String" Name="CultureCode" Nullable="false" FixedLength="false" MaxLength="16" />
           <Property Type="String" Name="Text" Nullable="false" Unicode="true" />
           <NavigationProperty Name="Tip" Relationship="MainModel.TipTipGlobalization" FromRole="TipGlobalization" ToRole="Tip" />
           <Property Type="String" Name="Source" Nullable="true" />
@@ -1286,16 +1353,11 @@
           <End Type="MainModel.UserBody" Role="UserBody" Multiplicity="0..1" >
           </End>
         </Association>
-        <EntityType Name="MotionLevelGlobalization">
+        <EntityType Name="MotionLevelGlobalization" BaseType="MainModel.IGlobalization">
           <Documentation>
             <Summary>Cadenas de Traducción de los Niveles de Actividad.</Summary>
           </Documentation>
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Type="Int64" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="MotionLevel" Relationship="MainModel.TipMotionLevelTipMotionLevelGlobalization" FromRole="TipMotionLevelGlobalization" ToRole="TipMotionLevel" />
-          <Property Type="String" Name="CultureCode" Nullable="false" FixedLength="false" MaxLength="16" />
           <Property Type="String" Name="Tag" Nullable="false" Unicode="true" />
         </EntityType>
         <Association Name="TipMotionLevelTipMotionLevelGlobalization">
@@ -1354,21 +1416,11 @@
           <End Type="MainModel.RewardGift" Role="RewardGift" Multiplicity="*" >
           </End>
         </Association>
-        <EntityType Name="RewardGlobalization">
+        <EntityType Name="RewardGlobalization" BaseType="MainModel.IGlobalization">
           <Documentation>
             <Summary>Cadenas de Traducción de las Recompensas.</Summary>
           </Documentation>
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Type="Int64" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="Reward" Relationship="MainModel.RewardRewardGlobalization" FromRole="RewardGlobalization" ToRole="Reward" />
-          <Property Type="String" Name="CultureCode" Nullable="false" FixedLength="true" MaxLength="16" >
-            <Documentation>
-              <Summary>Código de Cultura (lenguage-país).</Summary>
-              <LongDescription>El Código de Cultura está definido en el National Language Support de Microsoft, disponible en: http://msdn.microsoft.com/en-us/goglobal/bb896001.aspx</LongDescription>
-            </Documentation>
-          </Property>
           <Property Type="String" Name="Title" Nullable="false" />
           <Property Type="String" Name="Text" Nullable="false" />
           <Property Type="String" Name="Source" Nullable="true" />
@@ -1438,15 +1490,10 @@
           <End Type="MainModel.Reward" Role="Reward" Multiplicity="1" />
           <End Type="MainModel.RewardRegionalization" Role="RewardRegionalization" Multiplicity="*" />
         </Association>
-        <EntityType Name="RewardGiftGlobalization">
+        <EntityType Name="RewardGiftGlobalization" BaseType="MainModel.IGlobalization">
           <Documentation>
             <LongDescription>Almacén de Cadenas de Traudcción del Regalo.</LongDescription>
           </Documentation>
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Type="Int64" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" cg:SetterAccess="Internal" />
-          <Property Type="String" Name="CultureCode" Nullable="false" MaxLength="16" />
           <Property Name="NameSingular" Nullable="false" Type="String" Unicode="true" MaxLength="140" />
           <Property Type="String" Name="NamePlural" Nullable="false" Unicode="true" MaxLength="140" />
           <NavigationProperty Name="RewardGift" Relationship="MainModel.RewardGiftRewardGiftGlobalization" FromRole="RewardGiftGlobalization" ToRole="RewardGift" >
@@ -1685,6 +1732,7 @@
           <NavigationProperty Name="User" Relationship="MainModel.RewardGiftUserClaimedUser" FromRole="RewardGiftUserClaimed" ToRole="User" />
           <NavigationProperty Name="RewardGift" Relationship="MainModel.RewardGiftUserClaimedRewardGift" FromRole="RewardGiftUserClaimed" ToRole="RewardGift" />
           <Property Name="CreationDate" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ClaimLocation" Type="GeographyPoint" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
         </EntityType>
         <Association Name="RewardGiftUserClaimedUser">
           <End Type="MainModel.RewardGiftUserClaimed" Role="RewardGiftUserClaimed" Multiplicity="*" />
@@ -1694,6 +1742,31 @@
           <End Type="MainModel.RewardGiftUserClaimed" Role="RewardGiftUserClaimed" Multiplicity="1" />
           <End Type="MainModel.RewardGift" Role="RewardGift" Multiplicity="1" />
         </Association>
+        <EntityType Name="UserTipHistory">
+          <Key>
+            <PropertyRef Name="Guid" />
+          </Key>
+          <Property Name="Guid" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="User" Relationship="MainModel.UserTipHistoryUser" FromRole="UserTipHistory" ToRole="User" />
+          <NavigationProperty Name="Tip" Relationship="MainModel.UserTipHistoryTip" FromRole="UserTipHistory" ToRole="Tip" />
+          <Property Name="CreationDate" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+        </EntityType>
+        <Association Name="UserTipHistoryUser">
+          <End Type="MainModel.UserTipHistory" Role="UserTipHistory" Multiplicity="*" />
+          <End Type="MainModel.User" Role="User" Multiplicity="1" />
+        </Association>
+        <Association Name="UserTipHistoryTip">
+          <End Type="MainModel.UserTipHistory" Role="UserTipHistory" Multiplicity="1" />
+          <End Type="MainModel.Tip" Role="Tip" Multiplicity="1" />
+        </Association>
+        <EntityType Name="IGlobalization" Abstract="true">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CultureCode" Type="String" Nullable="false" MaxLength="16" FixedLength="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CreationDate" Type="DateTime" Nullable="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1766,26 +1839,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="TipCategoryGlobalizationSet">
-      <EntityTypeMapping TypeName="IsTypeOf(MainModel.TipCategoryGlobalization)">
-        <MappingFragment StoreEntitySet="TipCategoryGlobalizationSet">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="CultureCode" ColumnName="CultureCode" />
-          <ScalarProperty Name="Name" ColumnName="Name" />
-          <ScalarProperty Name="Description" ColumnName="Description" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="TipGlobalizationSet">
-      <EntityTypeMapping TypeName="IsTypeOf(MainModel.TipGlobalization)">
-        <MappingFragment StoreEntitySet="TipGlobalizationSet">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="CultureCode" ColumnName="CultureCode" />
-          <ScalarProperty Name="Text" ColumnName="Text" />
-          <ScalarProperty Name="Source" ColumnName="Source" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="DataSet">
       <EntityTypeMapping TypeName="IsTypeOf(MainModel.Data)">
         <MappingFragment StoreEntitySet="DataSet">
@@ -1803,15 +1856,6 @@
           <ScalarProperty Name="Weight" ColumnName="Weight" />
           <ScalarProperty Name="Sex" ColumnName="Sex" />
           <ScalarProperty Name="LastEditDate" ColumnName="LastEditDate" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="MotionLevelGlobalizationSet">
-      <EntityTypeMapping TypeName="IsTypeOf(MainModel.MotionLevelGlobalization)">
-        <MappingFragment StoreEntitySet="MotionLevelGlobalizationSet">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="CultureCode" ColumnName="CultureCode" />
-          <ScalarProperty Name="Tag" ColumnName="Tag" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -1834,17 +1878,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="RewardGlobalizationSet">
-      <EntityTypeMapping TypeName="IsTypeOf(MainModel.RewardGlobalization)">
-        <MappingFragment StoreEntitySet="RewardGlobalizationSet">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="CultureCode" ColumnName="CultureCode" />
-          <ScalarProperty Name="Title" ColumnName="Title" />
-          <ScalarProperty Name="Text" ColumnName="Text" />
-          <ScalarProperty Name="Source" ColumnName="Source" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="RewardGiftTokenSet">
       <EntityTypeMapping TypeName="IsTypeOf(MainModel.RewardGiftToken)">
         <MappingFragment StoreEntitySet="RewardGiftTokenSet">
@@ -1862,17 +1895,6 @@
         <MappingFragment StoreEntitySet="RewardRegionalizationSet">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="RegionCode" ColumnName="RegionCode" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="RewardGiftGlobalizationSet">
-      <EntityTypeMapping TypeName="IsTypeOf(MainModel.RewardGiftGlobalization)">
-        <MappingFragment StoreEntitySet="RewardGiftGlobalizationSet">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="CultureCode" ColumnName="CultureCode" />
-          <ScalarProperty Name="NameSingular" ColumnName="NameSingular" />
-          <ScalarProperty Name="NamePlural" ColumnName="NamePlural" />
-          <ScalarProperty Name="Description" ColumnName="Description" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -1964,8 +1986,58 @@
         <MappingFragment StoreEntitySet="RewardGiftUserClaimedSet">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+          <ScalarProperty Name="ClaimLocation" ColumnName="ClaimLocation" />
         </MappingFragment>
       </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserTipHistorySet">
+      <EntityTypeMapping TypeName="IsTypeOf(MainModel.UserTipHistory)">
+        <MappingFragment StoreEntitySet="UserTipHistorySet">
+          <ScalarProperty Name="Guid" ColumnName="Guid" />
+          <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="IGlobalizationSet">
+      <EntityTypeMapping TypeName="IsTypeOf(MainModel.IGlobalization)">
+        <MappingFragment StoreEntitySet="IGlobalizationSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="CultureCode" ColumnName="CultureCode" />
+          <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+      <EntityTypeMapping TypeName="IsTypeOf(MainModel.TipGlobalization)">
+        <MappingFragment StoreEntitySet="IGlobalizationSet_TipGlobalization">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Text" ColumnName="Text" />
+          <ScalarProperty Name="Source" ColumnName="Source" />
+        </MappingFragment>
+      </EntityTypeMapping>
+            <EntityTypeMapping TypeName="IsTypeOf(MainModel.MotionLevelGlobalization)" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+              <MappingFragment StoreEntitySet="MotionLevelGlobalizationSet">
+                <ScalarProperty Name="Tag" ColumnName="Tag" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="IsTypeOf(MainModel.TipCategoryGlobalization)" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+              <MappingFragment StoreEntitySet="TipCategoryGlobalizationSet">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="IsTypeOf(MainModel.RewardGlobalization)" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+              <MappingFragment StoreEntitySet="RewardGlobalizationSet">
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Text" ColumnName="Text" />
+                <ScalarProperty Name="Source" ColumnName="Source" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="IsTypeOf(MainModel.RewardGiftGlobalization)" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+              <MappingFragment StoreEntitySet="RewardGiftGlobalizationSet">
+                <ScalarProperty Name="NameSingular" ColumnName="NameSingular" />
+                <ScalarProperty Name="NamePlural" ColumnName="NamePlural" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
     </EntitySetMapping>
     <AssociationSetMapping Name="ApiKeyToken" TypeName="MainModel.ApiKeyToken" StoreEntitySet="TokenSet">
       <EndProperty Name="ApiKey">
@@ -1983,14 +2055,6 @@
         <ScalarProperty Name="Guid" ColumnName="Guid" />
       </EndProperty>
     </AssociationSetMapping>
-    <AssociationSetMapping Name="TipCategoryTipCategoryGlobalization" TypeName="MainModel.TipCategoryTipCategoryGlobalization" StoreEntitySet="TipCategoryGlobalizationSet">
-      <EndProperty Name="TipCategory">
-        <ScalarProperty Name="Guid" ColumnName="TipCategory_Guid" />
-      </EndProperty>
-      <EndProperty Name="TipCategoryGlobalization">
-        <ScalarProperty Name="Id" ColumnName="Id" />
-      </EndProperty>
-    </AssociationSetMapping>
     <AssociationSetMapping Name="TipCategoryTip" TypeName="MainModel.TipCategoryTip" StoreEntitySet="TipSet">
       <EndProperty Name="TipCategory">
         <ScalarProperty Name="Guid" ColumnName="TipCategory_Guid" />
@@ -1999,7 +2063,7 @@
         <ScalarProperty Name="Guid" ColumnName="Guid" />
       </EndProperty>
     </AssociationSetMapping>
-    <AssociationSetMapping Name="TipTipGlobalization" TypeName="MainModel.TipTipGlobalization" StoreEntitySet="TipGlobalizationSet">
+    <AssociationSetMapping Name="TipTipGlobalization" TypeName="MainModel.TipTipGlobalization" StoreEntitySet="IGlobalizationSet_TipGlobalization">
       <EndProperty Name="Tip">
         <ScalarProperty Name="Guid" ColumnName="Tip_Guid" />
       </EndProperty>
@@ -2023,14 +2087,6 @@
         <ScalarProperty Name="Id" ColumnName="Id" />
       </EndProperty>
     </AssociationSetMapping>
-    <AssociationSetMapping Name="TipMotionLevelTipMotionLevelGlobalization" TypeName="MainModel.TipMotionLevelTipMotionLevelGlobalization" StoreEntitySet="MotionLevelGlobalizationSet">
-      <EndProperty Name="TipMotionLevel">
-        <ScalarProperty Name="Guid" ColumnName="MotionLevel_Guid" />
-      </EndProperty>
-      <EndProperty Name="TipMotionLevelGlobalization">
-        <ScalarProperty Name="Id" ColumnName="Id" />
-      </EndProperty>
-    </AssociationSetMapping>
     <AssociationSetMapping Name="RewardRewardGift" TypeName="MainModel.RewardRewardGift" StoreEntitySet="RewardGiftSet">
       <EndProperty Name="Reward">
         <ScalarProperty Name="Guid" ColumnName="Reward_Guid" />
@@ -2039,27 +2095,11 @@
         <ScalarProperty Name="Guid" ColumnName="Guid" />
       </EndProperty>
     </AssociationSetMapping>
-    <AssociationSetMapping Name="RewardRewardGlobalization" TypeName="MainModel.RewardRewardGlobalization" StoreEntitySet="RewardGlobalizationSet">
-      <EndProperty Name="Reward">
-        <ScalarProperty Name="Guid" ColumnName="Reward_Guid" />
-      </EndProperty>
-      <EndProperty Name="RewardGlobalization">
-        <ScalarProperty Name="Id" ColumnName="Id" />
-      </EndProperty>
-    </AssociationSetMapping>
     <AssociationSetMapping Name="RewardRewardRegionalization" TypeName="MainModel.RewardRewardRegionalization" StoreEntitySet="RewardRegionalizationSet">
       <EndProperty Name="Reward">
         <ScalarProperty Name="Guid" ColumnName="Reward_Guid" />
       </EndProperty>
       <EndProperty Name="RewardRegionalization">
-        <ScalarProperty Name="Id" ColumnName="Id" />
-      </EndProperty>
-    </AssociationSetMapping>
-    <AssociationSetMapping Name="RewardGiftRewardGiftGlobalization" TypeName="MainModel.RewardGiftRewardGiftGlobalization" StoreEntitySet="RewardGiftGlobalizationSet">
-      <EndProperty Name="RewardGift">
-        <ScalarProperty Name="Guid" ColumnName="RewardGift_Guid" />
-      </EndProperty>
-      <EndProperty Name="RewardGiftGlobalization">
         <ScalarProperty Name="Id" ColumnName="Id" />
       </EndProperty>
     </AssociationSetMapping>
@@ -2184,6 +2224,28 @@
         <ScalarProperty Name="Id" ColumnName="Id" />
       </EndProperty>
     </AssociationSetMapping>
+    <AssociationSetMapping Name="UserTipHistoryUser" TypeName="MainModel.UserTipHistoryUser" StoreEntitySet="UserTipHistorySet">
+      <EndProperty Name="User">
+        <ScalarProperty Name="Guid" ColumnName="User_Guid" />
+      </EndProperty>
+      <EndProperty Name="UserTipHistory">
+        <ScalarProperty Name="Guid" ColumnName="Guid" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="UserTipHistoryTip" TypeName="MainModel.UserTipHistoryTip" StoreEntitySet="UserTipHistorySet">
+      <EndProperty Name="Tip">
+        <ScalarProperty Name="Guid" ColumnName="Tip_Guid" />
+      </EndProperty>
+      <EndProperty Name="UserTipHistory">
+        <ScalarProperty Name="Guid" ColumnName="Guid" />
+      </EndProperty>
+    </AssociationSetMapping>
+          <AssociationSetMapping Name="TipMotionLevelTipMotionLevelGlobalization" TypeName="MainModel.TipMotionLevelTipMotionLevelGlobalization" StoreEntitySet="MotionLevelGlobalizationSet">
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="TipCategoryTipCategoryGlobalization" TypeName="MainModel.TipCategoryTipCategoryGlobalization" StoreEntitySet="TipCategoryGlobalizationSet" />
+          <AssociationSetMapping Name="RewardRewardGlobalization" TypeName="MainModel.RewardRewardGlobalization" StoreEntitySet="RewardGlobalizationSet">
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="RewardGiftRewardGiftGlobalization" TypeName="MainModel.RewardGiftRewardGiftGlobalization" StoreEntitySet="RewardGiftGlobalizationSet" />
   </EntityContainerMapping>
 </Mapping></edmx:Mappings>
   </edmx:Runtime>

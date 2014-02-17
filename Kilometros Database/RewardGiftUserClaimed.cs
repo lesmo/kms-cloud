@@ -16,6 +16,7 @@ namespace KilometrosDatabase
     {
         public long Id { get; set; }
         public System.DateTime CreationDate { get; set; }
+        public System.Data.Spatial.DbGeography ClaimLocation { get; set; }
     
         public virtual User User { get; set; }
         public virtual RewardGift RewardGift { get; set; }

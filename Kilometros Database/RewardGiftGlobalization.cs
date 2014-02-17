@@ -12,10 +12,8 @@ namespace KilometrosDatabase
     using System;
     using System.Collections.Generic;
     
-    public partial class RewardGiftGlobalization
+    public partial class RewardGiftGlobalization : IGlobalization
     {
-        public long Id { get; internal set; }
-        public string CultureCode { get; set; }
         public string NameSingular { get; set; }
         public string NamePlural { get; set; }
         public string Description { get; set; }
