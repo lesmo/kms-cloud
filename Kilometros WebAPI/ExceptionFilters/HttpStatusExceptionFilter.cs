@@ -22,11 +22,18 @@ namespace Kilometros_WebAPI.ExceptionFilters {
             } else if ( httpContext.Exception is HttpUnauthorizedException ) {
                 httpContext.Response
                     = new HttpResponseMessage(HttpStatusCode.Unauthorized);
+            } else if ( httpContext.Exception is HttpConflictException ) {
+                httpContext.Response
+                    = new HttpResponseMessage(HttpStatusCode.Conflict);
             }
 
-            if ( httpContext.Exception.Message != null )
+            if (
+                httpContext.Exception.Message != null
+                && !(httpContext.Exception is HttpNoContentException)
+            ) {
                 httpContext.Response.Content
                     = new StringContent(httpContext.Exception.Message);
+            }
         }
     }
 }
