@@ -9,6 +9,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Results;
 using System.Data.Entity.Validation;
 using Kilometros_WebGlobalization.API;
 
@@ -19,7 +20,7 @@ namespace Kilometros_WebAPI.Controllers {
 
         [HttpPost]
         [Route("data")]
-        public HttpResponseMessage Post([FromBody]DataPost[] dataPost) {
+        public IHttpActionResult Post([FromBody]DataPost[] dataPost) {
             /** Determinar la última fecha registrada **/
             KmsIdentity identity
                 = (KmsIdentity)User.Identity;
@@ -32,6 +33,14 @@ namespace Kilometros_WebAPI.Controllers {
                 = lastData == null ? DateTime.MinValue : lastData.Timestamp;
 
             /** Determinar los registros que se almacenarán en BD **/
+            // TODO: Calcular fecha UTC a partir del Huso Horario configurado
+            //       por el Usuario
+            foreach ( DataPost item in dataPost )
+                item.Timestamp = DateTime.SpecifyKind(
+                    item.Timestamp,
+                    DateTimeKind.Utc
+                );
+
             // TODO: Incluir un algoritmo que mejore la solución al problema
             //       de datos replicados y sincronía.
             IEnumerable<DataPost> finalPost
@@ -40,6 +49,7 @@ namespace Kilometros_WebAPI.Controllers {
                   select d;
 
             /** Almacenar los nuevos registros **/
+            List<Data> addedData = new List<Data>();
             foreach ( DataPost data in finalPost ) {
                 Data newData = new Data(){
                      Timestamp = data.Timestamp,
@@ -47,11 +57,10 @@ namespace Kilometros_WebAPI.Controllers {
                 };
 
                 this._db.DataStore.Add(newData);
+                addedData.Add(newData);
             }
             
-            int savedRecords = this._db.SaveChanges();
-            
-            return Request.CreateResponse(HttpStatusCode.Created);
+            return Ok();
         }
     }
 }

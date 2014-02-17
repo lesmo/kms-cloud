@@ -17,80 +17,48 @@ namespace Kilometros_WebAPI.Controllers {
     public class MyAccountController : ApiController {
         public KilometrosDatabase.Abstraction.WorkUnit Database
             = new KilometrosDatabase.Abstraction.WorkUnit();
-        private HttpServerUtility _httpServerUtility
-            = HttpContext.Current.Server;
 
         [HttpGet]
         [Route("my/account")]
-        public HttpResponseMessage GetAccount() {
+        public AccountResponse GetAccount() {
             // TODO: Añadir funcionalidad de If-Modified-Since
 
             KmsIdentity identity
                 = MiscHelper.GetPrincipal<KmsIdentity>();
+            User user
+                = identity.UserData;
             
-            AccountResponse responseContent
-                = new AccountResponse() {
-                    AccountCreationDate
-                        = identity.UserData.CreationDate,
-                    Email
-                        = identity.UserData.Email,
-                    PreferredCultureCode
-                        = identity.UserData.PreferredCultureInfo.Name,
-                    RegionCode
-                        = identity.UserData.RegionCode
-                };
-            
-            return Request.CreateResponse<AccountResponse>(
-                HttpStatusCode.OK,
-                responseContent
-            );
+            return new AccountResponse() {
+                AccountCreationDate
+                    = user.CreationDate,
+                Email
+                    = user.Email,
+                PreferredCultureCode
+                    = user.PreferredCultureInfo.Name,
+                RegionCode
+                    = user.RegionCode
+            };
         }
 
         [HttpPost]
         [Route("my/account")]
-        public HttpResponseMessage PostAccount([FromBody]AccountPost accountPost) {
-            HttpResponseMessage response
-                = Request.CreateResponse();
-
+        public IHttpActionResult PostAccount([FromBody]AccountPost accountPost) {
             KmsIdentity identity
                 = (KmsIdentity)User.Identity;
             User user
                 = identity.UserData;
+            
+            user.PreferredCultureCode
+                = accountPost.PreferredCultureCode.ToLowerInvariant();
+            user.RegionCode
+                = accountPost.RegionCode.ToLowerInvariant();
+            user.Email
+                = accountPost.Email.ToLowerInvariant();
+            
+            this.Database.UserStore.Update(user);
+            this.Database.SaveChanges();
 
-            try {
-                if ( accountPost.PreferredCultureCode != null ) {
-                    CultureInfo cultureInfo
-                        = new CultureInfo(accountPost.PreferredCultureCode.ToLowerInvariant());
-                    user.PreferredCultureInfo
-                        = cultureInfo;
-                }
-
-                if ( accountPost.RegionCode != null )
-                    user.RegionCode
-                        = accountPost.RegionCode.ToLowerInvariant();
-
-                if ( accountPost.Email != null )
-                    user.Email
-                        = accountPost.Email.ToLowerInvariant();
-                
-                this.Database.UserStore.Update(user);
-                this.Database.SaveChanges();
-
-                response.StatusCode
-                    = HttpStatusCode.Created;
-            } catch {
-                string warningString
-                    = ControllerStrings.Warning501_AccountDataInvalid;
-                response.StatusCode
-                    = HttpStatusCode.BadRequest;
-
-                response.Headers.TryAddWithoutValidation(
-                    "Warning",
-                    "501" + this._httpServerUtility.UrlEncode(warningString)
-                );
-            }
-
-            return response;
+            return Ok();
         }
     }
 }

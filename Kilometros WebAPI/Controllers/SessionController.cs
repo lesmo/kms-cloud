@@ -11,77 +11,71 @@ using Kilometros_WebAPI.Models.HttpPost.SessionController;
 using Kilometros_WebGlobalization.API;
 using Kilometros_WebAPI.Models.HttpGet.SessionController;
 using System.Globalization;
+using Kilometros_WebAPI.Exceptions;
+using Kilometros_WebAPI.Helpers;
 
 namespace Kilometros_WebAPI.Controllers {
     public class SessionController : ApiController {
         public KilometrosDatabase.Abstraction.WorkUnit Database
             = new KilometrosDatabase.Abstraction.WorkUnit();
-        private HttpServerUtility _httpServerUtility
-            = HttpContext.Current.Server;
 
         [HttpPost]
         [Route("session/kms")]
-        public HttpResponseMessage KmsLogin([FromBody]LoginPost userPost) {
+        public TokenResponse KmsLogin([FromBody]LoginPost dataPost) {
             /** Evitar doble Login **/
-            if ( this.User.Identity.IsAuthenticated ) {
-                HttpResponseMessage response
-                    = Request.CreateResponse(HttpStatusCode.Forbidden);
-                string warningString
-                    = string.Format(ControllerStrings.Warning100_CannotLoginAgain, this.User.Identity.Name);
-
-                response.Headers.TryAddWithoutValidation(
-                    "Warning",
-                    "100" + this._httpServerUtility.UrlEncode(warningString)
+            if ( this.User.Identity.IsAuthenticated )
+                throw new HttpAlreadyLoggedInException(
+                    ControllerStrings.Warning100_CannotLoginAgain
                 );
+            
+            /** Obtener bytes de contraseña, buscar al Usuario y validar contraseña **/
+            byte[] passwordBytes
+                = Convert.FromBase64String(dataPost.AccessHash);
+            User user
+                = this.Database.UserStore.GetAll(
+                    u => u.Email == dataPost.Email
+                ).FirstOrDefault();
 
-                return response;
-            }
-
-            /** Buscar al Usuario y validar contraseña **/
-            User user = this.Database.UserStore.GetAll(
-                u => u.Email == userPost.Email
-            ).FirstOrDefault();
-
-            if ( user == null || userPost.AccessHash != user.PasswordString ) {
-                HttpResponseMessage response
-                    = Request.CreateResponse(HttpStatusCode.Unauthorized);
-                string warningString
-                    = ControllerStrings.Warning101_UserNotFound;
-
-                response.Headers.Add(
-                    "Warning",
-                    "101 " + this._httpServerUtility.UrlEncode(warningString)
+            if ( user == null || ! MiscHelper.BytesEqual(passwordBytes, user.Password) )
+                throw new HttpUnauthorizedException(
+                    string.Format(
+                        ControllerStrings.Warning101_UserNotFound,
+                        dataPost.Email
+                    )
                 );
-
-                return response;
-            }
 
             /** Generar nuevo Token **/
-            KmsIdentity identity = (KmsIdentity)this.User.Identity;
-            Token token = new Token() {
-                ApiKey = identity.ApiKey,
-                User = user,
-                Guid = Guid.NewGuid(),
+            KmsIdentity identity
+                = (KmsIdentity)this.User.Identity;
+            Token token
+                = new Token() {
+                    ApiKey
+                        = identity.ApiKey,
+                    User
+                        = user,
+                    Guid
+                        = Guid.NewGuid(),
 
-                CreationDate = DateTime.UtcNow,
-                LastUseDate = DateTime.UtcNow,
-                ExpirationDate = DateTime.UtcNow.AddDays(30)
-            };
+                    CreationDate
+                        = DateTime.UtcNow,
+                    LastUseDate
+                        = DateTime.UtcNow,
+                    ExpirationDate
+                        = DateTime.UtcNow.AddDays(30)
+                };
 
             this.Database.TokenStore.Add(token);
             this.Database.SaveChanges();
 
             /** Preparar y enviar respuesta **/
-            TokenResponse tokenResponse = new TokenResponse() {
-                Expires = DateTime.UtcNow.AddDays(30),
-                Token = Convert.ToBase64String(token.Guid.ToByteArray()),
-                Pending = {}
+            return new TokenResponse() {
+                Expires
+                    = token.ExpirationDate.Value,
+                Token
+                    = Convert.ToBase64String(token.Guid.ToByteArray()),
+                Pending
+                    = {}
             };
-
-            return Request.CreateResponse<TokenResponse>(
-                HttpStatusCode.Created, 
-                tokenResponse
-            );
         }
 
         [HttpPost]
@@ -97,7 +91,7 @@ namespace Kilometros_WebAPI.Controllers {
 
         [HttpGet]
         [Route("session/{tokenString}")]
-        public HttpResponseMessage GetToken(string tokenString) {
+        public IHttpActionResult GetToken(string tokenString) {
             HttpResponseMessage response
                 = Request.CreateResponse();
 
@@ -109,41 +103,24 @@ namespace Kilometros_WebAPI.Controllers {
                 = this.Database.TokenStore.Get(tokenGuid);
 
             if ( token == null ) {
-                string warningString
-                    = string.Format(ControllerStrings.Warning102_TokenNotFound, tokenString);
+                return NotFound();
+            } else if ( token.ExpirationDate.HasValue ) {
+                token.ExpirationDate
+                    = token.ExpirationDate.Value.AddDays(90);
 
-                response.StatusCode = HttpStatusCode.NotFound;
-                response.Headers.Add(
-                    "Warning",
-                    "102 " + this._httpServerUtility.UrlEncode(warningString)
-                );
+                this.Database.TokenStore.Update(token);
+                this.Database.SaveChanges();
+
+                return Ok();
             } else {
-                if ( token.ExpirationDate.HasValue ) {
-                    token.ExpirationDate
-                        = token.ExpirationDate.Value.AddDays(90);
-
-                    this.Database.TokenStore.Update(token);
-                    this.Database.SaveChanges();
-
-                    response.Headers.TryAddWithoutValidation(
-                        "Expires",
-                        token.ExpirationDate.Value.ToString(
-                            DateTimeFormatInfo.InvariantInfo.RFC1123Pattern
-                        )
-                    );
-                }
-
-                response.StatusCode = HttpStatusCode.OK;
+                // TODO: Tal vez notificar que no se hizo nada?
+                return Ok();
             }
-
-            return response;
         }
 
         [HttpDelete]
         [Route("session/{tokenString}")]
-        public HttpResponseMessage DeleteToken(string tokenString) {
-            HttpResponseMessage response = new HttpResponseMessage();
-
+        public IHttpActionResult DeleteToken(string tokenString) {
             byte[] tokenBytes
                 = Convert.FromBase64String(tokenString);
             Guid tokenGuid  
@@ -152,20 +129,13 @@ namespace Kilometros_WebAPI.Controllers {
                 = this.Database.TokenStore.Get(tokenGuid);
 
             if ( token == null ) {
-                string warningString
-                    = string.Format(ControllerStrings.Warning102_TokenNotFound, tokenString);
-
-                response.StatusCode = HttpStatusCode.NotFound;
-                response.Headers.Add(
-                    "Warning",
-                    "102 " + this._httpServerUtility.UrlEncode(warningString)
-                );
+                return NotFound();
             } else {
                 this.Database.TokenStore.Delete(tokenGuid);
-                response.StatusCode = HttpStatusCode.NoContent;
+                throw new HttpNoContentException(
+                    ControllerStrings.Warning103_TokenDeleteOk
+                );
             }
-
-            return response;
         }
     }
 }

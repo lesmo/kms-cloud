@@ -12,29 +12,28 @@ using Kilometros_WebAPI.Security;
 using Kilometros_WebAPI.Helpers;
 using KilometrosDatabase;
 using System.Globalization;
+using Kilometros_WebAPI.Exceptions;
+using Kilometros_WebGlobalization.API;
 
 namespace Kilometros_WebAPI.Controllers {
     [Authorize]
     public class MyPhysiqueController : ApiController {
         public KilometrosDatabase.Abstraction.WorkUnit Database
             = new KilometrosDatabase.Abstraction.WorkUnit();
-        private HttpServerUtility _httpServerUtility
-            = HttpContext.Current.Server;
 
         [HttpGet]
         [Route("my/physique")]
-        public HttpResponseMessage GetPhysique() {
+        public PhysiqueResponse GetPhysique() {
             KmsIdentity identity
                 = MiscHelper.GetPrincipal<KmsIdentity>();
             UserBody physique
                 = identity.UserData.UserBody;
 
             /** Validar si existe Perfil Físico **/
-            if ( physique == null ) {
-                return Request.CreateResponse(
-                    HttpStatusCode.NoContent
+            if ( physique == null )
+                throw new HttpNoContentException(
+                    ControllerStrings.Warning204_PhysicalInfoNotSet
                 );
-            }
 
             /** Verificar si se tiene la cabecera {If-Modified-Since} **/
             DateTimeOffset? ifModifiedSince
@@ -42,36 +41,50 @@ namespace Kilometros_WebAPI.Controllers {
 
             if ( ifModifiedSince.HasValue ) {
                 if ( ifModifiedSince.Value.DateTime > physique.LastEditDate )
-                    return Request.CreateResponse(
-                        HttpStatusCode.NotModified
-                    );
+                    throw new HttpNotModifiedException();
             }
 
             /** Preparar y devolver respuesta **/
-            PhysiqueResponse responseContent
-                = new PhysiqueResponse() {
-                    Age
-                        = physique.Age,
-                    Height
-                        = physique.Height,
-                    Weight
-                        = physique.Weight,
-                    Sex
-                        = physique.Sex
+            return new PhysiqueResponse() {
+                Age
+                    = physique.Age,
+                Height
+                    = physique.Height,
+                Weight
+                    = physique.Weight,
+                Sex
+                    = physique.Sex,
+
+                LastModified
+                    = physique.LastEditDate
+            };
+        }
+
+        [HttpPost]
+        [Route("my/physique")]
+        public IHttpActionResult PostPhysique([FromBody]PhysiquePost dataPost) {
+            KmsIdentity identity
+                = MiscHelper.GetPrincipal<KmsIdentity>();
+            UserBody physique
+                = identity.UserData.UserBody ?? new UserBody() {
+                    User
+                        = identity.UserData
                 };
 
-            HttpResponseMessage response
-                = Request.CreateResponse<PhysiqueResponse>(
-                    HttpStatusCode.OK,
-                    responseContent
-                );
+            physique.Age
+                = dataPost.Age;
+            physique.Height
+                = dataPost.Height;
+            physique.Weight
+                = dataPost.Weight;
+            physique.Sex
+                = dataPost.Sex;
 
-            response.Headers.TryAddWithoutValidation(
-                "Last-Modified",
-                physique.LastEditDate.ToString(DateTimeFormatInfo.InvariantInfo.RFC1123Pattern)
-            );
-
-            return response;
+            if ( identity.UserData.UserBody == null )
+                Database.UserBodyStore.Add(physique);
+            else
+                Database.UserBodyStore.Update(physique);
+            return Ok();
         }
     }
 }

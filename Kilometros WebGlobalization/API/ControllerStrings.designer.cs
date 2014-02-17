@@ -61,6 +61,15 @@ namespace Kilometros_WebGlobalization.API {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ooops! We&apos;re still developing that one... sorry.
+        /// </summary>
+        public static string GenericNotImplemented {
+            get {
+                return ResourceManager.GetString("GenericNotImplemented", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Validation error: {0}.
         /// </summary>
         public static string GenericValidationError {
@@ -70,7 +79,7 @@ namespace Kilometros_WebGlobalization.API {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User [{0}] is already logged in.
+        ///   Looks up a localized string similar to User is already logged in.
         /// </summary>
         public static string Warning100_CannotLoginAgain {
             get {
@@ -88,16 +97,16 @@ namespace Kilometros_WebGlobalization.API {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Token [{0}] requested could not be found or is invalid.
+        ///   Looks up a localized string similar to Token was deleted successfully.
         /// </summary>
-        public static string Warning102_TokenNotFound {
+        public static string Warning103_TokenDeleteOk {
             get {
-                return ResourceManager.GetString("Warning102_TokenNotFound", resourceCulture);
+                return ResourceManager.GetString("Warning103_TokenDeleteOk", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User [{0}] is logged in and cannot register a new account.
+        ///   Looks up a localized string similar to User is logged in and cannot register a new account.
         /// </summary>
         public static string Warning201_CannotCreateUserWithSessionOpen {
             get {
@@ -106,11 +115,20 @@ namespace Kilometros_WebGlobalization.API {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Password Hash [{0}] invalid.
+        ///   Looks up a localized string similar to Contact Information is not set yet.
         /// </summary>
-        public static string Warning202_PasswordHashInvalid {
+        public static string Warning203_ContactInfoNotSet {
             get {
-                return ResourceManager.GetString("Warning202_PasswordHashInvalid", resourceCulture);
+                return ResourceManager.GetString("Warning203_ContactInfoNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Physical Profile is not set yet.
+        /// </summary>
+        public static string Warning204_PhysicalInfoNotSet {
+            get {
+                return ResourceManager.GetString("Warning204_PhysicalInfoNotSet", resourceCulture);
             }
         }
         

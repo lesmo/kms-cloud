@@ -12,29 +12,28 @@ using Kilometros_WebAPI.Models.HttpPost.My_Controller;
 using Kilometros_WebAPI.Helpers;
 using KilometrosDatabase;
 using System.Globalization;
+using Kilometros_WebAPI.Exceptions;
+using Kilometros_WebGlobalization.API;
 
 namespace Kilometros_WebAPI.Controllers {
     [Authorize]
     public class MyContactInfoController : ApiController {
         public KilometrosDatabase.Abstraction.WorkUnit Database
             = new KilometrosDatabase.Abstraction.WorkUnit();
-        private HttpServerUtility _httpServerUtility
-            = HttpContext.Current.Server;
 
         [HttpGet]
         [Route("my/contact-info")]
-        public HttpResponseMessage GetContactInfo() {
+        public ContactInfoResponse GetContactInfo() {
             KmsIdentity identity
                 = MiscHelper.GetPrincipal<KmsIdentity>();
             ContactInfo contactInfo
                 = identity.UserData.ContactInfo;
 
             /** Validar si existe Información de Contacto registrada **/
-            if ( contactInfo == null ) {
-                return Request.CreateResponse(
-                    HttpStatusCode.NoContent
+            if ( contactInfo == null )
+                throw new HttpNoContentException(
+                    ControllerStrings.Warning203_ContactInfoNotSet
                 );
-            }
             
             /** Verificar si se tiene la cabecera {If-Modified-Since} **/
             DateTimeOffset? ifModifiedSince 
@@ -42,68 +41,50 @@ namespace Kilometros_WebAPI.Controllers {
 
             if ( ifModifiedSince.HasValue ) {
                 if ( ifModifiedSince.Value.DateTime > contactInfo.LastEditDate )
-                    return Request.CreateResponse(
-                        HttpStatusCode.NotModified
-                    );
+                    throw new HttpNotModifiedException();
             }
 
             /** Preparar respuesta **/
-            ContactInfoResponse responseContent
-                = new ContactInfoResponse() {
-                    HomePhone
-                        = contactInfo.HomePhone,
-                    MobilePhone
-                        = contactInfo.MobilePhone,
-                    WorkPhone
-                        = contactInfo.WorkPhone
-                };
-
-            HttpResponseMessage response
-                = Request.CreateResponse<ContactInfoResponse>(
-                    HttpStatusCode.OK,
-                    responseContent
-                );
-            
-            response.Headers.TryAddWithoutValidation(
-                "Last-Modified",
-                contactInfo.LastEditDate.ToString(DateTimeFormatInfo.InvariantInfo.RFC1123Pattern)
-            );
-
-            return response;
+            return new ContactInfoResponse() {
+                HomePhone
+                    = contactInfo.HomePhone,
+                MobilePhone
+                    = contactInfo.MobilePhone,
+                WorkPhone
+                    = contactInfo.WorkPhone,
+                LastModified
+                    = contactInfo.LastEditDate
+            };
         }
 
         [HttpPost]
         [Route("my/account")]
-        public HttpResponseMessage PostAccount([FromBody]ContactInfoPost contactInfoPost) {
+        public IHttpActionResult PostAccount([FromBody]ContactInfoPost dataPost) {
             HttpResponseMessage response
                 = Request.CreateResponse();
 
             KmsIdentity identity
                 = MiscHelper.GetPrincipal<KmsIdentity>();
             ContactInfo contactInfo
-                = identity.UserData.ContactInfo ?? new ContactInfo();
+                = identity.UserData.ContactInfo ?? new ContactInfo() {
+                    User = identity.UserData
+                };
 
             contactInfo.HomePhone
-                = contactInfoPost.HomePhone;
+                = dataPost.HomePhone;
             contactInfo.MobilePhone
-                = contactInfoPost.MobilePhone;
+                = dataPost.MobilePhone;
             contactInfo.WorkPhone
-                = contactInfoPost.WorkPhone;
-            contactInfo.LastEditDate
-                = DateTime.UtcNow;
+                = dataPost.WorkPhone;
 
-            if ( identity.UserData.ContactInfo == null ) {
-                contactInfo.User
-                    = identity.UserData;
+            if ( identity.UserData.ContactInfo == null )
+                Database.ContactInfoStore.Add(contactInfo);
+            else
+                Database.ContactInfoStore.Update(contactInfo);
 
-                this.Database.ContactInfoStore.Add(contactInfo);
-            } else {
-                this.Database.ContactInfoStore.Update(contactInfo);
-            }
+            Database.SaveChanges();
 
-            this.Database.SaveChanges();
-
-            return Request.CreateResponse(HttpStatusCode.Created);
+            return Ok();
         }
     }
 }

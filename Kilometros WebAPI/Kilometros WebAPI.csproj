@@ -156,14 +156,22 @@
     <Compile Include="Controllers\MyPhysiqueController.cs" />
     <Compile Include="Controllers\RegisterController.cs" />
     <Compile Include="Controllers\SessionController.cs" />
-    <Compile Include="ExceptionFilters\HttpNotModifiedExceptionFilter.cs" />
+    <Compile Include="ExceptionFilters\HttpStatusExceptionFilter.cs" />
+    <Compile Include="ExceptionFilters\DbValidationExceptionFilter.cs" />
+    <Compile Include="Exceptions\HttpAlreadyLoggedInException.cs" />
+    <Compile Include="Exceptions\HttpNoContentException.cs" />
+    <Compile Include="Exceptions\HttpNotFoundException.cs" />
     <Compile Include="Exceptions\HttpNotModifiedException.cs" />
+    <Compile Include="Exceptions\HttpProcessException.cs" />
+    <Compile Include="Exceptions\HttpUnauthorizedException.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\HttpResponseMessageHeadersHelper.cs" />
     <Compile Include="Helpers\HttpRequestMessageHeadersHelper.cs" />
     <Compile Include="Helpers\MiscHelper.cs" />
+    <Compile Include="MessageHandlers\ResponseLastModifiedHandler.cs" />
+    <Compile Include="Models\HttpGet\IModifiedDate.cs" />
     <Compile Include="Models\HttpGet\My_Controllers\AccountResponse.cs" />
     <Compile Include="Models\HttpGet\My_Controllers\ContactInfoResponse.cs" />
     <Compile Include="Models\HttpGet\My_Controllers\PhysiqueResponse.cs" />
