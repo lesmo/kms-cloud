@@ -144,7 +144,7 @@ namespace Kilometros_WebAPI.Controllers {
                 );
 
             /** Verificar que el Usuario tenga Información de Envío si el Regalo se envía **/
-            if ( userEarnedReward.Reward.IsShipped ) {
+            if ( rewardGift.IsShipped ) {
                 ShippingInformation shippingInformation
                     = user.ShippingInformation;
 
