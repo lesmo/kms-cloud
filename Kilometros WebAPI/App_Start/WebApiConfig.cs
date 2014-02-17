@@ -13,6 +13,7 @@ namespace Kilometros_WebAPI {
         
         public static void Register(HttpConfiguration config) {
             /** Configurar ExceptionFilters **/
+            config.Filters.Add(new ExceptionFilters.UnhandledExceptionFilter());
             config.Filters.Add(new ExceptionFilters.HttpStatusExceptionFilter());
             config.Filters.Add(new ExceptionFilters.DbValidationExceptionFilter());
 
@@ -21,13 +22,9 @@ namespace Kilometros_WebAPI {
             config.MessageHandlers.Add(new MessageHandlers.ResponseLastModifiedHandler());
             config.MessageHandlers.Add(new MessageHandlers.RequestSecurityHandler());
 
+            /** Configurar rutas **/
+            // Todas las rutas se establecen con el tag [Route(--)]
             config.MapHttpAttributeRoutes();
-
-            /*** Por defectuoso ***/
-            config.Routes.MapHttpRoute(
-                name: "DefaultApi",
-                routeTemplate: "{controller}"
-            );
         }
     }
 }

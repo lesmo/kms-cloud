@@ -158,6 +158,7 @@
     <Compile Include="Controllers\SessionController.cs" />
     <Compile Include="ExceptionFilters\HttpStatusExceptionFilter.cs" />
     <Compile Include="ExceptionFilters\DbValidationExceptionFilter.cs" />
+    <Compile Include="ExceptionFilters\UnhandledExceptionFilter.cs" />
     <Compile Include="Exceptions\HttpAlreadyLoggedInException.cs" />
     <Compile Include="Exceptions\HttpNoContentException.cs" />
     <Compile Include="Exceptions\HttpNotFoundException.cs" />
