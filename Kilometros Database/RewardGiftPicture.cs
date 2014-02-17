@@ -12,7 +12,7 @@ namespace KilometrosDatabase
     using System;
     using System.Collections.Generic;
     
-    public partial class RewardGiftImage : IPicture
+    public partial class RewardGiftPicture : IPicture
     {
     
         public virtual RewardGift RewardGift { get; set; }

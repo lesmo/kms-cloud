@@ -112,7 +112,7 @@
     <Compile Include="RewardGiftGlobalization.cs">
       <DependentUpon>MainModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="RewardGiftImage.cs">
+    <Compile Include="RewardGiftPicture.cs">
       <DependentUpon>MainModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RewardGiftToken.cs">

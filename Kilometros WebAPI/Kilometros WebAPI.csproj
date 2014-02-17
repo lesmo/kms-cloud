@@ -173,6 +173,7 @@
     <Compile Include="Helpers\HttpRequestMessageHeadersHelper.cs" />
     <Compile Include="Helpers\MiscHelper.cs" />
     <Compile Include="MessageHandlers\ResponseLastModifiedHandler.cs" />
+    <Compile Include="Models\HttpGet\RewardsController\RewardGiftResponse.cs" />
     <Compile Include="Models\HttpGet\IModifiedDate.cs" />
     <Compile Include="Models\HttpGet\My_Controllers\AccountResponse.cs" />
     <Compile Include="Models\HttpGet\My_Controllers\ContactInfoResponse.cs" />
@@ -205,6 +206,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Models\HttpGet\RewardGiftsController\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Kilometros Database\Kilometros Database.csproj">

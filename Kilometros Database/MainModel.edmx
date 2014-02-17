@@ -930,10 +930,6 @@
             <End Role="User" EntitySet="UserSet" />
             <End Role="ShippingInformation" EntitySet="ShippingInformationSet" />
           </AssociationSet>
-          <AssociationSet Name="RewardGiftRewardGiftImage" Association="MainModel.RewardGiftRewardGiftImage">
-            <End Role="RewardGift" EntitySet="RewardGiftSet" />
-            <End Role="RewardGiftImage" EntitySet="IPictureSet" />
-          </AssociationSet>
           <EntitySet Name="SocialIdentitySet" EntityType="MainModel.SocialIdentity" />
           <AssociationSet Name="UserSocialIdentity" Association="MainModel.UserSocialIdentity">
             <End Role="User" EntitySet="UserSet" />
@@ -973,6 +969,10 @@
           </AssociationSet>
           <EntitySet Name="IGlobalizationSet" EntityType="MainModel.IGlobalization" />
           <EntitySet Name="IPictureSet" EntityType="MainModel.IPicture" />
+          <AssociationSet Name="RewardGiftRewardGiftPictures" Association="MainModel.RewardGiftRewardGiftPictures">
+            <End Role="RewardGift" EntitySet="RewardGiftSet" />
+            <End Role="RewardGiftPictures" EntitySet="IPictureSet" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="User">
           <Documentation>
@@ -1380,14 +1380,10 @@
               <Summary>Códigos de Canje de éste Regalo.</Summary>
             </Documentation>
           </NavigationProperty>
-          <NavigationProperty Name="RewardGiftImage" Relationship="MainModel.RewardGiftRewardGiftImage" FromRole="RewardGift" ToRole="RewardGiftImage" >
-            <Documentation>
-              <Summary>Imagen(es) del Regalo.</Summary>
-            </Documentation>
-          </NavigationProperty>
           <NavigationProperty Name="RewardGiftUserClaimed" Relationship="MainModel.RewardGiftUserClaimedRewardGift" FromRole="RewardGift" ToRole="RewardGiftUserClaimed" />
           <Property Name="CreationDate" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Stock" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="RewardGiftPictures" Relationship="MainModel.RewardGiftRewardGiftPictures" FromRole="RewardGift" ToRole="RewardGiftPictures" />
         </EntityType>
         <Association Name="RewardRewardGift">
           <End Type="MainModel.Reward" Role="Reward" Multiplicity="1" >
@@ -1598,20 +1594,12 @@
           <End Type="MainModel.User" Role="User" Multiplicity="1" />
           <End Type="MainModel.ShippingInformation" Role="ShippingInformation" Multiplicity="0..1" />
         </Association>
-        <EntityType Name="RewardGiftImage" BaseType="MainModel.IPicture">
+        <EntityType Name="RewardGiftPicture" BaseType="MainModel.IPicture">
           <Documentation>
             <LongDescription>Almacén de Imágenes de Regalos</LongDescription>
           </Documentation>
-          <NavigationProperty Name="RewardGift" Relationship="MainModel.RewardGiftRewardGiftImage" FromRole="RewardGiftImage" ToRole="RewardGift" >
-            <Documentation>
-              <Summary>Regalo al que pertenece ésta Imagen.</Summary>
-            </Documentation>
-          </NavigationProperty>
+          <NavigationProperty Name="RewardGift" Relationship="MainModel.RewardGiftRewardGiftPictures" FromRole="RewardGiftPictures" ToRole="RewardGift" />
         </EntityType>
-        <Association Name="RewardGiftRewardGiftImage">
-          <End Type="MainModel.RewardGift" Role="RewardGift" Multiplicity="1" />
-          <End Type="MainModel.RewardGiftImage" Role="RewardGiftImage" Multiplicity="*" />
-        </Association>
         <EntityType Name="SocialIdentity">
           <Key>
             <PropertyRef Name="Guid" />
@@ -1715,6 +1703,10 @@
           <Property Name="PictureMimeType" Type="String" MaxLength="16" Nullable="true" />
           <Property Name="PictureExtension" Type="String" MaxLength="10" Nullable="true" />
         </EntityType>
+        <Association Name="RewardGiftRewardGiftPictures">
+          <End Type="MainModel.RewardGift" Role="RewardGift" Multiplicity="1" />
+          <End Type="MainModel.RewardGiftPicture" Role="RewardGiftPictures" Multiplicity="*" />
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2130,9 +2122,8 @@
           <AssociationSetMapping Name="RewardRewardGlobalization" TypeName="MainModel.RewardRewardGlobalization" StoreEntitySet="RewardGlobalizationSet">
           </AssociationSetMapping>
           <AssociationSetMapping Name="RewardGiftRewardGiftGlobalization" TypeName="MainModel.RewardGiftRewardGiftGlobalization" StoreEntitySet="RewardGiftGlobalizationSet" />
-          <AssociationSetMapping Name="RewardGiftRewardGiftImage" TypeName="MainModel.RewardGiftRewardGiftImage" StoreEntitySet="RewardGiftImageSet" />
           <EntitySetMapping Name="IPictureSet">
-            <EntityTypeMapping TypeName="IsTypeOf(MainModel.RewardGiftImage)" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+            <EntityTypeMapping TypeName="IsTypeOf(MainModel.RewardGiftPicture)" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
               <MappingFragment StoreEntitySet="RewardGiftImageSet">
               </MappingFragment>
             </EntityTypeMapping>

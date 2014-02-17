@@ -18,7 +18,7 @@ namespace KilometrosDatabase
         {
             this.RewardGiftGlobalization = new HashSet<RewardGiftGlobalization>();
             this.RewardGiftToken = new HashSet<RewardGiftToken>();
-            this.RewardGiftImage = new HashSet<RewardGiftImage>();
+            this.RewardGiftPictures = new HashSet<RewardGiftPicture>();
         }
     
         public System.Guid Guid { get; set; }
@@ -28,7 +28,7 @@ namespace KilometrosDatabase
         public virtual Reward Reward { get; set; }
         public virtual ICollection<RewardGiftGlobalization> RewardGiftGlobalization { get; set; }
         public virtual ICollection<RewardGiftToken> RewardGiftToken { get; set; }
-        public virtual ICollection<RewardGiftImage> RewardGiftImage { get; set; }
         public virtual UserClaimedRewardGift RewardGiftUserClaimed { get; set; }
+        public virtual ICollection<RewardGiftPicture> RewardGiftPictures { get; set; }
     }
 }
