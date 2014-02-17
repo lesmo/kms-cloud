@@ -30,23 +30,21 @@ namespace KilometrosDatabase
         public DbSet<ApiKey> ApiKeySet { get; set; }
         public DbSet<Tip> TipSet { get; set; }
         public DbSet<MotionLevel> MotionLevelSet { get; set; }
-        public DbSet<TipCategory> TipCategorySet { get; set; }
         public DbSet<Data> DataSet { get; set; }
         public DbSet<UserBody> UserBodySet { get; set; }
         public DbSet<Reward> RewardSet { get; set; }
         public DbSet<RewardGift> RewardGiftSet { get; set; }
-        public DbSet<RewardGiftToken> RewardGiftTokenSet { get; set; }
         public DbSet<RewardRegionalization> RewardRegionalizationSet { get; set; }
         public DbSet<UserMotionLevelHistory> UserMotionLevelHistorySet { get; set; }
         public DbSet<UserEarnedReward> UserEarnedRewardSet { get; set; }
         public DbSet<ContactInfo> ContactInfoSet { get; set; }
         public DbSet<ShippingInformation> ShippingInformationSet { get; set; }
-        public DbSet<RewardGiftImage> RewardGiftImageSet { get; set; }
         public DbSet<SocialIdentity> SocialIdentitySet { get; set; }
         public DbSet<Region> RegionSet { get; set; }
         public DbSet<RegionSubdivision> RegionSubdivisionSet { get; set; }
-        public DbSet<RewardGiftUserClaimed> RewardGiftUserClaimedSet { get; set; }
+        public DbSet<UserClaimedRewardGift> UserClaimedRewardGiftSet { get; set; }
         public DbSet<UserTipHistory> UserTipHistorySet { get; set; }
         public DbSet<IGlobalization> IGlobalizationSet { get; set; }
+        public DbSet<IPicture> IPictureSet { get; set; }
     }
 }

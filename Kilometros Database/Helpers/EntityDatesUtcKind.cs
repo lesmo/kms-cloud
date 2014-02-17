@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 namespace KilometrosDatabase.Helpers {
     internal static class EntityDatesUtcKind {
         public static TEntity ConvertDatesKindToUtc<TEntity>(TEntity entity) {
+            if ( entity == null )
+                return entity;
+
             IEnumerable<PropertyInfo> dateProperties =
                 from thisProperty in typeof(TEntity).GetProperties()
                 where thisProperty.GetType() == typeof(DateTime)

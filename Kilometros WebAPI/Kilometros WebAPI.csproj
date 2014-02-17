@@ -155,6 +155,7 @@
     <Compile Include="Controllers\MyContactInfoController.cs" />
     <Compile Include="Controllers\MyPhysiqueController.cs" />
     <Compile Include="Controllers\RegisterController.cs" />
+    <Compile Include="Controllers\RewardsController.cs" />
     <Compile Include="Controllers\SessionController.cs" />
     <Compile Include="Controllers\TipsController.cs" />
     <Compile Include="ExceptionFilters\HttpStatusExceptionFilter.cs" />
@@ -176,9 +177,10 @@
     <Compile Include="Models\HttpGet\My_Controllers\AccountResponse.cs" />
     <Compile Include="Models\HttpGet\My_Controllers\ContactInfoResponse.cs" />
     <Compile Include="Models\HttpGet\My_Controllers\PhysiqueResponse.cs" />
+    <Compile Include="Models\HttpGet\RewardsController\RewardResponse.cs" />
     <Compile Include="Models\HttpGet\SessionController\TokenResponse.cs" />
-    <Compile Include="Models\HttpGet\Tips\TipCategoryResponse.cs" />
-    <Compile Include="Models\HttpGet\Tips\TipResponse.cs" />
+    <Compile Include="Models\HttpGet\TipsController\TipCategoryResponse.cs" />
+    <Compile Include="Models\HttpGet\TipsController\TipResponse.cs" />
     <Compile Include="Models\HttpPost\DataController\DataPost.cs" />
     <Compile Include="Models\HttpPost\My_Controller\ContactInfoPost.cs" />
     <Compile Include="Models\HttpPost\My_Controller\PhysiquePost.cs" />

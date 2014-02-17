@@ -12,7 +12,7 @@ namespace KilometrosDatabase
     using System;
     using System.Collections.Generic;
     
-    public partial class RewardGiftUserClaimed
+    public partial class UserClaimedRewardGift
     {
         public long Id { get; set; }
         public System.DateTime CreationDate { get; set; }

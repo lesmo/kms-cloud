@@ -12,7 +12,7 @@
         <EntityTypeShape EntityType="MainModel.MotionLevel" Width="2" PointX="12.375" PointY="9.125" />
         <AssociationConnector Association="MainModel.ApiKeyToken" />
         <AssociationConnector Association="MainModel.UserToken" />
-        <EntityTypeShape EntityType="MainModel.TipCategory" Width="2" PointX="12.375" PointY="3.5" />
+        <EntityTypeShape EntityType="MainModel.TipCategory" Width="2" PointX="12.375" PointY="3.5" IsExpanded="false" />
         <EntityTypeShape EntityType="MainModel.TipCategoryGlobalization" Width="2.25" PointX="14.875" PointY="3.5" />
         <AssociationConnector Association="MainModel.TipCategoryTipCategoryGlobalization" />
         <AssociationConnector Association="MainModel.TipCategoryTip" />
@@ -24,7 +24,7 @@
         <AssociationConnector Association="MainModel.UserUserBody" />
         <EntityTypeShape EntityType="MainModel.MotionLevelGlobalization" Width="2.25" PointX="14.875" PointY="9.125" />
         <AssociationConnector Association="MainModel.TipMotionLevelTipMotionLevelGlobalization" />
-        <EntityTypeShape EntityType="MainModel.Reward" Width="1.875" PointX="8.75" PointY="12" />
+        <EntityTypeShape EntityType="MainModel.Reward" Width="1.875" PointX="8.75" PointY="12" IsExpanded="true" />
         <EntityTypeShape EntityType="MainModel.RewardGift" Width="1.875" PointX="8.75" PointY="16" />
         <AssociationConnector Association="MainModel.RewardRewardGift" ></AssociationConnector>
         <EntityTypeShape EntityType="MainModel.RewardGlobalization" Width="2.25" PointX="12.125" PointY="12.625" />
@@ -47,7 +47,7 @@
         <AssociationConnector Association="MainModel.ContactInfoUser" />
         <EntityTypeShape EntityType="MainModel.ShippingInformation" Width="2.25" PointX="0.625" PointY="9" />
         <AssociationConnector Association="MainModel.UserShippingInformation" />
-        <EntityTypeShape EntityType="MainModel.RewardGiftImage" Width="1.875" PointX="8.75" PointY="19" />
+        <EntityTypeShape EntityType="MainModel.RewardGiftImage" Width="1.875" PointX="8.75" PointY="19" IsExpanded="false" />
         <AssociationConnector Association="MainModel.RewardGiftRewardGiftImage" />
         <EntityTypeShape EntityType="MainModel.SocialIdentity" Width="2.25" PointX="0.625" PointY="11.75" />
         <AssociationConnector Association="MainModel.UserSocialIdentity" />
@@ -56,7 +56,7 @@
         <AssociationConnector Association="MainModel.RegionRegionSubdivision" />
         <AssociationConnector Association="MainModel.ApiKeyHistory" />
         <AssociationConnector Association="MainModel.UserData" />
-        <EntityTypeShape EntityType="MainModel.RewardGiftUserClaimed" Width="2.25" PointX="5.5" PointY="13.875" />
+        <EntityTypeShape EntityType="MainModel.UserClaimedRewardGift" Width="2.25" PointX="5.5" PointY="13.875" />
         <AssociationConnector Association="MainModel.RewardGiftUserClaimedUser" />
         <AssociationConnector Association="MainModel.RewardGiftUserClaimedRewardGift" ManuallyRouted="false" >
         </AssociationConnector>

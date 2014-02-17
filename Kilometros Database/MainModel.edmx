@@ -849,13 +849,12 @@
             <End Role="User" EntitySet="UserSet" />
             <End Role="Token" EntitySet="TokenSet" />
           </AssociationSet>
-          <EntitySet Name="TipCategorySet" EntityType="MainModel.TipCategory" />
           <AssociationSet Name="TipCategoryTipCategoryGlobalization" Association="MainModel.TipCategoryTipCategoryGlobalization">
-            <End Role="TipCategory" EntitySet="TipCategorySet" />
+            <End Role="TipCategory" EntitySet="IPictureSet" />
             <End Role="TipCategoryGlobalization" EntitySet="IGlobalizationSet" />
           </AssociationSet>
           <AssociationSet Name="TipCategoryTip" Association="MainModel.TipCategoryTip">
-            <End Role="TipCategory" EntitySet="TipCategorySet" />
+            <End Role="TipCategory" EntitySet="IPictureSet" />
             <End Role="Tip" EntitySet="TipSet" />
           </AssociationSet>
           <AssociationSet Name="TipTipGlobalization" Association="MainModel.TipTipGlobalization">
@@ -886,7 +885,6 @@
             <End Role="Reward" EntitySet="RewardSet" />
             <End Role="RewardGlobalization" EntitySet="IGlobalizationSet" />
           </AssociationSet>
-          <EntitySet Name="RewardGiftTokenSet" EntityType="MainModel.RewardGiftToken" />
           <EntitySet Name="RewardRegionalizationSet" EntityType="MainModel.RewardRegionalization" />
           <AssociationSet Name="RewardRewardRegionalization" Association="MainModel.RewardRewardRegionalization">
             <End Role="Reward" EntitySet="RewardSet" />
@@ -898,10 +896,10 @@
           </AssociationSet>
           <AssociationSet Name="RewardGiftRewardGiftToken" Association="MainModel.RewardGiftRewardGiftToken">
             <End Role="RewardGift" EntitySet="RewardGiftSet" />
-            <End Role="RewardGiftToken" EntitySet="RewardGiftTokenSet" />
+            <End Role="RewardGiftToken" EntitySet="IPictureSet" />
           </AssociationSet>
           <AssociationSet Name="RewardGiftTokenUser" Association="MainModel.RewardGiftTokenUser">
-            <End Role="RewardGiftToken" EntitySet="RewardGiftTokenSet" />
+            <End Role="RewardGiftToken" EntitySet="IPictureSet" />
             <End Role="User" EntitySet="UserSet" />
           </AssociationSet>
           <EntitySet Name="UserMotionLevelHistorySet" EntityType="MainModel.UserMotionLevelHistory" />
@@ -932,10 +930,9 @@
             <End Role="User" EntitySet="UserSet" />
             <End Role="ShippingInformation" EntitySet="ShippingInformationSet" />
           </AssociationSet>
-          <EntitySet Name="RewardGiftImageSet" EntityType="MainModel.RewardGiftImage" />
           <AssociationSet Name="RewardGiftRewardGiftImage" Association="MainModel.RewardGiftRewardGiftImage">
             <End Role="RewardGift" EntitySet="RewardGiftSet" />
-            <End Role="RewardGiftImage" EntitySet="RewardGiftImageSet" />
+            <End Role="RewardGiftImage" EntitySet="IPictureSet" />
           </AssociationSet>
           <EntitySet Name="SocialIdentitySet" EntityType="MainModel.SocialIdentity" />
           <AssociationSet Name="UserSocialIdentity" Association="MainModel.UserSocialIdentity">
@@ -956,13 +953,13 @@
             <End Role="User" EntitySet="UserSet" />
             <End Role="Data" EntitySet="DataSet" />
           </AssociationSet>
-          <EntitySet Name="RewardGiftUserClaimedSet" EntityType="MainModel.RewardGiftUserClaimed" />
+          <EntitySet Name="UserClaimedRewardGiftSet" EntityType="MainModel.UserClaimedRewardGift" />
           <AssociationSet Name="RewardGiftUserClaimedUser" Association="MainModel.RewardGiftUserClaimedUser">
-            <End Role="RewardGiftUserClaimed" EntitySet="RewardGiftUserClaimedSet" />
+            <End Role="RewardGiftUserClaimed" EntitySet="UserClaimedRewardGiftSet" />
             <End Role="User" EntitySet="UserSet" />
           </AssociationSet>
           <AssociationSet Name="RewardGiftUserClaimedRewardGift" Association="MainModel.RewardGiftUserClaimedRewardGift">
-            <End Role="RewardGiftUserClaimed" EntitySet="RewardGiftUserClaimedSet" />
+            <End Role="RewardGiftUserClaimed" EntitySet="UserClaimedRewardGiftSet" />
             <End Role="RewardGift" EntitySet="RewardGiftSet" />
           </AssociationSet>
           <EntitySet Name="UserTipHistorySet" EntityType="MainModel.UserTipHistory" />
@@ -975,6 +972,7 @@
             <End Role="Tip" EntitySet="TipSet" />
           </AssociationSet>
           <EntitySet Name="IGlobalizationSet" EntityType="MainModel.IGlobalization" />
+          <EntitySet Name="IPictureSet" EntityType="MainModel.IPicture" />
         </EntityContainer>
         <EntityType Name="User">
           <Documentation>
@@ -1220,23 +1218,10 @@
           <End Type="MainModel.Token" Role="Token" Multiplicity="*" >
           </End>
         </Association>
-        <EntityType Name="TipCategory">
+        <EntityType Name="TipCategory" BaseType="MainModel.IPicture">
           <Documentation>
             <Summary>Almacén de Categorías de los Tips.</Summary>
           </Documentation>
-          <Key>
-            <PropertyRef Name="Guid" />
-          </Key>
-          <Property Type="Guid" Name="Guid" Nullable="false" annotation:StoreGeneratedPattern="Identity" >
-            <Documentation>
-              <Summary>Guid de la Categoría de Tips.</Summary>
-            </Documentation>
-          </Property>
-          <Property Type="Binary" Name="Icon" Nullable="false" >
-            <Documentation>
-              <Summary>Ícono de la Categoría de Tips.</Summary>
-            </Documentation>
-          </Property>
           <NavigationProperty Name="TipCategoryGlobalization" Relationship="MainModel.TipCategoryTipCategoryGlobalization" FromRole="TipCategory" ToRole="TipCategoryGlobalization" >
             <Documentation>
               <Summary>Cadenas de Traducción de la Categoría de Tips.</Summary>
@@ -1247,11 +1232,6 @@
               <Summary>Tips(s) de la Categoría.</Summary>
             </Documentation>
           </NavigationProperty>
-          <Property Type="String" Name="IconMimeType" Nullable="false" >
-            <Documentation>
-              <Summary>Tipo MIME del Ícono (determinado al momento de añadirse la Categoría del Tip).</Summary>
-            </Documentation>
-          </Property>
         </EntityType>
         <EntityType Name="TipCategoryGlobalization" BaseType="MainModel.IGlobalization">
           <Documentation>
@@ -1432,25 +1412,12 @@
           <End Type="MainModel.RewardGlobalization" Role="RewardGlobalization" Multiplicity="*" >
           </End>
         </Association>
-        <EntityType Name="RewardGiftToken">
-          <Key>
-            <PropertyRef Name="Guid" />
-          </Key>
-          <Property Type="Guid" Name="Guid" annotation:StoreGeneratedPattern="Identity" Nullable="false" >
-            <Documentation>
-              <Summary>Guid de éste Código de Canje.</Summary>
-            </Documentation>
-          </Property>
+        <EntityType Name="RewardGiftToken" BaseType="MainModel.IPicture">
           <NavigationProperty Name="RewardGift" Relationship="MainModel.RewardGiftRewardGiftToken" FromRole="RewardGiftToken" ToRole="RewardGift" >
             <Documentation>
               <Summary>Regalo al que pertence el Código de Canje.</Summary>
             </Documentation>
           </NavigationProperty>
-          <Property Type="DateTime" Name="CreationDate" Nullable="false" annotation:StoreGeneratedPattern="Identity" cg:SetterAccess="Public" >
-            <Documentation>
-              <Summary>Fecha de Creación de éste Código de Canje.</Summary>
-            </Documentation>
-          </Property>
           <Property Type="DateTime" Name="ExpirationDate" Nullable="true" >
             <Documentation>
               <Summary>Fecha de Expiración de éste Código de Canje.</Summary>
@@ -1467,16 +1434,6 @@
               <Summary>Usuario que Canjeó el Código.</Summary>
             </Documentation>
           </NavigationProperty>
-          <Property Type="Binary" Name="RedeemGraphic" Nullable="true" >
-            <Documentation>
-              <Summary>Representación Gráfica del Código de Canje.</Summary>
-            </Documentation>
-          </Property>
-          <Property Type="String" Name="RedeemGraphicMimeType" Nullable="true" >
-            <Documentation>
-              <Summary>Tipo MIME de la Represnetación Gráfica del Cödigo de Canje.</Summary>
-            </Documentation>
-          </Property>
         </EntityType>
         <EntityType Name="RewardRegionalization">
           <Key>
@@ -1559,9 +1516,9 @@
             <Summary>Histórico de Recompensas conseguidas por el Usuario.</Summary>
           </Documentation>
           <Key>
-            <PropertyRef Name="Id" />
+            <PropertyRef Name="Guid" />
           </Key>
-          <Property Type="Int64" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Guid" Name="Guid" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="DateTime" Name="CreationDate" Nullable="false" />
           <NavigationProperty Name="User" Relationship="MainModel.UserUserEarnedReward" FromRole="UserEarnedReward" ToRole="User" />
           <NavigationProperty Name="Reward" Relationship="MainModel.UserEarnedRewardReward" FromRole="UserEarnedReward" ToRole="Reward" />
@@ -1641,29 +1598,10 @@
           <End Type="MainModel.User" Role="User" Multiplicity="1" />
           <End Type="MainModel.ShippingInformation" Role="ShippingInformation" Multiplicity="0..1" />
         </Association>
-        <EntityType Name="RewardGiftImage">
+        <EntityType Name="RewardGiftImage" BaseType="MainModel.IPicture">
           <Documentation>
             <LongDescription>Almacén de Imágenes de Regalos</LongDescription>
           </Documentation>
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Type="Int64" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" cg:SetterAccess="Internal" />
-          <Property Type="DateTime" Name="CreationDate" Nullable="false" annotation:StoreGeneratedPattern="Identity" cg:SetterAccess="Public" >
-            <Documentation>
-              <Summary>Fecha en la que se añadió la Imágen.</Summary>
-            </Documentation>
-          </Property>
-          <Property Type="Binary" Name="Image" Nullable="false" >
-            <Documentation>
-              <Summary>Imágen del Regalo.</Summary>
-            </Documentation>
-          </Property>
-          <Property Type="String" Name="ImageMimeType" Nullable="false" >
-            <Documentation>
-              <Summary>Tipo MIME de la Imagen.</Summary>
-            </Documentation>
-          </Property>
           <NavigationProperty Name="RewardGift" Relationship="MainModel.RewardGiftRewardGiftImage" FromRole="RewardGiftImage" ToRole="RewardGift" >
             <Documentation>
               <Summary>Regalo al que pertenece ésta Imagen.</Summary>
@@ -1724,7 +1662,7 @@
           <End Type="MainModel.User" Role="User" Multiplicity="1" />
           <End Type="MainModel.Data" Role="Data" Multiplicity="*" />
         </Association>
-        <EntityType Name="RewardGiftUserClaimed">
+        <EntityType Name="UserClaimedRewardGift">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -1735,11 +1673,11 @@
           <Property Name="ClaimLocation" Type="GeographyPoint" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
         </EntityType>
         <Association Name="RewardGiftUserClaimedUser">
-          <End Type="MainModel.RewardGiftUserClaimed" Role="RewardGiftUserClaimed" Multiplicity="*" />
+          <End Type="MainModel.UserClaimedRewardGift" Role="RewardGiftUserClaimed" Multiplicity="*" />
           <End Type="MainModel.User" Role="User" Multiplicity="1" />
         </Association>
         <Association Name="RewardGiftUserClaimedRewardGift">
-          <End Type="MainModel.RewardGiftUserClaimed" Role="RewardGiftUserClaimed" Multiplicity="1" />
+          <End Type="MainModel.UserClaimedRewardGift" Role="RewardGiftUserClaimed" Multiplicity="1" />
           <End Type="MainModel.RewardGift" Role="RewardGift" Multiplicity="1" />
         </Association>
         <EntityType Name="UserTipHistory">
@@ -1766,6 +1704,16 @@
           <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="CultureCode" Type="String" Nullable="false" MaxLength="16" FixedLength="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="CreationDate" Type="DateTime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="IPicture" Abstract="false">
+          <Key>
+            <PropertyRef Name="Guid" />
+          </Key>
+          <Property Name="Guid" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="None" />
+          <Property Name="CreationDate" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Picture" Type="Binary" Nullable="true" />
+          <Property Name="PictureMimeType" Type="String" MaxLength="16" Nullable="true" />
+          <Property Name="PictureExtension" Type="String" MaxLength="10" Nullable="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1830,15 +1778,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="TipCategorySet">
-      <EntityTypeMapping TypeName="IsTypeOf(MainModel.TipCategory)">
-        <MappingFragment StoreEntitySet="TipCategorySet">
-          <ScalarProperty Name="Guid" ColumnName="Guid" />
-          <ScalarProperty Name="Icon" ColumnName="Icon" />
-          <ScalarProperty Name="IconMimeType" ColumnName="IconMimeType" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="DataSet">
       <EntityTypeMapping TypeName="IsTypeOf(MainModel.Data)">
         <MappingFragment StoreEntitySet="DataSet">
@@ -1878,18 +1817,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="RewardGiftTokenSet">
-      <EntityTypeMapping TypeName="IsTypeOf(MainModel.RewardGiftToken)">
-        <MappingFragment StoreEntitySet="RewardGiftTokenSet">
-          <ScalarProperty Name="Guid" ColumnName="Guid" />
-          <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
-          <ScalarProperty Name="ExpirationDate" ColumnName="ExpirationDate" />
-          <ScalarProperty Name="RedeemCode" ColumnName="RedeemCode" />
-          <ScalarProperty Name="RedeemGraphic" ColumnName="RedeemGraphic" />
-          <ScalarProperty Name="RedeemGraphicMimeType" ColumnName="RedeemGraphicMimeType" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="RewardRegionalizationSet">
       <EntityTypeMapping TypeName="IsTypeOf(MainModel.RewardRegionalization)">
         <MappingFragment StoreEntitySet="RewardRegionalizationSet">
@@ -1909,7 +1836,7 @@
     <EntitySetMapping Name="UserEarnedRewardSet">
       <EntityTypeMapping TypeName="IsTypeOf(MainModel.UserEarnedReward)">
         <MappingFragment StoreEntitySet="UserEarnedRewardSet">
-          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Guid" ColumnName="Id" />
           <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -1934,16 +1861,6 @@
           <ScalarProperty Name="Latitude" ColumnName="Latitude" />
           <ScalarProperty Name="Longitude" ColumnName="Longitude" />
           <ScalarProperty Name="LastEditDate" ColumnName="LastEditDate" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="RewardGiftImageSet">
-      <EntityTypeMapping TypeName="IsTypeOf(MainModel.RewardGiftImage)">
-        <MappingFragment StoreEntitySet="RewardGiftImageSet">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
-          <ScalarProperty Name="Image" ColumnName="Image" />
-          <ScalarProperty Name="ImageMimeType" ColumnName="ImageMimeType" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -1981,8 +1898,8 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="RewardGiftUserClaimedSet">
-      <EntityTypeMapping TypeName="IsTypeOf(MainModel.RewardGiftUserClaimed)">
+    <EntitySetMapping Name="UserClaimedRewardGiftSet">
+      <EntityTypeMapping TypeName="IsTypeOf(MainModel.UserClaimedRewardGift)">
         <MappingFragment StoreEntitySet="RewardGiftUserClaimedSet">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
@@ -2055,14 +1972,6 @@
         <ScalarProperty Name="Guid" ColumnName="Guid" />
       </EndProperty>
     </AssociationSetMapping>
-    <AssociationSetMapping Name="TipCategoryTip" TypeName="MainModel.TipCategoryTip" StoreEntitySet="TipSet">
-      <EndProperty Name="TipCategory">
-        <ScalarProperty Name="Guid" ColumnName="TipCategory_Guid" />
-      </EndProperty>
-      <EndProperty Name="Tip">
-        <ScalarProperty Name="Guid" ColumnName="Guid" />
-      </EndProperty>
-    </AssociationSetMapping>
     <AssociationSetMapping Name="TipTipGlobalization" TypeName="MainModel.TipTipGlobalization" StoreEntitySet="IGlobalizationSet_TipGlobalization">
       <EndProperty Name="Tip">
         <ScalarProperty Name="Guid" ColumnName="Tip_Guid" />
@@ -2103,22 +2012,6 @@
         <ScalarProperty Name="Id" ColumnName="Id" />
       </EndProperty>
     </AssociationSetMapping>
-    <AssociationSetMapping Name="RewardGiftRewardGiftToken" TypeName="MainModel.RewardGiftRewardGiftToken" StoreEntitySet="RewardGiftTokenSet">
-      <EndProperty Name="RewardGift">
-        <ScalarProperty Name="Guid" ColumnName="RewardGift_Guid" />
-      </EndProperty>
-      <EndProperty Name="RewardGiftToken">
-        <ScalarProperty Name="Guid" ColumnName="Guid" />
-      </EndProperty>
-    </AssociationSetMapping>
-    <AssociationSetMapping Name="RewardGiftTokenUser" TypeName="MainModel.RewardGiftTokenUser" StoreEntitySet="RewardGiftTokenSet">
-      <EndProperty Name="User">
-        <ScalarProperty Name="Guid" ColumnName="RedeemedByUser_Guid" />
-      </EndProperty>
-      <EndProperty Name="RewardGiftToken">
-        <ScalarProperty Name="Guid" ColumnName="Guid" />
-      </EndProperty>
-    </AssociationSetMapping>
     <AssociationSetMapping Name="UserUserMotionLevelHistory" TypeName="MainModel.UserUserMotionLevelHistory" StoreEntitySet="UserMotionLevelHistorySet">
       <EndProperty Name="User">
         <ScalarProperty Name="Guid" ColumnName="User_Guid" />
@@ -2140,7 +2033,7 @@
         <ScalarProperty Name="Guid" ColumnName="User_Guid" />
       </EndProperty>
       <EndProperty Name="UserEarnedReward">
-        <ScalarProperty Name="Id" ColumnName="Id" />
+        <ScalarProperty Name="Guid" ColumnName="Id" />
       </EndProperty>
     </AssociationSetMapping>
     <AssociationSetMapping Name="UserEarnedRewardReward" TypeName="MainModel.UserEarnedRewardReward" StoreEntitySet="UserEarnedRewardSet">
@@ -2148,7 +2041,7 @@
         <ScalarProperty Name="Guid" ColumnName="Reward_Guid" />
       </EndProperty>
       <EndProperty Name="UserEarnedReward">
-        <ScalarProperty Name="Id" ColumnName="Id" />
+        <ScalarProperty Name="Guid" ColumnName="Id" />
       </EndProperty>
     </AssociationSetMapping>
     <AssociationSetMapping Name="ContactInfoUser" TypeName="MainModel.ContactInfoUser" StoreEntitySet="ContactInfoSet">
@@ -2164,14 +2057,6 @@
         <ScalarProperty Name="Guid" ColumnName="User_Guid" />
       </EndProperty>
       <EndProperty Name="ShippingInformation">
-        <ScalarProperty Name="Id" ColumnName="Id" />
-      </EndProperty>
-    </AssociationSetMapping>
-    <AssociationSetMapping Name="RewardGiftRewardGiftImage" TypeName="MainModel.RewardGiftRewardGiftImage" StoreEntitySet="RewardGiftImageSet">
-      <EndProperty Name="RewardGift">
-        <ScalarProperty Name="Guid" ColumnName="RewardGift_Guid" />
-      </EndProperty>
-      <EndProperty Name="RewardGiftImage">
         <ScalarProperty Name="Id" ColumnName="Id" />
       </EndProperty>
     </AssociationSetMapping>
@@ -2242,10 +2127,45 @@
     </AssociationSetMapping>
           <AssociationSetMapping Name="TipMotionLevelTipMotionLevelGlobalization" TypeName="MainModel.TipMotionLevelTipMotionLevelGlobalization" StoreEntitySet="MotionLevelGlobalizationSet">
           </AssociationSetMapping>
-          <AssociationSetMapping Name="TipCategoryTipCategoryGlobalization" TypeName="MainModel.TipCategoryTipCategoryGlobalization" StoreEntitySet="TipCategoryGlobalizationSet" />
           <AssociationSetMapping Name="RewardRewardGlobalization" TypeName="MainModel.RewardRewardGlobalization" StoreEntitySet="RewardGlobalizationSet">
           </AssociationSetMapping>
           <AssociationSetMapping Name="RewardGiftRewardGiftGlobalization" TypeName="MainModel.RewardGiftRewardGiftGlobalization" StoreEntitySet="RewardGiftGlobalizationSet" />
+          <AssociationSetMapping Name="RewardGiftRewardGiftImage" TypeName="MainModel.RewardGiftRewardGiftImage" StoreEntitySet="RewardGiftImageSet" />
+          <EntitySetMapping Name="IPictureSet">
+            <EntityTypeMapping TypeName="IsTypeOf(MainModel.RewardGiftImage)" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+              <MappingFragment StoreEntitySet="RewardGiftImageSet">
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="IsTypeOf(MainModel.RewardGiftToken)" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+              <MappingFragment StoreEntitySet="RewardGiftTokenSet">
+                <ScalarProperty Name="ExpirationDate" ColumnName="ExpirationDate" />
+                <ScalarProperty Name="RedeemCode" ColumnName="RedeemCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="IsTypeOf(MainModel.TipCategory)" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+              <MappingFragment StoreEntitySet="TipCategorySet"></MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="RewardGiftRewardGiftToken" TypeName="MainModel.RewardGiftRewardGiftToken" StoreEntitySet="RewardGiftTokenSet">
+            <EndProperty Name="RewardGift">
+              <ScalarProperty Name="Guid" ColumnName="Guid" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="RewardGiftTokenUser" TypeName="MainModel.RewardGiftTokenUser" StoreEntitySet="RewardGiftTokenSet">
+            <EndProperty Name="User">
+              <ScalarProperty Name="Guid" ColumnName="Guid" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="TipCategoryTipCategoryGlobalization" TypeName="MainModel.TipCategoryTipCategoryGlobalization" StoreEntitySet="TipCategoryGlobalizationSet">
+            <EndProperty Name="TipCategoryGlobalization">
+              <ScalarProperty Name="Id" ColumnName="Id" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="TipCategoryTip" TypeName="MainModel.TipCategoryTip" StoreEntitySet="TipSet">
+            <EndProperty Name="Tip">
+              <ScalarProperty Name="Guid" ColumnName="Guid" />
+            </EndProperty>
+          </AssociationSetMapping>
   </EntityContainerMapping>
 </Mapping></edmx:Mappings>
   </edmx:Runtime>

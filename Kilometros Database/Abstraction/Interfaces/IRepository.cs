@@ -105,12 +105,20 @@ namespace KilometrosDatabase.Abstraction.Interfaces {
             return (IEnumerable<TEntity>)returnValue;    
         }
 
+        /// <summary>
+        /// Devuelve una sola Entidad, opcionalmente filtrándo del universo.
+        /// </summary>
+        /// <returns>Objetos almacenado en la BD.</returns>
         public virtual TEntity GetFirst(
+            Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             string[] include = null
         ) {
             IQueryable<TEntity> query
                 = (IQueryable<TEntity>)this._dbSet.AsQueryable();
+
+            if ( filter != null )
+                query = query.Where(filter);
 
             if ( include != null && include.Length > 0 ) {
                 foreach ( string includeItem in include )

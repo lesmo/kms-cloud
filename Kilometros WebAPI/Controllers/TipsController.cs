@@ -1,6 +1,6 @@
 ﻿using Kilometros_WebAPI.Exceptions;
 using Kilometros_WebAPI.Helpers;
-using Kilometros_WebAPI.Models.HttpGet.Tips;
+using Kilometros_WebAPI.Models.HttpGet.TipsController;
 using Kilometros_WebAPI.Security;
 using Kilometros_WebGlobalization.API;
 using KilometrosDatabase;
@@ -90,11 +90,10 @@ namespace Kilometros_WebAPI.Controllers {
 
             /** Obtener el último Tip conseguido **/
             UserTipHistory lastTipHistory
-                = (
-                    from tipHistory in user.UserTipHistory
-                    orderby tipHistory.CreationDate
-                    select tipHistory
-                ).Take(1).FirstOrDefault();
+                = Database.UserTipHistoryStore.GetFirst(
+                    t => t.User == user,
+                    o => o.OrderBy(by => by.CreationDate)
+                );
 
             /** Verificar si se tiene la cabecera {If-Modified-Since} **/
             DateTimeOffset? ifModifiedSince
@@ -121,8 +120,6 @@ namespace Kilometros_WebAPI.Controllers {
 
             foreach ( UserTipHistory tipHistory in tipsHistory ) {
                 // Obtener Tip en el Idioma actual
-                //   - Buscar match exacto de Idioma + Culture
-                //   - Buscar match sólo de Idioma
                 TipGlobalization tipLocale
                     = Database.UserTipHistoryStore.GetGlobalization(
                         tipHistory

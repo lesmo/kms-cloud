@@ -21,7 +21,7 @@ namespace KilometrosDatabase
             this.UserMotionLevelHistory = new HashSet<UserMotionLevelHistory>();
             this.UserEarnedReward = new HashSet<UserEarnedReward>();
             this.Data = new HashSet<Data>();
-            this.RewardGiftUserClaimed = new HashSet<RewardGiftUserClaimed>();
+            this.RewardGiftUserClaimed = new HashSet<UserClaimedRewardGift>();
             this.UserTipHistory = new HashSet<UserTipHistory>();
         }
     
@@ -41,7 +41,7 @@ namespace KilometrosDatabase
         public virtual ShippingInformation ShippingInformation { get; set; }
         public virtual SocialIdentity SocialIdentity { get; set; }
         public virtual ICollection<Data> Data { get; set; }
-        public virtual ICollection<RewardGiftUserClaimed> RewardGiftUserClaimed { get; set; }
+        public virtual ICollection<UserClaimedRewardGift> RewardGiftUserClaimed { get; set; }
         public virtual ICollection<UserTipHistory> UserTipHistory { get; set; }
     }
 }

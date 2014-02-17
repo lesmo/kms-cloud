@@ -12,7 +12,7 @@ namespace KilometrosDatabase
     using System;
     using System.Collections.Generic;
     
-    public partial class TipCategory
+    public partial class TipCategory : IPicture
     {
         public TipCategory()
         {
@@ -20,9 +20,6 @@ namespace KilometrosDatabase
             this.Tip = new HashSet<Tip>();
         }
     
-        public System.Guid Guid { get; set; }
-        public byte[] Icon { get; set; }
-        public string IconMimeType { get; set; }
     
         public virtual ICollection<TipCategoryGlobalization> TipCategoryGlobalization { get; set; }
         public virtual ICollection<Tip> Tip { get; set; }

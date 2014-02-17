@@ -72,6 +72,9 @@
     <Compile Include="IGlobalization.cs">
       <DependentUpon>MainModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="IPicture.cs">
+      <DependentUpon>MainModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="MainModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -115,9 +118,6 @@
     <Compile Include="RewardGiftToken.cs">
       <DependentUpon>MainModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="RewardGiftUserClaimed.cs">
-      <DependentUpon>MainModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="RewardGlobalization.cs">
       <DependentUpon>MainModel.tt</DependentUpon>
     </Compile>
@@ -149,6 +149,9 @@
       <DependentUpon>MainModel.tt</DependentUpon>
     </Compile>
     <Compile Include="UserBody.cs">
+      <DependentUpon>MainModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserClaimedRewardGift.cs">
       <DependentUpon>MainModel.tt</DependentUpon>
     </Compile>
     <Compile Include="UserEarnedReward.cs">

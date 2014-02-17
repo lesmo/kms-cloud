@@ -12,12 +12,12 @@ namespace KilometrosDatabase
     using System;
     using System.Collections.Generic;
     
-    public partial class UserEarnedReward
+    public partial class IPicture
     {
         public System.Guid Guid { get; set; }
         public System.DateTime CreationDate { get; set; }
-    
-        public virtual User User { get; set; }
-        public virtual Reward Reward { get; set; }
+        public byte[] Picture { get; set; }
+        public string PictureMimeType { get; set; }
+        public string PictureExtension { get; set; }
     }
 }

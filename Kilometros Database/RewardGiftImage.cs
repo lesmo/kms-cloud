@@ -12,12 +12,8 @@ namespace KilometrosDatabase
     using System;
     using System.Collections.Generic;
     
-    public partial class RewardGiftImage
+    public partial class RewardGiftImage : IPicture
     {
-        public long Id { get; internal set; }
-        public System.DateTime CreationDate { get; set; }
-        public byte[] Image { get; set; }
-        public string ImageMimeType { get; set; }
     
         public virtual RewardGift RewardGift { get; set; }
     }
