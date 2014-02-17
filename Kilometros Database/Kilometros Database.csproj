@@ -62,7 +62,8 @@
     </Compile>
     <Compile Include="EntityValidation\Data\Data.cs" />
     <Compile Include="EntityValidation\MotionLevel\MotionLevel.cs" />
-    <Compile Include="EntityValidation\Rewards\RewardGiftToken.cs" />
+    <Compile Include="EntityValidation\Rewards\RewardGift.cs" />
+    <Compile Include="EntityValidation\Rewards\UserRewardGiftClaimed.cs" />
     <Compile Include="EntityValidation\Users\Token.cs" />
     <Compile Include="EntityValidation\Users\User.cs" />
     <Compile Include="EntityValidation\Users\UserBody.cs" />
@@ -115,9 +116,6 @@
     <Compile Include="RewardGiftPicture.cs">
       <DependentUpon>MainModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="RewardGiftToken.cs">
-      <DependentUpon>MainModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="RewardGlobalization.cs">
       <DependentUpon>MainModel.tt</DependentUpon>
     </Compile>
@@ -151,13 +149,16 @@
     <Compile Include="UserBody.cs">
       <DependentUpon>MainModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="UserClaimedRewardGift.cs">
-      <DependentUpon>MainModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="UserEarnedReward.cs">
       <DependentUpon>MainModel.tt</DependentUpon>
     </Compile>
     <Compile Include="UserMotionLevelHistory.cs">
+      <DependentUpon>MainModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserRewardGiftClaimed.cs">
+      <DependentUpon>MainModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserRewardGiftShippingStatus.cs">
       <DependentUpon>MainModel.tt</DependentUpon>
     </Compile>
     <Compile Include="UserTipHistory.cs">

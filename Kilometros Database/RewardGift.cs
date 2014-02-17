@@ -16,19 +16,19 @@ namespace KilometrosDatabase
     {
         public RewardGift()
         {
+            this.IsShipped = false;
             this.RewardGiftGlobalization = new HashSet<RewardGiftGlobalization>();
-            this.RewardGiftToken = new HashSet<RewardGiftToken>();
+            this.UserRewardGiftClaimed = new HashSet<UserRewardGiftClaimed>();
             this.RewardGiftPictures = new HashSet<RewardGiftPicture>();
         }
     
         public System.Guid Guid { get; set; }
         public System.DateTime CreationDate { get; set; }
-        public int Stock { get; set; }
+        public bool IsShipped { get; set; }
     
         public virtual Reward Reward { get; set; }
         public virtual ICollection<RewardGiftGlobalization> RewardGiftGlobalization { get; set; }
-        public virtual ICollection<RewardGiftToken> RewardGiftToken { get; set; }
-        public virtual UserClaimedRewardGift RewardGiftUserClaimed { get; set; }
+        public virtual ICollection<UserRewardGiftClaimed> UserRewardGiftClaimed { get; set; }
         public virtual ICollection<RewardGiftPicture> RewardGiftPictures { get; set; }
     }
 }

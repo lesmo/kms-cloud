@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations;
 using Kilometros_WebGlobalization.Database;
 
 namespace KilometrosDatabase {
-    public partial class RewardGiftToken : IValidatableObject {
+    public partial class UserRewardGiftClaimed : IValidatableObject {
         /// <summary>
         /// Ejecutar la validación de Usuario
         /// </summary>

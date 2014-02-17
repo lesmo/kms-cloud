@@ -29,13 +29,13 @@
         <AssociationConnector Association="MainModel.RewardRewardGift" ></AssociationConnector>
         <EntityTypeShape EntityType="MainModel.RewardGlobalization" Width="2.25" PointX="12.125" PointY="12.625" />
         <AssociationConnector Association="MainModel.RewardRewardGlobalization" />
-        <EntityTypeShape EntityType="MainModel.RewardGiftToken" Width="2.25" PointX="4.125" PointY="16.25" />
+        <EntityTypeShape EntityType="MainModel.UserRewardGiftClaimed" Width="2.25" PointX="4.125" PointY="16.25" />
         <EntityTypeShape EntityType="MainModel.RewardRegionalization" Width="2.25" PointX="5.5" PointY="12" />
         <AssociationConnector Association="MainModel.RewardRewardRegionalization" ></AssociationConnector>
-        <EntityTypeShape EntityType="MainModel.RewardGiftGlobalization" Width="2.25" PointX="11.125" PointY="16" />
+        <EntityTypeShape EntityType="MainModel.RewardGiftGlobalization" Width="2.25" PointX="11.5" PointY="15.75" />
         <AssociationConnector Association="MainModel.RewardGiftRewardGiftGlobalization" />
-        <AssociationConnector Association="MainModel.RewardGiftRewardGiftToken" ></AssociationConnector>
-        <AssociationConnector Association="MainModel.RewardGiftTokenUser" ManuallyRouted="false" >
+        <AssociationConnector Association="MainModel.RewardGiftUserRewardGiftClaimed" ></AssociationConnector>
+        <AssociationConnector Association="MainModel.UserRewardGiftClaimedUser" ManuallyRouted="false" >
         </AssociationConnector>
         <EntityTypeShape EntityType="MainModel.UserMotionLevelHistory" Width="2" PointX="9.75" PointY="7.125" />
         <AssociationConnector Association="MainModel.UserUserMotionLevelHistory" />
@@ -55,14 +55,12 @@
         <AssociationConnector Association="MainModel.RegionRegionSubdivision" />
         <AssociationConnector Association="MainModel.ApiKeyHistory" />
         <AssociationConnector Association="MainModel.UserData" />
-        <EntityTypeShape EntityType="MainModel.UserClaimedRewardGift" Width="2.25" PointX="5.625" PointY="13.875" />
-        <AssociationConnector Association="MainModel.RewardGiftUserClaimedUser" />
-        <AssociationConnector Association="MainModel.RewardGiftUserClaimedRewardGift" ManuallyRouted="false" >
-        </AssociationConnector>
         <EntityTypeShape EntityType="MainModel.UserTipHistory" Width="1.5" PointX="7.25" PointY="5.625" />
         <AssociationConnector Association="MainModel.UserTipHistoryUser" />
         <AssociationConnector Association="MainModel.UserTipHistoryTip" />
         <AssociationConnector Association="MainModel.RewardGiftRewardGiftPictures" />
+        <EntityTypeShape EntityType="MainModel.UserRewardGiftShippingStatus" Width="2.5" PointX="4.125" PointY="19.25" />
+        <AssociationConnector Association="MainModel.UserRewardGiftShippingStatusUserRewardGiftClaimed" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

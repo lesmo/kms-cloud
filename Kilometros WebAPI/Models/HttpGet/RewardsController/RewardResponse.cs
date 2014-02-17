@@ -12,6 +12,7 @@ namespace Kilometros_WebAPI.Models.HttpGet.RewardsController {
         public string Text;
         public string Source;
 
+        public RewardGiftResponse[] RewardGifts;
         public string[] RegionCodes;
     }
 }

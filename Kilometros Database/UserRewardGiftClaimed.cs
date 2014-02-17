@@ -12,12 +12,14 @@ namespace KilometrosDatabase
     using System;
     using System.Collections.Generic;
     
-    public partial class RewardGiftToken : IPicture
+    public partial class UserRewardGiftClaimed : IPicture
     {
         public Nullable<System.DateTime> ExpirationDate { get; set; }
         public string RedeemCode { get; set; }
+        public System.Data.Spatial.DbGeography ClaimLocation { get; set; }
     
         public virtual RewardGift RewardGift { get; set; }
         public virtual User RedeemedByUser { get; set; }
+        public virtual UserRewardGiftShippingStatus UserRewardGiftShippingStatus { get; set; }
     }
 }

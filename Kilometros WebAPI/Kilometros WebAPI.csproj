@@ -155,6 +155,7 @@
     <Compile Include="Controllers\MyContactInfoController.cs" />
     <Compile Include="Controllers\MyPhysiqueController.cs" />
     <Compile Include="Controllers\RegisterController.cs" />
+    <Compile Include="Controllers\MyGiftsController.cs" />
     <Compile Include="Controllers\RewardsController.cs" />
     <Compile Include="Controllers\SessionController.cs" />
     <Compile Include="Controllers\TipsController.cs" />
@@ -162,6 +163,7 @@
     <Compile Include="ExceptionFilters\DbValidationExceptionFilter.cs" />
     <Compile Include="ExceptionFilters\UnhandledExceptionFilter.cs" />
     <Compile Include="Exceptions\HttpAlreadyLoggedInException.cs" />
+    <Compile Include="Exceptions\HttpConflictException.cs" />
     <Compile Include="Exceptions\HttpNoContentException.cs" />
     <Compile Include="Exceptions\HttpNotFoundException.cs" />
     <Compile Include="Exceptions\HttpNotModifiedException.cs" />
@@ -173,6 +175,8 @@
     <Compile Include="Helpers\HttpRequestMessageHeadersHelper.cs" />
     <Compile Include="Helpers\MiscHelper.cs" />
     <Compile Include="MessageHandlers\ResponseLastModifiedHandler.cs" />
+    <Compile Include="Models\HttpGet\My_Controllers\GiftClaimResponse.cs" />
+    <Compile Include="Models\HttpGet\My_Controllers\GiftResponse.cs" />
     <Compile Include="Models\HttpGet\RewardsController\RewardGiftResponse.cs" />
     <Compile Include="Models\HttpGet\IModifiedDate.cs" />
     <Compile Include="Models\HttpGet\My_Controllers\AccountResponse.cs" />
@@ -206,7 +210,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\HttpGet\RewardGiftsController\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Kilometros Database\Kilometros Database.csproj">

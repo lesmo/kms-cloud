@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 02/17/2014 02:52:29
+-- Date Created: 02/17/2014 17:05:55
 -- Generated from EDMX file: F:\Sharp Dynamics\Kilometros\Kilometros Database\MainModel.edmx
 -- --------------------------------------------------
 
@@ -30,7 +30,7 @@ IF OBJECT_ID(N'[dbo].[FK_TipCategoryTip]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[TipSet] DROP CONSTRAINT [FK_TipCategoryTip];
 GO
 IF OBJECT_ID(N'[dbo].[FK_TipTipGlobalization]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[TipGlobalizationSet] DROP CONSTRAINT [FK_TipTipGlobalization];
+    ALTER TABLE [dbo].[IGlobalizationSet_TipGlobalization] DROP CONSTRAINT [FK_TipTipGlobalization];
 GO
 IF OBJECT_ID(N'[dbo].[FK_TipTipMotionLevel]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[MotionLevelSet] DROP CONSTRAINT [FK_TipTipMotionLevel];
@@ -92,11 +92,14 @@ GO
 IF OBJECT_ID(N'[dbo].[FK_UserData]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[DataSet] DROP CONSTRAINT [FK_UserData];
 GO
-IF OBJECT_ID(N'[dbo].[FK_RewardGiftUserClaimedUser]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[RewardGiftUserClaimedSet] DROP CONSTRAINT [FK_RewardGiftUserClaimedUser];
+IF OBJECT_ID(N'[dbo].[FK_UserTipHistoryUser]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[UserTipHistorySet] DROP CONSTRAINT [FK_UserTipHistoryUser];
 GO
-IF OBJECT_ID(N'[dbo].[FK_RewardGiftUserClaimedRewardGift]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[RewardGiftUserClaimedSet] DROP CONSTRAINT [FK_RewardGiftUserClaimedRewardGift];
+IF OBJECT_ID(N'[dbo].[FK_UserTipHistoryTip]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[UserTipHistorySet] DROP CONSTRAINT [FK_UserTipHistoryTip];
+GO
+IF OBJECT_ID(N'[dbo].[FK_TipGlobalization_inherits_IGlobalization]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[IGlobalizationSet_TipGlobalization] DROP CONSTRAINT [FK_TipGlobalization_inherits_IGlobalization];
 GO
 
 -- --------------------------------------------------
@@ -121,20 +124,11 @@ GO
 IF OBJECT_ID(N'[dbo].[TipCategorySet]', 'U') IS NOT NULL
     DROP TABLE [dbo].[TipCategorySet];
 GO
-IF OBJECT_ID(N'[dbo].[TipCategoryGlobalizationSet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[TipCategoryGlobalizationSet];
-GO
-IF OBJECT_ID(N'[dbo].[TipGlobalizationSet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[TipGlobalizationSet];
-GO
 IF OBJECT_ID(N'[dbo].[DataSet]', 'U') IS NOT NULL
     DROP TABLE [dbo].[DataSet];
 GO
 IF OBJECT_ID(N'[dbo].[UserBodySet]', 'U') IS NOT NULL
     DROP TABLE [dbo].[UserBodySet];
-GO
-IF OBJECT_ID(N'[dbo].[MotionLevelGlobalizationSet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[MotionLevelGlobalizationSet];
 GO
 IF OBJECT_ID(N'[dbo].[RewardSet]', 'U') IS NOT NULL
     DROP TABLE [dbo].[RewardSet];
@@ -178,8 +172,20 @@ GO
 IF OBJECT_ID(N'[dbo].[RegionSubdivisionSet]', 'U') IS NOT NULL
     DROP TABLE [dbo].[RegionSubdivisionSet];
 GO
-IF OBJECT_ID(N'[dbo].[RewardGiftUserClaimedSet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[RewardGiftUserClaimedSet];
+IF OBJECT_ID(N'[dbo].[UserTipHistorySet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[UserTipHistorySet];
+GO
+IF OBJECT_ID(N'[dbo].[TipCategoryGlobalizationSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[TipCategoryGlobalizationSet];
+GO
+IF OBJECT_ID(N'[dbo].[MotionLevelGlobalizationSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[MotionLevelGlobalizationSet];
+GO
+IF OBJECT_ID(N'[dbo].[IGlobalizationSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[IGlobalizationSet];
+GO
+IF OBJECT_ID(N'[dbo].[IGlobalizationSet_TipGlobalization]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[IGlobalizationSet_TipGlobalization];
 GO
 
 -- --------------------------------------------------
@@ -243,14 +249,6 @@ CREATE TABLE [dbo].[MotionLevelSet] (
 );
 GO
 
--- Creating table 'TipCategorySet'
-CREATE TABLE [dbo].[TipCategorySet] (
-    [Guid] uniqueidentifier  NOT NULL,
-    [Icon] varbinary(max)  NOT NULL,
-    [IconMimeType] nvarchar(max)  NOT NULL
-);
-GO
-
 -- Creating table 'DataSet'
 CREATE TABLE [dbo].[DataSet] (
     [Timestamp] datetime  NOT NULL,
@@ -284,32 +282,8 @@ GO
 CREATE TABLE [dbo].[RewardGiftSet] (
     [Guid] uniqueidentifier  NOT NULL,
     [CreationDate] datetime  NOT NULL,
-    [Stock] int  NOT NULL,
+    [IsShipped] bit  NOT NULL,
     [Reward_Guid] uniqueidentifier  NOT NULL
-);
-GO
-
--- Creating table 'RewardGlobalizationSet'
-CREATE TABLE [dbo].[RewardGlobalizationSet] (
-    [Id] bigint IDENTITY(1,1) NOT NULL,
-    [CultureCode] nchar(16)  NOT NULL,
-    [Title] nvarchar(max)  NOT NULL,
-    [Text] nvarchar(max)  NOT NULL,
-    [Source] nvarchar(max)  NULL,
-    [Reward_Guid] uniqueidentifier  NOT NULL
-);
-GO
-
--- Creating table 'RewardGiftTokenSet'
-CREATE TABLE [dbo].[RewardGiftTokenSet] (
-    [Guid] uniqueidentifier  NOT NULL,
-    [CreationDate] datetime  NOT NULL,
-    [ExpirationDate] datetime  NULL,
-    [RedeemCode] nvarchar(max)  NOT NULL,
-    [RedeemGraphic] varbinary(max)  NULL,
-    [RedeemGraphicMimeType] nvarchar(max)  NULL,
-    [RewardGift_Guid] uniqueidentifier  NOT NULL,
-    [RedeemedByUser_Guid] uniqueidentifier  NOT NULL
 );
 GO
 
@@ -318,17 +292,6 @@ CREATE TABLE [dbo].[RewardRegionalizationSet] (
     [Id] bigint IDENTITY(1,1) NOT NULL,
     [RegionCode] nchar(2)  NOT NULL,
     [Reward_Guid] uniqueidentifier  NOT NULL
-);
-GO
-
--- Creating table 'RewardGiftGlobalizationSet'
-CREATE TABLE [dbo].[RewardGiftGlobalizationSet] (
-    [Id] bigint IDENTITY(1,1) NOT NULL,
-    [CultureCode] nvarchar(16)  NOT NULL,
-    [NameSingular] nvarchar(140)  NOT NULL,
-    [NamePlural] nvarchar(140)  NOT NULL,
-    [Description] nvarchar(max)  NOT NULL,
-    [RewardGift_Guid] uniqueidentifier  NOT NULL
 );
 GO
 
@@ -343,7 +306,7 @@ GO
 
 -- Creating table 'UserEarnedRewardSet'
 CREATE TABLE [dbo].[UserEarnedRewardSet] (
-    [Id] bigint IDENTITY(1,1) NOT NULL,
+    [Guid] uniqueidentifier  NOT NULL,
     [CreationDate] datetime  NOT NULL,
     [User_Guid] uniqueidentifier  NOT NULL,
     [Reward_Guid] uniqueidentifier  NOT NULL
@@ -370,16 +333,6 @@ CREATE TABLE [dbo].[ShippingInformationSet] (
     [Longitude] float  NOT NULL,
     [LastEditDate] datetime  NOT NULL,
     [User_Guid] uniqueidentifier  NOT NULL
-);
-GO
-
--- Creating table 'RewardGiftImageSet'
-CREATE TABLE [dbo].[RewardGiftImageSet] (
-    [Id] bigint IDENTITY(1,1) NOT NULL,
-    [CreationDate] datetime  NOT NULL,
-    [Image] varbinary(max)  NOT NULL,
-    [ImageMimeType] nvarchar(max)  NOT NULL,
-    [RewardGift_Guid] uniqueidentifier  NOT NULL
 );
 GO
 
@@ -416,42 +369,12 @@ CREATE TABLE [dbo].[RegionSubdivisionSet] (
 );
 GO
 
--- Creating table 'RewardGiftUserClaimedSet'
-CREATE TABLE [dbo].[RewardGiftUserClaimedSet] (
-    [Id] bigint IDENTITY(1,1) NOT NULL,
-    [CreationDate] datetime  NOT NULL,
-    [ClaimLocation] geography  NOT NULL,
-    [User_Guid] uniqueidentifier  NOT NULL,
-    [RewardGift_Guid] uniqueidentifier  NOT NULL
-);
-GO
-
 -- Creating table 'UserTipHistorySet'
 CREATE TABLE [dbo].[UserTipHistorySet] (
     [Guid] uniqueidentifier  NOT NULL,
     [CreationDate] datetime  NOT NULL,
     [User_Guid] uniqueidentifier  NOT NULL,
     [Tip_Guid] uniqueidentifier  NOT NULL
-);
-GO
-
--- Creating table 'TipCategoryGlobalizationSet'
-CREATE TABLE [dbo].[TipCategoryGlobalizationSet] (
-    [Id] bigint IDENTITY(1,1) NOT NULL,
-    [CultureCode] nvarchar(16)  NOT NULL,
-    [Name] nvarchar(max)  NOT NULL,
-    [Description] nvarchar(max)  NULL,
-    [CreationDate] datetime  NOT NULL,
-    [TipCategory_Guid] uniqueidentifier  NOT NULL
-);
-GO
-
--- Creating table 'MotionLevelGlobalizationSet'
-CREATE TABLE [dbo].[MotionLevelGlobalizationSet] (
-    [Id] bigint IDENTITY(1,1) NOT NULL,
-    [CultureCode] nvarchar(16)  NOT NULL,
-    [Tag] nvarchar(max)  NOT NULL,
-    [MotionLevel_Guid] uniqueidentifier  NOT NULL
 );
 GO
 
@@ -463,12 +386,93 @@ CREATE TABLE [dbo].[IGlobalizationSet] (
 );
 GO
 
+-- Creating table 'IPictureSet'
+CREATE TABLE [dbo].[IPictureSet] (
+    [Guid] uniqueidentifier  NOT NULL,
+    [CreationDate] datetime  NOT NULL,
+    [Picture] varbinary(max)  NULL,
+    [PictureMimeType] nvarchar(16)  NULL,
+    [PictureExtension] nvarchar(10)  NULL
+);
+GO
+
+-- Creating table 'UserRewardGiftShippingStatusSet'
+CREATE TABLE [dbo].[UserRewardGiftShippingStatusSet] (
+    [Id] bigint IDENTITY(1,1) NOT NULL,
+    [CreationDate] datetime  NOT NULL,
+    [TrackingCode] nvarchar(max)  NOT NULL,
+    [TrackingLink] nvarchar(max)  NOT NULL,
+    [UserRewardGiftClaimed_Guid] uniqueidentifier  NOT NULL
+);
+GO
+
+-- Creating table 'IPictureSet_TipCategory'
+CREATE TABLE [dbo].[IPictureSet_TipCategory] (
+    [Guid] uniqueidentifier  NOT NULL
+);
+GO
+
+-- Creating table 'IGlobalizationSet_TipCategoryGlobalization'
+CREATE TABLE [dbo].[IGlobalizationSet_TipCategoryGlobalization] (
+    [Name] nvarchar(max)  NOT NULL,
+    [Description] nvarchar(max)  NULL,
+    [Id] bigint  NOT NULL,
+    [TipCategory_Guid] uniqueidentifier  NOT NULL
+);
+GO
+
 -- Creating table 'IGlobalizationSet_TipGlobalization'
 CREATE TABLE [dbo].[IGlobalizationSet_TipGlobalization] (
     [Text] nvarchar(max)  NOT NULL,
     [Source] nvarchar(max)  NULL,
     [Id] bigint  NOT NULL,
     [Tip_Guid] uniqueidentifier  NOT NULL
+);
+GO
+
+-- Creating table 'IGlobalizationSet_MotionLevelGlobalization'
+CREATE TABLE [dbo].[IGlobalizationSet_MotionLevelGlobalization] (
+    [Tag] nvarchar(max)  NOT NULL,
+    [Id] bigint  NOT NULL,
+    [MotionLevel_Guid] uniqueidentifier  NOT NULL
+);
+GO
+
+-- Creating table 'IGlobalizationSet_RewardGlobalization'
+CREATE TABLE [dbo].[IGlobalizationSet_RewardGlobalization] (
+    [Title] nvarchar(max)  NOT NULL,
+    [Text] nvarchar(max)  NOT NULL,
+    [Source] nvarchar(max)  NULL,
+    [Id] bigint  NOT NULL,
+    [Reward_Guid] uniqueidentifier  NOT NULL
+);
+GO
+
+-- Creating table 'IGlobalizationSet_RewardGiftGlobalization'
+CREATE TABLE [dbo].[IGlobalizationSet_RewardGiftGlobalization] (
+    [NameSingular] nvarchar(140)  NOT NULL,
+    [NamePlural] nvarchar(140)  NOT NULL,
+    [Description] nvarchar(max)  NOT NULL,
+    [Id] bigint  NOT NULL,
+    [RewardGift_Guid] uniqueidentifier  NOT NULL
+);
+GO
+
+-- Creating table 'IPictureSet_UserRewardGiftClaimed'
+CREATE TABLE [dbo].[IPictureSet_UserRewardGiftClaimed] (
+    [ExpirationDate] datetime  NULL,
+    [RedeemCode] nvarchar(max)  NULL,
+    [ClaimLocation] geography  NULL,
+    [Guid] uniqueidentifier  NOT NULL,
+    [RewardGift_Guid] uniqueidentifier  NOT NULL,
+    [RedeemedByUser_Guid] uniqueidentifier  NOT NULL
+);
+GO
+
+-- Creating table 'IPictureSet_RewardGiftPicture'
+CREATE TABLE [dbo].[IPictureSet_RewardGiftPicture] (
+    [Guid] uniqueidentifier  NOT NULL,
+    [RewardGift_Guid] uniqueidentifier  NOT NULL
 );
 GO
 
@@ -506,12 +510,6 @@ ADD CONSTRAINT [PK_MotionLevelSet]
     PRIMARY KEY CLUSTERED ([Guid] ASC);
 GO
 
--- Creating primary key on [Guid] in table 'TipCategorySet'
-ALTER TABLE [dbo].[TipCategorySet]
-ADD CONSTRAINT [PK_TipCategorySet]
-    PRIMARY KEY CLUSTERED ([Guid] ASC);
-GO
-
 -- Creating primary key on [Timestamp] in table 'DataSet'
 ALTER TABLE [dbo].[DataSet]
 ADD CONSTRAINT [PK_DataSet]
@@ -536,27 +534,9 @@ ADD CONSTRAINT [PK_RewardGiftSet]
     PRIMARY KEY CLUSTERED ([Guid] ASC);
 GO
 
--- Creating primary key on [Id] in table 'RewardGlobalizationSet'
-ALTER TABLE [dbo].[RewardGlobalizationSet]
-ADD CONSTRAINT [PK_RewardGlobalizationSet]
-    PRIMARY KEY CLUSTERED ([Id] ASC);
-GO
-
--- Creating primary key on [Guid] in table 'RewardGiftTokenSet'
-ALTER TABLE [dbo].[RewardGiftTokenSet]
-ADD CONSTRAINT [PK_RewardGiftTokenSet]
-    PRIMARY KEY CLUSTERED ([Guid] ASC);
-GO
-
 -- Creating primary key on [Id] in table 'RewardRegionalizationSet'
 ALTER TABLE [dbo].[RewardRegionalizationSet]
 ADD CONSTRAINT [PK_RewardRegionalizationSet]
-    PRIMARY KEY CLUSTERED ([Id] ASC);
-GO
-
--- Creating primary key on [Id] in table 'RewardGiftGlobalizationSet'
-ALTER TABLE [dbo].[RewardGiftGlobalizationSet]
-ADD CONSTRAINT [PK_RewardGiftGlobalizationSet]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
@@ -566,10 +546,10 @@ ADD CONSTRAINT [PK_UserMotionLevelHistorySet]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
--- Creating primary key on [Id] in table 'UserEarnedRewardSet'
+-- Creating primary key on [Guid] in table 'UserEarnedRewardSet'
 ALTER TABLE [dbo].[UserEarnedRewardSet]
 ADD CONSTRAINT [PK_UserEarnedRewardSet]
-    PRIMARY KEY CLUSTERED ([Id] ASC);
+    PRIMARY KEY CLUSTERED ([Guid] ASC);
 GO
 
 -- Creating primary key on [Id] in table 'ContactInfoSet'
@@ -581,12 +561,6 @@ GO
 -- Creating primary key on [Id] in table 'ShippingInformationSet'
 ALTER TABLE [dbo].[ShippingInformationSet]
 ADD CONSTRAINT [PK_ShippingInformationSet]
-    PRIMARY KEY CLUSTERED ([Id] ASC);
-GO
-
--- Creating primary key on [Id] in table 'RewardGiftImageSet'
-ALTER TABLE [dbo].[RewardGiftImageSet]
-ADD CONSTRAINT [PK_RewardGiftImageSet]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
@@ -608,28 +582,10 @@ ADD CONSTRAINT [PK_RegionSubdivisionSet]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
--- Creating primary key on [Id] in table 'RewardGiftUserClaimedSet'
-ALTER TABLE [dbo].[RewardGiftUserClaimedSet]
-ADD CONSTRAINT [PK_RewardGiftUserClaimedSet]
-    PRIMARY KEY CLUSTERED ([Id] ASC);
-GO
-
 -- Creating primary key on [Guid] in table 'UserTipHistorySet'
 ALTER TABLE [dbo].[UserTipHistorySet]
 ADD CONSTRAINT [PK_UserTipHistorySet]
     PRIMARY KEY CLUSTERED ([Guid] ASC);
-GO
-
--- Creating primary key on [Id] in table 'TipCategoryGlobalizationSet'
-ALTER TABLE [dbo].[TipCategoryGlobalizationSet]
-ADD CONSTRAINT [PK_TipCategoryGlobalizationSet]
-    PRIMARY KEY CLUSTERED ([Id] ASC);
-GO
-
--- Creating primary key on [Id] in table 'MotionLevelGlobalizationSet'
-ALTER TABLE [dbo].[MotionLevelGlobalizationSet]
-ADD CONSTRAINT [PK_MotionLevelGlobalizationSet]
-    PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
 -- Creating primary key on [Id] in table 'IGlobalizationSet'
@@ -638,10 +594,64 @@ ADD CONSTRAINT [PK_IGlobalizationSet]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
+-- Creating primary key on [Guid] in table 'IPictureSet'
+ALTER TABLE [dbo].[IPictureSet]
+ADD CONSTRAINT [PK_IPictureSet]
+    PRIMARY KEY CLUSTERED ([Guid] ASC);
+GO
+
+-- Creating primary key on [Id] in table 'UserRewardGiftShippingStatusSet'
+ALTER TABLE [dbo].[UserRewardGiftShippingStatusSet]
+ADD CONSTRAINT [PK_UserRewardGiftShippingStatusSet]
+    PRIMARY KEY CLUSTERED ([Id] ASC);
+GO
+
+-- Creating primary key on [Guid] in table 'IPictureSet_TipCategory'
+ALTER TABLE [dbo].[IPictureSet_TipCategory]
+ADD CONSTRAINT [PK_IPictureSet_TipCategory]
+    PRIMARY KEY CLUSTERED ([Guid] ASC);
+GO
+
+-- Creating primary key on [Id] in table 'IGlobalizationSet_TipCategoryGlobalization'
+ALTER TABLE [dbo].[IGlobalizationSet_TipCategoryGlobalization]
+ADD CONSTRAINT [PK_IGlobalizationSet_TipCategoryGlobalization]
+    PRIMARY KEY CLUSTERED ([Id] ASC);
+GO
+
 -- Creating primary key on [Id] in table 'IGlobalizationSet_TipGlobalization'
 ALTER TABLE [dbo].[IGlobalizationSet_TipGlobalization]
 ADD CONSTRAINT [PK_IGlobalizationSet_TipGlobalization]
     PRIMARY KEY CLUSTERED ([Id] ASC);
+GO
+
+-- Creating primary key on [Id] in table 'IGlobalizationSet_MotionLevelGlobalization'
+ALTER TABLE [dbo].[IGlobalizationSet_MotionLevelGlobalization]
+ADD CONSTRAINT [PK_IGlobalizationSet_MotionLevelGlobalization]
+    PRIMARY KEY CLUSTERED ([Id] ASC);
+GO
+
+-- Creating primary key on [Id] in table 'IGlobalizationSet_RewardGlobalization'
+ALTER TABLE [dbo].[IGlobalizationSet_RewardGlobalization]
+ADD CONSTRAINT [PK_IGlobalizationSet_RewardGlobalization]
+    PRIMARY KEY CLUSTERED ([Id] ASC);
+GO
+
+-- Creating primary key on [Id] in table 'IGlobalizationSet_RewardGiftGlobalization'
+ALTER TABLE [dbo].[IGlobalizationSet_RewardGiftGlobalization]
+ADD CONSTRAINT [PK_IGlobalizationSet_RewardGiftGlobalization]
+    PRIMARY KEY CLUSTERED ([Id] ASC);
+GO
+
+-- Creating primary key on [Guid] in table 'IPictureSet_UserRewardGiftClaimed'
+ALTER TABLE [dbo].[IPictureSet_UserRewardGiftClaimed]
+ADD CONSTRAINT [PK_IPictureSet_UserRewardGiftClaimed]
+    PRIMARY KEY CLUSTERED ([Guid] ASC);
+GO
+
+-- Creating primary key on [Guid] in table 'IPictureSet_RewardGiftPicture'
+ALTER TABLE [dbo].[IPictureSet_RewardGiftPicture]
+ADD CONSTRAINT [PK_IPictureSet_RewardGiftPicture]
+    PRIMARY KEY CLUSTERED ([Guid] ASC);
 GO
 
 -- --------------------------------------------------
@@ -676,17 +686,17 @@ ON [dbo].[TokenSet]
     ([User_Guid]);
 GO
 
--- Creating foreign key on [TipCategory_Guid] in table 'TipCategoryGlobalizationSet'
-ALTER TABLE [dbo].[TipCategoryGlobalizationSet]
+-- Creating foreign key on [TipCategory_Guid] in table 'IGlobalizationSet_TipCategoryGlobalization'
+ALTER TABLE [dbo].[IGlobalizationSet_TipCategoryGlobalization]
 ADD CONSTRAINT [FK_TipCategoryTipCategoryGlobalization]
     FOREIGN KEY ([TipCategory_Guid])
-    REFERENCES [dbo].[TipCategorySet]
+    REFERENCES [dbo].[IPictureSet_TipCategory]
         ([Guid])
     ON DELETE CASCADE ON UPDATE NO ACTION;
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_TipCategoryTipCategoryGlobalization'
 CREATE INDEX [IX_FK_TipCategoryTipCategoryGlobalization]
-ON [dbo].[TipCategoryGlobalizationSet]
+ON [dbo].[IGlobalizationSet_TipCategoryGlobalization]
     ([TipCategory_Guid]);
 GO
 
@@ -694,7 +704,7 @@ GO
 ALTER TABLE [dbo].[TipSet]
 ADD CONSTRAINT [FK_TipCategoryTip]
     FOREIGN KEY ([TipCategory_Guid])
-    REFERENCES [dbo].[TipCategorySet]
+    REFERENCES [dbo].[IPictureSet_TipCategory]
         ([Guid])
     ON DELETE CASCADE ON UPDATE NO ACTION;
 
@@ -746,8 +756,8 @@ ON [dbo].[UserBodySet]
     ([User_Guid]);
 GO
 
--- Creating foreign key on [MotionLevel_Guid] in table 'MotionLevelGlobalizationSet'
-ALTER TABLE [dbo].[MotionLevelGlobalizationSet]
+-- Creating foreign key on [MotionLevel_Guid] in table 'IGlobalizationSet_MotionLevelGlobalization'
+ALTER TABLE [dbo].[IGlobalizationSet_MotionLevelGlobalization]
 ADD CONSTRAINT [FK_TipMotionLevelTipMotionLevelGlobalization]
     FOREIGN KEY ([MotionLevel_Guid])
     REFERENCES [dbo].[MotionLevelSet]
@@ -756,7 +766,7 @@ ADD CONSTRAINT [FK_TipMotionLevelTipMotionLevelGlobalization]
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_TipMotionLevelTipMotionLevelGlobalization'
 CREATE INDEX [IX_FK_TipMotionLevelTipMotionLevelGlobalization]
-ON [dbo].[MotionLevelGlobalizationSet]
+ON [dbo].[IGlobalizationSet_MotionLevelGlobalization]
     ([MotionLevel_Guid]);
 GO
 
@@ -774,8 +784,8 @@ ON [dbo].[RewardGiftSet]
     ([Reward_Guid]);
 GO
 
--- Creating foreign key on [Reward_Guid] in table 'RewardGlobalizationSet'
-ALTER TABLE [dbo].[RewardGlobalizationSet]
+-- Creating foreign key on [Reward_Guid] in table 'IGlobalizationSet_RewardGlobalization'
+ALTER TABLE [dbo].[IGlobalizationSet_RewardGlobalization]
 ADD CONSTRAINT [FK_RewardRewardGlobalization]
     FOREIGN KEY ([Reward_Guid])
     REFERENCES [dbo].[RewardSet]
@@ -784,7 +794,7 @@ ADD CONSTRAINT [FK_RewardRewardGlobalization]
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_RewardRewardGlobalization'
 CREATE INDEX [IX_FK_RewardRewardGlobalization]
-ON [dbo].[RewardGlobalizationSet]
+ON [dbo].[IGlobalizationSet_RewardGlobalization]
     ([Reward_Guid]);
 GO
 
@@ -802,8 +812,8 @@ ON [dbo].[RewardRegionalizationSet]
     ([Reward_Guid]);
 GO
 
--- Creating foreign key on [RewardGift_Guid] in table 'RewardGiftGlobalizationSet'
-ALTER TABLE [dbo].[RewardGiftGlobalizationSet]
+-- Creating foreign key on [RewardGift_Guid] in table 'IGlobalizationSet_RewardGiftGlobalization'
+ALTER TABLE [dbo].[IGlobalizationSet_RewardGiftGlobalization]
 ADD CONSTRAINT [FK_RewardGiftRewardGiftGlobalization]
     FOREIGN KEY ([RewardGift_Guid])
     REFERENCES [dbo].[RewardGiftSet]
@@ -812,35 +822,35 @@ ADD CONSTRAINT [FK_RewardGiftRewardGiftGlobalization]
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_RewardGiftRewardGiftGlobalization'
 CREATE INDEX [IX_FK_RewardGiftRewardGiftGlobalization]
-ON [dbo].[RewardGiftGlobalizationSet]
+ON [dbo].[IGlobalizationSet_RewardGiftGlobalization]
     ([RewardGift_Guid]);
 GO
 
--- Creating foreign key on [RewardGift_Guid] in table 'RewardGiftTokenSet'
-ALTER TABLE [dbo].[RewardGiftTokenSet]
-ADD CONSTRAINT [FK_RewardGiftRewardGiftToken]
+-- Creating foreign key on [RewardGift_Guid] in table 'IPictureSet_UserRewardGiftClaimed'
+ALTER TABLE [dbo].[IPictureSet_UserRewardGiftClaimed]
+ADD CONSTRAINT [FK_RewardGiftUserRewardGiftClaimed]
     FOREIGN KEY ([RewardGift_Guid])
     REFERENCES [dbo].[RewardGiftSet]
         ([Guid])
     ON DELETE CASCADE ON UPDATE NO ACTION;
 
--- Creating non-clustered index for FOREIGN KEY 'FK_RewardGiftRewardGiftToken'
-CREATE INDEX [IX_FK_RewardGiftRewardGiftToken]
-ON [dbo].[RewardGiftTokenSet]
+-- Creating non-clustered index for FOREIGN KEY 'FK_RewardGiftUserRewardGiftClaimed'
+CREATE INDEX [IX_FK_RewardGiftUserRewardGiftClaimed]
+ON [dbo].[IPictureSet_UserRewardGiftClaimed]
     ([RewardGift_Guid]);
 GO
 
--- Creating foreign key on [RedeemedByUser_Guid] in table 'RewardGiftTokenSet'
-ALTER TABLE [dbo].[RewardGiftTokenSet]
-ADD CONSTRAINT [FK_RewardGiftTokenUser]
+-- Creating foreign key on [RedeemedByUser_Guid] in table 'IPictureSet_UserRewardGiftClaimed'
+ALTER TABLE [dbo].[IPictureSet_UserRewardGiftClaimed]
+ADD CONSTRAINT [FK_UserRewardGiftClaimedUser]
     FOREIGN KEY ([RedeemedByUser_Guid])
     REFERENCES [dbo].[UserSet]
         ([Guid])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 
--- Creating non-clustered index for FOREIGN KEY 'FK_RewardGiftTokenUser'
-CREATE INDEX [IX_FK_RewardGiftTokenUser]
-ON [dbo].[RewardGiftTokenSet]
+-- Creating non-clustered index for FOREIGN KEY 'FK_UserRewardGiftClaimedUser'
+CREATE INDEX [IX_FK_UserRewardGiftClaimedUser]
+ON [dbo].[IPictureSet_UserRewardGiftClaimed]
     ([RedeemedByUser_Guid]);
 GO
 
@@ -928,20 +938,6 @@ ON [dbo].[ShippingInformationSet]
     ([User_Guid]);
 GO
 
--- Creating foreign key on [RewardGift_Guid] in table 'RewardGiftImageSet'
-ALTER TABLE [dbo].[RewardGiftImageSet]
-ADD CONSTRAINT [FK_RewardGiftRewardGiftImage]
-    FOREIGN KEY ([RewardGift_Guid])
-    REFERENCES [dbo].[RewardGiftSet]
-        ([Guid])
-    ON DELETE NO ACTION ON UPDATE NO ACTION;
-
--- Creating non-clustered index for FOREIGN KEY 'FK_RewardGiftRewardGiftImage'
-CREATE INDEX [IX_FK_RewardGiftRewardGiftImage]
-ON [dbo].[RewardGiftImageSet]
-    ([RewardGift_Guid]);
-GO
-
 -- Creating foreign key on [User_Guid] in table 'SocialIdentitySet'
 ALTER TABLE [dbo].[SocialIdentitySet]
 ADD CONSTRAINT [FK_UserSocialIdentity]
@@ -998,34 +994,6 @@ ON [dbo].[DataSet]
     ([User_Guid]);
 GO
 
--- Creating foreign key on [User_Guid] in table 'RewardGiftUserClaimedSet'
-ALTER TABLE [dbo].[RewardGiftUserClaimedSet]
-ADD CONSTRAINT [FK_RewardGiftUserClaimedUser]
-    FOREIGN KEY ([User_Guid])
-    REFERENCES [dbo].[UserSet]
-        ([Guid])
-    ON DELETE NO ACTION ON UPDATE NO ACTION;
-
--- Creating non-clustered index for FOREIGN KEY 'FK_RewardGiftUserClaimedUser'
-CREATE INDEX [IX_FK_RewardGiftUserClaimedUser]
-ON [dbo].[RewardGiftUserClaimedSet]
-    ([User_Guid]);
-GO
-
--- Creating foreign key on [RewardGift_Guid] in table 'RewardGiftUserClaimedSet'
-ALTER TABLE [dbo].[RewardGiftUserClaimedSet]
-ADD CONSTRAINT [FK_RewardGiftUserClaimedRewardGift]
-    FOREIGN KEY ([RewardGift_Guid])
-    REFERENCES [dbo].[RewardGiftSet]
-        ([Guid])
-    ON DELETE NO ACTION ON UPDATE NO ACTION;
-
--- Creating non-clustered index for FOREIGN KEY 'FK_RewardGiftUserClaimedRewardGift'
-CREATE INDEX [IX_FK_RewardGiftUserClaimedRewardGift]
-ON [dbo].[RewardGiftUserClaimedSet]
-    ([RewardGift_Guid]);
-GO
-
 -- Creating foreign key on [User_Guid] in table 'UserTipHistorySet'
 ALTER TABLE [dbo].[UserTipHistorySet]
 ADD CONSTRAINT [FK_UserTipHistoryUser]
@@ -1054,12 +1022,103 @@ ON [dbo].[UserTipHistorySet]
     ([Tip_Guid]);
 GO
 
+-- Creating foreign key on [RewardGift_Guid] in table 'IPictureSet_RewardGiftPicture'
+ALTER TABLE [dbo].[IPictureSet_RewardGiftPicture]
+ADD CONSTRAINT [FK_RewardGiftRewardGiftPictures]
+    FOREIGN KEY ([RewardGift_Guid])
+    REFERENCES [dbo].[RewardGiftSet]
+        ([Guid])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_RewardGiftRewardGiftPictures'
+CREATE INDEX [IX_FK_RewardGiftRewardGiftPictures]
+ON [dbo].[IPictureSet_RewardGiftPicture]
+    ([RewardGift_Guid]);
+GO
+
+-- Creating foreign key on [UserRewardGiftClaimed_Guid] in table 'UserRewardGiftShippingStatusSet'
+ALTER TABLE [dbo].[UserRewardGiftShippingStatusSet]
+ADD CONSTRAINT [FK_UserRewardGiftShippingStatusUserRewardGiftClaimed]
+    FOREIGN KEY ([UserRewardGiftClaimed_Guid])
+    REFERENCES [dbo].[IPictureSet_UserRewardGiftClaimed]
+        ([Guid])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_UserRewardGiftShippingStatusUserRewardGiftClaimed'
+CREATE INDEX [IX_FK_UserRewardGiftShippingStatusUserRewardGiftClaimed]
+ON [dbo].[UserRewardGiftShippingStatusSet]
+    ([UserRewardGiftClaimed_Guid]);
+GO
+
+-- Creating foreign key on [Guid] in table 'IPictureSet_TipCategory'
+ALTER TABLE [dbo].[IPictureSet_TipCategory]
+ADD CONSTRAINT [FK_TipCategory_inherits_IPicture]
+    FOREIGN KEY ([Guid])
+    REFERENCES [dbo].[IPictureSet]
+        ([Guid])
+    ON DELETE CASCADE ON UPDATE NO ACTION;
+GO
+
+-- Creating foreign key on [Id] in table 'IGlobalizationSet_TipCategoryGlobalization'
+ALTER TABLE [dbo].[IGlobalizationSet_TipCategoryGlobalization]
+ADD CONSTRAINT [FK_TipCategoryGlobalization_inherits_IGlobalization]
+    FOREIGN KEY ([Id])
+    REFERENCES [dbo].[IGlobalizationSet]
+        ([Id])
+    ON DELETE CASCADE ON UPDATE NO ACTION;
+GO
+
 -- Creating foreign key on [Id] in table 'IGlobalizationSet_TipGlobalization'
 ALTER TABLE [dbo].[IGlobalizationSet_TipGlobalization]
 ADD CONSTRAINT [FK_TipGlobalization_inherits_IGlobalization]
     FOREIGN KEY ([Id])
     REFERENCES [dbo].[IGlobalizationSet]
         ([Id])
+    ON DELETE CASCADE ON UPDATE NO ACTION;
+GO
+
+-- Creating foreign key on [Id] in table 'IGlobalizationSet_MotionLevelGlobalization'
+ALTER TABLE [dbo].[IGlobalizationSet_MotionLevelGlobalization]
+ADD CONSTRAINT [FK_MotionLevelGlobalization_inherits_IGlobalization]
+    FOREIGN KEY ([Id])
+    REFERENCES [dbo].[IGlobalizationSet]
+        ([Id])
+    ON DELETE CASCADE ON UPDATE NO ACTION;
+GO
+
+-- Creating foreign key on [Id] in table 'IGlobalizationSet_RewardGlobalization'
+ALTER TABLE [dbo].[IGlobalizationSet_RewardGlobalization]
+ADD CONSTRAINT [FK_RewardGlobalization_inherits_IGlobalization]
+    FOREIGN KEY ([Id])
+    REFERENCES [dbo].[IGlobalizationSet]
+        ([Id])
+    ON DELETE CASCADE ON UPDATE NO ACTION;
+GO
+
+-- Creating foreign key on [Id] in table 'IGlobalizationSet_RewardGiftGlobalization'
+ALTER TABLE [dbo].[IGlobalizationSet_RewardGiftGlobalization]
+ADD CONSTRAINT [FK_RewardGiftGlobalization_inherits_IGlobalization]
+    FOREIGN KEY ([Id])
+    REFERENCES [dbo].[IGlobalizationSet]
+        ([Id])
+    ON DELETE CASCADE ON UPDATE NO ACTION;
+GO
+
+-- Creating foreign key on [Guid] in table 'IPictureSet_UserRewardGiftClaimed'
+ALTER TABLE [dbo].[IPictureSet_UserRewardGiftClaimed]
+ADD CONSTRAINT [FK_UserRewardGiftClaimed_inherits_IPicture]
+    FOREIGN KEY ([Guid])
+    REFERENCES [dbo].[IPictureSet]
+        ([Guid])
+    ON DELETE CASCADE ON UPDATE NO ACTION;
+GO
+
+-- Creating foreign key on [Guid] in table 'IPictureSet_RewardGiftPicture'
+ALTER TABLE [dbo].[IPictureSet_RewardGiftPicture]
+ADD CONSTRAINT [FK_RewardGiftPicture_inherits_IPicture]
+    FOREIGN KEY ([Guid])
+    REFERENCES [dbo].[IPictureSet]
+        ([Guid])
     ON DELETE CASCADE ON UPDATE NO ACTION;
 GO
 

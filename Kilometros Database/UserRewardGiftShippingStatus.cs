@@ -12,13 +12,13 @@ namespace KilometrosDatabase
     using System;
     using System.Collections.Generic;
     
-    public partial class UserClaimedRewardGift
+    public partial class UserRewardGiftShippingStatus
     {
         public long Id { get; set; }
         public System.DateTime CreationDate { get; set; }
-        public System.Data.Spatial.DbGeography ClaimLocation { get; set; }
+        public string TrackingCode { get; set; }
+        public string TrackingLink { get; set; }
     
-        public virtual User User { get; set; }
-        public virtual RewardGift RewardGift { get; set; }
+        public virtual UserRewardGiftClaimed UserRewardGiftClaimed { get; set; }
     }
 }

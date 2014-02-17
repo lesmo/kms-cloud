@@ -133,6 +133,15 @@ namespace Kilometros_WebGlobalization.API {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Shipping Information is not set yet.
+        /// </summary>
+        public static string Warning205_ShippingInfoNotSet {
+            get {
+                return ResourceManager.GetString("Warning205_ShippingInfoNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Account Data received is invalid.
         /// </summary>
         public static string Warning501_AccountDataInvalid {
@@ -151,11 +160,38 @@ namespace Kilometros_WebGlobalization.API {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Gift requested could not be found, or ID is invalid.
+        /// </summary>
+        public static string Warning701_GiftNotFound {
+            get {
+                return ResourceManager.GetString("Warning701_GiftNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gift request is out of stock.
+        /// </summary>
+        public static string Warning702_GiftOutOfStock {
+            get {
+                return ResourceManager.GetString("Warning702_GiftOutOfStock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tip requested could not be found, or ID is invalid.
         /// </summary>
         public static string Warning801_TipNotFound {
             get {
                 return ResourceManager.GetString("Warning801_TipNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reward requested could not be found, or ID is invalid.
+        /// </summary>
+        public static string Warning901_RewardNotFound {
+            get {
+                return ResourceManager.GetString("Warning901_RewardNotFound", resourceCulture);
             }
         }
     }

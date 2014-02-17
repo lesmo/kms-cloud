@@ -42,9 +42,9 @@ namespace KilometrosDatabase
         public DbSet<SocialIdentity> SocialIdentitySet { get; set; }
         public DbSet<Region> RegionSet { get; set; }
         public DbSet<RegionSubdivision> RegionSubdivisionSet { get; set; }
-        public DbSet<UserClaimedRewardGift> UserClaimedRewardGiftSet { get; set; }
         public DbSet<UserTipHistory> UserTipHistorySet { get; set; }
         public DbSet<IGlobalization> IGlobalizationSet { get; set; }
         public DbSet<IPicture> IPictureSet { get; set; }
+        public DbSet<UserRewardGiftShippingStatus> UserRewardGiftShippingStatusSet { get; set; }
     }
 }

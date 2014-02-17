@@ -239,41 +239,28 @@ namespace KilometrosDatabase.Abstraction {
         /// <summary>
         /// Almacén de Imágenes de los Regalos por Recompensa
         /// </summary>
-        public GenericRepository<RewardGiftImage> RewardImageStore {
+        public GenericRepository<RewardGiftPicture> RewardPictureStore {
             get {
-                if ( this._rewardGiftImageRepository == null )
-                    this._rewardGiftImageRepository = new GenericRepository<RewardGiftImage>(this._context);
+                if ( this._rewardGiftPictureRepository == null )
+                    this._rewardGiftPictureRepository = new GenericRepository<RewardGiftPicture>(this._context);
 
-                return this._rewardGiftImageRepository;
+                return this._rewardGiftPictureRepository;
             }
         }
-        private GenericRepository<RewardGiftImage> _rewardGiftImageRepository = null;
-
-        /// <summary>
-        /// Almacén de Códigos de Canje de Regalos por Recompensa
-        /// </summary>
-        public GenericRepository<RewardGiftToken> RewardGiftTokenStore {
-            get {
-                if ( this._rewardGiftTokenRepository == null )
-                    this._rewardGiftTokenRepository = new GenericRepository<RewardGiftToken>(this._context);
-
-                return this._rewardGiftTokenRepository;
-            }
-        }
-        private GenericRepository<RewardGiftToken> _rewardGiftTokenRepository = null;
+        private GenericRepository<RewardGiftPicture> _rewardGiftPictureRepository = null;
 
         /// <summary>
         /// Almacén de asociación entre Regalos y Usuario que han reclamado esos regalos
         /// </summary>
-        public GenericRepository<RewardGiftUserClaimed> RewardGiftUserClaimedStore {
+        public GenericRepository<UserRewardGiftClaimed> UserRewardGiftClaimedStore {
             get {
-                if ( this._rewardGiftUserClaimedRepository == null )
-                    this._rewardGiftUserClaimedRepository = new GenericRepository<RewardGiftUserClaimed>(this._context);
+                if ( this._userRewardGiftClaimedRepository == null )
+                    this._userRewardGiftClaimedRepository = new GenericRepository<UserRewardGiftClaimed>(this._context);
 
-                return this._rewardGiftUserClaimedRepository;
+                return this._userRewardGiftClaimedRepository;
             }
         }
-        private GenericRepository<RewardGiftUserClaimed> _rewardGiftUserClaimedRepository = null;
+        private GenericRepository<UserRewardGiftClaimed> _userRewardGiftClaimedRepository = null;
         #endregion
 
         #region Globalization Storage

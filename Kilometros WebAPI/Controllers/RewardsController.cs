@@ -2,6 +2,7 @@
 using Kilometros_WebAPI.Helpers;
 using Kilometros_WebAPI.Models.HttpGet.RewardsController;
 using Kilometros_WebAPI.Security;
+using Kilometros_WebGlobalization.API;
 using KilometrosDatabase;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace Kilometros_WebAPI.Controllers {
 
         [HttpGet]
         [Route("rewards/history")]
-        public RewardResponse[] GetRewardsHistory(int page = 1) {
+        public IEnumerable<RewardResponse> GetRewardsHistory(int page = 1) {
             KmsIdentity identity
                 = (KmsIdentity)User.Identity;
             User user
@@ -59,24 +60,34 @@ namespace Kilometros_WebAPI.Controllers {
                         reward.Reward
                     ) as RewardGlobalization;
 
+                // Buscar y obtener regalos asociados
                 IEnumerable<RewardGift> rewardGifts
                     = reward.Reward.RewardGift;
                 List<RewardGiftResponse> rewardGiftsList
                     = new List<RewardGiftResponse>();
 
                 foreach ( RewardGift rewardGift in rewardGifts ) {
-                    RewardGiftGlobalization rewardGiftGlobalization
-                        = Database.RewardGiftStore.GetGlobalization(
-                            rewardGift
-                        ) as RewardGiftGlobalization;
+                    // Obtener fotografías del Regalo
                     List<string> rewardGiftPictures
                         = new List<string>();
-
                     foreach ( RewardGiftPicture picture in rewardGift.RewardGiftPictures )
                         rewardGiftPictures.Add(
                             picture.Guid.ToString() + "." + picture.PictureExtension
                         );
 
+                    // Determinar si el Regalo se reclamó por el Usuario
+                    bool userClaimed
+                        = (
+                            from uc in rewardGift.UserRewardGiftClaimed
+                            where uc.RedeemedByUser == user
+                            select uc
+                        ).FirstOrDefault() != null;
+
+                    // Obtener Regalo en el Idioma actual
+                    RewardGiftGlobalization rewardGiftGlobalization
+                        = Database.RewardGiftStore.GetGlobalization(
+                            rewardGift
+                        ) as RewardGiftGlobalization;
                     if ( rewardGiftGlobalization == null ) {
                         rewardGiftsList.Add(new RewardGiftResponse() {
                             RewardGiftId
@@ -84,10 +95,12 @@ namespace Kilometros_WebAPI.Controllers {
 
                             Stock
                                 = rewardGift.Stock,
-                            NamePlural 
-                                = rewardGiftGlobalization.NamePlural,
+                            NamePlural
+                                = null,
                             NameSingular
-                                = rewardGiftGlobalization.NameSingular,
+                                = null,
+                            Claimed
+                                = userClaimed,
 
                             Pictures
                                 = rewardGiftPictures.ToArray()
@@ -99,10 +112,12 @@ namespace Kilometros_WebAPI.Controllers {
 
                             Stock
                                 = rewardGift.Stock,
-                            NamePlural
-                                = null,
+                            NamePlural 
+                                = rewardGiftGlobalization.NamePlural,
                             NameSingular
-                                = null,
+                                = rewardGiftGlobalization.NameSingular,
+                            Claimed
+                                = userClaimed,
 
                             Pictures
                                 = rewardGiftPictures.ToArray()
@@ -110,9 +125,9 @@ namespace Kilometros_WebAPI.Controllers {
                     }
                 }
 
+                // Obtener Regiones a las que aplica la Recompensa
                 List<string> rewardRegions
                     = new List<string>();
-
                 foreach ( RewardRegionalization region in reward.Reward.RewardRegionalization )
                     rewardRegions.Add(region.RegionCode);
 
@@ -129,12 +144,133 @@ namespace Kilometros_WebAPI.Controllers {
                     Source
                         = rewardGlobalization.Source,
 
+                    RewardGifts
+                        = rewardGiftsList.ToArray(),
                     RegionCodes
                         = rewardRegions.ToArray()
                 });
             }
 
-            return response.ToArray();
+            return response;
+        }
+
+        [HttpGet]
+        [Route("rewards/{rewardGuidBase64}")]
+        public RewardResponse GetReward(string rewardGuidBase64) {
+            KmsIdentity identity
+                = (KmsIdentity)User.Identity;
+            User user
+                = identity.UserData;
+
+            /** Obtener la Recompensa solicitada **/
+            Guid? rewardGuid
+                = MiscHelper.GuidFromBase64(rewardGuidBase64);
+            if ( ! rewardGuid.HasValue )
+                throw new HttpNotFoundException(
+                    ControllerStrings.Warning901_RewardNotFound
+                );
+
+            UserEarnedReward reward
+                = Database.UserEarnedRewardStore.Get(rewardGuid.Value);
+            if ( reward == null )
+                throw new HttpNotFoundException(
+                    ControllerStrings.Warning901_RewardNotFound
+                );
+
+            /** Buscar y obtener regalos asociados **/
+            IEnumerable<RewardGift> rewardGifts
+                = reward.Reward.RewardGift;
+            List<RewardGiftResponse> rewardGiftsList
+                = new List<RewardGiftResponse>();
+
+            foreach ( RewardGift rewardGift in rewardGifts ) {
+                // Obtener fotografías del Regalo
+                List<string> rewardGiftPictures
+                    = new List<string>();
+                foreach ( RewardGiftPicture picture in rewardGift.RewardGiftPictures )
+                    rewardGiftPictures.Add(
+                        picture.Guid.ToString() + "." + picture.PictureExtension
+                    );
+
+                // Determinar si el Regalo se reclamó por el Usuario
+                bool userClaimed
+                    = (
+                        from uc in rewardGift.UserRewardGiftClaimed
+                        where uc.RedeemedByUser == user
+                        select uc
+                    ).FirstOrDefault() != null;
+
+                // Obtener Regalo en el Idioma actual
+                RewardGiftGlobalization rewardGiftGlobalization
+                    = Database.RewardGiftStore.GetGlobalization(
+                        rewardGift
+                    ) as RewardGiftGlobalization;
+                if ( rewardGiftGlobalization == null ) {
+                    rewardGiftsList.Add(new RewardGiftResponse() {
+                        RewardGiftId
+                            = MiscHelper.Base64FromGuid(rewardGift.Guid),
+
+                        Stock
+                            = rewardGift.Stock,
+                        NamePlural
+                            = null,
+                        NameSingular
+                            = null,
+                        Claimed
+                            = userClaimed,
+
+                        Pictures
+                            = rewardGiftPictures.ToArray()
+                    });
+                } else {
+                    rewardGiftsList.Add(new RewardGiftResponse() {
+                        RewardGiftId
+                            = MiscHelper.Base64FromGuid(rewardGift.Guid),
+
+                        Stock
+                            = rewardGift.Stock,
+                        NamePlural
+                            = rewardGiftGlobalization.NamePlural,
+                        NameSingular
+                            = rewardGiftGlobalization.NameSingular,
+                        Claimed
+                                = userClaimed,
+
+                        Pictures
+                            = rewardGiftPictures.ToArray()
+                    });
+                }
+            }
+
+            /** Obtener cadenas en el Idioma actual **/
+            RewardGlobalization rewardGlobalization
+                 = Database.RewardStore.GetGlobalization(reward.Reward) as RewardGlobalization;
+
+            /** Obtener Regiones a las que aplica la Recompensa **/
+            List<string> rewardRegions
+                = new List<string>();
+            foreach ( RewardRegionalization region in reward.Reward.RewardRegionalization )
+                rewardRegions.Add(region.RegionCode);
+
+            /** Preparar y devolver respuesta **/
+            return new RewardResponse() {
+                RewardId
+                    = MiscHelper.Base64FromGuid(reward.Guid),
+                EarnDate
+                    = reward.CreationDate,
+
+                Title
+                    = rewardGlobalization.Title,
+                Text
+                    = rewardGlobalization.Text,
+                Source
+                    = rewardGlobalization.Source,
+
+                RewardGifts
+                    = rewardGiftsList.ToArray(),
+                RegionCodes
+                    = rewardRegions.ToArray()
+            };
         }
     }
 }

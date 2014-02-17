@@ -4,8 +4,8 @@ using System.Linq;
 using System.Web;
 
 namespace Kilometros_WebAPI.Exceptions {
-    public class HttpNotModifiedException : HttpProcessException {
-        public HttpNotModifiedException() : base("Not Modified Since") {
+    public class HttpConflictException : HttpProcessException {
+        public HttpConflictException(string message) : base(message) {
         }
     }
 }

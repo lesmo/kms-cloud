@@ -5,7 +5,7 @@ using System.Web;
 
 namespace Kilometros_WebAPI.Exceptions {
     public abstract class HttpProcessException : Exception {
-        public string Message {
+        public override string Message {
             get {
                 return this._message;
             }

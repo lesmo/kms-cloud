@@ -13,6 +13,6 @@ namespace Kilometros_WebAPI.Models.HttpGet {
                 this._lastModified = value;
             }
         }
-        private virtual DateTime _lastModified;
+        private DateTime _lastModified;
     }
 }
