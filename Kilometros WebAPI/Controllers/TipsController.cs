@@ -21,13 +21,13 @@ namespace Kilometros_WebAPI.Controllers {
         [HttpGet]
         [Route("tips/categories")]
         public TipCategoryResponse[] GetTipsCategories() {
-            /** Obtener el último Idioma + Cultura añadido **/
+            // --- Obtener el último Idioma + Cultura añadido ---
             TipCategoryGlobalization lastTipCategoryGlobalization
                 = Database.TipCategoryGlobalizationStore.GetFirst(
                     orderBy: tcg => tcg.OrderBy(o => o.CreationDate)
                 );
 
-            /** Verificar si se tiene la cabecera {If-Modified-Since} **/
+            // --- Verificar si se tiene la cabecera {If-Modified-Since} ---
             DateTimeOffset? ifModifiedSince
                 = Request.Headers.IfModifiedSince;
 
@@ -36,13 +36,13 @@ namespace Kilometros_WebAPI.Controllers {
                     throw new HttpNotModifiedException();
             }
 
-            /** Obtener las categorías **/
+            // --- Obtener las categorías ---
             IEnumerable<TipCategory> tipCategories
                 = Database.TipCategoryStore.GetAll();
             List<TipCategoryResponse> tipCategoriesResponse
                 = new List<TipCategoryResponse>();
 
-            /** Obtener los textos en el Idioma + Cultura actuales **/
+            // --- Obtener los textos en el Idioma + Cultura actuales ---
             foreach ( TipCategory tipCategory in tipCategories ) {
                 // Obtener Categoría en el Idioma actual
                 //   - Buscar match exacto de Idioma + Culture
@@ -88,14 +88,14 @@ namespace Kilometros_WebAPI.Controllers {
             User user
                 = identity.UserData;
 
-            /** Obtener el último Tip conseguido **/
+            // --- Obtener el último Tip conseguido ---
             UserTipHistory lastTipHistory
                 = Database.UserTipHistoryStore.GetFirst(
                     t => t.User == user,
                     o => o.OrderBy(by => by.CreationDate)
                 );
 
-            /** Verificar si se tiene la cabecera {If-Modified-Since} **/
+            // --- Verificar si se tiene la cabecera {If-Modified-Since} ---
             DateTimeOffset? ifModifiedSince
                 = Request.Headers.IfModifiedSince;
 
@@ -104,7 +104,7 @@ namespace Kilometros_WebAPI.Controllers {
                     throw new HttpNotModifiedException();
             }
 
-            /** Obtener los Tips conseguidos **/
+            // --- Obtener los Tips conseguidos ---
             IEnumerable<UserTipHistory> tipsHistory
                 = (
                     from tip in user.UserTipHistory
@@ -112,7 +112,7 @@ namespace Kilometros_WebAPI.Controllers {
                     select tip
                 ).Skip(10 * page).Take(10);
 
-            /** Preparar respuesta **/
+            // --- Preparar respuesta ---
             List<TipResponse> response
                 = new List<TipResponse>();
             Dictionary<Guid, TipCategoryResponse> tipCategoryLocales
@@ -191,7 +191,7 @@ namespace Kilometros_WebAPI.Controllers {
         [HttpGet]
         [Route("tips/{tipGuidBase64}")]
         public TipResponse GetTip(string tipGuidBase64) {
-            /** Obtener Tip Guid e intentar buscarlo **/
+            // --- Obtener Tip Guid e intentar buscarlo ---
             Guid? tipGuid
                 = MiscHelper.GuidFromBase64(tipGuidBase64);
 
@@ -208,11 +208,11 @@ namespace Kilometros_WebAPI.Controllers {
                     ControllerStrings.Warning801_TipNotFound
                 );
 
-            /** Obtener Tip en el Idioma actual **/
+            // --- Obtener Tip en el Idioma actual ---
             TipGlobalization tipLocale
                 = Database.TipStore.GetGlobalization(tip.Tip) as TipGlobalization;
 
-            /** Obtener Categoría de Tip **/
+            // --- Obtener Categoría de Tip ---
             TipCategory tipCategory
                 = tip.Tip.TipCategory;
             TipCategoryGlobalization tipCategoryLocale
@@ -241,7 +241,7 @@ namespace Kilometros_WebAPI.Controllers {
                     };
             }
 
-            /** Preparar y enviar la respuesta **/
+            // --- Preparar y enviar la respuesta ---
             TipResponse tipResponse
                 = new TipResponse() {
                     TipId

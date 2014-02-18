@@ -29,13 +29,13 @@ namespace Kilometros_WebAPI.Controllers {
             ContactInfo contactInfo
                 = identity.UserData.ContactInfo;
 
-            /** Validar si existe Información de Contacto registrada **/
+            // --- Validar si existe Información de Contacto registrada ---
             if ( contactInfo == null )
                 throw new HttpNoContentException(
                     ControllerStrings.Warning203_ContactInfoNotSet
                 );
             
-            /** Verificar si se tiene la cabecera {If-Modified-Since} **/
+            // --- Verificar si se tiene la cabecera {If-Modified-Since} ---
             DateTimeOffset? ifModifiedSince 
                 = Request.Headers.IfModifiedSince;
 
@@ -44,7 +44,7 @@ namespace Kilometros_WebAPI.Controllers {
                     throw new HttpNotModifiedException();
             }
 
-            /** Preparar respuesta **/
+            // --- Preparar respuesta ---
             return new ContactInfoResponse() {
                 HomePhone
                     = contactInfo.HomePhone,

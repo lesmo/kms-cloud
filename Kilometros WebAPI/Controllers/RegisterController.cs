@@ -21,23 +21,23 @@ namespace Kilometros_WebAPI.Controllers {
         [HttpPost]
         [Route("register/kms")]
         public IHttpActionResult RegisterKms([FromBody]RegisterKmsPost registerPost) {
-            /** Evitar que Usuarios que ya tienen una sesión registren usuarios **/
+            // --- Evitar que Usuarios que ya tienen una sesión registren usuarios ---
             if ( this.User.Identity.IsAuthenticated )
                 throw new HttpAlreadyLoggedInException(
                     ControllerStrings.Warning201_CannotCreateUserWithSessionOpen
                 );
 
-            /** Obtener Hash de Contraseña **/
+            // --- Obtener Hash de Contraseña ---
             byte[] passwordBytes
                 = Convert.FromBase64String(registerPost.Password);
 
-            /** Generar segundo Hash de Contraseña **/
+            // --- Generar segundo Hash de Contraseña ---
             SHA256 sha256
                 = new SHA256CryptoServiceProvider();
             byte[] passwordHashBytes
                 = sha256.ComputeHash(passwordBytes);
 
-            /** Guardar nueva cuente de Usuario y enviar emails de verificación **/
+            // --- Guardar nueva cuente de Usuario y enviar emails de verificación ---
             User newUser
                 = new User() {
                     Email = registerPost.Email,
@@ -48,7 +48,7 @@ namespace Kilometros_WebAPI.Controllers {
             this.Database.UserStore.Add(newUser);
             this.Database.SaveChanges();
             
-            /** Reportar éxito **/
+            // --- Reportar éxito ---
             return Ok();
         }
 

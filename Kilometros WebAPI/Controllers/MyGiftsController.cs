@@ -25,7 +25,7 @@ namespace Kilometros_WebAPI.Controllers {
             User user
                 = identity.UserData;
 
-            /** Buscar Regalo solicitado **/
+            // --- Buscar Regalo solicitado ---
             Guid? giftGuid
                 = MiscHelper.GuidFromBase64(giftGuidBase64);
             if ( ! giftGuid.HasValue )
@@ -42,7 +42,7 @@ namespace Kilometros_WebAPI.Controllers {
                     ControllerStrings.Warning701_GiftNotFound
                 );
 
-            /** Verificar que el Regalo haya sido reclamado por el Usuario **/
+            // --- Verificar que el Regalo haya sido reclamado por el Usuario ---
             UserRewardGiftClaimed userRewardGiftClaim
                 = Database.UserRewardGiftClaimedStore.GetFirst(
                     r => r.RewardGift == rewardGift && r.RedeemedByUser == user
@@ -52,7 +52,7 @@ namespace Kilometros_WebAPI.Controllers {
                     ControllerStrings.Warning701_GiftNotFound
                 );
 
-            /** Obtener Información del Regalo **/
+            // --- Obtener Información del Regalo ---
             // Obtener fotografías del Regalo
             List<string> rewardGiftPictures
                 = new List<string>();
@@ -61,7 +61,7 @@ namespace Kilometros_WebAPI.Controllers {
                     picture.Guid.ToString() + "." + picture.PictureExtension
                 );
 
-            /** Obtener Regalo en el Idioma actual **/
+            // --- Obtener Regalo en el Idioma actual ---
             RewardGiftGlobalization rewardGiftGlobalization
                 = Database.RewardGiftStore.GetGlobalization(
                     rewardGift
@@ -116,7 +116,7 @@ namespace Kilometros_WebAPI.Controllers {
             User user
                 = identity.UserData;
 
-            /** Buscar Regalo solicitado **/
+            // --- Buscar Regalo solicitado ---
             Guid? giftGuid
                 = MiscHelper.GuidFromBase64(giftGuidBase64);
             if ( !giftGuid.HasValue )
@@ -133,7 +133,7 @@ namespace Kilometros_WebAPI.Controllers {
                     ControllerStrings.Warning701_GiftNotFound
                 );
 
-            /** Verificar que el Regalo haya sido obtenido por el Usuario **/
+            // --- Verificar que el Regalo haya sido obtenido por el Usuario ---
             UserEarnedReward userEarnedReward
                 = Database.UserEarnedRewardStore.GetFirst(
                     r => r.User == user && r.Reward.RewardGift.Contains(rewardGift)
@@ -143,7 +143,7 @@ namespace Kilometros_WebAPI.Controllers {
                     ControllerStrings.Warning701_GiftNotFound
                 );
 
-            /** Verificar que el Usuario tenga Información de Envío si el Regalo se envía **/
+            // --- Verificar que el Usuario tenga Información de Envío si el Regalo se envía ---
             if ( rewardGift.IsShipped ) {
                 ShippingInformation shippingInformation
                     = user.ShippingInformation;
@@ -154,7 +154,7 @@ namespace Kilometros_WebAPI.Controllers {
                     );
             }
 
-            /** Obtener un objeto de Reclamo **/
+            // --- Obtener un objeto de Reclamo ---
             UserRewardGiftClaimed giftClaim
                 = Database.UserRewardGiftClaimedStore.GetFirst(
                     r => r.RedeemedByUser == null && r.RewardGift == rewardGift
@@ -164,13 +164,13 @@ namespace Kilometros_WebAPI.Controllers {
                     ControllerStrings.Warning702_GiftOutOfStock
                 );
 
-            /** Asociar al Usuario con el Reclamo (efectivamente reclamando el regalo del usuario) **/
+            // --- Asociar al Usuario con el Reclamo (efectivamente reclamando el regalo del usuario) ---
             giftClaim.RedeemedByUser = user;
 
             Database.UserRewardGiftClaimedStore.Update(giftClaim);
             Database.SaveChanges();
 
-            /** Devolver detalles de canje **/
+            // --- Devolver detalles de canje ---
             return new GiftClaimResponse() {
                 ExpirationDate
                     = giftClaim.ExpirationDate.HasValue

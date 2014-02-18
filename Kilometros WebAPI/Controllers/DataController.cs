@@ -14,14 +14,22 @@ using System.Data.Entity.Validation;
 using Kilometros_WebGlobalization.API;
 
 namespace Kilometros_WebAPI.Controllers {
+    /// <summary>
+    /// Permite obtener y enviar Datos generados por el Podómetro de KMS.
+    /// </summary>
     [Authorize]
     public class DataController : ApiController {
         private WorkUnit _db = new WorkUnit();
 
+        /// <summary>
+        /// Enviar los Datos generados por el Podómetro KMS.
+        /// </summary>
+        /// <param name="dataPost">Datos de la Pulesera</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("data")]
-        public IHttpActionResult Post([FromBody]DataPost[] dataPost) {
-            /** Determinar la última fecha registrada **/
+        public IHttpActionResult Post([FromBody]IEnumerable<DataPost> dataPost) {
+            // Determinar la última fecha registrada
             KmsIdentity identity
                 = (KmsIdentity)User.Identity;
             Data lastData
@@ -32,7 +40,7 @@ namespace Kilometros_WebAPI.Controllers {
             DateTime lastDataTimestamp
                 = lastData == null ? DateTime.MinValue : lastData.Timestamp;
 
-            /** Determinar los registros que se almacenarán en BD **/
+            // Determinar los registros que se almacenarán en BD
             // TODO: Calcular fecha UTC a partir del Huso Horario configurado
             //       por el Usuario
             foreach ( DataPost item in dataPost )
@@ -48,7 +56,7 @@ namespace Kilometros_WebAPI.Controllers {
                   where d.Timestamp > lastDataTimestamp
                   select d;
 
-            /** Almacenar los nuevos registros **/
+            // --- Almacenar los nuevos registros ---
             List<Data> addedData = new List<Data>();
             foreach ( DataPost data in finalPost ) {
                 Data newData = new Data(){

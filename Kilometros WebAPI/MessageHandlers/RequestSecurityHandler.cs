@@ -26,7 +26,7 @@ namespace Kilometros_WebAPI.MessageHandlers {
             HttpRequestMessageHeadersHelper reqHeadersHelper
                 = new HttpRequestMessageHeadersHelper(request);
 
-            /** Validar que se recibió Firma de Petición **/
+            // --- Validar que se recibió Firma de Petición ---
             string requestSignatureString
                 = reqHeadersHelper.GetHeaderValue(WebApiConfig.KmsHttpHeaders.RequestSignature);
             byte[] requestSignatureBytes
@@ -44,7 +44,7 @@ namespace Kilometros_WebAPI.MessageHandlers {
                 return MiscHelper.ReturnHttpResponseAndHalt(response);
             }
 
-            /** Validar que el API-Key exista en BD **/
+            // --- Validar que el API-Key exista en BD ---
             string apiKeyString
                 = reqHeadersHelper.GetHeaderValue(WebApiConfig.KmsHttpHeaders.ApiKey);
             ApiKey apiKey
@@ -62,7 +62,7 @@ namespace Kilometros_WebAPI.MessageHandlers {
             }
 
 
-            /** Obtener Token **/
+            // --- Obtener Token ---
             string tokenString
                 = reqHeadersHelper.GetHeaderValue(WebApiConfig.KmsHttpHeaders.Token);
             Token token
@@ -79,7 +79,7 @@ namespace Kilometros_WebAPI.MessageHandlers {
                 return MiscHelper.ReturnHttpResponseAndHalt(response);
             }
 
-            /** Validar que el API-Request-Signature sea correcto **/
+            // --- Validar que el API-Request-Signature sea correcto ---
             SHA256 sha1 = new SHA256CryptoServiceProvider();
 
             // Obtener URL
@@ -112,7 +112,7 @@ namespace Kilometros_WebAPI.MessageHandlers {
                 return MiscHelper.ReturnHttpResponseAndHalt(response);
             }
 
-            /** Establecer contexto de Seguridad **/
+            // --- Establecer contexto de Seguridad ---
             User identityUser
                 = token != null ? token.User : null;
             KmsIdentity identity

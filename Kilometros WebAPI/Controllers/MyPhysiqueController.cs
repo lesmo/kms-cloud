@@ -29,13 +29,13 @@ namespace Kilometros_WebAPI.Controllers {
             UserBody physique
                 = identity.UserData.UserBody;
 
-            /** Validar si existe Perfil Físico **/
+            // --- Validar si existe Perfil Físico ---
             if ( physique == null )
                 throw new HttpNoContentException(
                     ControllerStrings.Warning204_PhysicalInfoNotSet
                 );
 
-            /** Verificar si se tiene la cabecera {If-Modified-Since} **/
+            // --- Verificar si se tiene la cabecera {If-Modified-Since} ---
             DateTimeOffset? ifModifiedSince
                 = Request.Headers.IfModifiedSince;
 
@@ -44,7 +44,7 @@ namespace Kilometros_WebAPI.Controllers {
                     throw new HttpNotModifiedException();
             }
 
-            /** Preparar y devolver respuesta **/
+            // --- Preparar y devolver respuesta ---
             return new PhysiqueResponse() {
                 Age
                     = physique.Age,

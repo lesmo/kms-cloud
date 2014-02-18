@@ -12,17 +12,17 @@ namespace Kilometros_WebAPI {
         }
         
         public static void Register(HttpConfiguration config) {
-            /** Configurar ExceptionFilters **/
+            // --- Configurar ExceptionFilters ---
             config.Filters.Add(new ExceptionFilters.UnhandledExceptionFilter());
             config.Filters.Add(new ExceptionFilters.HttpStatusExceptionFilter());
             config.Filters.Add(new ExceptionFilters.DbValidationExceptionFilter());
 
-            /** Configurar MessageHandlers **/
+            // --- Configurar MessageHandlers ---
             config.MessageHandlers.Add(new MessageHandlers.ResponseEncoder());
             config.MessageHandlers.Add(new MessageHandlers.ResponseLastModifiedHandler());
             config.MessageHandlers.Add(new MessageHandlers.RequestSecurityHandler());
 
-            /** Configurar rutas **/
+            // --- Configurar rutas ---
             // Todas las rutas se establecen con el tag [Route(--)]
             config.MapHttpAttributeRoutes();
         }

@@ -25,14 +25,14 @@ namespace Kilometros_WebAPI.Controllers {
             User user
                 = identity.UserData;
 
-            /** Obtener la última Recompensa conseguida **/
+            // --- Obtener la última Recompensa conseguida ---
             UserEarnedReward lastReward
                 = Database.UserEarnedRewardStore.GetFirst(
                     r => r.User == user,
                     o => o.OrderBy(by => by.CreationDate)
                 );
 
-            /** Verificar si se tiene la cabecera {If-Modified-Since} **/
+            // --- Verificar si se tiene la cabecera {If-Modified-Since} ---
             DateTimeOffset? ifModifiedSince
                 = Request.Headers.IfModifiedSince;
 
@@ -41,7 +41,7 @@ namespace Kilometros_WebAPI.Controllers {
                     throw new HttpNotModifiedException();
             }
 
-            /** Obtener las Recompensas conseguidas **/
+            // --- Obtener las Recompensas conseguidas ---
             IEnumerable<UserEarnedReward> rewards
                 = (
                     from reward in user.UserEarnedReward
@@ -49,7 +49,7 @@ namespace Kilometros_WebAPI.Controllers {
                     select reward
                 ).Skip(10 * page).Take(10);
 
-            /** Preparar respuesta **/
+            // --- Preparar respuesta ---
             List<RewardResponse> response
                 = new List<RewardResponse>();
 
@@ -162,7 +162,7 @@ namespace Kilometros_WebAPI.Controllers {
             User user
                 = identity.UserData;
 
-            /** Obtener la Recompensa solicitada **/
+            // --- Obtener la Recompensa solicitada ---
             Guid? rewardGuid
                 = MiscHelper.GuidFromBase64(rewardGuidBase64);
             if ( ! rewardGuid.HasValue )
@@ -177,7 +177,7 @@ namespace Kilometros_WebAPI.Controllers {
                     ControllerStrings.Warning901_RewardNotFound
                 );
 
-            /** Buscar y obtener regalos asociados **/
+            // --- Buscar y obtener regalos asociados ---
             IEnumerable<RewardGift> rewardGifts
                 = reward.Reward.RewardGift;
             List<RewardGiftResponse> rewardGiftsList
@@ -242,17 +242,17 @@ namespace Kilometros_WebAPI.Controllers {
                 }
             }
 
-            /** Obtener cadenas en el Idioma actual **/
+            // --- Obtener cadenas en el Idioma actual ---
             RewardGlobalization rewardGlobalization
                  = Database.RewardStore.GetGlobalization(reward.Reward) as RewardGlobalization;
 
-            /** Obtener Regiones a las que aplica la Recompensa **/
+            // --- Obtener Regiones a las que aplica la Recompensa ---
             List<string> rewardRegions
                 = new List<string>();
             foreach ( RewardRegionalization region in reward.Reward.RewardRegionalization )
                 rewardRegions.Add(region.RegionCode);
 
-            /** Preparar y devolver respuesta **/
+            // --- Preparar y devolver respuesta ---
             return new RewardResponse() {
                 RewardId
                     = MiscHelper.Base64FromGuid(reward.Guid),

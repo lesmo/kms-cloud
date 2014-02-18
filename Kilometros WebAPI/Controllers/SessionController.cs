@@ -22,13 +22,13 @@ namespace Kilometros_WebAPI.Controllers {
         [HttpPost]
         [Route("session/kms")]
         public TokenResponse KmsLogin([FromBody]LoginPost dataPost) {
-            /** Evitar doble Login **/
+            // --- Evitar doble Login ---
             if ( this.User.Identity.IsAuthenticated )
                 throw new HttpAlreadyLoggedInException(
                     ControllerStrings.Warning100_CannotLoginAgain
                 );
             
-            /** Obtener bytes de contraseña, buscar al Usuario y validar contraseña **/
+            // --- Obtener bytes de contraseña, buscar al Usuario y validar contraseña ---
             byte[] passwordBytes
                 = Convert.FromBase64String(dataPost.AccessHash);
             User user
@@ -44,7 +44,7 @@ namespace Kilometros_WebAPI.Controllers {
                     )
                 );
 
-            /** Generar nuevo Token **/
+            // --- Generar nuevo Token ---
             KmsIdentity identity
                 = (KmsIdentity)this.User.Identity;
             Token token
@@ -67,7 +67,7 @@ namespace Kilometros_WebAPI.Controllers {
             this.Database.TokenStore.Add(token);
             this.Database.SaveChanges();
 
-            /** Preparar y enviar respuesta **/
+            // --- Preparar y enviar respuesta ---
             return new TokenResponse() {
                 Expires
                     = token.ExpirationDate.Value,
