@@ -2,6 +2,7 @@
 // package to your project.
 ////#define Handle_PageResultOfT
 
+using Kilometros_WebAPI.Areas.HelpPage.App_Start;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -35,6 +36,11 @@ namespace Kilometros_WebAPI.Areas.HelpPage
         {
             // Use the documentation from XML documentation file.
             config.SetDocumentationProvider(new XmlDocumentationProvider(HttpContext.Current.Server.MapPath("~/App_Data/XmlDocument.xml")));
+
+            // Registrar los Ejemplos de Petición y Respuesta propios
+            Dictionary<Type, object> sampleObjects = new Dictionary<Type,object>();
+            CustomSamplesRegister.Register(sampleObjects, config);
+            config.SetSampleObjects(sampleObjects);
 
             //// Uncomment the following to use "sample string" as the sample for all actions that have string as the body parameter or return type.
             //// Also, the string arrays will be used for IEnumerable<string>. The sample objects will be serialized into different media type 
