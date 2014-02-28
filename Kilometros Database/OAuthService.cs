@@ -10,14 +10,12 @@
 namespace KilometrosDatabase
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class Data
+    public enum OAuthService : int
     {
-        public System.DateTime Timestamp { get; set; }
-        public int Steps { get; set; }
-        public Nullable<int> Distance { get; set; }
-    
-        public virtual User User { get; set; }
+        Facebook = 0,
+        Twitter = 1,
+        Fitbit = 2,
+        NikePlus = 3
     }
 }

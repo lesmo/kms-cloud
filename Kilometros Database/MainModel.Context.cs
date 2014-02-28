@@ -39,12 +39,12 @@ namespace KilometrosDatabase
         public DbSet<UserEarnedReward> UserEarnedRewardSet { get; set; }
         public DbSet<ContactInfo> ContactInfoSet { get; set; }
         public DbSet<ShippingInformation> ShippingInformationSet { get; set; }
-        public DbSet<SocialIdentity> SocialIdentitySet { get; set; }
         public DbSet<Region> RegionSet { get; set; }
         public DbSet<RegionSubdivision> RegionSubdivisionSet { get; set; }
         public DbSet<UserTipHistory> UserTipHistorySet { get; set; }
         public DbSet<IGlobalization> IGlobalizationSet { get; set; }
         public DbSet<IPicture> IPictureSet { get; set; }
         public DbSet<UserRewardGiftShippingStatus> UserRewardGiftShippingStatusSet { get; set; }
+        public DbSet<OAuthCredential> OAuthCredentialSet { get; set; }
     }
 }

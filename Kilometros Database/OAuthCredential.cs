@@ -12,22 +12,18 @@ namespace KilometrosDatabase
     using System;
     using System.Collections.Generic;
     
-    public partial class SocialIdentity
+    public partial class OAuthCredential
     {
-        public SocialIdentity()
+        public OAuthCredential()
         {
-            this.FacebookTokenIsInvalid = false;
-            this.TwitterTokenIsInvalid = false;
+            this.IsInvalid = false;
         }
     
-        public System.Guid Guid { get; set; }
-        public string FacebookUid { get; set; }
-        public string FacebookToken { get; set; }
-        public bool FacebookTokenIsInvalid { get; set; }
-        public string TwitterUid { get; set; }
-        public string TwitterToken { get; set; }
-        public string TwitterTokenSecret { get; set; }
-        public bool TwitterTokenIsInvalid { get; set; }
+        public long Id { get; set; }
+        public OAuthService OAuthProvider { get; set; }
+        public string Uid { get; set; }
+        public string Token { get; set; }
+        public bool IsInvalid { get; set; }
     
         public virtual User User { get; set; }
     }

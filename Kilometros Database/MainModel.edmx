@@ -20,13 +20,13 @@
     <EntitySet Name="UserEarnedRewardSet" EntityType="MainModel.Store.UserEarnedRewardSet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="ContactInfoSet" EntityType="MainModel.Store.ContactInfoSet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="ShippingInformationSet" EntityType="MainModel.Store.ShippingInformationSet" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="SocialIdentitySet" EntityType="MainModel.Store.SocialIdentitySet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="RegionSet" EntityType="MainModel.Store.RegionSet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="RegionSubdivisionSet" EntityType="MainModel.Store.RegionSubdivisionSet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="UserTipHistorySet" EntityType="MainModel.Store.UserTipHistorySet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="IGlobalizationSet" EntityType="MainModel.Store.IGlobalizationSet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="IPictureSet" EntityType="MainModel.Store.IPictureSet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="UserRewardGiftShippingStatusSet" EntityType="MainModel.Store.UserRewardGiftShippingStatusSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="OAuthCredentialSet" EntityType="MainModel.Store.OAuthCredentialSet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="IPictureSet_TipCategory" EntityType="MainModel.Store.IPictureSet_TipCategory" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="IGlobalizationSet_TipCategoryGlobalization" EntityType="MainModel.Store.IGlobalizationSet_TipCategoryGlobalization" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="IGlobalizationSet_TipGlobalization" EntityType="MainModel.Store.IGlobalizationSet_TipGlobalization" store:Type="Tables" Schema="dbo" />
@@ -115,10 +115,6 @@
       <End Role="User" EntitySet="UserSet" />
       <End Role="ShippingInformation" EntitySet="ShippingInformationSet" />
     </AssociationSet>
-    <AssociationSet Name="UserSocialIdentity" Association="MainModel.Store.UserSocialIdentity">
-      <End Role="User" EntitySet="UserSet" />
-      <End Role="SocialIdentity" EntitySet="SocialIdentitySet" />
-    </AssociationSet>
     <AssociationSet Name="RegionRegionSubdivision" Association="MainModel.Store.RegionRegionSubdivision">
       <End Role="Region" EntitySet="RegionSet" />
       <End Role="RegionSubdivision" EntitySet="RegionSubdivisionSet" />
@@ -146,6 +142,10 @@
     <AssociationSet Name="UserRewardGiftShippingStatusUserRewardGiftClaimed" Association="MainModel.Store.UserRewardGiftShippingStatusUserRewardGiftClaimed">
       <End Role="UserRewardGiftShippingStatus" EntitySet="UserRewardGiftShippingStatusSet" />
       <End Role="UserRewardGiftClaimed" EntitySet="IPictureSet_UserRewardGiftClaimed" />
+    </AssociationSet>
+    <AssociationSet Name="OAuthCredentialUser" Association="MainModel.Store.OAuthCredentialUser">
+      <End Role="OAuthCredential" EntitySet="OAuthCredentialSet" />
+      <End Role="User" EntitySet="UserSet" />
     </AssociationSet>
     <AssociationSet Name="FK_TipCategory_inherits_IPicture" Association="MainModel.Store.FK_TipCategory_inherits_IPicture">
       <End Role="IPicture" EntitySet="IPictureSet" />
@@ -243,6 +243,7 @@
     </Key>
     <Property Name="Timestamp" Type="datetime" Nullable="false" />
     <Property Name="Steps" Type="int" Nullable="false" />
+    <Property Name="Distance" Type="int" StoreGeneratedPattern="Identity" Nullable="true" />
     <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
   </EntityType>
   <EntityType Name="UserBodySet">
@@ -324,20 +325,6 @@
     <Property Name="LastEditDate" Type="datetime" Nullable="false" />
     <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
   </EntityType>
-  <EntityType Name="SocialIdentitySet">
-    <Key>
-      <PropertyRef Name="Guid" />
-    </Key>
-    <Property Name="Guid" Type="uniqueidentifier" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="FacebookUid" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="FacebookToken" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="FacebookTokenIsInvalid" Type="bit" Nullable="false" DefaultValue="false" />
-    <Property Name="TwitterUid" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="TwitterToken" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="TwitterTokenSecret" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="TwitterTokenIsInvalid" Type="bit" Nullable="false" DefaultValue="false" />
-    <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
-  </EntityType>
   <EntityType Name="RegionSet">
     <Key>
       <PropertyRef Name="Id" />
@@ -393,6 +380,17 @@
     <Property Name="TrackingCode" Type="nvarchar(max)" Nullable="false" />
     <Property Name="TrackingLink" Type="nvarchar(max)" Nullable="false" />
     <Property Name="UserRewardGiftClaimed_Guid" Type="uniqueidentifier" Nullable="false" />
+  </EntityType>
+  <EntityType Name="OAuthCredentialSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="OAuthProvider" Type="int" Nullable="false" />
+    <Property Name="Uid" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Token" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="IsInvalid" Type="bit" Nullable="false" DefaultValue="false" />
+    <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
   </EntityType>
   <EntityType Name="IPictureSet_TipCategory">
     <Key>
@@ -732,18 +730,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="UserSocialIdentity">
-    <End Role="User" Type="MainModel.Store.UserSet" Multiplicity="1" />
-    <End Role="SocialIdentity" Type="MainModel.Store.SocialIdentitySet" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="User">
-        <PropertyRef Name="Guid" />
-      </Principal>
-      <Dependent Role="SocialIdentity">
-        <PropertyRef Name="User_Guid" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="RegionRegionSubdivision">
     <End Role="Region" Type="MainModel.Store.RegionSet" Multiplicity="1" />
     <End Role="RegionSubdivision" Type="MainModel.Store.RegionSubdivisionSet" Multiplicity="*" />
@@ -825,6 +811,18 @@
       </Principal>
       <Dependent Role="UserRewardGiftShippingStatus">
         <PropertyRef Name="UserRewardGiftClaimed_Guid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="OAuthCredentialUser">
+    <End Role="OAuthCredential" Type="MainModel.Store.OAuthCredentialSet" Multiplicity="*" />
+    <End Role="User" Type="MainModel.Store.UserSet" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Guid" />
+      </Principal>
+      <Dependent Role="OAuthCredential">
+        <PropertyRef Name="User_Guid" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -1039,11 +1037,6 @@
             <End Role="User" EntitySet="UserSet" />
             <End Role="ShippingInformation" EntitySet="ShippingInformationSet" />
           </AssociationSet>
-          <EntitySet Name="SocialIdentitySet" EntityType="MainModel.SocialIdentity" />
-          <AssociationSet Name="UserSocialIdentity" Association="MainModel.UserSocialIdentity">
-            <End Role="User" EntitySet="UserSet" />
-            <End Role="SocialIdentity" EntitySet="SocialIdentitySet" />
-          </AssociationSet>
           <EntitySet Name="RegionSet" EntityType="MainModel.Region" />
           <EntitySet Name="RegionSubdivisionSet" EntityType="MainModel.RegionSubdivision" />
           <AssociationSet Name="RegionRegionSubdivision" Association="MainModel.RegionRegionSubdivision">
@@ -1077,6 +1070,11 @@
           <AssociationSet Name="UserRewardGiftShippingStatusUserRewardGiftClaimed" Association="MainModel.UserRewardGiftShippingStatusUserRewardGiftClaimed">
             <End Role="UserRewardGiftShippingStatus" EntitySet="UserRewardGiftShippingStatusSet" />
             <End Role="UserRewardGiftClaimed" EntitySet="IPictureSet" />
+          </AssociationSet>
+          <EntitySet Name="OAuthCredentialSet" EntityType="MainModel.OAuthCredential" />
+          <AssociationSet Name="OAuthCredentialUser" Association="MainModel.OAuthCredentialUser">
+            <End Role="OAuthCredential" EntitySet="OAuthCredentialSet" />
+            <End Role="User" EntitySet="UserSet" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="User">
@@ -1147,7 +1145,6 @@
               <Summary>Información de Envío del Usuario.</Summary>
             </Documentation>
           </NavigationProperty>
-          <NavigationProperty Name="SocialIdentity" Relationship="MainModel.UserSocialIdentity" FromRole="User" ToRole="SocialIdentity" />
           <Property Type="String" Name="PreferredCultureCode" Nullable="true" MaxLength="16" >
             <Documentation>
               <Summary>Código de Cultura (Idioma) preferido por el Usuario</Summary>
@@ -1155,6 +1152,7 @@
           </Property>
           <NavigationProperty Name="Data" Relationship="MainModel.UserData" FromRole="User" ToRole="Data" />
           <NavigationProperty Name="UserTipHistory" Relationship="MainModel.UserTipHistoryUser" FromRole="User" ToRole="UserTipHistory" />
+          <NavigationProperty Name="OAuthCredential" Relationship="MainModel.OAuthCredentialUser" FromRole="User" ToRole="OAuthCredential" />
         </EntityType>
         <EntityType Name="Token">
           <Documentation>
@@ -1390,6 +1388,7 @@
           <Property Type="DateTime" Name="Timestamp" Nullable="false" cg:SetterAccess="Public" annotation:StoreGeneratedPattern="None" />
           <Property Type="Int32" Name="Steps" Nullable="false" />
           <NavigationProperty Name="User" Relationship="MainModel.UserData" FromRole="Data" ToRole="User" />
+          <Property Name="Distance" Type="Int32" Nullable="true" annotation:StoreGeneratedPattern="Identity" />
         </EntityType>
         <EntityType Name="UserBody">
           <Documentation>
@@ -1705,24 +1704,6 @@
           </Documentation>
           <NavigationProperty Name="RewardGift" Relationship="MainModel.RewardGiftRewardGiftPictures" FromRole="RewardGiftPictures" ToRole="RewardGift" />
         </EntityType>
-        <EntityType Name="SocialIdentity">
-          <Key>
-            <PropertyRef Name="Guid" />
-          </Key>
-          <Property Type="Guid" Name="Guid" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="String" Name="FacebookUid" Nullable="false" />
-          <Property Type="String" Name="FacebookToken" Nullable="false" />
-          <Property Type="Boolean" Name="FacebookTokenIsInvalid" Nullable="false" DefaultValue="False" />
-          <Property Type="String" Name="TwitterUid" Nullable="false" />
-          <Property Type="String" Name="TwitterToken" Nullable="false" />
-          <Property Type="String" Name="TwitterTokenSecret" Nullable="false" />
-          <Property Type="Boolean" Name="TwitterTokenIsInvalid" Nullable="false" DefaultValue="False" />
-          <NavigationProperty Name="User" Relationship="MainModel.UserSocialIdentity" FromRole="SocialIdentity" ToRole="User" />
-        </EntityType>
-        <Association Name="UserSocialIdentity">
-          <End Type="MainModel.User" Role="User" Multiplicity="1" />
-          <End Type="MainModel.SocialIdentity" Role="SocialIdentity" Multiplicity="0..1" />
-        </Association>
         <EntityType Name="Region">
           <Key>
             <PropertyRef Name="Id" />
@@ -1808,6 +1789,43 @@
           <End Type="MainModel.UserRewardGiftShippingStatus" Role="UserRewardGiftShippingStatus" Multiplicity="0..1" />
           <End Type="MainModel.UserRewardGiftClaimed" Role="UserRewardGiftClaimed" Multiplicity="1" />
         </Association>
+        <EntityType Name="OAuthCredential">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OAuthProvider" Type="MainModel.OAuthService" Nullable="false" >
+            <Documentation>
+              <Summary>Servicio/Red Social que provee el servicio de OAuth y al que pertenecen el UID y Token</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="Uid" Type="String" Nullable="false" >
+            <Documentation>
+              <Summary>ID del Usuario en la Red Social</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="Token" Type="String" Nullable="false" >
+            <Documentation>
+              <Summary>Token de Sesión del Usuario en la Red Social</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="IsInvalid" Type="Boolean" Nullable="false" DefaultValue="False" >
+            <Documentation>
+              <Summary>Si el Token de OAuth es válido</Summary>
+            </Documentation>
+          </Property>
+          <NavigationProperty Name="User" Relationship="MainModel.OAuthCredentialUser" FromRole="OAuthCredential" ToRole="User" />
+        </EntityType>
+        <EnumType Name="OAuthService">
+          <Member Name="Facebook" />
+          <Member Name="Twitter" />
+          <Member Name="Fitbit" />
+          <Member Name="NikePlus" />
+        </EnumType>
+        <Association Name="OAuthCredentialUser">
+          <End Type="MainModel.OAuthCredential" Role="OAuthCredential" Multiplicity="*" />
+          <End Type="MainModel.User" Role="User" Multiplicity="1" />
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1876,6 +1894,7 @@
         <MappingFragment StoreEntitySet="DataSet">
           <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
           <ScalarProperty Name="Steps" ColumnName="Steps" />
+          <ScalarProperty Name="Distance" ColumnName="Distance" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -1954,20 +1973,6 @@
           <ScalarProperty Name="Latitude" ColumnName="Latitude" />
           <ScalarProperty Name="Longitude" ColumnName="Longitude" />
           <ScalarProperty Name="LastEditDate" ColumnName="LastEditDate" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="SocialIdentitySet">
-      <EntityTypeMapping TypeName="IsTypeOf(MainModel.SocialIdentity)">
-        <MappingFragment StoreEntitySet="SocialIdentitySet">
-          <ScalarProperty Name="Guid" ColumnName="Guid" />
-          <ScalarProperty Name="FacebookUid" ColumnName="FacebookUid" />
-          <ScalarProperty Name="FacebookToken" ColumnName="FacebookToken" />
-          <ScalarProperty Name="FacebookTokenIsInvalid" ColumnName="FacebookTokenIsInvalid" />
-          <ScalarProperty Name="TwitterUid" ColumnName="TwitterUid" />
-          <ScalarProperty Name="TwitterToken" ColumnName="TwitterToken" />
-          <ScalarProperty Name="TwitterTokenSecret" ColumnName="TwitterTokenSecret" />
-          <ScalarProperty Name="TwitterTokenIsInvalid" ColumnName="TwitterTokenIsInvalid" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -2080,6 +2085,17 @@
           <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
           <ScalarProperty Name="TrackingCode" ColumnName="TrackingCode" />
           <ScalarProperty Name="TrackingLink" ColumnName="TrackingLink" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OAuthCredentialSet">
+      <EntityTypeMapping TypeName="IsTypeOf(MainModel.OAuthCredential)">
+        <MappingFragment StoreEntitySet="OAuthCredentialSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="OAuthProvider" ColumnName="OAuthProvider" />
+          <ScalarProperty Name="Uid" ColumnName="Uid" />
+          <ScalarProperty Name="Token" ColumnName="Token" />
+          <ScalarProperty Name="IsInvalid" ColumnName="IsInvalid" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -2243,14 +2259,6 @@
         <ScalarProperty Name="Id" ColumnName="Id" />
       </EndProperty>
     </AssociationSetMapping>
-    <AssociationSetMapping Name="UserSocialIdentity" TypeName="MainModel.UserSocialIdentity" StoreEntitySet="SocialIdentitySet">
-      <EndProperty Name="User">
-        <ScalarProperty Name="Guid" ColumnName="User_Guid" />
-      </EndProperty>
-      <EndProperty Name="SocialIdentity">
-        <ScalarProperty Name="Guid" ColumnName="Guid" />
-      </EndProperty>
-    </AssociationSetMapping>
     <AssociationSetMapping Name="RegionRegionSubdivision" TypeName="MainModel.RegionRegionSubdivision" StoreEntitySet="RegionSubdivisionSet">
       <EndProperty Name="Region">
         <ScalarProperty Name="Id" ColumnName="Region_Id" />
@@ -2305,6 +2313,14 @@
         <ScalarProperty Name="Guid" ColumnName="UserRewardGiftClaimed_Guid" />
       </EndProperty>
       <EndProperty Name="UserRewardGiftShippingStatus">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="OAuthCredentialUser" TypeName="MainModel.OAuthCredentialUser" StoreEntitySet="OAuthCredentialSet">
+      <EndProperty Name="User">
+        <ScalarProperty Name="Guid" ColumnName="User_Guid" />
+      </EndProperty>
+      <EndProperty Name="OAuthCredential">
         <ScalarProperty Name="Id" ColumnName="Id" />
       </EndProperty>
     </AssociationSetMapping>
