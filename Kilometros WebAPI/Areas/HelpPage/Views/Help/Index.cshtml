@@ -30,7 +30,7 @@
         </div>
     </section>
     <section class="content-wrapper main-content clear-fix">
-        @foreach (var group in apiGroups)
+        @foreach (var group in apiGroups.OrderBy(o => o.Key.ControllerName))
         {
             @Html.DisplayFor(m => group, "ApiGroup")
         }
