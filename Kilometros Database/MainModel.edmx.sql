@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 02/28/2014 16:12:50
+-- Date Created: 02/28/2014 19:09:39
 -- Generated from EDMX file: F:\Sharp Dynamics\Kilometros\Kilometros Database\MainModel.edmx
 -- --------------------------------------------------
 
@@ -98,6 +98,9 @@ GO
 IF OBJECT_ID(N'[dbo].[FK_UserRewardGiftShippingStatusUserRewardGiftClaimed]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[UserRewardGiftShippingStatusSet] DROP CONSTRAINT [FK_UserRewardGiftShippingStatusUserRewardGiftClaimed];
 GO
+IF OBJECT_ID(N'[dbo].[FK_OAuthCredentialUser]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[OAuthCredentialSet] DROP CONSTRAINT [FK_OAuthCredentialUser];
+GO
 IF OBJECT_ID(N'[dbo].[FK_TipCategory_inherits_IPicture]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[IPictureSet_TipCategory] DROP CONSTRAINT [FK_TipCategory_inherits_IPicture];
 GO
@@ -187,6 +190,9 @@ GO
 IF OBJECT_ID(N'[dbo].[UserRewardGiftShippingStatusSet]', 'U') IS NOT NULL
     DROP TABLE [dbo].[UserRewardGiftShippingStatusSet];
 GO
+IF OBJECT_ID(N'[dbo].[OAuthCredentialSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[OAuthCredentialSet];
+GO
 IF OBJECT_ID(N'[dbo].[IPictureSet_TipCategory]', 'U') IS NOT NULL
     DROP TABLE [dbo].[IPictureSet_TipCategory];
 GO
@@ -223,7 +229,8 @@ CREATE TABLE [dbo].[UserSet] (
     [Email] nvarchar(max)  NOT NULL,
     [Password] varbinary(max)  NULL,
     [RegionCode] nchar(5)  NULL,
-    [PreferredCultureCode] nvarchar(16)  NULL
+    [PreferredCultureCode] nvarchar(16)  NULL,
+    [UtcOffset] smallint  NULL
 );
 GO
 
@@ -275,6 +282,7 @@ GO
 
 -- Creating table 'DataSet'
 CREATE TABLE [dbo].[DataSet] (
+    [Id] nvarchar(max)  NOT NULL,
     [Timestamp] datetime  NOT NULL,
     [Steps] int  NOT NULL,
     [Distance] int IDENTITY(1,1) NULL,
@@ -289,6 +297,8 @@ CREATE TABLE [dbo].[UserBodySet] (
     [Height] smallint  NOT NULL,
     [Weight] int  NOT NULL,
     [Sex] nchar(1)  NOT NULL,
+    [StrideLengthWalking] nvarchar(max)  NOT NULL,
+    [StrideLenghtRunning] nvarchar(max)  NOT NULL,
     [LastEditDate] datetime  NOT NULL,
     [User_Guid] uniqueidentifier  NOT NULL
 );
@@ -532,10 +542,10 @@ ADD CONSTRAINT [PK_MotionLevelSet]
     PRIMARY KEY CLUSTERED ([Guid] ASC);
 GO
 
--- Creating primary key on [Timestamp] in table 'DataSet'
+-- Creating primary key on [Id] in table 'DataSet'
 ALTER TABLE [dbo].[DataSet]
 ADD CONSTRAINT [PK_DataSet]
-    PRIMARY KEY CLUSTERED ([Timestamp] ASC);
+    PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
 -- Creating primary key on [Id] in table 'UserBodySet'

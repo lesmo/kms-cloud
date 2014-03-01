@@ -19,6 +19,8 @@ namespace KilometrosDatabase
         public short Height { get; set; }
         public int Weight { get; set; }
         public string Sex { get; set; }
+        public string StrideLengthWalking { get; set; }
+        public string StrideLenghtRunning { get; set; }
         public System.DateTime LastEditDate { get; set; }
     
         public virtual User User { get; set; }

@@ -9,5 +9,8 @@ namespace Kilometros_WebAPI.Models.HttpPost.My_Controller {
         public short Height;
         public int Weight;
         public string Sex;
+
+        public short StrideLengthRunning;
+        public short StrideLengthWalking;
     }
 }

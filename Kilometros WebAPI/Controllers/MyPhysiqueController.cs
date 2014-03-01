@@ -55,6 +55,11 @@ namespace Kilometros_WebAPI.Controllers {
                 Sex
                     = physique.Sex,
 
+                StrideLengthWalking
+                    = physique.StrideLengthWalking,
+                StrideLengthRunning
+                    = physique.StrideLenghtRunning,
+
                 LastModified
                     = physique.LastEditDate
             };
@@ -79,6 +84,10 @@ namespace Kilometros_WebAPI.Controllers {
                 = dataPost.Weight;
             physique.Sex
                 = dataPost.Sex;
+            physique.StrideLenghtRunning
+                = dataPost.StrideLengthRunning;
+            physique.StrideLengthWalking
+                = dataPost.StrideLengthWalking;
 
             if ( identity.UserData.UserBody == null )
                 Database.UserBodyStore.Add(physique);

@@ -14,6 +14,7 @@ namespace KilometrosDatabase
     
     public partial class Data
     {
+        public string Id { get; set; }
         public System.DateTime Timestamp { get; set; }
         public int Steps { get; set; }
         public Nullable<int> Distance { get; set; }

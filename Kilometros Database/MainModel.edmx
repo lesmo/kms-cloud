@@ -190,6 +190,7 @@
     <Property Name="Password" Type="varbinary(max)" Nullable="true" />
     <Property Name="RegionCode" Type="nchar" Nullable="true" MaxLength="5" />
     <Property Name="PreferredCultureCode" Type="nvarchar" Nullable="true" MaxLength="16" />
+    <Property Name="UtcOffset" Type="smallint" Nullable="true" />
   </EntityType>
   <EntityType Name="TokenSet">
     <Key>
@@ -239,8 +240,9 @@
   </EntityType>
   <EntityType Name="DataSet">
     <Key>
-      <PropertyRef Name="Timestamp" />
+      <PropertyRef Name="Id" />
     </Key>
+    <Property Name="Id" Type="nvarchar(max)" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Timestamp" Type="datetime" Nullable="false" />
     <Property Name="Steps" Type="int" Nullable="false" />
     <Property Name="Distance" Type="int" StoreGeneratedPattern="Identity" Nullable="true" />
@@ -255,6 +257,8 @@
     <Property Name="Height" Type="smallint" Nullable="false" />
     <Property Name="Weight" Type="int" Nullable="false" />
     <Property Name="Sex" Type="nchar" Nullable="false" MaxLength="1" />
+    <Property Name="StrideLengthWalking" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="StrideLenghtRunning" Type="nvarchar(max)" Nullable="false" />
     <Property Name="LastEditDate" Type="datetime" Nullable="false" />
     <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
   </EntityType>
@@ -1153,6 +1157,7 @@
           <NavigationProperty Name="Data" Relationship="MainModel.UserData" FromRole="User" ToRole="Data" />
           <NavigationProperty Name="UserTipHistory" Relationship="MainModel.UserTipHistoryUser" FromRole="User" ToRole="UserTipHistory" />
           <NavigationProperty Name="OAuthCredential" Relationship="MainModel.OAuthCredentialUser" FromRole="User" ToRole="OAuthCredential" />
+          <Property Name="UtcOffset" Type="Int16" Nullable="true" />
         </EntityType>
         <EntityType Name="Token">
           <Documentation>
@@ -1383,8 +1388,9 @@
         </Association>
         <EntityType Name="Data">
           <Key>
-            <PropertyRef Name="Timestamp" />
+            <PropertyRef Name="Id" />
           </Key>
+          <Property Name="Id" Type="String" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="DateTime" Name="Timestamp" Nullable="false" cg:SetterAccess="Public" annotation:StoreGeneratedPattern="None" />
           <Property Type="Int32" Name="Steps" Nullable="false" />
           <NavigationProperty Name="User" Relationship="MainModel.UserData" FromRole="Data" ToRole="User" />
@@ -1420,6 +1426,8 @@
               <LongDescription>El carácter F es Femenino, el carácter M es masculino.</LongDescription>
             </Documentation>
           </Property>
+          <Property Name="StrideLengthWalking" Type="String" Nullable="false" />
+          <Property Name="StrideLenghtRunning" Type="String" Nullable="false" />
           <Property Type="DateTime" Name="LastEditDate" Nullable="false" annotation:StoreGeneratedPattern="None" >
             <Documentation>
               <Summary>Última fecha de modificación de la Complexión Física del Usuario.</Summary>
@@ -1841,6 +1849,7 @@
           <ScalarProperty Name="Password" ColumnName="Password" />
           <ScalarProperty Name="RegionCode" ColumnName="RegionCode" />
           <ScalarProperty Name="PreferredCultureCode" ColumnName="PreferredCultureCode" />
+          <ScalarProperty Name="UtcOffset" ColumnName="UtcOffset" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -1892,6 +1901,7 @@
     <EntitySetMapping Name="DataSet">
       <EntityTypeMapping TypeName="IsTypeOf(MainModel.Data)">
         <MappingFragment StoreEntitySet="DataSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
           <ScalarProperty Name="Steps" ColumnName="Steps" />
           <ScalarProperty Name="Distance" ColumnName="Distance" />
@@ -1906,6 +1916,8 @@
           <ScalarProperty Name="Height" ColumnName="Height" />
           <ScalarProperty Name="Weight" ColumnName="Weight" />
           <ScalarProperty Name="Sex" ColumnName="Sex" />
+          <ScalarProperty Name="StrideLengthWalking" ColumnName="StrideLengthWalking" />
+          <ScalarProperty Name="StrideLenghtRunning" ColumnName="StrideLenghtRunning" />
           <ScalarProperty Name="LastEditDate" ColumnName="LastEditDate" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -2281,7 +2293,7 @@
         <ScalarProperty Name="Guid" ColumnName="User_Guid" />
       </EndProperty>
       <EndProperty Name="Data">
-        <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
+        <ScalarProperty Name="Id" ColumnName="Id" />
       </EndProperty>
     </AssociationSetMapping>
     <AssociationSetMapping Name="UserTipHistoryUser" TypeName="MainModel.UserTipHistoryUser" StoreEntitySet="UserTipHistorySet">
