@@ -20,6 +20,6 @@ namespace KilometrosDatabase
     
         public virtual RewardGift RewardGift { get; set; }
         public virtual User RedeemedByUser { get; set; }
-        public virtual UserRewardGiftShippingStatus UserRewardGiftShippingStatus { get; set; }
+        public virtual UserRewardGiftShippingStatus ShippingStatus { get; set; }
     }
 }

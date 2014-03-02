@@ -60,11 +60,11 @@
         <EntityTypeShape EntityType="MainModel.UserRewardGiftShippingStatus" Width="2.5" PointX="7" PointY="19.375" />
         <EntityTypeShape EntityType="MainModel.OAuthCredential" Width="2.25" PointX="3.5" PointY="11.875" />
         <AssociationConnector Association="MainModel.OAuthCredentialUser" />
-        <EntityTypeShape EntityType="MainModel.UserDataHourlyDistanceView" Width="2.25" PointX="0.75" PointY="0.75" />
-        <EntityTypeShape EntityType="MainModel.UserDataHourlyStepsView" Width="2.25" PointX="0.75" PointY="2.75" />
-        <EntityTypeShape EntityType="MainModel.UserDataTotalDistanceView" Width="2.25" PointX="0.75" PointY="6.625" />
-        <EntityTypeShape EntityType="MainModel.UserDataTotalStepsView" Width="2.25" PointX="0.75" PointY="4.75" />
-        <AssociationConnector Association="MainModel.UserRewardGiftShippingStatusUserRewardGiftClaimed" />
+        <EntityTypeShape EntityType="MainModel.UserDataHourlyDistanceView" Width="2.375" PointX="0.75" PointY="0.5" />
+        <EntityTypeShape EntityType="MainModel.UserDataHourlyStepsView" Width="2.375" PointX="0.75" PointY="2.625" />
+        <EntityTypeShape EntityType="MainModel.UserDataTotalDistanceView" Width="2.375" PointX="0.75" PointY="4.625" />
+        <EntityTypeShape EntityType="MainModel.UserDataTotalStepsView" Width="2.375" PointX="0.75" PointY="6.75" />
+        <AssociationConnector Association="MainModel.FK_UserRewardGiftShippingStatusUserRewardGiftClaimed" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
