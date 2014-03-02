@@ -1892,7 +1892,6 @@
         <EntityType Name="UserDataHourlyStepsView">
           <Key>
             <PropertyRef Name="User_Guid" />
-            <PropertyRef Name="Activity" />
           </Key>
           <Property Name="User_Guid" Type="Guid" Nullable="false" />
           <Property Name="Activity" Type="Int16" Nullable="false" />
@@ -1911,7 +1910,6 @@
         <EntityType Name="UserDataTotalStepsView">
           <Key>
             <PropertyRef Name="User_Guid" />
-            <PropertyRef Name="Activity" />
           </Key>
           <Property Name="User_Guid" Type="Guid" Nullable="false" />
           <Property Name="Activity" Type="Int16" Nullable="false" />
