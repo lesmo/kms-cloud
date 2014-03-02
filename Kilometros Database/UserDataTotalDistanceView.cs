@@ -15,9 +15,9 @@ namespace KilometrosDatabase
     public partial class UserDataTotalDistanceView
     {
         public System.Guid User_Guid { get; set; }
-        public Nullable<System.DateTime> Timestamp { get; set; }
-        public Nullable<long> RunningDistance { get; set; }
-        public Nullable<long> WalkingDistance { get; set; }
-        public Nullable<int> TotalDistance { get; set; }
+        public System.DateTime Timestamp { get; set; }
+        public long RunningDistance { get; set; }
+        public long WalkingDistance { get; set; }
+        public int TotalDistance { get; set; }
     }
 }

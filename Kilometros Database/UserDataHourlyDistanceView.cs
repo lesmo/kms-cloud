@@ -16,8 +16,8 @@ namespace KilometrosDatabase
     {
         public System.Guid User_Guid { get; set; }
         public Nullable<System.DateTime> Timestamp { get; set; }
-        public Nullable<int> RunningDistance { get; set; }
-        public Nullable<int> WalkingDistance { get; set; }
-        public Nullable<int> TotalDistance { get; set; }
+        public int RunningDistance { get; set; }
+        public int WalkingDistance { get; set; }
+        public int TotalDistance { get; set; }
     }
 }

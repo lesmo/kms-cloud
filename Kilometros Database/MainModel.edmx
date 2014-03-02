@@ -1927,9 +1927,9 @@ FROM [dbo].[UserDataTotalStepsView] AS [UserDataTotalStepsView]</DefiningQuery>
           </Key>
           <Property Name="User_Guid" Type="Guid" Nullable="false" />
           <Property Name="Timestamp" Type="DateTime" Precision="3" />
-          <Property Name="RunningDistance" Type="Int32" />
-          <Property Name="WalkingDistance" Type="Int32" />
-          <Property Name="TotalDistance" Type="Int32" />
+          <Property Name="RunningDistance" Type="Int32" Nullable="false" />
+          <Property Name="WalkingDistance" Type="Int32" Nullable="false" />
+          <Property Name="TotalDistance" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="UserDataHourlyStepsView">
           <Key>
@@ -1938,18 +1938,18 @@ FROM [dbo].[UserDataTotalStepsView] AS [UserDataTotalStepsView]</DefiningQuery>
           </Key>
           <Property Name="User_Guid" Type="Guid" Nullable="false" />
           <Property Name="Activity" Type="Int16" Nullable="false" />
-          <Property Name="Timestamp" Type="DateTime" Precision="3" />
-          <Property Name="TotalSteps" Type="Int32" />
+          <Property Name="Timestamp" Type="DateTime" Precision="3" Nullable="false" />
+          <Property Name="TotalSteps" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="UserDataTotalDistanceView">
           <Key>
             <PropertyRef Name="User_Guid" />
           </Key>
           <Property Name="User_Guid" Type="Guid" Nullable="false" />
-          <Property Name="Timestamp" Type="DateTime" Precision="3" />
-          <Property Name="RunningDistance" Type="Int64" />
-          <Property Name="WalkingDistance" Type="Int64" />
-          <Property Name="TotalDistance" Type="Int32" />
+          <Property Name="Timestamp" Type="DateTime" Precision="3" Nullable="false" />
+          <Property Name="RunningDistance" Type="Int64" Nullable="false" />
+          <Property Name="WalkingDistance" Type="Int64" Nullable="false" />
+          <Property Name="TotalDistance" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="UserDataTotalStepsView">
           <Key>
@@ -1958,8 +1958,8 @@ FROM [dbo].[UserDataTotalStepsView] AS [UserDataTotalStepsView]</DefiningQuery>
           </Key>
           <Property Name="User_Guid" Type="Guid" Nullable="false" />
           <Property Name="Activity" Type="Int16" Nullable="false" />
-          <Property Name="Timestamp" Type="DateTime" Precision="3" />
-          <Property Name="TotalSteps" Type="Int64" />
+          <Property Name="Timestamp" Type="DateTime" Precision="3" Nullable="false" />
+          <Property Name="TotalSteps" Type="Int64" Nullable="false" />
         </EntityType>
         <Association Name="FK_UserRewardGiftShippingStatusUserRewardGiftClaimed">
           <End Type="MainModel.UserRewardGiftClaimed" Role="UserRewardGiftClaimed" Multiplicity="1" />
