@@ -329,5 +329,59 @@ namespace KilometrosDatabase.Abstraction {
         }
         private GenericRepository<TipGlobalization> _tipGlobalization = null;
         #endregion
+
+        #region Data Views
+        /// <summary>
+        /// Almacén de Distancia por Hora
+        /// </summary>
+        public GenericRepository<UserDataHourlyDistanceView> UserDataHourlyDistanceView {
+            get {
+                if ( this._userDataHourlyDistanceView == null )
+                    this._userDataHourlyDistanceView = new GenericRepository<UserDataHourlyDistanceView>(this._context);
+
+                return this._userDataHourlyDistanceView;
+            }
+        }
+        private GenericRepository<UserDataHourlyDistanceView> _userDataHourlyDistanceView = null;
+
+        /// <summary>
+        /// Almacén de Pasos por Hora
+        /// </summary>
+        public GenericRepository<UserDataHourlyStepsView> UserDataHourlyStepsView {
+            get {
+                if ( this._userDataHourlyStepsView == null )
+                    this._userDataHourlyStepsView = new GenericRepository<UserDataHourlyStepsView>(this._context);
+
+                return this._userDataHourlyStepsView;
+            }
+        }
+        private GenericRepository<UserDataHourlyStepsView> _userDataHourlyStepsView = null;
+
+        /// <summary>
+        /// Almacén de Distancia Total
+        /// </summary>
+        public GenericRepository<UserDataTotalDistanceView> UserDataTotalStepsView {
+            get {
+                if ( this._userDataTotalDistanceView == null )
+                    this._userDataTotalDistanceView = new GenericRepository<UserDataTotalDistanceView>(this._context);
+
+                return this._userDataTotalDistanceView;
+            }
+        }
+        private GenericRepository<UserDataTotalDistanceView> _userDataTotalDistanceView = null;
+
+        /// <summary>
+        /// Almacén de Total de Pasos
+        /// </summary>
+        public GenericRepository<UserDataTotalStepsView> UserDataTotalStepsView {
+            get {
+                if ( this._userDataTotalStepsView == null )
+                    this._userDataTotalStepsView = new GenericRepository<UserDataTotalStepsView>(this._context);
+
+                return this._userDataTotalStepsView;
+            }
+        }
+        private GenericRepository<UserDataTotalStepsView> _userDataTotalStepsView = null;
+        #endregion
     }
 }
