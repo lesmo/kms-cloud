@@ -10,15 +10,11 @@
 namespace KilometrosDatabase
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class Data
+    public enum DataActivity : short
     {
-        public long Id { get; set; }
-        public System.DateTime Timestamp { get; set; }
-        public int Steps { get; set; }
-        public DataActivity Activity { get; set; }
-    
-        public virtual User User { get; set; }
+        Walking = 1,
+        Running = 2,
+        Sleep = 3
     }
 }

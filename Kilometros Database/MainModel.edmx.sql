@@ -2,13 +2,13 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 02/28/2014 19:09:39
+-- Date Created: 03/02/2014 14:45:56
 -- Generated from EDMX file: F:\Sharp Dynamics\Kilometros\Kilometros Database\MainModel.edmx
 -- --------------------------------------------------
 
 SET QUOTED_IDENTIFIER OFF;
 GO
-USE [KmsCloud];
+USE [KilometrosDatabase];
 GO
 IF SCHEMA_ID(N'dbo') IS NULL EXECUTE(N'CREATE SCHEMA [dbo]');
 GO
@@ -17,29 +17,41 @@ GO
 -- Dropping existing FOREIGN KEY constraints
 -- --------------------------------------------------
 
+IF OBJECT_ID(N'[dbo].[FK_ApiKeyHistory]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[ApiKeySet] DROP CONSTRAINT [FK_ApiKeyHistory];
+GO
 IF OBJECT_ID(N'[dbo].[FK_ApiKeyToken]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[TokenSet] DROP CONSTRAINT [FK_ApiKeyToken];
 GO
-IF OBJECT_ID(N'[dbo].[FK_UserToken]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[TokenSet] DROP CONSTRAINT [FK_UserToken];
+IF OBJECT_ID(N'[dbo].[FK_ContactInfoUser]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[ContactInfoSet] DROP CONSTRAINT [FK_ContactInfoUser];
 GO
-IF OBJECT_ID(N'[dbo].[FK_TipCategoryTipCategoryGlobalization]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[IGlobalizationSet_TipCategoryGlobalization] DROP CONSTRAINT [FK_TipCategoryTipCategoryGlobalization];
+IF OBJECT_ID(N'[dbo].[FK_MotionLevelGlobalization_inherits_IGlobalization]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[IGlobalizationSet_MotionLevelGlobalization] DROP CONSTRAINT [FK_MotionLevelGlobalization_inherits_IGlobalization];
 GO
-IF OBJECT_ID(N'[dbo].[FK_TipCategoryTip]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[TipSet] DROP CONSTRAINT [FK_TipCategoryTip];
+IF OBJECT_ID(N'[dbo].[FK_OAuthCredentialUser]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[OAuthCredentialSet] DROP CONSTRAINT [FK_OAuthCredentialUser];
 GO
-IF OBJECT_ID(N'[dbo].[FK_TipTipGlobalization]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[IGlobalizationSet_TipGlobalization] DROP CONSTRAINT [FK_TipTipGlobalization];
+IF OBJECT_ID(N'[dbo].[FK_RegionRegionSubdivision]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[RegionSubdivisionSet] DROP CONSTRAINT [FK_RegionRegionSubdivision];
 GO
-IF OBJECT_ID(N'[dbo].[FK_TipTipMotionLevel]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[MotionLevelSet] DROP CONSTRAINT [FK_TipTipMotionLevel];
+IF OBJECT_ID(N'[dbo].[FK_RewardGiftGlobalization_inherits_IGlobalization]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[IGlobalizationSet_RewardGiftGlobalization] DROP CONSTRAINT [FK_RewardGiftGlobalization_inherits_IGlobalization];
 GO
-IF OBJECT_ID(N'[dbo].[FK_UserUserBody]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[UserBodySet] DROP CONSTRAINT [FK_UserUserBody];
+IF OBJECT_ID(N'[dbo].[FK_RewardGiftPicture_inherits_IPicture]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[IPictureSet_RewardGiftPicture] DROP CONSTRAINT [FK_RewardGiftPicture_inherits_IPicture];
 GO
-IF OBJECT_ID(N'[dbo].[FK_TipMotionLevelTipMotionLevelGlobalization]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[IGlobalizationSet_MotionLevelGlobalization] DROP CONSTRAINT [FK_TipMotionLevelTipMotionLevelGlobalization];
+IF OBJECT_ID(N'[dbo].[FK_RewardGiftRewardGiftGlobalization]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[IGlobalizationSet_RewardGiftGlobalization] DROP CONSTRAINT [FK_RewardGiftRewardGiftGlobalization];
+GO
+IF OBJECT_ID(N'[dbo].[FK_RewardGiftRewardGiftPictures]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[IPictureSet_RewardGiftPicture] DROP CONSTRAINT [FK_RewardGiftRewardGiftPictures];
+GO
+IF OBJECT_ID(N'[dbo].[FK_RewardGiftUserRewardGiftClaimed]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[IPictureSet_UserRewardGiftClaimed] DROP CONSTRAINT [FK_RewardGiftUserRewardGiftClaimed];
+GO
+IF OBJECT_ID(N'[dbo].[FK_RewardGlobalization_inherits_IGlobalization]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[IGlobalizationSet_RewardGlobalization] DROP CONSTRAINT [FK_RewardGlobalization_inherits_IGlobalization];
 GO
 IF OBJECT_ID(N'[dbo].[FK_RewardRewardGift]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[RewardGiftSet] DROP CONSTRAINT [FK_RewardRewardGift];
@@ -50,151 +62,94 @@ GO
 IF OBJECT_ID(N'[dbo].[FK_RewardRewardRegionalization]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[RewardRegionalizationSet] DROP CONSTRAINT [FK_RewardRewardRegionalization];
 GO
-IF OBJECT_ID(N'[dbo].[FK_RewardGiftRewardGiftGlobalization]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[IGlobalizationSet_RewardGiftGlobalization] DROP CONSTRAINT [FK_RewardGiftRewardGiftGlobalization];
-GO
-IF OBJECT_ID(N'[dbo].[FK_RewardGiftUserRewardGiftClaimed]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[IPictureSet_UserRewardGiftClaimed] DROP CONSTRAINT [FK_RewardGiftUserRewardGiftClaimed];
-GO
-IF OBJECT_ID(N'[dbo].[FK_UserRewardGiftClaimedUser]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[IPictureSet_UserRewardGiftClaimed] DROP CONSTRAINT [FK_UserRewardGiftClaimedUser];
-GO
-IF OBJECT_ID(N'[dbo].[FK_UserUserMotionLevelHistory]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[UserMotionLevelHistorySet] DROP CONSTRAINT [FK_UserUserMotionLevelHistory];
-GO
-IF OBJECT_ID(N'[dbo].[FK_UserMotionLevelHistoryMotionLevel]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[UserMotionLevelHistorySet] DROP CONSTRAINT [FK_UserMotionLevelHistoryMotionLevel];
-GO
-IF OBJECT_ID(N'[dbo].[FK_UserUserEarnedReward]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[UserEarnedRewardSet] DROP CONSTRAINT [FK_UserUserEarnedReward];
-GO
-IF OBJECT_ID(N'[dbo].[FK_UserEarnedRewardReward]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[UserEarnedRewardSet] DROP CONSTRAINT [FK_UserEarnedRewardReward];
-GO
-IF OBJECT_ID(N'[dbo].[FK_ContactInfoUser]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[ContactInfoSet] DROP CONSTRAINT [FK_ContactInfoUser];
-GO
-IF OBJECT_ID(N'[dbo].[FK_UserShippingInformation]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[ShippingInformationSet] DROP CONSTRAINT [FK_UserShippingInformation];
-GO
-IF OBJECT_ID(N'[dbo].[FK_RegionRegionSubdivision]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[RegionSubdivisionSet] DROP CONSTRAINT [FK_RegionRegionSubdivision];
-GO
-IF OBJECT_ID(N'[dbo].[FK_ApiKeyHistory]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[ApiKeySet] DROP CONSTRAINT [FK_ApiKeyHistory];
-GO
-IF OBJECT_ID(N'[dbo].[FK_UserData]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[DataSet] DROP CONSTRAINT [FK_UserData];
-GO
-IF OBJECT_ID(N'[dbo].[FK_UserTipHistoryUser]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[UserTipHistorySet] DROP CONSTRAINT [FK_UserTipHistoryUser];
-GO
-IF OBJECT_ID(N'[dbo].[FK_UserTipHistoryTip]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[UserTipHistorySet] DROP CONSTRAINT [FK_UserTipHistoryTip];
-GO
-IF OBJECT_ID(N'[dbo].[FK_RewardGiftRewardGiftPictures]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[IPictureSet_RewardGiftPicture] DROP CONSTRAINT [FK_RewardGiftRewardGiftPictures];
-GO
-IF OBJECT_ID(N'[dbo].[FK_UserRewardGiftShippingStatusUserRewardGiftClaimed]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[UserRewardGiftShippingStatusSet] DROP CONSTRAINT [FK_UserRewardGiftShippingStatusUserRewardGiftClaimed];
-GO
-IF OBJECT_ID(N'[dbo].[FK_OAuthCredentialUser]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[OAuthCredentialSet] DROP CONSTRAINT [FK_OAuthCredentialUser];
-GO
 IF OBJECT_ID(N'[dbo].[FK_TipCategory_inherits_IPicture]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[IPictureSet_TipCategory] DROP CONSTRAINT [FK_TipCategory_inherits_IPicture];
 GO
 IF OBJECT_ID(N'[dbo].[FK_TipCategoryGlobalization_inherits_IGlobalization]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[IGlobalizationSet_TipCategoryGlobalization] DROP CONSTRAINT [FK_TipCategoryGlobalization_inherits_IGlobalization];
 GO
+IF OBJECT_ID(N'[dbo].[FK_TipCategoryTip]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[TipSet] DROP CONSTRAINT [FK_TipCategoryTip];
+GO
+IF OBJECT_ID(N'[dbo].[FK_TipCategoryTipCategoryGlobalization]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[IGlobalizationSet_TipCategoryGlobalization] DROP CONSTRAINT [FK_TipCategoryTipCategoryGlobalization];
+GO
 IF OBJECT_ID(N'[dbo].[FK_TipGlobalization_inherits_IGlobalization]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[IGlobalizationSet_TipGlobalization] DROP CONSTRAINT [FK_TipGlobalization_inherits_IGlobalization];
 GO
-IF OBJECT_ID(N'[dbo].[FK_MotionLevelGlobalization_inherits_IGlobalization]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[IGlobalizationSet_MotionLevelGlobalization] DROP CONSTRAINT [FK_MotionLevelGlobalization_inherits_IGlobalization];
+IF OBJECT_ID(N'[dbo].[FK_TipMotionLevelTipMotionLevelGlobalization]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[IGlobalizationSet_MotionLevelGlobalization] DROP CONSTRAINT [FK_TipMotionLevelTipMotionLevelGlobalization];
 GO
-IF OBJECT_ID(N'[dbo].[FK_RewardGlobalization_inherits_IGlobalization]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[IGlobalizationSet_RewardGlobalization] DROP CONSTRAINT [FK_RewardGlobalization_inherits_IGlobalization];
+IF OBJECT_ID(N'[dbo].[FK_TipTipGlobalization]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[IGlobalizationSet_TipGlobalization] DROP CONSTRAINT [FK_TipTipGlobalization];
 GO
-IF OBJECT_ID(N'[dbo].[FK_RewardGiftGlobalization_inherits_IGlobalization]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[IGlobalizationSet_RewardGiftGlobalization] DROP CONSTRAINT [FK_RewardGiftGlobalization_inherits_IGlobalization];
+IF OBJECT_ID(N'[dbo].[FK_TipTipMotionLevel]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[MotionLevelSet] DROP CONSTRAINT [FK_TipTipMotionLevel];
+GO
+IF OBJECT_ID(N'[dbo].[FK_UserData]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[DataSet] DROP CONSTRAINT [FK_UserData];
+GO
+IF OBJECT_ID(N'[dbo].[FK_UserEarnedRewardReward]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[UserEarnedRewardSet] DROP CONSTRAINT [FK_UserEarnedRewardReward];
+GO
+IF OBJECT_ID(N'[dbo].[FK_UserMotionLevelHistoryMotionLevel]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[UserMotionLevelHistorySet] DROP CONSTRAINT [FK_UserMotionLevelHistoryMotionLevel];
 GO
 IF OBJECT_ID(N'[dbo].[FK_UserRewardGiftClaimed_inherits_IPicture]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[IPictureSet_UserRewardGiftClaimed] DROP CONSTRAINT [FK_UserRewardGiftClaimed_inherits_IPicture];
 GO
-IF OBJECT_ID(N'[dbo].[FK_RewardGiftPicture_inherits_IPicture]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[IPictureSet_RewardGiftPicture] DROP CONSTRAINT [FK_RewardGiftPicture_inherits_IPicture];
+IF OBJECT_ID(N'[dbo].[FK_UserRewardGiftClaimedUser]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[IPictureSet_UserRewardGiftClaimed] DROP CONSTRAINT [FK_UserRewardGiftClaimedUser];
+GO
+IF OBJECT_ID(N'[dbo].[FK_UserRewardGiftShippingStatusUserRewardGiftClaimed]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[UserRewardGiftShippingStatusSet] DROP CONSTRAINT [FK_UserRewardGiftShippingStatusUserRewardGiftClaimed];
+GO
+IF OBJECT_ID(N'[dbo].[FK_UserShippingInformation]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[ShippingInformationSet] DROP CONSTRAINT [FK_UserShippingInformation];
+GO
+IF OBJECT_ID(N'[dbo].[FK_UserTipHistoryTip]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[UserTipHistorySet] DROP CONSTRAINT [FK_UserTipHistoryTip];
+GO
+IF OBJECT_ID(N'[dbo].[FK_UserTipHistoryUser]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[UserTipHistorySet] DROP CONSTRAINT [FK_UserTipHistoryUser];
+GO
+IF OBJECT_ID(N'[dbo].[FK_UserToken]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[TokenSet] DROP CONSTRAINT [FK_UserToken];
+GO
+IF OBJECT_ID(N'[dbo].[FK_UserUserBody]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[UserBodySet] DROP CONSTRAINT [FK_UserUserBody];
+GO
+IF OBJECT_ID(N'[dbo].[FK_UserUserEarnedReward]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[UserEarnedRewardSet] DROP CONSTRAINT [FK_UserUserEarnedReward];
+GO
+IF OBJECT_ID(N'[dbo].[FK_UserUserMotionLevelHistory]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[UserMotionLevelHistorySet] DROP CONSTRAINT [FK_UserUserMotionLevelHistory];
 GO
 
 -- --------------------------------------------------
 -- Dropping existing tables
 -- --------------------------------------------------
 
-IF OBJECT_ID(N'[dbo].[UserSet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[UserSet];
-GO
-IF OBJECT_ID(N'[dbo].[TokenSet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[TokenSet];
-GO
 IF OBJECT_ID(N'[dbo].[ApiKeySet]', 'U') IS NOT NULL
     DROP TABLE [dbo].[ApiKeySet];
-GO
-IF OBJECT_ID(N'[dbo].[TipSet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[TipSet];
-GO
-IF OBJECT_ID(N'[dbo].[MotionLevelSet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[MotionLevelSet];
-GO
-IF OBJECT_ID(N'[dbo].[DataSet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[DataSet];
-GO
-IF OBJECT_ID(N'[dbo].[UserBodySet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[UserBodySet];
-GO
-IF OBJECT_ID(N'[dbo].[RewardSet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[RewardSet];
-GO
-IF OBJECT_ID(N'[dbo].[RewardGiftSet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[RewardGiftSet];
-GO
-IF OBJECT_ID(N'[dbo].[RewardRegionalizationSet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[RewardRegionalizationSet];
-GO
-IF OBJECT_ID(N'[dbo].[UserMotionLevelHistorySet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[UserMotionLevelHistorySet];
-GO
-IF OBJECT_ID(N'[dbo].[UserEarnedRewardSet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[UserEarnedRewardSet];
 GO
 IF OBJECT_ID(N'[dbo].[ContactInfoSet]', 'U') IS NOT NULL
     DROP TABLE [dbo].[ContactInfoSet];
 GO
-IF OBJECT_ID(N'[dbo].[ShippingInformationSet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[ShippingInformationSet];
-GO
-IF OBJECT_ID(N'[dbo].[RegionSet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[RegionSet];
-GO
-IF OBJECT_ID(N'[dbo].[RegionSubdivisionSet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[RegionSubdivisionSet];
-GO
-IF OBJECT_ID(N'[dbo].[UserTipHistorySet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[UserTipHistorySet];
+IF OBJECT_ID(N'[dbo].[DataSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[DataSet];
 GO
 IF OBJECT_ID(N'[dbo].[IGlobalizationSet]', 'U') IS NOT NULL
     DROP TABLE [dbo].[IGlobalizationSet];
 GO
-IF OBJECT_ID(N'[dbo].[IPictureSet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[IPictureSet];
+IF OBJECT_ID(N'[dbo].[IGlobalizationSet_MotionLevelGlobalization]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[IGlobalizationSet_MotionLevelGlobalization];
 GO
-IF OBJECT_ID(N'[dbo].[UserRewardGiftShippingStatusSet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[UserRewardGiftShippingStatusSet];
+IF OBJECT_ID(N'[dbo].[IGlobalizationSet_RewardGiftGlobalization]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[IGlobalizationSet_RewardGiftGlobalization];
 GO
-IF OBJECT_ID(N'[dbo].[OAuthCredentialSet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[OAuthCredentialSet];
-GO
-IF OBJECT_ID(N'[dbo].[IPictureSet_TipCategory]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[IPictureSet_TipCategory];
+IF OBJECT_ID(N'[dbo].[IGlobalizationSet_RewardGlobalization]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[IGlobalizationSet_RewardGlobalization];
 GO
 IF OBJECT_ID(N'[dbo].[IGlobalizationSet_TipCategoryGlobalization]', 'U') IS NOT NULL
     DROP TABLE [dbo].[IGlobalizationSet_TipCategoryGlobalization];
@@ -202,20 +157,77 @@ GO
 IF OBJECT_ID(N'[dbo].[IGlobalizationSet_TipGlobalization]', 'U') IS NOT NULL
     DROP TABLE [dbo].[IGlobalizationSet_TipGlobalization];
 GO
-IF OBJECT_ID(N'[dbo].[IGlobalizationSet_MotionLevelGlobalization]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[IGlobalizationSet_MotionLevelGlobalization];
+IF OBJECT_ID(N'[dbo].[IPictureSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[IPictureSet];
 GO
-IF OBJECT_ID(N'[dbo].[IGlobalizationSet_RewardGlobalization]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[IGlobalizationSet_RewardGlobalization];
+IF OBJECT_ID(N'[dbo].[IPictureSet_RewardGiftPicture]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[IPictureSet_RewardGiftPicture];
 GO
-IF OBJECT_ID(N'[dbo].[IGlobalizationSet_RewardGiftGlobalization]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[IGlobalizationSet_RewardGiftGlobalization];
+IF OBJECT_ID(N'[dbo].[IPictureSet_TipCategory]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[IPictureSet_TipCategory];
 GO
 IF OBJECT_ID(N'[dbo].[IPictureSet_UserRewardGiftClaimed]', 'U') IS NOT NULL
     DROP TABLE [dbo].[IPictureSet_UserRewardGiftClaimed];
 GO
-IF OBJECT_ID(N'[dbo].[IPictureSet_RewardGiftPicture]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[IPictureSet_RewardGiftPicture];
+IF OBJECT_ID(N'[dbo].[MotionLevelSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[MotionLevelSet];
+GO
+IF OBJECT_ID(N'[dbo].[OAuthCredentialSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[OAuthCredentialSet];
+GO
+IF OBJECT_ID(N'[dbo].[RegionSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[RegionSet];
+GO
+IF OBJECT_ID(N'[dbo].[RegionSubdivisionSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[RegionSubdivisionSet];
+GO
+IF OBJECT_ID(N'[dbo].[RewardGiftSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[RewardGiftSet];
+GO
+IF OBJECT_ID(N'[dbo].[RewardRegionalizationSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[RewardRegionalizationSet];
+GO
+IF OBJECT_ID(N'[dbo].[RewardSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[RewardSet];
+GO
+IF OBJECT_ID(N'[dbo].[ShippingInformationSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[ShippingInformationSet];
+GO
+IF OBJECT_ID(N'[dbo].[TipSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[TipSet];
+GO
+IF OBJECT_ID(N'[dbo].[TokenSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[TokenSet];
+GO
+IF OBJECT_ID(N'[dbo].[UserBodySet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[UserBodySet];
+GO
+IF OBJECT_ID(N'[dbo].[UserEarnedRewardSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[UserEarnedRewardSet];
+GO
+IF OBJECT_ID(N'[dbo].[UserMotionLevelHistorySet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[UserMotionLevelHistorySet];
+GO
+IF OBJECT_ID(N'[dbo].[UserRewardGiftShippingStatusSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[UserRewardGiftShippingStatusSet];
+GO
+IF OBJECT_ID(N'[dbo].[UserSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[UserSet];
+GO
+IF OBJECT_ID(N'[dbo].[UserTipHistorySet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[UserTipHistorySet];
+GO
+IF OBJECT_ID(N'[MainModelStoreContainer].[UserDataHourlyDistanceView]', 'U') IS NOT NULL
+    DROP TABLE [MainModelStoreContainer].[UserDataHourlyDistanceView];
+GO
+IF OBJECT_ID(N'[MainModelStoreContainer].[UserDataHourlyStepsView]', 'U') IS NOT NULL
+    DROP TABLE [MainModelStoreContainer].[UserDataHourlyStepsView];
+GO
+IF OBJECT_ID(N'[MainModelStoreContainer].[UserDataTotalDistanceView]', 'U') IS NOT NULL
+    DROP TABLE [MainModelStoreContainer].[UserDataTotalDistanceView];
+GO
+IF OBJECT_ID(N'[MainModelStoreContainer].[UserDataTotalStepsView]', 'U') IS NOT NULL
+    DROP TABLE [MainModelStoreContainer].[UserDataTotalStepsView];
 GO
 
 -- --------------------------------------------------
@@ -282,10 +294,10 @@ GO
 
 -- Creating table 'DataSet'
 CREATE TABLE [dbo].[DataSet] (
-    [Id] nvarchar(max)  NOT NULL,
+    [Id] bigint IDENTITY(1,1) NOT NULL,
     [Timestamp] datetime  NOT NULL,
     [Steps] int  NOT NULL,
-    [Distance] int IDENTITY(1,1) NULL,
+    [Activity] smallint  NOT NULL,
     [User_Guid] uniqueidentifier  NOT NULL
 );
 GO
@@ -298,7 +310,7 @@ CREATE TABLE [dbo].[UserBodySet] (
     [Weight] int  NOT NULL,
     [Sex] nchar(1)  NOT NULL,
     [StrideLengthWalking] nvarchar(max)  NOT NULL,
-    [StrideLenghtRunning] nvarchar(max)  NOT NULL,
+    [StrideLengthRunning] nvarchar(max)  NOT NULL,
     [LastEditDate] datetime  NOT NULL,
     [User_Guid] uniqueidentifier  NOT NULL
 );
@@ -435,6 +447,41 @@ CREATE TABLE [dbo].[OAuthCredentialSet] (
     [Token] nvarchar(max)  NOT NULL,
     [IsInvalid] bit  NOT NULL,
     [User_Guid] uniqueidentifier  NOT NULL
+);
+GO
+
+-- Creating table 'UserDataHourlyDistanceView'
+CREATE TABLE [dbo].[UserDataHourlyDistanceView] (
+    [User_Guid] uniqueidentifier  NOT NULL,
+    [RunningDistance] int  NULL,
+    [WalkingDistance] int  NULL,
+    [TotalDistance] int  NULL
+);
+GO
+
+-- Creating table 'UserDataHourlyStepsView'
+CREATE TABLE [dbo].[UserDataHourlyStepsView] (
+    [User_Guid] uniqueidentifier  NOT NULL,
+    [Activity] smallint  NOT NULL,
+    [Timestamp] datetime  NULL,
+    [TotalSteps] int  NULL
+);
+GO
+
+-- Creating table 'UserDataTotalDistanceView'
+CREATE TABLE [dbo].[UserDataTotalDistanceView] (
+    [User_Guid] uniqueidentifier  NOT NULL,
+    [RunningDistance] int  NULL,
+    [WalkingDistance] int  NULL,
+    [TotalDistance] int  NULL
+);
+GO
+
+-- Creating table 'UserDataTotalStepsView'
+CREATE TABLE [dbo].[UserDataTotalStepsView] (
+    [User_Guid] uniqueidentifier  NOT NULL,
+    [Activity] smallint  NOT NULL,
+    [TotalSteps] int  NULL
 );
 GO
 
@@ -636,6 +683,30 @@ GO
 ALTER TABLE [dbo].[OAuthCredentialSet]
 ADD CONSTRAINT [PK_OAuthCredentialSet]
     PRIMARY KEY CLUSTERED ([Id] ASC);
+GO
+
+-- Creating primary key on [User_Guid] in table 'UserDataHourlyDistanceView'
+ALTER TABLE [dbo].[UserDataHourlyDistanceView]
+ADD CONSTRAINT [PK_UserDataHourlyDistanceView]
+    PRIMARY KEY CLUSTERED ([User_Guid] ASC);
+GO
+
+-- Creating primary key on [User_Guid], [Activity] in table 'UserDataHourlyStepsView'
+ALTER TABLE [dbo].[UserDataHourlyStepsView]
+ADD CONSTRAINT [PK_UserDataHourlyStepsView]
+    PRIMARY KEY CLUSTERED ([User_Guid], [Activity] ASC);
+GO
+
+-- Creating primary key on [User_Guid] in table 'UserDataTotalDistanceView'
+ALTER TABLE [dbo].[UserDataTotalDistanceView]
+ADD CONSTRAINT [PK_UserDataTotalDistanceView]
+    PRIMARY KEY CLUSTERED ([User_Guid] ASC);
+GO
+
+-- Creating primary key on [User_Guid], [Activity] in table 'UserDataTotalStepsView'
+ALTER TABLE [dbo].[UserDataTotalStepsView]
+ADD CONSTRAINT [PK_UserDataTotalStepsView]
+    PRIMARY KEY CLUSTERED ([User_Guid], [Activity] ASC);
 GO
 
 -- Creating primary key on [Guid] in table 'IPictureSet_TipCategory'

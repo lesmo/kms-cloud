@@ -27,6 +27,10 @@
     <EntitySet Name="IPictureSet" EntityType="MainModel.Store.IPictureSet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="UserRewardGiftShippingStatusSet" EntityType="MainModel.Store.UserRewardGiftShippingStatusSet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="OAuthCredentialSet" EntityType="MainModel.Store.OAuthCredentialSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="UserDataHourlyDistanceView" EntityType="MainModel.Store.UserDataHourlyDistanceView" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="UserDataHourlyStepsView" EntityType="MainModel.Store.UserDataHourlyStepsView" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="UserDataTotalDistanceView" EntityType="MainModel.Store.UserDataTotalDistanceView" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="UserDataTotalStepsView" EntityType="MainModel.Store.UserDataTotalStepsView" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="IPictureSet_TipCategory" EntityType="MainModel.Store.IPictureSet_TipCategory" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="IGlobalizationSet_TipCategoryGlobalization" EntityType="MainModel.Store.IGlobalizationSet_TipCategoryGlobalization" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="IGlobalizationSet_TipGlobalization" EntityType="MainModel.Store.IGlobalizationSet_TipGlobalization" store:Type="Tables" Schema="dbo" />
@@ -242,10 +246,10 @@
     <Key>
       <PropertyRef Name="Id" />
     </Key>
-    <Property Name="Id" Type="nvarchar(max)" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Timestamp" Type="datetime" Nullable="false" />
     <Property Name="Steps" Type="int" Nullable="false" />
-    <Property Name="Distance" Type="int" StoreGeneratedPattern="Identity" Nullable="true" />
+    <Property Name="Activity" Type="smallint" Nullable="false" />
     <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
   </EntityType>
   <EntityType Name="UserBodySet">
@@ -258,7 +262,7 @@
     <Property Name="Weight" Type="int" Nullable="false" />
     <Property Name="Sex" Type="nchar" Nullable="false" MaxLength="1" />
     <Property Name="StrideLengthWalking" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="StrideLenghtRunning" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="StrideLengthRunning" Type="nvarchar(max)" Nullable="false" />
     <Property Name="LastEditDate" Type="datetime" Nullable="false" />
     <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
   </EntityType>
@@ -395,6 +399,43 @@
     <Property Name="Token" Type="nvarchar(max)" Nullable="false" />
     <Property Name="IsInvalid" Type="bit" Nullable="false" DefaultValue="false" />
     <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
+  </EntityType>
+  <EntityType Name="UserDataHourlyDistanceView">
+    <Key>
+      <PropertyRef Name="User_Guid" />
+    </Key>
+    <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="RunningDistance" Type="int" Nullable="true" />
+    <Property Name="WalkingDistance" Type="int" Nullable="true" />
+    <Property Name="TotalDistance" Type="int" Nullable="true" />
+  </EntityType>
+  <EntityType Name="UserDataHourlyStepsView">
+    <Key>
+      <PropertyRef Name="User_Guid" />
+      <PropertyRef Name="Activity" />
+    </Key>
+    <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="Activity" Type="smallint" Nullable="false" />
+    <Property Name="Timestamp" Type="datetime" Nullable="true" />
+    <Property Name="TotalSteps" Type="int" Nullable="true" />
+  </EntityType>
+  <EntityType Name="UserDataTotalDistanceView">
+    <Key>
+      <PropertyRef Name="User_Guid" />
+    </Key>
+    <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="RunningDistance" Type="int" Nullable="true" />
+    <Property Name="WalkingDistance" Type="int" Nullable="true" />
+    <Property Name="TotalDistance" Type="int" Nullable="true" />
+  </EntityType>
+  <EntityType Name="UserDataTotalStepsView">
+    <Key>
+      <PropertyRef Name="User_Guid" />
+      <PropertyRef Name="Activity" />
+    </Key>
+    <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="Activity" Type="smallint" Nullable="false" />
+    <Property Name="TotalSteps" Type="int" Nullable="true" />
   </EntityType>
   <EntityType Name="IPictureSet_TipCategory">
     <Key>
@@ -1071,14 +1112,18 @@
             <End Role="RewardGiftPictures" EntitySet="IPictureSet" />
           </AssociationSet>
           <EntitySet Name="UserRewardGiftShippingStatusSet" EntityType="MainModel.UserRewardGiftShippingStatus" />
-          <AssociationSet Name="UserRewardGiftShippingStatusUserRewardGiftClaimed" Association="MainModel.UserRewardGiftShippingStatusUserRewardGiftClaimed">
-            <End Role="UserRewardGiftShippingStatus" EntitySet="UserRewardGiftShippingStatusSet" />
-            <End Role="UserRewardGiftClaimed" EntitySet="IPictureSet" />
-          </AssociationSet>
           <EntitySet Name="OAuthCredentialSet" EntityType="MainModel.OAuthCredential" />
           <AssociationSet Name="OAuthCredentialUser" Association="MainModel.OAuthCredentialUser">
             <End Role="OAuthCredential" EntitySet="OAuthCredentialSet" />
             <End Role="User" EntitySet="UserSet" />
+          </AssociationSet>
+          <EntitySet Name="UserDataHourlyDistanceView" EntityType="MainModel.UserDataHourlyDistanceView" />
+          <EntitySet Name="UserDataHourlyStepsView" EntityType="MainModel.UserDataHourlyStepsView" />
+          <EntitySet Name="UserDataTotalDistanceView" EntityType="MainModel.UserDataTotalDistanceView" />
+          <EntitySet Name="UserDataTotalStepsView" EntityType="MainModel.UserDataTotalStepsView" />
+          <AssociationSet Name="UserRewardGiftShippingStatusUserRewardGiftClaimed" Association="MainModel.UserRewardGiftShippingStatusUserRewardGiftClaimed">
+            <End Role="UserRewardGiftShippingStatus" EntitySet="UserRewardGiftShippingStatusSet" />
+            <End Role="UserRewardGiftClaimed" EntitySet="IPictureSet" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="User">
@@ -1093,17 +1138,17 @@
               <Summary>Guid que representa al Usuario.</Summary>
             </Documentation>
           </Property>
-          <Property Type="DateTime" Name="CreationDate" Nullable="false" cg:SetterAccess="Public" annotation:StoreGeneratedPattern="Identity" >
+          <Property Type="DateTime" Name="CreationDate" Nullable="false" cg:SetterAccess="Public" annotation:StoreGeneratedPattern="Identity" Precision="3" >
             <Documentation>
               <Summary>Fecha de Creación del Usuario</Summary>
             </Documentation>
           </Property>
-          <Property Type="String" Name="Email" Nullable="false" >
+          <Property Type="String" Name="Email" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" >
             <Documentation>
               <Summary>Email del Usuario (en minúsculas)</Summary>
             </Documentation>
           </Property>
-          <Property Type="Binary" Name="Password" Nullable="true" >
+          <Property Type="Binary" Name="Password" Nullable="true" MaxLength="Max" FixedLength="false" >
             <Documentation>
               <Summary>Contraseña del Usuario (SHA-256)</Summary>
               <LongDescription>El Hash SHA-256 se genera a partir de la cadena en codificación UTF-8, y se almacena en Byte[]</LongDescription>
@@ -1119,7 +1164,7 @@
               <Summary>Información de la Complexión Física del Usuario.</Summary>
             </Documentation>
           </NavigationProperty>
-          <Property Type="String" Name="RegionCode" Nullable="true" FixedLength="true" MaxLength="5" >
+          <Property Type="String" Name="RegionCode" Nullable="true" FixedLength="true" MaxLength="5" Unicode="true" >
             <Documentation>
               <Summary>Código de País/Región y Estado/Subdivisión según lo definido en el ISO-3166-2 (AA-AAA).</Summary>
             </Documentation>
@@ -1149,7 +1194,7 @@
               <Summary>Información de Envío del Usuario.</Summary>
             </Documentation>
           </NavigationProperty>
-          <Property Type="String" Name="PreferredCultureCode" Nullable="true" MaxLength="16" >
+          <Property Type="String" Name="PreferredCultureCode" Nullable="true" MaxLength="16" Unicode="true" FixedLength="false" >
             <Documentation>
               <Summary>Código de Cultura (Idioma) preferido por el Usuario</Summary>
             </Documentation>
@@ -1166,7 +1211,7 @@
           <Key>
             <PropertyRef Name="Guid" />
           </Key>
-          <Property Type="DateTime" Name="CreationDate" Nullable="false" annotation:StoreGeneratedPattern="Identity" >
+          <Property Type="DateTime" Name="CreationDate" Nullable="false" annotation:StoreGeneratedPattern="Identity" Precision="3" >
             <Documentation>
               <Summary>Fecha y Hora de Inicio de Sesión del Usuario.</Summary>
             </Documentation>
@@ -1181,7 +1226,7 @@
               <Summary>Usuario que generó éste Token.</Summary>
             </Documentation>
           </NavigationProperty>
-          <Property Type="DateTime" Name="ExpirationDate" Nullable="true" annotation:StoreGeneratedPattern="Identity" >
+          <Property Type="DateTime" Name="ExpirationDate" Nullable="true" annotation:StoreGeneratedPattern="Identity" Precision="3" >
             <Documentation>
               <Summary>Fecha de expiración de la Sesión.</Summary>
             </Documentation>
@@ -1191,7 +1236,7 @@
               <Summary>Ésto se utiliza para identificar la Sesión actual en todas las peticiones al Api.</Summary>
             </Documentation>
           </Property>
-          <Property Type="DateTime" Name="LastUseDate" Nullable="true" />
+          <Property Type="DateTime" Name="LastUseDate" Nullable="true" Precision="3" />
         </EntityType>
         <EntityType Name="ApiKey">
           <Documentation>
@@ -1201,18 +1246,18 @@
           <Key>
             <PropertyRef Name="Guid" />
           </Key>
-          <Property Type="DateTime" Name="CreationDate" Nullable="false" annotation:StoreGeneratedPattern="Identity" >
+          <Property Type="DateTime" Name="CreationDate" Nullable="false" annotation:StoreGeneratedPattern="Identity" Precision="3" >
             <Documentation>
               <Summary>Fecha de Creación del Api-Key</Summary>
             </Documentation>
           </Property>
-          <Property Type="String" Name="Platform" Nullable="false" Unicode="true" MaxLength="64" >
+          <Property Type="String" Name="Platform" Nullable="false" Unicode="true" MaxLength="64" FixedLength="false" >
             <Documentation>
               <Summary>Plataforma de operación del Api-Key.</Summary>
               <LongDescription>La plataforma es sólo con fines informativos e internos de operación, no sigue un estándar definido. Esto almacenaría valores como iPhone, iPad, etc.</LongDescription>
             </Documentation>
           </Property>
-          <Property Type="String" Name="Description" Nullable="true" MaxLength="64" Unicode="true" >
+          <Property Type="String" Name="Description" Nullable="true" MaxLength="64" Unicode="true" FixedLength="false" >
             <Documentation>
               <Summary>Descripción del Api-Key, no es obligatorio.</Summary>
               <LongDescription>Esto almacena detalles como "sólo para testing" o similares.</LongDescription>
@@ -1234,7 +1279,7 @@
               <LongDescription>Las operaciones criptográficas para generar un HMAC deben suponer cadenas en ASCII.</LongDescription>
             </Documentation>
           </Property>
-          <Property Type="String" Name="TokenUpgradeRequired" Nullable="false" >
+          <Property Type="String" Name="TokenUpgradeRequired" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" >
             <Documentation>
               <Summary>Si el Api-Key requiere que los Tokens generados con el se actualicen a una nueva versión.</Summary>
               <LongDescription>Cuando se actualiza una App se generará un nuevo Api-Key, y todos los Tokens actuales podrán utilizarse con el nuevo Api-Key sólo para actualizar el Token.</LongDescription>
@@ -1256,12 +1301,12 @@
               <Summary>Guid del Tip.</Summary>
             </Documentation>
           </Property>
-          <Property Type="DateTime" Name="CreationDate" Nullable="false" annotation:StoreGeneratedPattern="Identity" >
+          <Property Type="DateTime" Name="CreationDate" Nullable="false" annotation:StoreGeneratedPattern="Identity" Precision="3" >
             <Documentation>
               <Summary>Fecha de Creación del Tip.</Summary>
             </Documentation>
           </Property>
-          <Property Type="String" Name="DistanceTrigger" >
+          <Property Type="String" Name="DistanceTrigger" MaxLength="Max" Unicode="true" FixedLength="false" >
             <Documentation>
               <Summary>Distancia la que se lanzará el Tip al Usuario.</Summary>
             </Documentation>
@@ -1281,12 +1326,12 @@
               <Summary>Nivel de Actividad al que se le lanzarán éstos Tips.</Summary>
             </Documentation>
           </NavigationProperty>
-          <Property Type="String" Name="DaysTrigger" Nullable="false" >
+          <Property Type="String" Name="DaysTrigger" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" >
             <Documentation>
               <Summary>Días a los que se lanzará el Tip.</Summary>
             </Documentation>
           </Property>
-          <Property Type="String" Name="Source" Nullable="true" >
+          <Property Type="String" Name="Source" Nullable="true" MaxLength="Max" Unicode="true" FixedLength="false" >
             <Documentation>
               <Summary>Fuente del Tip.</Summary>
               <LongDescription>Las Fuentes de los Tips que estén disponibles en más de un Idioma deben dejar en blanco ésta fuente, y almacenar la fuente en el registro de las Cadenas de Traducción correspondiente.</LongDescription>
@@ -1344,8 +1389,8 @@
           <Documentation>
             <Summary>Cadenas de Traducción de las Categorías.</Summary>
           </Documentation>
-          <Property Type="String" Name="Name" Nullable="false" Unicode="true" />
-          <Property Type="String" Name="Description" Nullable="true" Unicode="true" >
+          <Property Type="String" Name="Name" Nullable="false" Unicode="true" MaxLength="Max" FixedLength="false" />
+          <Property Type="String" Name="Description" Nullable="true" Unicode="true" MaxLength="Max" FixedLength="false" >
             <Documentation>
               <Summary>Descripción de la Categoría.</Summary>
             </Documentation>
@@ -1372,9 +1417,9 @@
           <Documentation>
             <Summary>Almacén de Cadenas de Traducción de los Tips.</Summary>
           </Documentation>
-          <Property Type="String" Name="Text" Nullable="false" Unicode="true" />
+          <Property Type="String" Name="Text" Nullable="false" Unicode="true" MaxLength="Max" FixedLength="false" />
           <NavigationProperty Name="Tip" Relationship="MainModel.TipTipGlobalization" FromRole="TipGlobalization" ToRole="Tip" />
-          <Property Type="String" Name="Source" Nullable="true" />
+          <Property Type="String" Name="Source" Nullable="true" MaxLength="Max" Unicode="true" FixedLength="false" />
         </EntityType>
         <Association Name="TipTipGlobalization">
           <End Type="MainModel.Tip" Role="Tip" Multiplicity="1" >
@@ -1390,11 +1435,11 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="String" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="DateTime" Name="Timestamp" Nullable="false" cg:SetterAccess="Public" annotation:StoreGeneratedPattern="None" />
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="DateTime" Name="Timestamp" Nullable="false" cg:SetterAccess="Public" annotation:StoreGeneratedPattern="None" Precision="3" />
           <Property Type="Int32" Name="Steps" Nullable="false" />
           <NavigationProperty Name="User" Relationship="MainModel.UserData" FromRole="Data" ToRole="User" />
-          <Property Name="Distance" Type="Int32" Nullable="true" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Activity" Type="MainModel.DataActivity" Nullable="false" />
         </EntityType>
         <EntityType Name="UserBody">
           <Documentation>
@@ -1420,15 +1465,15 @@
               <Summary>Peso del Usuario (en gr)</Summary>
             </Documentation>
           </Property>
-          <Property Type="String" Name="Sex" Nullable="false" MaxLength="1" FixedLength="true" >
+          <Property Type="String" Name="Sex" Nullable="false" MaxLength="1" FixedLength="true" Unicode="true" >
             <Documentation>
               <Summary>Sexo del Usuario (M o F)</Summary>
               <LongDescription>El carácter F es Femenino, el carácter M es masculino.</LongDescription>
             </Documentation>
           </Property>
-          <Property Name="StrideLengthWalking" Type="String" Nullable="false" />
-          <Property Name="StrideLenghtRunning" Type="String" Nullable="false" />
-          <Property Type="DateTime" Name="LastEditDate" Nullable="false" annotation:StoreGeneratedPattern="None" >
+          <Property Name="StrideLengthWalking" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="StrideLengthRunning" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Type="DateTime" Name="LastEditDate" Nullable="false" annotation:StoreGeneratedPattern="None" Precision="3" >
             <Documentation>
               <Summary>Última fecha de modificación de la Complexión Física del Usuario.</Summary>
             </Documentation>
@@ -1449,7 +1494,7 @@
             <Summary>Cadenas de Traducción de los Niveles de Actividad.</Summary>
           </Documentation>
           <NavigationProperty Name="MotionLevel" Relationship="MainModel.TipMotionLevelTipMotionLevelGlobalization" FromRole="TipMotionLevelGlobalization" ToRole="TipMotionLevel" />
-          <Property Type="String" Name="Tag" Nullable="false" Unicode="true" />
+          <Property Type="String" Name="Tag" Nullable="false" Unicode="true" MaxLength="Max" FixedLength="false" />
         </EntityType>
         <Association Name="TipMotionLevelTipMotionLevelGlobalization">
           <End Type="MainModel.MotionLevel" Role="TipMotionLevel" Multiplicity="1" />
@@ -1465,9 +1510,9 @@
           <Property Type="Guid" Name="Guid" Nullable="false" annotation:StoreGeneratedPattern="None" />
           <NavigationProperty Name="RewardGift" Relationship="MainModel.RewardRewardGift" FromRole="Reward" ToRole="RewardGift" />
           <NavigationProperty Name="RewardGlobalization" Relationship="MainModel.RewardRewardGlobalization" FromRole="Reward" ToRole="RewardGlobalization" />
-          <Property Type="String" Name="DistanceTrigger" Nullable="false" />
-          <Property Type="String" Name="DaysTrigger" Nullable="false" />
-          <Property Type="String" Name="Source" Nullable="false" />
+          <Property Type="String" Name="DistanceTrigger" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Type="String" Name="DaysTrigger" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Type="String" Name="Source" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="RewardRegionalization" Relationship="MainModel.RewardRewardRegionalization" FromRole="Reward" ToRole="RewardRegionalization" />
           <NavigationProperty Name="UserEarnedReward" Relationship="MainModel.UserEarnedRewardReward" FromRole="Reward" ToRole="UserEarnedReward" />
           </EntityType>
@@ -1491,7 +1536,7 @@
               <Summary>Códigos de Canje de éste Regalo.</Summary>
             </Documentation>
           </NavigationProperty>
-          <Property Name="CreationDate" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CreationDate" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Identity" Precision="3" />
           <NavigationProperty Name="RewardGiftPictures" Relationship="MainModel.RewardGiftRewardGiftPictures" FromRole="RewardGift" ToRole="RewardGiftPictures" />
           <Property Name="IsShipped" Type="Boolean" Nullable="false" DefaultValue="False" />
         </EntityType>
@@ -1507,9 +1552,9 @@
             <Summary>Cadenas de Traducción de las Recompensas.</Summary>
           </Documentation>
           <NavigationProperty Name="Reward" Relationship="MainModel.RewardRewardGlobalization" FromRole="RewardGlobalization" ToRole="Reward" />
-          <Property Type="String" Name="Title" Nullable="false" />
-          <Property Type="String" Name="Text" Nullable="false" />
-          <Property Type="String" Name="Source" Nullable="true" />
+          <Property Type="String" Name="Title" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Type="String" Name="Text" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Type="String" Name="Source" Nullable="true" MaxLength="Max" Unicode="true" FixedLength="false" />
         </EntityType>
         <Association Name="RewardRewardGlobalization">
           <End Type="MainModel.Reward" Role="Reward" Multiplicity="1" >
@@ -1524,12 +1569,12 @@
               <Summary>Regalo al que pertence el Código de Canje.</Summary>
             </Documentation>
           </NavigationProperty>
-          <Property Type="DateTime" Name="ExpirationDate" Nullable="true" >
+          <Property Type="DateTime" Name="ExpirationDate" Nullable="true" Precision="3" >
             <Documentation>
               <Summary>Fecha de Expiración de éste Código de Canje.</Summary>
             </Documentation>
           </Property>
-          <Property Type="String" Name="RedeemCode" Nullable="true" >
+          <Property Type="String" Name="RedeemCode" Nullable="true" MaxLength="Max" Unicode="true" FixedLength="false" >
             <Documentation>
               <Summary>Código de Canje (cadena).</Summary>
               <LongDescription>El tipo de dato es cadena para los casos en los que se utilice QR como representación gráfica.</LongDescription>
@@ -1548,7 +1593,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Type="Int64" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="String" Name="RegionCode" Nullable="false" MaxLength="2" FixedLength="true" />
+          <Property Type="String" Name="RegionCode" Nullable="false" MaxLength="2" FixedLength="true" Unicode="true" />
           <NavigationProperty Name="Reward" Relationship="MainModel.RewardRewardRegionalization" FromRole="RewardRegionalization" ToRole="Reward" />
         </EntityType>
         <Association Name="RewardRewardRegionalization">
@@ -1559,14 +1604,14 @@
           <Documentation>
             <LongDescription>Almacén de Cadenas de Traudcción del Regalo.</LongDescription>
           </Documentation>
-          <Property Name="NameSingular" Nullable="false" Type="String" Unicode="true" MaxLength="140" />
-          <Property Type="String" Name="NamePlural" Nullable="false" Unicode="true" MaxLength="140" />
+          <Property Name="NameSingular" Nullable="false" Type="String" Unicode="true" MaxLength="140" FixedLength="false" />
+          <Property Type="String" Name="NamePlural" Nullable="false" Unicode="true" MaxLength="140" FixedLength="false" />
           <NavigationProperty Name="RewardGift" Relationship="MainModel.RewardGiftRewardGiftGlobalization" FromRole="RewardGiftGlobalization" ToRole="RewardGift" >
             <Documentation>
               <Summary>Regalo al que pertenecen éstas Cadenas de Traducción.</Summary>
             </Documentation>
           </NavigationProperty>
-          <Property Type="String" Name="Description" Nullable="false" Unicode="true" />
+          <Property Type="String" Name="Description" Nullable="false" Unicode="true" MaxLength="Max" FixedLength="false" />
         </EntityType>
         <Association Name="RewardGiftRewardGiftGlobalization">
           <End Type="MainModel.RewardGift" Role="RewardGift" Multiplicity="1" >
@@ -1593,7 +1638,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Type="Int64" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" cg:SetterAccess="Internal" />
-          <Property Type="DateTime" Name="CreationDate" Nullable="false" annotation:StoreGeneratedPattern="Identity" >
+          <Property Type="DateTime" Name="CreationDate" Nullable="false" annotation:StoreGeneratedPattern="Identity" Precision="3" >
             <Documentation>
               <Summary>Fecha en la que se consiguió éste Nivel de Actividad.</Summary>
             </Documentation>
@@ -1627,7 +1672,7 @@
             <PropertyRef Name="Guid" />
           </Key>
           <Property Type="Guid" Name="Guid" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="DateTime" Name="CreationDate" Nullable="false" />
+          <Property Type="DateTime" Name="CreationDate" Nullable="false" Precision="3" />
           <NavigationProperty Name="User" Relationship="MainModel.UserUserEarnedReward" FromRole="UserEarnedReward" ToRole="User" />
           <NavigationProperty Name="Reward" Relationship="MainModel.UserEarnedRewardReward" FromRole="UserEarnedReward" ToRole="Reward" />
         </EntityType>
@@ -1656,22 +1701,22 @@
               <Summary>Usuario al que pertenece ésta Información de Contacto.</Summary>
             </Documentation>
           </NavigationProperty>
-          <Property Type="String" Name="HomePhone" Nullable="true" MaxLength="16" >
+          <Property Type="String" Name="HomePhone" Nullable="true" MaxLength="16" Unicode="true" FixedLength="false" >
             <Documentation>
               <Summary>Teléfono de Casa del Usuario.</Summary>
             </Documentation>
           </Property>
-          <Property Type="String" Name="MobilePhone" Nullable="true" MaxLength="16" >
+          <Property Type="String" Name="MobilePhone" Nullable="true" MaxLength="16" Unicode="true" FixedLength="false" >
             <Documentation>
               <Summary>Teléfono Celular del Usuario.</Summary>
             </Documentation>
           </Property>
-          <Property Type="String" Name="WorkPhone" Nullable="true" >
+          <Property Type="String" Name="WorkPhone" Nullable="true" MaxLength="Max" Unicode="true" FixedLength="false" >
             <Documentation>
               <Summary>Teléfono del Trabajo del Usuario (en formato &lt;Número&gt; x &lt;Extensión&gt;)</Summary>
             </Documentation>
           </Property>
-          <Property Type="DateTime" Name="LastEditDate" Nullable="false" annotation:StoreGeneratedPattern="None" >
+          <Property Type="DateTime" Name="LastEditDate" Nullable="false" annotation:StoreGeneratedPattern="None" Precision="3" >
             <Documentation>
               <Summary>Última fecha de modificación de la Información de Contacto.</Summary>
             </Documentation>
@@ -1691,12 +1736,12 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Type="Int64" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="String" Name="RegionCode" Nullable="false" MaxLength="5" FixedLength="true" />
-          <Property Type="String" Name="Address" Nullable="false" Unicode="true" />
+          <Property Type="String" Name="RegionCode" Nullable="false" MaxLength="5" FixedLength="true" Unicode="true" />
+          <Property Type="String" Name="Address" Nullable="false" Unicode="true" MaxLength="Max" FixedLength="false" />
           <Property Type="Double" Name="Latitude" Nullable="false" />
           <Property Type="Double" Name="Longitude" Nullable="false" />
           <NavigationProperty Name="User" Relationship="MainModel.UserShippingInformation" FromRole="ShippingInformation" ToRole="User" />
-          <Property Type="DateTime" Name="LastEditDate" Nullable="false" annotation:StoreGeneratedPattern="None" >
+          <Property Type="DateTime" Name="LastEditDate" Nullable="false" annotation:StoreGeneratedPattern="None" Precision="3" >
             <Documentation>
               <Summary>Última fecha de modificación de la Información de Envío del Usuario.</Summary>
             </Documentation>
@@ -1717,9 +1762,9 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Type="Int64" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="String" Name="TwoLetterIsoCode" Nullable="false" />
-          <Property Type="String" Name="ThreeLetterIsoCode" Nullable="false" />
-          <Property Type="String" Name="Name" Nullable="false" Unicode="true" />
+          <Property Type="String" Name="TwoLetterIsoCode" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Type="String" Name="ThreeLetterIsoCode" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Type="String" Name="Name" Nullable="false" Unicode="true" MaxLength="Max" FixedLength="false" />
           <NavigationProperty Name="RegionSubdivision" Relationship="MainModel.RegionRegionSubdivision" FromRole="Region" ToRole="RegionSubdivision" />
         </EntityType>
         <EntityType Name="RegionSubdivision">
@@ -1727,8 +1772,8 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Type="Int64" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="String" Name="IsoCode" Nullable="false" />
-          <Property Type="String" Name="Name" Nullable="false" Unicode="true" />
+          <Property Type="String" Name="IsoCode" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Type="String" Name="Name" Nullable="false" Unicode="true" MaxLength="Max" FixedLength="false" />
           <NavigationProperty Name="Region" Relationship="MainModel.RegionRegionSubdivision" FromRole="RegionSubdivision" ToRole="Region" />
           <Property Name="UtcOffset" Type="Int16" Nullable="false" />
         </EntityType>
@@ -1751,7 +1796,7 @@
           <Property Name="Guid" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="User" Relationship="MainModel.UserTipHistoryUser" FromRole="UserTipHistory" ToRole="User" />
           <NavigationProperty Name="Tip" Relationship="MainModel.UserTipHistoryTip" FromRole="UserTipHistory" ToRole="Tip" />
-          <Property Name="CreationDate" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CreationDate" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Identity" Precision="3" />
         </EntityType>
         <Association Name="UserTipHistoryUser">
           <End Type="MainModel.UserTipHistory" Role="UserTipHistory" Multiplicity="*" />
@@ -1766,18 +1811,18 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CultureCode" Type="String" Nullable="false" MaxLength="16" FixedLength="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CreationDate" Type="DateTime" Nullable="false" />
+          <Property Name="CultureCode" Type="String" Nullable="false" MaxLength="16" FixedLength="false" annotation:StoreGeneratedPattern="Identity" Unicode="true" />
+          <Property Name="CreationDate" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
         <EntityType Name="IPicture" Abstract="false">
           <Key>
             <PropertyRef Name="Guid" />
           </Key>
           <Property Name="Guid" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="None" />
-          <Property Name="CreationDate" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Picture" Type="Binary" Nullable="true" />
-          <Property Name="PictureMimeType" Type="String" MaxLength="16" Nullable="true" />
-          <Property Name="PictureExtension" Type="String" MaxLength="10" Nullable="true" />
+          <Property Name="CreationDate" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Identity" Precision="3" />
+          <Property Name="Picture" Type="Binary" Nullable="true" MaxLength="Max" FixedLength="false" />
+          <Property Name="PictureMimeType" Type="String" MaxLength="16" Nullable="true" Unicode="true" FixedLength="false" />
+          <Property Name="PictureExtension" Type="String" MaxLength="10" Nullable="true" Unicode="true" FixedLength="false" />
         </EntityType>
         <Association Name="RewardGiftRewardGiftPictures">
           <End Type="MainModel.RewardGift" Role="RewardGift" Multiplicity="1" />
@@ -1788,15 +1833,11 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CreationDate" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="TrackingCode" Type="String" Nullable="false" />
-          <Property Name="TrackingLink" Type="String" Nullable="false" />
+          <Property Name="CreationDate" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Identity" Precision="3" />
+          <Property Name="TrackingCode" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="TrackingLink" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="UserRewardGiftClaimed" Relationship="MainModel.UserRewardGiftShippingStatusUserRewardGiftClaimed" FromRole="UserRewardGiftShippingStatus" ToRole="UserRewardGiftClaimed" />
         </EntityType>
-        <Association Name="UserRewardGiftShippingStatusUserRewardGiftClaimed">
-          <End Type="MainModel.UserRewardGiftShippingStatus" Role="UserRewardGiftShippingStatus" Multiplicity="0..1" />
-          <End Type="MainModel.UserRewardGiftClaimed" Role="UserRewardGiftClaimed" Multiplicity="1" />
-        </Association>
         <EntityType Name="OAuthCredential">
           <Key>
             <PropertyRef Name="Id" />
@@ -1807,12 +1848,12 @@
               <Summary>Servicio/Red Social que provee el servicio de OAuth y al que pertenecen el UID y Token</Summary>
             </Documentation>
           </Property>
-          <Property Name="Uid" Type="String" Nullable="false" >
+          <Property Name="Uid" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" >
             <Documentation>
               <Summary>ID del Usuario en la Red Social</Summary>
             </Documentation>
           </Property>
-          <Property Name="Token" Type="String" Nullable="false" >
+          <Property Name="Token" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" >
             <Documentation>
               <Summary>Token de Sesión del Usuario en la Red Social</Summary>
             </Documentation>
@@ -1833,6 +1874,52 @@
         <Association Name="OAuthCredentialUser">
           <End Type="MainModel.OAuthCredential" Role="OAuthCredential" Multiplicity="*" />
           <End Type="MainModel.User" Role="User" Multiplicity="1" />
+        </Association>
+        <EnumType Name="DataActivity" UnderlyingType="Int16">
+          <Member Name="Walking" Value="1" />
+          <Member Name="Running" Value="2" />
+          <Member Name="Sleep" Value="3" />
+        </EnumType>
+        <EntityType Name="UserDataHourlyDistanceView">
+          <Key>
+            <PropertyRef Name="User_Guid" />
+          </Key>
+          <Property Name="User_Guid" Type="Guid" Nullable="false" />
+          <Property Name="RunningDistance" Type="Int32" />
+          <Property Name="WalkingDistance" Type="Int32" />
+          <Property Name="TotalDistance" Type="Int32" />
+        </EntityType>
+        <EntityType Name="UserDataHourlyStepsView">
+          <Key>
+            <PropertyRef Name="User_Guid" />
+            <PropertyRef Name="Activity" />
+          </Key>
+          <Property Name="User_Guid" Type="Guid" Nullable="false" />
+          <Property Name="Activity" Type="Int16" Nullable="false" />
+          <Property Name="Timestamp" Type="DateTime" Precision="3" />
+          <Property Name="TotalSteps" Type="Int32" />
+        </EntityType>
+        <EntityType Name="UserDataTotalDistanceView">
+          <Key>
+            <PropertyRef Name="User_Guid" />
+          </Key>
+          <Property Name="User_Guid" Type="Guid" Nullable="false" />
+          <Property Name="RunningDistance" Type="Int32" />
+          <Property Name="WalkingDistance" Type="Int32" />
+          <Property Name="TotalDistance" Type="Int32" />
+        </EntityType>
+        <EntityType Name="UserDataTotalStepsView">
+          <Key>
+            <PropertyRef Name="User_Guid" />
+            <PropertyRef Name="Activity" />
+          </Key>
+          <Property Name="User_Guid" Type="Guid" Nullable="false" />
+          <Property Name="Activity" Type="Int16" Nullable="false" />
+          <Property Name="TotalSteps" Type="Int32" />
+        </EntityType>
+        <Association Name="UserRewardGiftShippingStatusUserRewardGiftClaimed">
+          <End Type="MainModel.UserRewardGiftShippingStatus" Role="UserRewardGiftShippingStatus" Multiplicity="0..1" />
+          <End Type="MainModel.UserRewardGiftClaimed" Role="UserRewardGiftClaimed" Multiplicity="1" />
         </Association>
       </Schema>
     </edmx:ConceptualModels>
@@ -1904,7 +1991,7 @@
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
           <ScalarProperty Name="Steps" ColumnName="Steps" />
-          <ScalarProperty Name="Distance" ColumnName="Distance" />
+          <ScalarProperty Name="Activity" ColumnName="Activity" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -1917,7 +2004,7 @@
           <ScalarProperty Name="Weight" ColumnName="Weight" />
           <ScalarProperty Name="Sex" ColumnName="Sex" />
           <ScalarProperty Name="StrideLengthWalking" ColumnName="StrideLengthWalking" />
-          <ScalarProperty Name="StrideLenghtRunning" ColumnName="StrideLenghtRunning" />
+          <ScalarProperty Name="StrideLengthRunning" ColumnName="StrideLengthRunning" />
           <ScalarProperty Name="LastEditDate" ColumnName="LastEditDate" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -2108,6 +2195,45 @@
           <ScalarProperty Name="Uid" ColumnName="Uid" />
           <ScalarProperty Name="Token" ColumnName="Token" />
           <ScalarProperty Name="IsInvalid" ColumnName="IsInvalid" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserDataHourlyDistanceView">
+      <EntityTypeMapping TypeName="IsTypeOf(MainModel.UserDataHourlyDistanceView)">
+        <MappingFragment StoreEntitySet="UserDataHourlyDistanceView">
+          <ScalarProperty Name="User_Guid" ColumnName="User_Guid" />
+          <ScalarProperty Name="RunningDistance" ColumnName="RunningDistance" />
+          <ScalarProperty Name="WalkingDistance" ColumnName="WalkingDistance" />
+          <ScalarProperty Name="TotalDistance" ColumnName="TotalDistance" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserDataHourlyStepsView">
+      <EntityTypeMapping TypeName="IsTypeOf(MainModel.UserDataHourlyStepsView)">
+        <MappingFragment StoreEntitySet="UserDataHourlyStepsView">
+          <ScalarProperty Name="User_Guid" ColumnName="User_Guid" />
+          <ScalarProperty Name="Activity" ColumnName="Activity" />
+          <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
+          <ScalarProperty Name="TotalSteps" ColumnName="TotalSteps" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserDataTotalDistanceView">
+      <EntityTypeMapping TypeName="IsTypeOf(MainModel.UserDataTotalDistanceView)">
+        <MappingFragment StoreEntitySet="UserDataTotalDistanceView">
+          <ScalarProperty Name="User_Guid" ColumnName="User_Guid" />
+          <ScalarProperty Name="RunningDistance" ColumnName="RunningDistance" />
+          <ScalarProperty Name="WalkingDistance" ColumnName="WalkingDistance" />
+          <ScalarProperty Name="TotalDistance" ColumnName="TotalDistance" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserDataTotalStepsView">
+      <EntityTypeMapping TypeName="IsTypeOf(MainModel.UserDataTotalStepsView)">
+        <MappingFragment StoreEntitySet="UserDataTotalStepsView">
+          <ScalarProperty Name="User_Guid" ColumnName="User_Guid" />
+          <ScalarProperty Name="Activity" ColumnName="Activity" />
+          <ScalarProperty Name="TotalSteps" ColumnName="TotalSteps" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -2320,14 +2446,6 @@
         <ScalarProperty Name="Guid" ColumnName="Guid" />
       </EndProperty>
     </AssociationSetMapping>
-    <AssociationSetMapping Name="UserRewardGiftShippingStatusUserRewardGiftClaimed" TypeName="MainModel.UserRewardGiftShippingStatusUserRewardGiftClaimed" StoreEntitySet="UserRewardGiftShippingStatusSet">
-      <EndProperty Name="UserRewardGiftClaimed">
-        <ScalarProperty Name="Guid" ColumnName="UserRewardGiftClaimed_Guid" />
-      </EndProperty>
-      <EndProperty Name="UserRewardGiftShippingStatus">
-        <ScalarProperty Name="Id" ColumnName="Id" />
-      </EndProperty>
-    </AssociationSetMapping>
     <AssociationSetMapping Name="OAuthCredentialUser" TypeName="MainModel.OAuthCredentialUser" StoreEntitySet="OAuthCredentialSet">
       <EndProperty Name="User">
         <ScalarProperty Name="Guid" ColumnName="User_Guid" />
@@ -2352,6 +2470,7 @@
         <DesignerProperty Name="EnablePluralization" Value="False" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
         <DesignerProperty Name="UseLegacyProvider" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
       </DesignerInfoPropertySet>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->

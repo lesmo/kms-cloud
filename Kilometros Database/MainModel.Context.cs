@@ -46,5 +46,9 @@ namespace KilometrosDatabase
         public DbSet<IPicture> IPictureSet { get; set; }
         public DbSet<UserRewardGiftShippingStatus> UserRewardGiftShippingStatusSet { get; set; }
         public DbSet<OAuthCredential> OAuthCredentialSet { get; set; }
+        public DbSet<UserDataHourlyDistanceView> UserDataHourlyDistanceView { get; set; }
+        public DbSet<UserDataHourlyStepsView> UserDataHourlyStepsView { get; set; }
+        public DbSet<UserDataTotalDistanceView> UserDataTotalDistanceView { get; set; }
+        public DbSet<UserDataTotalStepsView> UserDataTotalStepsView { get; set; }
     }
 }

@@ -12,17 +12,10 @@ namespace KilometrosDatabase
     using System;
     using System.Collections.Generic;
     
-    public partial class UserBody
+    public partial class UserDataTotalStepsView
     {
-        public long Id { get; internal set; }
-        public short Age { get; set; }
-        public short Height { get; set; }
-        public int Weight { get; set; }
-        public string Sex { get; set; }
-        public string StrideLengthWalking { get; set; }
-        public string StrideLengthRunning { get; set; }
-        public System.DateTime LastEditDate { get; set; }
-    
-        public virtual User User { get; set; }
+        public System.Guid User_Guid { get; set; }
+        public short Activity { get; set; }
+        public Nullable<int> TotalSteps { get; set; }
     }
 }

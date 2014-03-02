@@ -60,6 +60,9 @@
     <Compile Include="Data.cs">
       <DependentUpon>MainModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="DataActivity.cs">
+      <DependentUpon>MainModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="EntityValidation\Data\Data.cs" />
     <Compile Include="EntityValidation\MotionLevel\MotionLevel.cs" />
     <Compile Include="EntityValidation\Rewards\RewardGift.cs" />
@@ -150,6 +153,18 @@
       <DependentUpon>MainModel.tt</DependentUpon>
     </Compile>
     <Compile Include="UserBody.cs">
+      <DependentUpon>MainModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserDataHourlyDistanceView.cs">
+      <DependentUpon>MainModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserDataHourlyStepsView.cs">
+      <DependentUpon>MainModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserDataTotalDistanceView.cs">
+      <DependentUpon>MainModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserDataTotalStepsView.cs">
       <DependentUpon>MainModel.tt</DependentUpon>
     </Compile>
     <Compile Include="UserEarnedReward.cs">
