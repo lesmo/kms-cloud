@@ -308,7 +308,6 @@ warning 6002: The table/view 'KilometrosDatabase.dbo.UserDataHourlyStepsView' do
         <EntityType Name="UserDataHourlyStepsView">
           <Key>
             <PropertyRef Name="User_Guid" />
-            <PropertyRef Name="Activity" />
           </Key>
           <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Activity" Type="smallint" Nullable="false" />
@@ -332,7 +331,6 @@ warning 6002: The table/view 'KilometrosDatabase.dbo.UserDataTotalStepsView' doe
         <EntityType Name="UserDataTotalStepsView">
           <Key>
             <PropertyRef Name="User_Guid" />
-            <PropertyRef Name="Activity" />
           </Key>
           <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Activity" Type="smallint" Nullable="false" />
@@ -1934,10 +1932,9 @@ FROM [dbo].[UserDataTotalStepsView] AS [UserDataTotalStepsView]</DefiningQuery>
         <EntityType Name="UserDataHourlyStepsView">
           <Key>
             <PropertyRef Name="User_Guid" />
-            <PropertyRef Name="Activity" />
           </Key>
           <Property Name="User_Guid" Type="Guid" Nullable="false" />
-          <Property Name="Activity" Type="Int16" Nullable="false" />
+          <Property Name="Activity" Type="MainModel.DataActivity" Nullable="false" />
           <Property Name="Timestamp" Type="DateTime" Precision="3" Nullable="false" />
           <Property Name="TotalSteps" Type="Int32" Nullable="false" />
         </EntityType>
@@ -1954,10 +1951,9 @@ FROM [dbo].[UserDataTotalStepsView] AS [UserDataTotalStepsView]</DefiningQuery>
         <EntityType Name="UserDataTotalStepsView">
           <Key>
             <PropertyRef Name="User_Guid" />
-            <PropertyRef Name="Activity" />
           </Key>
           <Property Name="User_Guid" Type="Guid" Nullable="false" />
-          <Property Name="Activity" Type="Int16" Nullable="false" />
+          <Property Name="Activity" Type="MainModel.DataActivity" Nullable="false" />
           <Property Name="Timestamp" Type="DateTime" Precision="3" Nullable="false" />
           <Property Name="TotalSteps" Type="Int64" Nullable="false" />
         </EntityType>

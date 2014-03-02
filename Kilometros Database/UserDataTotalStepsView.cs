@@ -15,7 +15,7 @@ namespace KilometrosDatabase
     public partial class UserDataTotalStepsView
     {
         public System.Guid User_Guid { get; set; }
-        public short Activity { get; set; }
+        public DataActivity Activity { get; set; }
         public System.DateTime Timestamp { get; set; }
         public long TotalSteps { get; set; }
     }
