@@ -58,7 +58,7 @@ namespace Kilometros_WebAPI.Controllers {
                 StrideLengthWalking
                     = physique.StrideLengthWalking,
                 StrideLengthRunning
-                    = physique.StrideLenghtRunning,
+                    = physique.StrideLengthRunning,
 
                 LastModified
                     = physique.LastEditDate
