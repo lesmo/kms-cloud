@@ -360,7 +360,7 @@ namespace KilometrosDatabase.Abstraction {
         /// <summary>
         /// Almacén de Distancia Total
         /// </summary>
-        public GenericRepository<UserDataTotalDistanceView> UserDataTotalStepsView {
+        public GenericRepository<UserDataTotalDistanceView> UserDataTotalDistanceView {
             get {
                 if ( this._userDataTotalDistanceView == null )
                     this._userDataTotalDistanceView = new GenericRepository<UserDataTotalDistanceView>(this._context);
