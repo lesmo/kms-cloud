@@ -212,6 +212,10 @@
     <Compile Include="Helpers\HttpRequestMessageHeadersHelper.cs" />
     <Compile Include="Helpers\MiscHelper.cs" />
     <Compile Include="MessageHandlers\ResponseLastModifiedHandler.cs" />
+    <Compile Include="Models\HttpGet\DataController\DataDistanceResponse.cs" />
+    <Compile Include="Models\HttpGet\DataController\DataStepsResponse.cs" />
+    <Compile Include="Models\HttpGet\DataController\DataTotalDistanceResponse.cs" />
+    <Compile Include="Models\HttpGet\DataController\DataTotalStepsResponse.cs" />
     <Compile Include="Models\HttpGet\My_Controllers\GiftClaimResponse.cs" />
     <Compile Include="Models\HttpGet\My_Controllers\GiftResponse.cs" />
     <Compile Include="Models\HttpGet\RewardsController\RewardGiftResponse.cs" />
