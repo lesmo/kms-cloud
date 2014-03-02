@@ -1512,8 +1512,8 @@ FROM [dbo].[UserDataTotalStepsView] AS [UserDataTotalStepsView]</DefiningQuery>
               <LongDescription>El carácter F es Femenino, el carácter M es masculino.</LongDescription>
             </Documentation>
           </Property>
-          <Property Name="StrideLengthWalking" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
-          <Property Name="StrideLengthRunning" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="StrideLengthWalking" Type="Int32" Nullable="false" />
+          <Property Name="StrideLengthRunning" Type="Int32" Nullable="false" />
           <Property Type="DateTime" Name="LastEditDate" Nullable="false" annotation:StoreGeneratedPattern="None" Precision="3" >
             <Documentation>
               <Summary>Última fecha de modificación de la Complexión Física del Usuario.</Summary>
