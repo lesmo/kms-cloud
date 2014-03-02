@@ -1924,7 +1924,7 @@ FROM [dbo].[UserDataTotalStepsView] AS [UserDataTotalStepsView]</DefiningQuery>
             <PropertyRef Name="User_Guid" />
           </Key>
           <Property Name="User_Guid" Type="Guid" Nullable="false" />
-          <Property Name="Timestamp" Type="DateTime" Precision="3" />
+          <Property Name="Timestamp" Type="DateTime" Precision="3" Nullable="false" />
           <Property Name="RunningDistance" Type="Int32" Nullable="false" />
           <Property Name="WalkingDistance" Type="Int32" Nullable="false" />
           <Property Name="TotalDistance" Type="Int32" Nullable="false" />
