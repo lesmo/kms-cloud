@@ -13,70 +13,12 @@ using Kilometros_WebAPI.Models.HttpGet.SessionController;
 using System.Globalization;
 using Kilometros_WebAPI.Exceptions;
 using Kilometros_WebAPI.Helpers;
+using System.Text;
 
 namespace Kilometros_WebAPI.Controllers {
     public class SessionController : ApiController {
         public KilometrosDatabase.Abstraction.WorkUnit Database
             = new KilometrosDatabase.Abstraction.WorkUnit();
-
-        [HttpPost]
-        [Route("session/kms")]
-        public TokenResponse KmsLogin([FromBody]LoginPost dataPost) {
-            // --- Evitar doble Login ---
-            if ( this.User.Identity.IsAuthenticated )
-                throw new HttpAlreadyLoggedInException(
-                    ControllerStrings.Warning100_CannotLoginAgain
-                );
-            
-            // --- Obtener bytes de contraseña, buscar al Usuario y validar contraseña ---
-            byte[] passwordBytes
-                = Convert.FromBase64String(dataPost.AccessHash);
-            User user
-                = this.Database.UserStore.GetAll(
-                    u => u.Email == dataPost.Email
-                ).FirstOrDefault();
-
-            if ( user == null || ! MiscHelper.BytesEqual(passwordBytes, user.Password) )
-                throw new HttpUnauthorizedException(
-                    string.Format(
-                        ControllerStrings.Warning101_UserNotFound,
-                        dataPost.Email
-                    )
-                );
-
-            // --- Generar nuevo Token ---
-            KmsIdentity identity
-                = (KmsIdentity)this.User.Identity;
-            Token token
-                = new Token() {
-                    ApiKey
-                        = identity.ApiKey,
-                    User
-                        = user,
-                    Guid
-                        = Guid.NewGuid(),
-
-                    CreationDate
-                        = DateTime.UtcNow,
-                    LastUseDate
-                        = DateTime.UtcNow,
-                    ExpirationDate
-                        = DateTime.UtcNow.AddDays(30)
-                };
-
-            this.Database.TokenStore.Add(token);
-            this.Database.SaveChanges();
-
-            // --- Preparar y enviar respuesta ---
-            return new TokenResponse() {
-                Expires
-                    = token.ExpirationDate.Value,
-                Token
-                    = Convert.ToBase64String(token.Guid.ToByteArray()),
-                Pending
-                    = {}
-            };
-        }
 
         [HttpPost]
         [Route("session/facebook")]
@@ -89,22 +31,16 @@ namespace Kilometros_WebAPI.Controllers {
             throw new NotImplementedException();
         }
 
+        [Authorize]
         [HttpGet]
-        [Route("session/{tokenString}")]
-        public IHttpActionResult GetToken(string tokenString) {
-            HttpResponseMessage response
-                = Request.CreateResponse();
-
-            byte[] tokenBytes
-                = Convert.FromBase64String(tokenString);
-            Guid tokenGuid
-                = new Guid(tokenBytes);
+        [Route("session")]
+        public IHttpActionResult GetToken() {
+            KmsIdentity identity
+                = (KmsIdentity)User.Identity;
             Token token
-                = this.Database.TokenStore.Get(tokenGuid);
+                = identity.Token;
 
-            if ( token == null ) {
-                return NotFound();
-            } else if ( token.ExpirationDate.HasValue ) {
+            if ( token.ExpirationDate.HasValue ) {
                 token.ExpirationDate
                     = token.ExpirationDate.Value.AddDays(90);
 
@@ -118,24 +54,20 @@ namespace Kilometros_WebAPI.Controllers {
             }
         }
 
+        [Authorize]
         [HttpDelete]
-        [Route("session/{tokenString}")]
-        public IHttpActionResult DeleteToken(string tokenString) {
-            byte[] tokenBytes
-                = Convert.FromBase64String(tokenString);
-            Guid tokenGuid  
-                = new Guid(tokenBytes);
+        [Route("session")]
+        public IHttpActionResult DeleteToken() {
+            KmsIdentity identity
+                = (KmsIdentity)User.Identity;
             Token token
-                = this.Database.TokenStore.Get(tokenGuid);
+                = identity.Token;
 
-            if ( token == null ) {
-                return NotFound();
-            } else {
-                this.Database.TokenStore.Delete(tokenGuid);
-                throw new HttpNoContentException(
-                    ControllerStrings.Warning103_TokenDeleteOk
-                );
-            }
+            Database.TokenStore.Delete(token.Guid);
+
+            throw new HttpNoContentException(
+                ControllerStrings.Warning103_TokenDeleteOk
+            );
         }
     }
 }
