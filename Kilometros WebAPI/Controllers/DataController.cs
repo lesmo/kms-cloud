@@ -72,11 +72,11 @@ namespace Kilometros_WebAPI.Controllers {
                 from s in stepsView
                 select new DataStepsResponse() {
                     Timestamp
-                        = s.Timestamp,
+                        = s.Timestamp.Value,
                     Activity
                         = DataActivityString[s.Activity],
                     Steps
-                        = s.TotalSteps
+                        = s.TotalSteps.Value
                 };
         }
 

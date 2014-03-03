@@ -84,7 +84,7 @@ namespace Kilometros_WebAPI.Controllers {
                 = dataPost.Weight;
             physique.Sex
                 = dataPost.Sex;
-            physique.StrideLenghtRunning
+            physique.StrideLengthRunning
                 = dataPost.StrideLengthRunning;
             physique.StrideLengthWalking
                 = dataPost.StrideLengthWalking;
