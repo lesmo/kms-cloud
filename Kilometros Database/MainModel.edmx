@@ -230,9 +230,10 @@
           <Property Name="CreationDate" Type="datetime" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="ExpirationDate" Type="datetime" StoreGeneratedPattern="Identity" />
           <Property Name="Guid" Type="uniqueidentifier" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Secret" Type="uniqueidentifier" Nullable="false" />
           <Property Name="LastUseDate" Type="datetime" />
           <Property Name="ApiKey_Guid" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="User_Guid" Type="uniqueidentifier" />
         </EntityType>
         <EntityType Name="UserBodySet">
           <Key>
@@ -768,7 +769,7 @@ warning 6002: The table/view 'KilometrosDatabase.dbo.UserDataTotalStepsView' doe
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_UserToken">
-          <End Role="UserSet" Type="Self.UserSet" Multiplicity="1">
+          <End Role="UserSet" Type="Self.UserSet" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
           </End>
           <End Role="TokenSet" Type="Self.TokenSet" Multiplicity="*" />
@@ -1285,6 +1286,7 @@ FROM [dbo].[UserDataTotalStepsView] AS [UserDataTotalStepsView]</DefiningQuery>
               <Summary>Ésto se utiliza para identificar la Sesión actual en todas las peticiones al Api.</Summary>
             </Documentation>
           </Property>
+          <Property Name="Secret" Type="Guid" Nullable="false" />
           <Property Type="DateTime" Name="LastUseDate" Nullable="true" Precision="3" />
         </EntityType>
         <EntityType Name="ApiKey">
@@ -1999,7 +2001,8 @@ FROM [dbo].[UserDataTotalStepsView] AS [UserDataTotalStepsView]</DefiningQuery>
     <EntitySetMapping Name="TokenSet">
       <EntityTypeMapping TypeName="IsTypeOf(MainModel.Token)">
         <MappingFragment StoreEntitySet="TokenSet">
-          <ScalarProperty Name="Guid" ColumnName="Guid" />
+          <ScalarProperty Name="Secret" ColumnName="Secret" />
+                <ScalarProperty Name="Guid" ColumnName="Guid" />
           <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
           <ScalarProperty Name="ExpirationDate" ColumnName="ExpirationDate" />
           <ScalarProperty Name="LastUseDate" ColumnName="LastUseDate" />
