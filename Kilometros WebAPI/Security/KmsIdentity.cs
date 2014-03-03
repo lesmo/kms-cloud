@@ -9,10 +9,12 @@ namespace Kilometros_WebAPI.Security {
     public class KmsIdentity : IIdentity {
         public User UserData {
             get {
-                return this._userData;
+                if ( this._oAuth != null && this._oAuth.Token != null && this._oAuth.Token.User != null )
+                    return this._oAuth.Token.User;
+                else
+                    return null;
             }
         }
-        private User _userData = null;
 
         public string AuthenticationType {
             get {
@@ -23,35 +25,55 @@ namespace Kilometros_WebAPI.Security {
 
         public string Name {
             get {
-                return this._name;
+                if ( this._oAuth != null && this._oAuth.Token != null && this._oAuth.Token.User != null )
+                    return this._oAuth.Token.User.Email;
+                else
+                    return "";
             }
         }
-        private string _name = "";
 
         public bool IsAuthenticated {
             get {
-                return this._isAuthenticated;
+                if ( this._oAuth != null && this._oAuth.Token != null)
+                    return this._oAuth.Token.User != null;
+                else
+                    return false;
             }
         }
-        private bool _isAuthenticated = false;
 
         public ApiKey ApiKey {
             get {
-                return this._apiKey;
+                if ( this._oAuth != null )
+                    return this._oAuth.ConsumerKey;
+                else
+                    return null;
             }
         }
-        private ApiKey _apiKey;
 
-        public KmsIdentity(User user = null, string authenticationType = "KmsToken", ApiKey apiKey = null) {
-            if ( user == null )
+        public Token Token {
+            get {
+                if ( this._oAuth != null )
+                    return this._oAuth.Token;
+                else
+                    return null;
+            }
+        }
+
+        public HttpOAuthAuthorization OAuth {
+            get {
+                return this._oAuth;
+            }
+        }
+        private HttpOAuthAuthorization _oAuth;
+
+        public KmsIdentity(HttpOAuthAuthorization httpOAuth = null, string authenticationType = "KmsToken") {
+            if ( httpOAuth == null )
                 return;
 
-            this._authenticationType = authenticationType;
-            this._name = user.Email;
-            this._isAuthenticated = true;
-
-            this._userData = user;
-            this._apiKey = apiKey;
+            this._authenticationType
+                = authenticationType;
+            this._oAuth
+                = httpOAuth;
         }
     }
 }

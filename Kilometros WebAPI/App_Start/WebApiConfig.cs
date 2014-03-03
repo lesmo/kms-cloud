@@ -22,7 +22,8 @@ namespace Kilometros_WebAPI {
                 "oauth_version"
             };
 
-            public const string Realm = "http://api.kms.me";
+            public const string ApiRealm = "api.kms.me";
+            public const string GuiRealm = "kms.me";
         }
         
         public static void Register(HttpConfiguration config) {

@@ -61,6 +61,15 @@ namespace Kilometros_WebGlobalization.API {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to OAuth Authorization parameters contain one or more invalid values, or is missing one or more values.
+        /// </summary>
+        public static string Warning100_OAuthAuthorizationInvalid {
+            get {
+                return ResourceManager.GetString("Warning100_OAuthAuthorizationInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to OAuth Nonce already used or invalid.
         /// </summary>
         public static string Warning100_OAuthNonceInvalid {

@@ -17,8 +17,11 @@ namespace KilometrosDatabase
         public System.DateTime CreationDate { get; set; }
         public Nullable<System.DateTime> ExpirationDate { get; set; }
         public System.Guid Guid { get; set; }
-        public System.Guid Secret { get; set; }
+        public Nullable<System.Guid> Secret { get; set; }
         public Nullable<System.DateTime> LastUseDate { get; set; }
+        public byte LoginAttempts { get; set; }
+        public string CallbackUri { get; set; }
+        public Nullable<System.Guid> VerificationCode { get; set; }
     
         public virtual ApiKey ApiKey { get; set; }
         public virtual User User { get; set; }

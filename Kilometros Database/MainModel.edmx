@@ -14,8 +14,9 @@
           <Property Name="Description" Type="nvarchar" MaxLength="64" />
           <Property Name="Guid" Type="uniqueidentifier" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="Secret" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="TokenUpgradeRequired" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="TokenUpgradeRequired" Type="bit" Nullable="false" />
           <Property Name="DebugEnabled" Type="bit" Nullable="false" />
+          <Property Name="BasicLoginEnabled" Type="bit" Nullable="false" />
           <Property Name="ApiKeyNext_Guid" Type="uniqueidentifier" />
         </EntityType>
         <EntityType Name="ContactInfoSet">
@@ -230,8 +231,11 @@
           <Property Name="CreationDate" Type="datetime" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="ExpirationDate" Type="datetime" StoreGeneratedPattern="Identity" />
           <Property Name="Guid" Type="uniqueidentifier" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="Secret" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Secret" Type="uniqueidentifier" />
+          <Property Name="VerificationCode" Type="uniqueidentifier" />
+          <Property Name="CallbackUri" Type="varchar" MaxLength="250" />
           <Property Name="LastUseDate" Type="datetime" />
+          <Property Name="LoginAttempts" Type="tinyint" Nullable="false" />
           <Property Name="ApiKey_Guid" Type="uniqueidentifier" Nullable="false" />
           <Property Name="User_Guid" Type="uniqueidentifier" />
         </EntityType>
@@ -1286,8 +1290,11 @@ FROM [dbo].[UserDataTotalStepsView] AS [UserDataTotalStepsView]</DefiningQuery>
               <Summary>Ésto se utiliza para identificar la Sesión actual en todas las peticiones al Api.</Summary>
             </Documentation>
           </Property>
-          <Property Name="Secret" Type="Guid" Nullable="false" />
+          <Property Name="Secret" Type="Guid" Nullable="true" />
           <Property Type="DateTime" Name="LastUseDate" Nullable="true" Precision="3" />
+          <Property Name="LoginAttempts" Type="Byte" Nullable="false" />
+          <Property Name="CallbackUri" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="VerificationCode" Type="Guid" />
         </EntityType>
         <EntityType Name="ApiKey">
           <Documentation>
@@ -1330,7 +1337,7 @@ FROM [dbo].[UserDataTotalStepsView] AS [UserDataTotalStepsView]</DefiningQuery>
               <LongDescription>Las operaciones criptográficas para generar un HMAC deben suponer cadenas en ASCII.</LongDescription>
             </Documentation>
           </Property>
-          <Property Type="String" Name="TokenUpgradeRequired" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" >
+          <Property Type="Boolean" Name="TokenUpgradeRequired" Nullable="false" DefaultValue="False" >
             <Documentation>
               <Summary>Si el Api-Key requiere que los Tokens generados con el se actualicen a una nueva versión.</Summary>
               <LongDescription>Cuando se actualiza una App se generará un nuevo Api-Key, y todos los Tokens actuales podrán utilizarse con el nuevo Api-Key sólo para actualizar el Token.</LongDescription>
@@ -1339,6 +1346,7 @@ FROM [dbo].[UserDataTotalStepsView] AS [UserDataTotalStepsView]</DefiningQuery>
           <NavigationProperty Name="ApiKeyPrevious" Relationship="MainModel.ApiKeyHistory" FromRole="ApiKey" ToRole="ApiKey1" />
           <NavigationProperty Name="ApiKeyNext" Relationship="MainModel.ApiKeyHistory" FromRole="ApiKey1" ToRole="ApiKey" />
           <Property Name="DebugEnabled" Type="Boolean" Nullable="false" DefaultValue="False" />
+          <Property Name="BasicLoginEnabled" Type="Boolean" Nullable="false" DefaultValue="False" />
         </EntityType>
         <EntityType Name="Tip">
           <Documentation>
@@ -2001,7 +2009,10 @@ FROM [dbo].[UserDataTotalStepsView] AS [UserDataTotalStepsView]</DefiningQuery>
     <EntitySetMapping Name="TokenSet">
       <EntityTypeMapping TypeName="IsTypeOf(MainModel.Token)">
         <MappingFragment StoreEntitySet="TokenSet">
-          <ScalarProperty Name="Secret" ColumnName="Secret" />
+          <ScalarProperty Name="VerificationCode" ColumnName="VerificationCode" />
+                <ScalarProperty Name="CallbackUri" ColumnName="CallbackUri" />
+                <ScalarProperty Name="LoginAttempts" ColumnName="LoginAttempts" />
+                <ScalarProperty Name="Secret" ColumnName="Secret" />
                 <ScalarProperty Name="Guid" ColumnName="Guid" />
           <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
           <ScalarProperty Name="ExpirationDate" ColumnName="ExpirationDate" />
@@ -2012,7 +2023,8 @@ FROM [dbo].[UserDataTotalStepsView] AS [UserDataTotalStepsView]</DefiningQuery>
     <EntitySetMapping Name="ApiKeySet">
       <EntityTypeMapping TypeName="IsTypeOf(MainModel.ApiKey)">
         <MappingFragment StoreEntitySet="ApiKeySet">
-          <ScalarProperty Name="Guid" ColumnName="Guid" />
+          <ScalarProperty Name="BasicLoginEnabled" ColumnName="BasicLoginEnabled" />
+                <ScalarProperty Name="Guid" ColumnName="Guid" />
           <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
           <ScalarProperty Name="Platform" ColumnName="Platform" />
           <ScalarProperty Name="Description" ColumnName="Description" />
