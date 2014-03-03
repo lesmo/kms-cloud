@@ -12,12 +12,8 @@ namespace KilometrosDatabase
     using System;
     using System.Collections.Generic;
     
-    public partial class UserDataTotalDistanceView
+    public partial class OAuthNonce
     {
-        public System.Guid User_Guid { get; set; }
-        public Nullable<System.DateTime> Timestamp { get; set; }
-        public Nullable<long> RunningDistance { get; set; }
-        public Nullable<long> WalkingDistance { get; set; }
-        public Nullable<int> TotalDistance { get; set; }
+        public string Nonce { get; set; }
     }
 }

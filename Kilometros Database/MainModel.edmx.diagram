@@ -65,6 +65,7 @@
         <EntityTypeShape EntityType="MainModel.UserDataTotalDistanceView" Width="2.375" PointX="0.75" PointY="4.625" />
         <EntityTypeShape EntityType="MainModel.UserDataTotalStepsView" Width="2.375" PointX="0.75" PointY="6.75" />
         <AssociationConnector Association="MainModel.FK_UserRewardGiftShippingStatusUserRewardGiftClaimed" />
+        <EntityTypeShape EntityType="MainModel.OAuthNonce" Width="1.5" PointX="8.25" PointY="0.625" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

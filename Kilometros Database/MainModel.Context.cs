@@ -50,5 +50,6 @@ namespace KilometrosDatabase
         public DbSet<UserDataHourlyStepsView> UserDataHourlyStepsView { get; set; }
         public DbSet<UserDataTotalDistanceView> UserDataTotalDistanceView { get; set; }
         public DbSet<UserDataTotalStepsView> UserDataTotalStepsView { get; set; }
+        public DbSet<OAuthNonce> OAuthNonceSet { get; set; }
     }
 }

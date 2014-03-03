@@ -53,6 +53,19 @@ namespace KilometrosDatabase.Abstraction {
             }
         }
         private GenericRepository<Token> _tokenRepository = null;
+
+        /// <summary>
+        /// Almacén de Nonce de OAuth
+        /// </summary>
+        public GenericRepository<OAuthNonce> OAuthNonceStore {
+            get {
+                if ( this._oAuthNonceRepository == null )
+                    this._oAuthNonceRepository = new GenericRepository<OAuthNonce>(this._context);
+
+                return this._oAuthNonceRepository;
+            }
+        }
+        private GenericRepository<OAuthNonce> _oAuthNonceRepository = null;
         #endregion
 
         #region User Information Storage
@@ -95,7 +108,6 @@ namespace KilometrosDatabase.Abstraction {
         }
         private GenericRepository<ContactInfo> _contactInfoRepository = null;
         #endregion
-
 
         #region User Data Storage
         /// <summary>

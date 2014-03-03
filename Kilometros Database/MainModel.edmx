@@ -149,6 +149,12 @@
           <Property Name="IsInvalid" Type="bit" Nullable="false" />
           <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
         </EntityType>
+        <EntityType Name="OAuthNonceSet">
+          <Key>
+            <PropertyRef Name="Nonce" />
+          </Key>
+          <Property Name="Nonce" Type="char" MaxLength="40" Nullable="false" />
+        </EntityType>
         <EntityType Name="RegionSet">
           <Key>
             <PropertyRef Name="Id" />
@@ -237,8 +243,8 @@
           <Property Name="Height" Type="smallint" Nullable="false" />
           <Property Name="Weight" Type="int" Nullable="false" />
           <Property Name="Sex" Type="nchar" MaxLength="1" Nullable="false" />
-          <Property Name="StrideLengthWalking" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="StrideLengthRunning" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="StrideLengthWalking" Type="int" Nullable="false" />
+          <Property Name="StrideLengthRunning" Type="int" Nullable="false" />
           <Property Name="LastEditDate" Type="datetime" Nullable="false" />
           <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
         </EntityType>
@@ -308,6 +314,7 @@ warning 6002: The table/view 'KilometrosDatabase.dbo.UserDataHourlyStepsView' do
         <EntityType Name="UserDataHourlyStepsView">
           <Key>
             <PropertyRef Name="User_Guid" />
+            
           </Key>
           <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Activity" Type="smallint" Nullable="false" />
@@ -322,20 +329,21 @@ warning 6002: The table/view 'KilometrosDatabase.dbo.UserDataTotalDistanceView' 
           </Key>
           <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Timestamp" Type="datetime" />
-          <Property Name="RunningDistance" Type="int" />
-          <Property Name="WalkingDistance" Type="int" />
-          <Property Name="TotalDistance" Type="int" />
+          <Property Name="RunningDistance" Type="bigint" />
+          <Property Name="WalkingDistance" Type="bigint" />
+          <Property Name="TotalDistance" Type="bigint" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'KilometrosDatabase.dbo.UserDataTotalStepsView' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="UserDataTotalStepsView">
           <Key>
             <PropertyRef Name="User_Guid" />
+            
           </Key>
           <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Activity" Type="smallint" Nullable="false" />
           <Property Name="Timestamp" Type="datetime" />
-          <Property Name="TotalSteps" Type="int" />
+          <Property Name="TotalSteps" Type="bigint" />
         </EntityType>
         <Association Name="FK_ApiKeyHistory">
           <End Role="ApiKeySet" Type="Self.ApiKeySet" Multiplicity="0..1" />
@@ -829,6 +837,7 @@ warning 6002: The table/view 'KilometrosDatabase.dbo.UserDataTotalStepsView' doe
           <EntitySet Name="IPictureSet_UserRewardGiftClaimed" EntityType="Self.IPictureSet_UserRewardGiftClaimed" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MotionLevelSet" EntityType="Self.MotionLevelSet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OAuthCredentialSet" EntityType="Self.OAuthCredentialSet" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OAuthNonceSet" EntityType="Self.OAuthNonceSet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RegionSet" EntityType="Self.RegionSet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RegionSubdivisionSet" EntityType="Self.RegionSubdivisionSet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RewardGiftSet" EntityType="Self.RewardGiftSet" Schema="dbo" store:Type="Tables" />
@@ -1164,6 +1173,7 @@ FROM [dbo].[UserDataTotalStepsView] AS [UserDataTotalStepsView]</DefiningQuery>
             <End Role="UserRewardGiftClaimed" EntitySet="IPictureSet" />
             <End Role="UserRewardGiftShippingStatus" EntitySet="UserRewardGiftShippingStatusSet" />
           </AssociationSet>
+          <EntitySet Name="OAuthNonceSet" EntityType="MainModel.OAuthNonce" />
         </EntityContainer>
         <EntityType Name="User">
           <Documentation>
@@ -1924,10 +1934,10 @@ FROM [dbo].[UserDataTotalStepsView] AS [UserDataTotalStepsView]</DefiningQuery>
             <PropertyRef Name="User_Guid" />
           </Key>
           <Property Name="User_Guid" Type="Guid" Nullable="false" />
-          <Property Name="Timestamp" Type="DateTime" Precision="3" Nullable="false" />
-          <Property Name="RunningDistance" Type="Int32" Nullable="false" />
-          <Property Name="WalkingDistance" Type="Int32" Nullable="false" />
-          <Property Name="TotalDistance" Type="Int32" Nullable="false" />
+          <Property Name="Timestamp" Type="DateTime" Precision="3" />
+          <Property Name="RunningDistance" Type="Int32" />
+          <Property Name="WalkingDistance" Type="Int32" />
+          <Property Name="TotalDistance" Type="Int32" />
         </EntityType>
         <EntityType Name="UserDataHourlyStepsView">
           <Key>
@@ -1935,18 +1945,18 @@ FROM [dbo].[UserDataTotalStepsView] AS [UserDataTotalStepsView]</DefiningQuery>
           </Key>
           <Property Name="User_Guid" Type="Guid" Nullable="false" />
           <Property Name="Activity" Type="MainModel.DataActivity" Nullable="false" />
-          <Property Name="Timestamp" Type="DateTime" Precision="3" Nullable="false" />
-          <Property Name="TotalSteps" Type="Int32" Nullable="false" />
+          <Property Name="Timestamp" Type="DateTime" Precision="3" />
+          <Property Name="TotalSteps" Type="Int32" />
         </EntityType>
         <EntityType Name="UserDataTotalDistanceView">
           <Key>
             <PropertyRef Name="User_Guid" />
           </Key>
           <Property Name="User_Guid" Type="Guid" Nullable="false" />
-          <Property Name="Timestamp" Type="DateTime" Precision="3" Nullable="false" />
-          <Property Name="RunningDistance" Type="Int64" Nullable="false" />
-          <Property Name="WalkingDistance" Type="Int64" Nullable="false" />
-          <Property Name="TotalDistance" Type="Int32" Nullable="false" />
+          <Property Name="Timestamp" Type="DateTime" Precision="3" />
+          <Property Name="RunningDistance" Type="Int64" />
+          <Property Name="WalkingDistance" Type="Int64" />
+          <Property Name="TotalDistance" Type="Int32" />
         </EntityType>
         <EntityType Name="UserDataTotalStepsView">
           <Key>
@@ -1954,13 +1964,19 @@ FROM [dbo].[UserDataTotalStepsView] AS [UserDataTotalStepsView]</DefiningQuery>
           </Key>
           <Property Name="User_Guid" Type="Guid" Nullable="false" />
           <Property Name="Activity" Type="MainModel.DataActivity" Nullable="false" />
-          <Property Name="Timestamp" Type="DateTime" Precision="3" Nullable="false" />
-          <Property Name="TotalSteps" Type="Int64" Nullable="false" />
+          <Property Name="Timestamp" Type="DateTime" Precision="3" />
+          <Property Name="TotalSteps" Type="Int64" />
         </EntityType>
         <Association Name="FK_UserRewardGiftShippingStatusUserRewardGiftClaimed">
           <End Type="MainModel.UserRewardGiftClaimed" Role="UserRewardGiftClaimed" Multiplicity="1" />
           <End Type="MainModel.UserRewardGiftShippingStatus" Role="UserRewardGiftShippingStatus" Multiplicity="0..1" />
         </Association>
+        <EntityType Name="OAuthNonce">
+          <Key>
+            <PropertyRef Name="Nonce" />
+          </Key>
+          <Property Name="Nonce" Type="String" Nullable="false" MaxLength="40" FixedLength="true" Unicode="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2506,6 +2522,13 @@ FROM [dbo].[UserDataTotalStepsView] AS [UserDataTotalStepsView]</DefiningQuery>
             </EndProperty>
             <Condition ColumnName="UserRewardGiftClaimed_Guid" IsNull="false" />
           </AssociationSetMapping>
+          <EntitySetMapping Name="OAuthNonceSet">
+            <EntityTypeMapping TypeName="MainModel.OAuthNonce">
+              <MappingFragment StoreEntitySet="OAuthNonceSet">
+                <ScalarProperty Name="Nonce" ColumnName="Nonce" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping></edmx:Mappings>
   </edmx:Runtime>

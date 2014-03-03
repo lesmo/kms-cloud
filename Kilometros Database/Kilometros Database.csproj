@@ -103,6 +103,9 @@
     <Compile Include="OAuthCredential.cs">
       <DependentUpon>MainModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="OAuthNonce.cs">
+      <DependentUpon>MainModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="OAuthService.cs">
       <DependentUpon>MainModel.tt</DependentUpon>
     </Compile>
