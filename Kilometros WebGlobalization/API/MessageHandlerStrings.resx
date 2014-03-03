@@ -117,16 +117,28 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Warning101_RequestSignatureInvalid" xml:space="preserve">
-    <value>Request Signature was not received or is invalid</value>
+  <data name="Warning100_OAuthNonceInvalid" xml:space="preserve">
+    <value>OAuth Nonce already used or invalid</value>
   </data>
-  <data name="Warning102_ApiKeyInvalid" xml:space="preserve">
-    <value>API Key was not received, non existant or invalid</value>
+  <data name="Warning101_AuthorizationNotFound" xml:space="preserve">
+    <value>Authorization header not received</value>
   </data>
-  <data name="Warning103_SessionTokenInvalid" xml:space="preserve">
-    <value>Session Token not received, is expired or invalid</value>
+  <data name="Warning102_OAuthFieldMissing" xml:space="preserve">
+    <value>Authorization header is missing OAuth param [{0}]</value>
   </data>
-  <data name="Warning104_EncodingInvalid" xml:space="preserve">
+  <data name="Warning103_OAuthConsumerKeyInvalid" xml:space="preserve">
+    <value>OAuth Consumer Key not found or invalid</value>
+  </data>
+  <data name="Warning104_OAuthTokenInvalid" xml:space="preserve">
+    <value>OAuth Token not found, is expired or invalid</value>
+  </data>
+  <data name="Warning105_OAuthTimestampInvalid" xml:space="preserve">
+    <value>OAuth Timestamp is way too out of sync with server time</value>
+  </data>
+  <data name="Warning106_OAuthSignatureInvalid" xml:space="preserve">
+    <value>OAuth Signature is invalid</value>
+  </data>
+  <data name="Warning110_EncodingInvalid" xml:space="preserve">
     <value>Encoding {0} is not supported</value>
   </data>
 </root>

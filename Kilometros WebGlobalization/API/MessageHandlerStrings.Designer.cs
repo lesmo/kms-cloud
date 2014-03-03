@@ -61,38 +61,74 @@ namespace Kilometros_WebGlobalization.API {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Request Signature was not received or is invalid.
+        ///   Looks up a localized string similar to OAuth Nonce already used or invalid.
         /// </summary>
-        public static string Warning101_RequestSignatureInvalid {
+        public static string Warning100_OAuthNonceInvalid {
             get {
-                return ResourceManager.GetString("Warning101_RequestSignatureInvalid", resourceCulture);
+                return ResourceManager.GetString("Warning100_OAuthNonceInvalid", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to API Key was not received, non existant or invalid.
+        ///   Looks up a localized string similar to Authorization header not received.
         /// </summary>
-        public static string Warning102_ApiKeyInvalid {
+        public static string Warning101_AuthorizationNotFound {
             get {
-                return ResourceManager.GetString("Warning102_ApiKeyInvalid", resourceCulture);
+                return ResourceManager.GetString("Warning101_AuthorizationNotFound", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Session Token not received, is expired or invalid.
+        ///   Looks up a localized string similar to Authorization header is missing OAuth param [{0}].
         /// </summary>
-        public static string Warning103_SessionTokenInvalid {
+        public static string Warning102_OAuthFieldMissing {
             get {
-                return ResourceManager.GetString("Warning103_SessionTokenInvalid", resourceCulture);
+                return ResourceManager.GetString("Warning102_OAuthFieldMissing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OAuth Consumer Key not found or invalid.
+        /// </summary>
+        public static string Warning103_OAuthConsumerKeyInvalid {
+            get {
+                return ResourceManager.GetString("Warning103_OAuthConsumerKeyInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OAuth Token not found, is expired or invalid.
+        /// </summary>
+        public static string Warning104_OAuthTokenInvalid {
+            get {
+                return ResourceManager.GetString("Warning104_OAuthTokenInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OAuth Timestamp is way too out of sync with server time.
+        /// </summary>
+        public static string Warning105_OAuthTimestampInvalid {
+            get {
+                return ResourceManager.GetString("Warning105_OAuthTimestampInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OAuth Signature is invalid.
+        /// </summary>
+        public static string Warning106_OAuthSignatureInvalid {
+            get {
+                return ResourceManager.GetString("Warning106_OAuthSignatureInvalid", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Encoding {0} is not supported.
         /// </summary>
-        public static string Warning104_EncodingInvalid {
+        public static string Warning110_EncodingInvalid {
             get {
-                return ResourceManager.GetString("Warning104_EncodingInvalid", resourceCulture);
+                return ResourceManager.GetString("Warning110_EncodingInvalid", resourceCulture);
             }
         }
     }
