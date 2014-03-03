@@ -10,6 +10,20 @@ namespace Kilometros_WebAPI {
             public const string RequestSignature = "X-Kms-Api-Request-Signature";
             public const string Token = "X-Kms-Api-Token";
         }
+
+        public static class KmsOAuthConfig {
+            public static readonly string[] RequiredParams = {
+                "oauth_consumer_key",
+                "oauth_nonce", 
+                "oauth_signature",
+                "oauth_signature_method",
+                "oauth_timestamp",
+                //"oauth_token",
+                "oauth_version"
+            };
+
+            public const string Realm = "http://api.kms.me";
+        }
         
         public static void Register(HttpConfiguration config) {
             // --- Configurar ExceptionFilters ---

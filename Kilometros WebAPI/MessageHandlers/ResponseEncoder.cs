@@ -17,20 +17,22 @@ namespace Kilometros_WebAPI.MessageHandlers {
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken) {
             return base.SendAsync(request, cancellationToken).ContinueWith<HttpResponseMessage>(
                 (responseToCompleteTask) => {
-                    HttpResponseMessage response = responseToCompleteTask.Result;
+                    HttpResponseMessage response
+                        = responseToCompleteTask.Result;
 
                     if (
                         response.Content != null &&
                         request.Headers.AcceptEncoding != null &&
                         request.Headers.AcceptEncoding.Count > 0
                     ) {
-                        string encodingType = request.Headers.AcceptEncoding.First().Value;
+                        string encodingType
+                            = request.Headers.AcceptEncoding.First().Value;
 
                         if ( encodingType != "gzip" && encodingType != "deflate" ) {
                             response.StatusCode = HttpStatusCode.NotAcceptable;
                             response.Headers.TryAddWithoutValidation(
                                 "Warning",
-                                "102 " + string.Format(MessageHandlerStrings.Warning104_EncodingInvalid, encodingType)
+                                "110 " + string.Format(MessageHandlerStrings.Warning110_EncodingInvalid, encodingType)
                             );
 
                             return response;
