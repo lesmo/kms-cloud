@@ -45,7 +45,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="CultureCode" Type="nvarchar" MaxLength="16" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="CultureCode" Type="varchar" MaxLength="16" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="CreationDate" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="IGlobalizationSet_MotionLevelGlobalization">
@@ -147,6 +147,7 @@
           <Property Name="OAuthProvider" Type="int" Nullable="false" />
           <Property Name="Uid" Type="nvarchar(max)" Nullable="false" />
           <Property Name="Token" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Secret" Type="nvarchar(max)" />
           <Property Name="IsInvalid" Type="bit" Nullable="false" />
           <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
         </EntityType>
@@ -161,17 +162,17 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="TwoLetterIsoCode" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="ThreeLetterIsoCode" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="TwoLetterIsoCode" Type="char" MaxLength="2" Nullable="false" />
+          <Property Name="ThreeLetterIsoCode" Type="char" MaxLength="3" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="128" Nullable="false" />
         </EntityType>
         <EntityType Name="RegionSubdivisionSet">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="IsoCode" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="IsoCode" Type="char" MaxLength="3" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="UtcOffset" Type="smallint" Nullable="false" />
           <Property Name="Region_Id" Type="bigint" Nullable="false" />
         </EntityType>
@@ -231,7 +232,7 @@
           <Property Name="CreationDate" Type="datetime" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="ExpirationDate" Type="datetime" StoreGeneratedPattern="Identity" />
           <Property Name="Guid" Type="uniqueidentifier" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="Secret" Type="uniqueidentifier" />
+          <Property Name="Secret" Type="uniqueidentifier" Nullable="false" />
           <Property Name="VerificationCode" Type="uniqueidentifier" />
           <Property Name="CallbackUri" Type="varchar" MaxLength="250" />
           <Property Name="LastUseDate" Type="datetime" />
@@ -287,10 +288,12 @@
           </Key>
           <Property Name="Guid" Type="uniqueidentifier" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="CreationDate" Type="datetime" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="Email" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="LastName" Type="nvarchar(max)" />
+          <Property Name="Email" Type="varchar" MaxLength="255" Nullable="false" />
           <Property Name="Password" Type="varbinary(max)" />
-          <Property Name="RegionCode" Type="nchar" MaxLength="5" />
-          <Property Name="PreferredCultureCode" Type="nvarchar" MaxLength="16" />
+          <Property Name="RegionCode" Type="char" MaxLength="5" />
+          <Property Name="PreferredCultureCode" Type="varchar" MaxLength="16" />
           <Property Name="UtcOffset" Type="smallint" />
         </EntityType>
         <EntityType Name="UserTipHistorySet">
@@ -1197,7 +1200,7 @@ FROM [dbo].[UserDataTotalStepsView] AS [UserDataTotalStepsView]</DefiningQuery>
               <Summary>Fecha de Creación del Usuario</Summary>
             </Documentation>
           </Property>
-          <Property Type="String" Name="Email" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" >
+          <Property Type="String" Name="Email" Nullable="false" MaxLength="255" Unicode="false" FixedLength="false" >
             <Documentation>
               <Summary>Email del Usuario (en minúsculas)</Summary>
             </Documentation>
@@ -1218,7 +1221,7 @@ FROM [dbo].[UserDataTotalStepsView] AS [UserDataTotalStepsView]</DefiningQuery>
               <Summary>Información de la Complexión Física del Usuario.</Summary>
             </Documentation>
           </NavigationProperty>
-          <Property Type="String" Name="RegionCode" Nullable="true" FixedLength="true" MaxLength="5" Unicode="true" >
+          <Property Type="String" Name="RegionCode" Nullable="true" FixedLength="true" MaxLength="5" Unicode="false" >
             <Documentation>
               <Summary>Código de País/Región y Estado/Subdivisión según lo definido en el ISO-3166-2 (AA-AAA).</Summary>
             </Documentation>
@@ -1248,7 +1251,7 @@ FROM [dbo].[UserDataTotalStepsView] AS [UserDataTotalStepsView]</DefiningQuery>
               <Summary>Información de Envío del Usuario.</Summary>
             </Documentation>
           </NavigationProperty>
-          <Property Type="String" Name="PreferredCultureCode" Nullable="true" MaxLength="16" Unicode="true" FixedLength="false" >
+          <Property Type="String" Name="PreferredCultureCode" Nullable="true" MaxLength="16" Unicode="false" FixedLength="false" >
             <Documentation>
               <Summary>Código de Cultura (Idioma) preferido por el Usuario</Summary>
             </Documentation>
@@ -1257,6 +1260,8 @@ FROM [dbo].[UserDataTotalStepsView] AS [UserDataTotalStepsView]</DefiningQuery>
           <NavigationProperty Name="UserTipHistory" Relationship="MainModel.UserTipHistoryUser" FromRole="User" ToRole="UserTipHistory" />
           <NavigationProperty Name="OAuthCredential" Relationship="MainModel.OAuthCredentialUser" FromRole="User" ToRole="OAuthCredential" />
           <Property Name="UtcOffset" Type="Int16" Nullable="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Token">
           <Documentation>
@@ -1290,7 +1295,7 @@ FROM [dbo].[UserDataTotalStepsView] AS [UserDataTotalStepsView]</DefiningQuery>
               <Summary>Ésto se utiliza para identificar la Sesión actual en todas las peticiones al Api.</Summary>
             </Documentation>
           </Property>
-          <Property Name="Secret" Type="Guid" Nullable="true" />
+          <Property Name="Secret" Type="Guid" Nullable="false" />
           <Property Type="DateTime" Name="LastUseDate" Nullable="true" Precision="3" />
           <Property Name="LoginAttempts" Type="Byte" Nullable="false" />
           <Property Name="CallbackUri" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
@@ -1821,9 +1826,9 @@ FROM [dbo].[UserDataTotalStepsView] AS [UserDataTotalStepsView]</DefiningQuery>
             <PropertyRef Name="Id" />
           </Key>
           <Property Type="Int64" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="String" Name="TwoLetterIsoCode" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
-          <Property Type="String" Name="ThreeLetterIsoCode" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
-          <Property Type="String" Name="Name" Nullable="false" Unicode="true" MaxLength="Max" FixedLength="false" />
+          <Property Type="String" Name="TwoLetterIsoCode" Nullable="false" MaxLength="2" Unicode="false" FixedLength="true" />
+          <Property Type="String" Name="ThreeLetterIsoCode" Nullable="false" MaxLength="3" Unicode="false" FixedLength="true" />
+          <Property Type="String" Name="Name" Nullable="false" Unicode="true" MaxLength="128" FixedLength="false" />
           <NavigationProperty Name="RegionSubdivision" Relationship="MainModel.RegionRegionSubdivision" FromRole="Region" ToRole="RegionSubdivision" />
         </EntityType>
         <EntityType Name="RegionSubdivision">
@@ -1831,8 +1836,8 @@ FROM [dbo].[UserDataTotalStepsView] AS [UserDataTotalStepsView]</DefiningQuery>
             <PropertyRef Name="Id" />
           </Key>
           <Property Type="Int64" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="String" Name="IsoCode" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
-          <Property Type="String" Name="Name" Nullable="false" Unicode="true" MaxLength="Max" FixedLength="false" />
+          <Property Type="String" Name="IsoCode" Nullable="false" MaxLength="3" Unicode="false" FixedLength="true" />
+          <Property Type="String" Name="Name" Nullable="false" Unicode="true" MaxLength="128" FixedLength="false" />
           <NavigationProperty Name="Region" Relationship="MainModel.RegionRegionSubdivision" FromRole="RegionSubdivision" ToRole="Region" />
           <Property Name="UtcOffset" Type="Int16" Nullable="false" />
         </EntityType>
@@ -1870,7 +1875,7 @@ FROM [dbo].[UserDataTotalStepsView] AS [UserDataTotalStepsView]</DefiningQuery>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CultureCode" Type="String" Nullable="false" MaxLength="16" FixedLength="false" annotation:StoreGeneratedPattern="Identity" Unicode="true" />
+          <Property Name="CultureCode" Type="String" Nullable="false" MaxLength="16" FixedLength="false" annotation:StoreGeneratedPattern="Identity" Unicode="false" />
           <Property Name="CreationDate" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
         <EntityType Name="IPicture" Abstract="false">
@@ -1917,6 +1922,7 @@ FROM [dbo].[UserDataTotalStepsView] AS [UserDataTotalStepsView]</DefiningQuery>
               <Summary>Token de Sesión del Usuario en la Red Social</Summary>
             </Documentation>
           </Property>
+          <Property Name="Secret" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="IsInvalid" Type="Boolean" Nullable="false" DefaultValue="False" >
             <Documentation>
               <Summary>Si el Token de OAuth es válido</Summary>
@@ -1996,7 +2002,9 @@ FROM [dbo].[UserDataTotalStepsView] AS [UserDataTotalStepsView]</DefiningQuery>
     <EntitySetMapping Name="UserSet">
       <EntityTypeMapping TypeName="IsTypeOf(MainModel.User)">
         <MappingFragment StoreEntitySet="UserSet">
-          <ScalarProperty Name="Guid" ColumnName="Guid" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Guid" ColumnName="Guid" />
           <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
           <ScalarProperty Name="Email" ColumnName="Email" />
           <ScalarProperty Name="Password" ColumnName="Password" />
@@ -2261,7 +2269,8 @@ FROM [dbo].[UserDataTotalStepsView] AS [UserDataTotalStepsView]</DefiningQuery>
     <EntitySetMapping Name="OAuthCredentialSet">
       <EntityTypeMapping TypeName="IsTypeOf(MainModel.OAuthCredential)">
         <MappingFragment StoreEntitySet="OAuthCredentialSet">
-          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Secret" ColumnName="Secret" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="OAuthProvider" ColumnName="OAuthProvider" />
           <ScalarProperty Name="Uid" ColumnName="Uid" />
           <ScalarProperty Name="Token" ColumnName="Token" />

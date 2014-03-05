@@ -50,6 +50,9 @@
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="RestSharp">
+      <HintPath>..\packages\RestSharp.103.4\lib\net4\RestSharp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -186,6 +189,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Areas\Login\Controllers\HomeController.cs" />
     <Compile Include="Areas\Login\LoginAreaRegistration.cs" />
+    <Compile Include="Controllers\AccountCreateController.cs" />
     <Compile Include="Controllers\DataController.cs" />
     <Compile Include="Controllers\MyAccountController.cs" />
     <Compile Include="Controllers\MyContactInfoController.cs" />
@@ -194,7 +198,7 @@
     <Compile Include="Controllers\RegisterController.cs" />
     <Compile Include="Controllers\MyGiftsController.cs" />
     <Compile Include="Controllers\RewardsController.cs" />
-    <Compile Include="Controllers\SessionController.cs" />
+    <Compile Include="Controllers\OAuthThirdPartyController.cs" />
     <Compile Include="Controllers\TipsController.cs" />
     <Compile Include="ExceptionFilters\HttpStatusExceptionFilter.cs" />
     <Compile Include="ExceptionFilters\DbValidationExceptionFilter.cs" />
@@ -227,6 +231,7 @@
     <Compile Include="Models\HttpGet\SessionController\TokenResponse.cs" />
     <Compile Include="Models\HttpGet\TipsController\TipCategoryResponse.cs" />
     <Compile Include="Models\HttpGet\TipsController\TipResponse.cs" />
+    <Compile Include="Models\HttpPost\AccountCreateController\CreateKmsAccountPost.cs" />
     <Compile Include="Models\HttpPost\DataController\DataPost.cs" />
     <Compile Include="Models\HttpPost\My_Controller\ContactInfoPost.cs" />
     <Compile Include="Models\HttpPost\My_Controller\PhysiquePost.cs" />

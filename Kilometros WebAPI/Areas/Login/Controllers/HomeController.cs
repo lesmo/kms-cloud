@@ -60,6 +60,11 @@ namespace Kilometros_WebAPI.Areas.Login.Controllers {
                             new char[]{' '},
                             2
                         )[1];
+                    authorizationLine
+                        = Encoding.ASCII.GetString(
+                            Convert.FromBase64String(authorizationLine)
+                        );
+
                     string[] authorizationValues
                         = authorizationLine.Split(
                             new char[]{':'},
@@ -144,22 +149,32 @@ namespace Kilometros_WebAPI.Areas.Login.Controllers {
             // --- Autorizar Token y redirigir a CallbackUri ---
             token.User
                 = user;
-            token.Secret
-                = Guid.NewGuid();
             token.LastUseDate
                 = DateTime.UtcNow;
             token.VerificationCode
                 = Guid.NewGuid();
-            Database.TokenStore.Update(token);
 
-            Redirect(string.Format(
+            Database.TokenStore.Update(token);
+            Database.SaveChanges();
+
+            string callbackUri
+                = token.CallbackUri ?? "http://api.kms.me/oauth/nocallback#";
+
+            if ( !callbackUri.EndsWith('?') || !callbackUri.EndsWith('#') )
+                callbackUri += "?";
+
+            return Redirect(string.Format(
                 "{0}oauth_token={1}&oauth_verifier={2}",
-                token.CallbackUri.Contains('?')
-                    ? token.CallbackUri
-                    : token.CallbackUri + "?",
+                token.CallbackUri,
                 token.Guid.ToString("00000000000000000000000000000000"),
                 token.Secret.ToString("00000000000000000000000000000000")
             ));
+        }
+
+        [HttpGet]
+        [Route("oauth/nocallback")]
+        public ActionResult NoCallback() {
+            return View();
         }
     }
 }

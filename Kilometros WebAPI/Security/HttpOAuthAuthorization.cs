@@ -65,6 +65,16 @@ namespace Kilometros_WebAPI.Security {
                     = database.TokenStore.Get(
                     new Guid(oAuthParameters["oauth_token"])
                 );
+
+                if (
+                    this.Token.ExpirationDate.HasValue
+                    && this.Token.ExpirationDate.Value < DateTime.UtcNow
+                ) {
+                    database.TokenStore.Delete(this.Token.Guid);
+                    database.SaveChanges();
+
+                    this.Token = null;
+                }
             } else {
                 this.Token
                     = null;

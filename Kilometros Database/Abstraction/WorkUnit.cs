@@ -107,6 +107,19 @@ namespace KilometrosDatabase.Abstraction {
             }
         }
         private GenericRepository<ContactInfo> _contactInfoRepository = null;
+
+        /// <summary>
+        /// Almacén de Credenciales OAuth the terceros
+        /// </summary>
+        public GenericRepository<OAuthCredential> OAuthCredentialStore {
+            get {
+                if ( this._oAuthCredentialRepository == null )
+                    this._oAuthCredentialRepository = new GenericRepository<OAuthCredential>(this._context);
+
+                return this._oAuthCredentialRepository;
+            }
+        }
+        private GenericRepository<OAuthCredential> _oAuthCredentialRepository = null;
         #endregion
 
         #region User Data Storage

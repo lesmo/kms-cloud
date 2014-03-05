@@ -106,6 +106,24 @@ namespace Kilometros_WebGlobalization.API {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to OAuth Request Token is invalid, expired or Verifier Code is invalid.
+        /// </summary>
+        public static string Warning104_RequestTokenInvalid {
+            get {
+                return ResourceManager.GetString("Warning104_RequestTokenInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Social Network Token is invalid, expired or doesn&apos;t exist.
+        /// </summary>
+        public static string Warning105_SocialTokenInvalid {
+            get {
+                return ResourceManager.GetString("Warning105_SocialTokenInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to User is logged in and cannot register a new account.
         /// </summary>
         public static string Warning201_CannotCreateUserWithSessionOpen {
@@ -138,6 +156,15 @@ namespace Kilometros_WebGlobalization.API {
         public static string Warning205_ShippingInfoNotSet {
             get {
                 return ResourceManager.GetString("Warning205_ShippingInfoNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There is another User using provided email.
+        /// </summary>
+        public static string Warning206_CannotCreateUserWithEmail {
+            get {
+                return ResourceManager.GetString("Warning206_CannotCreateUserWithEmail", resourceCulture);
             }
         }
         

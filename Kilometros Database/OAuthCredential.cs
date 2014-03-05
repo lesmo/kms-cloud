@@ -23,6 +23,7 @@ namespace KilometrosDatabase
         public OAuthService OAuthProvider { get; set; }
         public string Uid { get; set; }
         public string Token { get; set; }
+        public string Secret { get; set; }
         public bool IsInvalid { get; set; }
     
         public virtual User User { get; set; }

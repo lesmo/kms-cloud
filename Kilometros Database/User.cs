@@ -32,6 +32,8 @@ namespace KilometrosDatabase
         public string RegionCode { get; set; }
         public string PreferredCultureCode { get; set; }
         public Nullable<short> UtcOffset { get; set; }
+        public string Name { get; set; }
+        public string LastName { get; set; }
     
         public virtual ICollection<Token> Token { get; set; }
         public virtual UserBody UserBody { get; set; }

@@ -132,6 +132,12 @@
   <data name="Warning103_TokenDeleteOk" xml:space="preserve">
     <value>Token was deleted successfully</value>
   </data>
+  <data name="Warning104_RequestTokenInvalid" xml:space="preserve">
+    <value>OAuth Request Token is invalid, expired or Verifier Code is invalid</value>
+  </data>
+  <data name="Warning105_SocialTokenInvalid" xml:space="preserve">
+    <value>Social Network Token is invalid, expired or doesn't exist</value>
+  </data>
   <data name="Warning201_CannotCreateUserWithSessionOpen" xml:space="preserve">
     <value>User is logged in and cannot register a new account</value>
   </data>
@@ -143,6 +149,9 @@
   </data>
   <data name="Warning205_ShippingInfoNotSet" xml:space="preserve">
     <value>Shipping Information is not set yet</value>
+  </data>
+  <data name="Warning206_CannotCreateUserWithEmail" xml:space="preserve">
+    <value>There is another User using provided email</value>
   </data>
   <data name="Warning501_AccountDataInvalid" xml:space="preserve">
     <value>Account Data received is invalid</value>
