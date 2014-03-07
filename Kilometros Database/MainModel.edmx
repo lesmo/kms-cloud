@@ -36,8 +36,9 @@
           </Key>
           <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Timestamp" Type="datetime" Nullable="false" />
-          <Property Name="Steps" Type="int" Nullable="false" />
           <Property Name="Activity" Type="smallint" Nullable="false" />
+          <Property Name="Steps" Type="int" Nullable="false" />
+          <Property Name="StrideLength" Type="int" Nullable="false" />
           <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
         </EntityType>
         <EntityType Name="IGlobalizationSet">
@@ -1504,6 +1505,7 @@ FROM [dbo].[UserDataTotalStepsView] AS [UserDataTotalStepsView]</DefiningQuery>
           <Property Type="Int32" Name="Steps" Nullable="false" />
           <NavigationProperty Name="User" Relationship="MainModel.UserData" FromRole="Data" ToRole="User" />
           <Property Name="Activity" Type="MainModel.DataActivity" Nullable="false" />
+          <Property Name="StrideLength" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="UserBody">
           <Documentation>
@@ -1535,7 +1537,11 @@ FROM [dbo].[UserDataTotalStepsView] AS [UserDataTotalStepsView]</DefiningQuery>
               <LongDescription>El carácter F es Femenino, el carácter M es masculino.</LongDescription>
             </Documentation>
           </Property>
-          <Property Name="StrideLengthWalking" Type="Int32" Nullable="false" />
+          <Property Name="StrideLengthWalking" Type="Int32" Nullable="false" >
+            <Documentation>
+              <Summary>Largo del paso del Usuario (en cm)</Summary>
+            </Documentation>
+          </Property>
           <Property Name="StrideLengthRunning" Type="Int32" Nullable="false" />
           <Property Type="DateTime" Name="LastEditDate" Nullable="false" annotation:StoreGeneratedPattern="None" Precision="3" >
             <Documentation>
@@ -2067,7 +2073,8 @@ FROM [dbo].[UserDataTotalStepsView] AS [UserDataTotalStepsView]</DefiningQuery>
     <EntitySetMapping Name="DataSet">
       <EntityTypeMapping TypeName="IsTypeOf(MainModel.Data)">
         <MappingFragment StoreEntitySet="DataSet">
-          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="StrideLength" ColumnName="StrideLength" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
           <ScalarProperty Name="Steps" ColumnName="Steps" />
           <ScalarProperty Name="Activity" ColumnName="Activity" />

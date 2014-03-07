@@ -18,6 +18,7 @@ namespace KilometrosDatabase
         public System.DateTime Timestamp { get; set; }
         public int Steps { get; set; }
         public DataActivity Activity { get; set; }
+        public int StrideLength { get; set; }
     
         public virtual User User { get; set; }
     }
