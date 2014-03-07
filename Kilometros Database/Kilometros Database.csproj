@@ -158,16 +158,10 @@
     <Compile Include="UserBody.cs">
       <DependentUpon>MainModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="UserDataHourlyDistanceView.cs">
+    <Compile Include="UserDataHourlyDistance.cs">
       <DependentUpon>MainModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="UserDataHourlyStepsView.cs">
-      <DependentUpon>MainModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="UserDataTotalDistanceView.cs">
-      <DependentUpon>MainModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="UserDataTotalStepsView.cs">
+    <Compile Include="UserDataTotalDistance.cs">
       <DependentUpon>MainModel.tt</DependentUpon>
     </Compile>
     <Compile Include="UserEarnedReward.cs">

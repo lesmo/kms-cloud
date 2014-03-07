@@ -307,52 +307,30 @@
           <Property Name="Tip_Guid" Type="uniqueidentifier" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'KilometrosDatabase.dbo.UserDataHourlyDistanceView' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="UserDataHourlyDistanceView">
+warning 6002: The table/view 'KilometrosDatabase.dbo.UserDataHourlyDistance' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="UserDataHourlyDistance">
           <Key>
             <PropertyRef Name="User_Guid" />
-          </Key>
-          <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="Timestamp" Type="datetime" />
-          <Property Name="RunningDistance" Type="int" />
-          <Property Name="WalkingDistance" Type="int" />
-          <Property Name="TotalDistance" Type="int" />
-        </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'KilometrosDatabase.dbo.UserDataHourlyStepsView' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="UserDataHourlyStepsView">
-          <Key>
-            <PropertyRef Name="User_Guid" />
-            
+            <PropertyRef Name="Activity" />
           </Key>
           <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Activity" Type="smallint" Nullable="false" />
           <Property Name="Timestamp" Type="datetime" />
-          <Property Name="TotalSteps" Type="int" />
+          <Property Name="Steps" Type="bigint" />
+          <Property Name="Distance" Type="bigint" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'KilometrosDatabase.dbo.UserDataTotalDistanceView' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="UserDataTotalDistanceView">
+warning 6002: The table/view 'KilometrosDatabase.dbo.UserDataTotalDistance' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="UserDataTotalDistance">
           <Key>
             <PropertyRef Name="User_Guid" />
-          </Key>
-          <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="Timestamp" Type="datetime" />
-          <Property Name="RunningDistance" Type="bigint" />
-          <Property Name="WalkingDistance" Type="bigint" />
-          <Property Name="TotalDistance" Type="bigint" />
-        </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'KilometrosDatabase.dbo.UserDataTotalStepsView' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="UserDataTotalStepsView">
-          <Key>
-            <PropertyRef Name="User_Guid" />
-            
+            <PropertyRef Name="Activity" />
           </Key>
           <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Activity" Type="smallint" Nullable="false" />
           <Property Name="Timestamp" Type="datetime" />
           <Property Name="TotalSteps" Type="bigint" />
+          <Property Name="TotalDistance" Type="bigint" />
         </EntityType>
         <Association Name="FK_ApiKeyHistory">
           <End Role="ApiKeySet" Type="Self.ApiKeySet" Multiplicity="0..1" />
@@ -861,39 +839,23 @@ warning 6002: The table/view 'KilometrosDatabase.dbo.UserDataTotalStepsView' doe
           <EntitySet Name="UserRewardGiftShippingStatusSet" EntityType="Self.UserRewardGiftShippingStatusSet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserSet" EntityType="Self.UserSet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserTipHistorySet" EntityType="Self.UserTipHistorySet" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="UserDataHourlyDistanceView" EntityType="Self.UserDataHourlyDistanceView" store:Type="Views" store:Schema="dbo">
+          <EntitySet Name="UserDataHourlyDistance" EntityType="Self.UserDataHourlyDistance" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
-[UserDataHourlyDistanceView].[User_Guid] AS [User_Guid], 
-[UserDataHourlyDistanceView].[Timestamp] AS [Timestamp], 
-[UserDataHourlyDistanceView].[RunningDistance] AS [RunningDistance], 
-[UserDataHourlyDistanceView].[WalkingDistance] AS [WalkingDistance], 
-[UserDataHourlyDistanceView].[TotalDistance] AS [TotalDistance]
-FROM [dbo].[UserDataHourlyDistanceView] AS [UserDataHourlyDistanceView]</DefiningQuery>
+[UserDataHourlyDistance].[User_Guid] AS [User_Guid], 
+[UserDataHourlyDistance].[Activity] AS [Activity], 
+[UserDataHourlyDistance].[Timestamp] AS [Timestamp], 
+[UserDataHourlyDistance].[Steps] AS [Steps], 
+[UserDataHourlyDistance].[Distance] AS [Distance]
+FROM [dbo].[UserDataHourlyDistance] AS [UserDataHourlyDistance]</DefiningQuery>
           </EntitySet>
-          <EntitySet Name="UserDataHourlyStepsView" EntityType="Self.UserDataHourlyStepsView" store:Type="Views" store:Schema="dbo">
+          <EntitySet Name="UserDataTotalDistance" EntityType="Self.UserDataTotalDistance" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
-[UserDataHourlyStepsView].[User_Guid] AS [User_Guid], 
-[UserDataHourlyStepsView].[Activity] AS [Activity], 
-[UserDataHourlyStepsView].[Timestamp] AS [Timestamp], 
-[UserDataHourlyStepsView].[TotalSteps] AS [TotalSteps]
-FROM [dbo].[UserDataHourlyStepsView] AS [UserDataHourlyStepsView]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="UserDataTotalDistanceView" EntityType="Self.UserDataTotalDistanceView" store:Type="Views" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-[UserDataTotalDistanceView].[User_Guid] AS [User_Guid], 
-[UserDataTotalDistanceView].[Timestamp] AS [Timestamp], 
-[UserDataTotalDistanceView].[RunningDistance] AS [RunningDistance], 
-[UserDataTotalDistanceView].[WalkingDistance] AS [WalkingDistance], 
-[UserDataTotalDistanceView].[TotalDistance] AS [TotalDistance]
-FROM [dbo].[UserDataTotalDistanceView] AS [UserDataTotalDistanceView]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="UserDataTotalStepsView" EntityType="Self.UserDataTotalStepsView" store:Type="Views" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-[UserDataTotalStepsView].[User_Guid] AS [User_Guid], 
-[UserDataTotalStepsView].[Activity] AS [Activity], 
-[UserDataTotalStepsView].[Timestamp] AS [Timestamp], 
-[UserDataTotalStepsView].[TotalSteps] AS [TotalSteps]
-FROM [dbo].[UserDataTotalStepsView] AS [UserDataTotalStepsView]</DefiningQuery>
+[UserDataTotalDistance].[User_Guid] AS [User_Guid], 
+[UserDataTotalDistance].[Activity] AS [Activity], 
+[UserDataTotalDistance].[Timestamp] AS [Timestamp], 
+[UserDataTotalDistance].[TotalSteps] AS [TotalSteps], 
+[UserDataTotalDistance].[TotalDistance] AS [TotalDistance]
+FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
           </EntitySet>
           <AssociationSet Name="FK_ApiKeyHistory" Association="Self.FK_ApiKeyHistory">
             <End Role="ApiKeySet" EntitySet="ApiKeySet" />
@@ -1174,15 +1136,13 @@ FROM [dbo].[UserDataTotalStepsView] AS [UserDataTotalStepsView]</DefiningQuery>
             <End Role="OAuthCredential" EntitySet="OAuthCredentialSet" />
             <End Role="User" EntitySet="UserSet" />
           </AssociationSet>
-          <EntitySet Name="UserDataHourlyDistanceView" EntityType="MainModel.UserDataHourlyDistanceView" />
-          <EntitySet Name="UserDataHourlyStepsView" EntityType="MainModel.UserDataHourlyStepsView" />
-          <EntitySet Name="UserDataTotalDistanceView" EntityType="MainModel.UserDataTotalDistanceView" />
-          <EntitySet Name="UserDataTotalStepsView" EntityType="MainModel.UserDataTotalStepsView" />
           <AssociationSet Name="FK_UserRewardGiftShippingStatusUserRewardGiftClaimed" Association="MainModel.FK_UserRewardGiftShippingStatusUserRewardGiftClaimed">
             <End Role="UserRewardGiftClaimed" EntitySet="IPictureSet" />
             <End Role="UserRewardGiftShippingStatus" EntitySet="UserRewardGiftShippingStatusSet" />
           </AssociationSet>
           <EntitySet Name="OAuthNonceSet" EntityType="MainModel.OAuthNonce" />
+          <EntitySet Name="UserDataHourlyDistance" EntityType="MainModel.UserDataHourlyDistance" />
+          <EntitySet Name="UserDataTotalDistance" EntityType="MainModel.UserDataTotalDistance" />
         </EntityContainer>
         <EntityType Name="User">
           <Documentation>
@@ -1951,44 +1911,6 @@ FROM [dbo].[UserDataTotalStepsView] AS [UserDataTotalStepsView]</DefiningQuery>
           <Member Name="Running" Value="2" />
           <Member Name="Sleep" Value="3" />
         </EnumType>
-        <EntityType Name="UserDataHourlyDistanceView">
-          <Key>
-            <PropertyRef Name="User_Guid" />
-          </Key>
-          <Property Name="User_Guid" Type="Guid" Nullable="false" />
-          <Property Name="Timestamp" Type="DateTime" Precision="3" />
-          <Property Name="RunningDistance" Type="Int32" />
-          <Property Name="WalkingDistance" Type="Int32" />
-          <Property Name="TotalDistance" Type="Int32" />
-        </EntityType>
-        <EntityType Name="UserDataHourlyStepsView">
-          <Key>
-            <PropertyRef Name="User_Guid" />
-          </Key>
-          <Property Name="User_Guid" Type="Guid" Nullable="false" />
-          <Property Name="Activity" Type="MainModel.DataActivity" Nullable="false" />
-          <Property Name="Timestamp" Type="DateTime" Precision="3" />
-          <Property Name="TotalSteps" Type="Int32" />
-        </EntityType>
-        <EntityType Name="UserDataTotalDistanceView">
-          <Key>
-            <PropertyRef Name="User_Guid" />
-          </Key>
-          <Property Name="User_Guid" Type="Guid" Nullable="false" />
-          <Property Name="Timestamp" Type="DateTime" Precision="3" />
-          <Property Name="RunningDistance" Type="Int64" />
-          <Property Name="WalkingDistance" Type="Int64" />
-          <Property Name="TotalDistance" Type="Int32" />
-        </EntityType>
-        <EntityType Name="UserDataTotalStepsView">
-          <Key>
-            <PropertyRef Name="User_Guid" />
-          </Key>
-          <Property Name="User_Guid" Type="Guid" Nullable="false" />
-          <Property Name="Activity" Type="MainModel.DataActivity" Nullable="false" />
-          <Property Name="Timestamp" Type="DateTime" Precision="3" />
-          <Property Name="TotalSteps" Type="Int64" />
-        </EntityType>
         <Association Name="FK_UserRewardGiftShippingStatusUserRewardGiftClaimed">
           <End Type="MainModel.UserRewardGiftClaimed" Role="UserRewardGiftClaimed" Multiplicity="1" />
           <End Type="MainModel.UserRewardGiftShippingStatus" Role="UserRewardGiftShippingStatus" Multiplicity="0..1" />
@@ -1999,6 +1921,28 @@ FROM [dbo].[UserDataTotalStepsView] AS [UserDataTotalStepsView]</DefiningQuery>
           </Key>
           <Property Name="Nonce" Type="String" Nullable="false" MaxLength="40" FixedLength="true" Unicode="false" />
         </EntityType>
+        <EntityType Name="UserDataHourlyDistance">
+          <Key>
+            <PropertyRef Name="User_Guid" />
+            <PropertyRef Name="Activity" />
+          </Key>
+          <Property Name="User_Guid" Type="Guid" Nullable="false" />
+          <Property Name="Activity" Type="Int16" Nullable="false" />
+          <Property Name="Timestamp" Type="DateTime" Precision="3" />
+          <Property Name="Steps" Type="Int64" />
+          <Property Name="Distance" Type="Int64" />
+        </EntityType>
+        <EntityType Name="UserDataTotalDistance">
+          <Key>
+            <PropertyRef Name="User_Guid" />
+            <PropertyRef Name="Activity" />
+          </Key>
+          <Property Name="User_Guid" Type="Guid" Nullable="false" />
+          <Property Name="Activity" Type="Int16" Nullable="false" />
+          <Property Name="Timestamp" Type="DateTime" Precision="3" />
+          <Property Name="TotalSteps" Type="Int64" />
+          <Property Name="TotalDistance" Type="Int64" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2008,43 +1952,43 @@ FROM [dbo].[UserDataTotalStepsView] AS [UserDataTotalStepsView]</DefiningQuery>
     <EntitySetMapping Name="UserSet">
       <EntityTypeMapping TypeName="IsTypeOf(MainModel.User)">
         <MappingFragment StoreEntitySet="UserSet">
-          <ScalarProperty Name="LastName" ColumnName="LastName" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Guid" ColumnName="Guid" />
+          <ScalarProperty Name="Guid" ColumnName="Guid" />
           <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
           <ScalarProperty Name="Email" ColumnName="Email" />
           <ScalarProperty Name="Password" ColumnName="Password" />
           <ScalarProperty Name="RegionCode" ColumnName="RegionCode" />
           <ScalarProperty Name="PreferredCultureCode" ColumnName="PreferredCultureCode" />
           <ScalarProperty Name="UtcOffset" ColumnName="UtcOffset" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="TokenSet">
       <EntityTypeMapping TypeName="IsTypeOf(MainModel.Token)">
         <MappingFragment StoreEntitySet="TokenSet">
-          <ScalarProperty Name="VerificationCode" ColumnName="VerificationCode" />
-                <ScalarProperty Name="CallbackUri" ColumnName="CallbackUri" />
-                <ScalarProperty Name="LoginAttempts" ColumnName="LoginAttempts" />
-                <ScalarProperty Name="Secret" ColumnName="Secret" />
-                <ScalarProperty Name="Guid" ColumnName="Guid" />
+          <ScalarProperty Name="Guid" ColumnName="Guid" />
           <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
           <ScalarProperty Name="ExpirationDate" ColumnName="ExpirationDate" />
+          <ScalarProperty Name="Secret" ColumnName="Secret" />
           <ScalarProperty Name="LastUseDate" ColumnName="LastUseDate" />
+          <ScalarProperty Name="LoginAttempts" ColumnName="LoginAttempts" />
+          <ScalarProperty Name="CallbackUri" ColumnName="CallbackUri" />
+          <ScalarProperty Name="VerificationCode" ColumnName="VerificationCode" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="ApiKeySet">
       <EntityTypeMapping TypeName="IsTypeOf(MainModel.ApiKey)">
         <MappingFragment StoreEntitySet="ApiKeySet">
-          <ScalarProperty Name="BasicLoginEnabled" ColumnName="BasicLoginEnabled" />
-                <ScalarProperty Name="Guid" ColumnName="Guid" />
+          <ScalarProperty Name="Guid" ColumnName="Guid" />
           <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
           <ScalarProperty Name="Platform" ColumnName="Platform" />
           <ScalarProperty Name="Description" ColumnName="Description" />
           <ScalarProperty Name="Secret" ColumnName="Secret" />
           <ScalarProperty Name="TokenUpgradeRequired" ColumnName="TokenUpgradeRequired" />
           <ScalarProperty Name="DebugEnabled" ColumnName="DebugEnabled" />
+          <ScalarProperty Name="BasicLoginEnabled" ColumnName="BasicLoginEnabled" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -2073,11 +2017,11 @@ FROM [dbo].[UserDataTotalStepsView] AS [UserDataTotalStepsView]</DefiningQuery>
     <EntitySetMapping Name="DataSet">
       <EntityTypeMapping TypeName="IsTypeOf(MainModel.Data)">
         <MappingFragment StoreEntitySet="DataSet">
-          <ScalarProperty Name="StrideLength" ColumnName="StrideLength" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
           <ScalarProperty Name="Steps" ColumnName="Steps" />
           <ScalarProperty Name="Activity" ColumnName="Activity" />
+          <ScalarProperty Name="StrideLength" ColumnName="StrideLength" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -2276,12 +2220,19 @@ FROM [dbo].[UserDataTotalStepsView] AS [UserDataTotalStepsView]</DefiningQuery>
     <EntitySetMapping Name="OAuthCredentialSet">
       <EntityTypeMapping TypeName="IsTypeOf(MainModel.OAuthCredential)">
         <MappingFragment StoreEntitySet="OAuthCredentialSet">
-          <ScalarProperty Name="Secret" ColumnName="Secret" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="OAuthProvider" ColumnName="OAuthProvider" />
           <ScalarProperty Name="Uid" ColumnName="Uid" />
           <ScalarProperty Name="Token" ColumnName="Token" />
+          <ScalarProperty Name="Secret" ColumnName="Secret" />
           <ScalarProperty Name="IsInvalid" ColumnName="IsInvalid" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OAuthNonceSet">
+      <EntityTypeMapping TypeName="IsTypeOf(MainModel.OAuthNonce)">
+        <MappingFragment StoreEntitySet="OAuthNonceSet">
+          <ScalarProperty Name="Nonce" ColumnName="Nonce" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -2502,61 +2453,33 @@ FROM [dbo].[UserDataTotalStepsView] AS [UserDataTotalStepsView]</DefiningQuery>
         <ScalarProperty Name="Id" ColumnName="Id" />
       </EndProperty>
     </AssociationSetMapping>
-          <EntitySetMapping Name="UserDataHourlyDistanceView">
-            <EntityTypeMapping TypeName="MainModel.UserDataHourlyDistanceView">
-              <MappingFragment StoreEntitySet="UserDataHourlyDistanceView">
-                <ScalarProperty Name="TotalDistance" ColumnName="TotalDistance" />
-                <ScalarProperty Name="WalkingDistance" ColumnName="WalkingDistance" />
-                <ScalarProperty Name="RunningDistance" ColumnName="RunningDistance" />
-                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
-                <ScalarProperty Name="User_Guid" ColumnName="User_Guid" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="UserDataHourlyStepsView">
-            <EntityTypeMapping TypeName="MainModel.UserDataHourlyStepsView">
-              <MappingFragment StoreEntitySet="UserDataHourlyStepsView">
-                <ScalarProperty Name="TotalSteps" ColumnName="TotalSteps" />
+    <AssociationSetMapping Name="FK_UserRewardGiftShippingStatusUserRewardGiftClaimed" TypeName="MainModel.FK_UserRewardGiftShippingStatusUserRewardGiftClaimed" StoreEntitySet="UserRewardGiftShippingStatusSet">
+      <EndProperty Name="UserRewardGiftClaimed">
+        <ScalarProperty Name="Guid" ColumnName="UserRewardGiftClaimed_Guid" />
+      </EndProperty>
+      <EndProperty Name="UserRewardGiftShippingStatus">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+          <EntitySetMapping Name="UserDataHourlyDistance">
+            <EntityTypeMapping TypeName="MainModel.UserDataHourlyDistance">
+              <MappingFragment StoreEntitySet="UserDataHourlyDistance">
+                <ScalarProperty Name="Distance" ColumnName="Distance" />
+                <ScalarProperty Name="Steps" ColumnName="Steps" />
                 <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
                 <ScalarProperty Name="Activity" ColumnName="Activity" />
                 <ScalarProperty Name="User_Guid" ColumnName="User_Guid" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="UserDataTotalDistanceView">
-            <EntityTypeMapping TypeName="MainModel.UserDataTotalDistanceView">
-              <MappingFragment StoreEntitySet="UserDataTotalDistanceView">
+          <EntitySetMapping Name="UserDataTotalDistance">
+            <EntityTypeMapping TypeName="MainModel.UserDataTotalDistance">
+              <MappingFragment StoreEntitySet="UserDataTotalDistance">
                 <ScalarProperty Name="TotalDistance" ColumnName="TotalDistance" />
-                <ScalarProperty Name="WalkingDistance" ColumnName="WalkingDistance" />
-                <ScalarProperty Name="RunningDistance" ColumnName="RunningDistance" />
-                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
-                <ScalarProperty Name="User_Guid" ColumnName="User_Guid" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="UserDataTotalStepsView">
-            <EntityTypeMapping TypeName="MainModel.UserDataTotalStepsView">
-              <MappingFragment StoreEntitySet="UserDataTotalStepsView">
                 <ScalarProperty Name="TotalSteps" ColumnName="TotalSteps" />
                 <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
                 <ScalarProperty Name="Activity" ColumnName="Activity" />
                 <ScalarProperty Name="User_Guid" ColumnName="User_Guid" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <AssociationSetMapping Name="FK_UserRewardGiftShippingStatusUserRewardGiftClaimed" TypeName="MainModel.FK_UserRewardGiftShippingStatusUserRewardGiftClaimed" StoreEntitySet="UserRewardGiftShippingStatusSet">
-            <EndProperty Name="UserRewardGiftShippingStatus">
-              <ScalarProperty Name="Id" ColumnName="Id" />
-            </EndProperty>
-            <EndProperty Name="UserRewardGiftClaimed">
-              <ScalarProperty Name="Guid" ColumnName="UserRewardGiftClaimed_Guid" />
-            </EndProperty>
-            <Condition ColumnName="UserRewardGiftClaimed_Guid" IsNull="false" />
-          </AssociationSetMapping>
-          <EntitySetMapping Name="OAuthNonceSet">
-            <EntityTypeMapping TypeName="MainModel.OAuthNonce">
-              <MappingFragment StoreEntitySet="OAuthNonceSet">
-                <ScalarProperty Name="Nonce" ColumnName="Nonce" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -12,12 +12,12 @@ namespace KilometrosDatabase
     using System;
     using System.Collections.Generic;
     
-    public partial class UserDataHourlyDistanceView
+    public partial class UserDataHourlyDistance
     {
         public System.Guid User_Guid { get; set; }
+        public short Activity { get; set; }
         public Nullable<System.DateTime> Timestamp { get; set; }
-        public Nullable<int> RunningDistance { get; set; }
-        public Nullable<int> WalkingDistance { get; set; }
-        public Nullable<int> TotalDistance { get; set; }
+        public Nullable<long> Steps { get; set; }
+        public Nullable<long> Distance { get; set; }
     }
 }

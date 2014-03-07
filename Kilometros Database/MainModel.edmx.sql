@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 03/02/2014 14:45:56
+-- Date Created: 03/06/2014 21:11:54
 -- Generated from EDMX file: F:\Sharp Dynamics\Kilometros\Kilometros Database\MainModel.edmx
 -- --------------------------------------------------
 
@@ -175,6 +175,9 @@ GO
 IF OBJECT_ID(N'[dbo].[OAuthCredentialSet]', 'U') IS NOT NULL
     DROP TABLE [dbo].[OAuthCredentialSet];
 GO
+IF OBJECT_ID(N'[dbo].[OAuthNonceSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[OAuthNonceSet];
+GO
 IF OBJECT_ID(N'[dbo].[RegionSet]', 'U') IS NOT NULL
     DROP TABLE [dbo].[RegionSet];
 GO
@@ -238,11 +241,13 @@ GO
 CREATE TABLE [dbo].[UserSet] (
     [Guid] uniqueidentifier  NOT NULL,
     [CreationDate] datetime  NOT NULL,
-    [Email] nvarchar(max)  NOT NULL,
+    [Email] varchar(255)  NOT NULL,
     [Password] varbinary(max)  NULL,
-    [RegionCode] nchar(5)  NULL,
-    [PreferredCultureCode] nvarchar(16)  NULL,
-    [UtcOffset] smallint  NULL
+    [RegionCode] char(5)  NULL,
+    [PreferredCultureCode] varchar(16)  NULL,
+    [UtcOffset] smallint  NULL,
+    [Name] nvarchar(max)  NOT NULL,
+    [LastName] nvarchar(max)  NULL
 );
 GO
 
@@ -251,7 +256,11 @@ CREATE TABLE [dbo].[TokenSet] (
     [CreationDate] datetime  NOT NULL,
     [ExpirationDate] datetime  NULL,
     [Guid] uniqueidentifier  NOT NULL,
+    [Secret] uniqueidentifier  NOT NULL,
     [LastUseDate] datetime  NULL,
+    [LoginAttempts] tinyint  NOT NULL,
+    [CallbackUri] varchar(250)  NULL,
+    [VerificationCode] uniqueidentifier  NULL,
     [ApiKey_Guid] uniqueidentifier  NOT NULL,
     [User_Guid] uniqueidentifier  NOT NULL
 );
@@ -264,8 +273,9 @@ CREATE TABLE [dbo].[ApiKeySet] (
     [Description] nvarchar(64)  NULL,
     [Guid] uniqueidentifier  NOT NULL,
     [Secret] uniqueidentifier  NOT NULL,
-    [TokenUpgradeRequired] nvarchar(max)  NOT NULL,
+    [TokenUpgradeRequired] bit  NOT NULL,
     [DebugEnabled] bit  NOT NULL,
+    [BasicLoginEnabled] bit  NOT NULL,
     [ApiKeyNext_Guid] uniqueidentifier  NULL
 );
 GO
@@ -298,6 +308,7 @@ CREATE TABLE [dbo].[DataSet] (
     [Timestamp] datetime  NOT NULL,
     [Steps] int  NOT NULL,
     [Activity] smallint  NOT NULL,
+    [StrideLength] int  NOT NULL,
     [User_Guid] uniqueidentifier  NOT NULL
 );
 GO
@@ -309,8 +320,8 @@ CREATE TABLE [dbo].[UserBodySet] (
     [Height] smallint  NOT NULL,
     [Weight] int  NOT NULL,
     [Sex] nchar(1)  NOT NULL,
-    [StrideLengthWalking] nvarchar(max)  NOT NULL,
-    [StrideLengthRunning] nvarchar(max)  NOT NULL,
+    [StrideLengthWalking] int  NOT NULL,
+    [StrideLengthRunning] int  NOT NULL,
     [LastEditDate] datetime  NOT NULL,
     [User_Guid] uniqueidentifier  NOT NULL
 );
@@ -386,17 +397,17 @@ GO
 -- Creating table 'RegionSet'
 CREATE TABLE [dbo].[RegionSet] (
     [Id] bigint IDENTITY(1,1) NOT NULL,
-    [TwoLetterIsoCode] nvarchar(max)  NOT NULL,
-    [ThreeLetterIsoCode] nvarchar(max)  NOT NULL,
-    [Name] nvarchar(max)  NOT NULL
+    [TwoLetterIsoCode] char(2)  NOT NULL,
+    [ThreeLetterIsoCode] char(3)  NOT NULL,
+    [Name] nvarchar(128)  NOT NULL
 );
 GO
 
 -- Creating table 'RegionSubdivisionSet'
 CREATE TABLE [dbo].[RegionSubdivisionSet] (
     [Id] bigint IDENTITY(1,1) NOT NULL,
-    [IsoCode] nvarchar(max)  NOT NULL,
-    [Name] nvarchar(max)  NOT NULL,
+    [IsoCode] char(3)  NOT NULL,
+    [Name] nvarchar(128)  NOT NULL,
     [UtcOffset] smallint  NOT NULL,
     [Region_Id] bigint  NOT NULL
 );
@@ -414,7 +425,7 @@ GO
 -- Creating table 'IGlobalizationSet'
 CREATE TABLE [dbo].[IGlobalizationSet] (
     [Id] bigint IDENTITY(1,1) NOT NULL,
-    [CultureCode] nvarchar(16)  NOT NULL,
+    [CultureCode] varchar(16)  NOT NULL,
     [CreationDate] datetime  NOT NULL
 );
 GO
@@ -445,6 +456,7 @@ CREATE TABLE [dbo].[OAuthCredentialSet] (
     [OAuthProvider] int  NOT NULL,
     [Uid] nvarchar(max)  NOT NULL,
     [Token] nvarchar(max)  NOT NULL,
+    [Secret] nvarchar(max)  NULL,
     [IsInvalid] bit  NOT NULL,
     [User_Guid] uniqueidentifier  NOT NULL
 );
@@ -453,6 +465,7 @@ GO
 -- Creating table 'UserDataHourlyDistanceView'
 CREATE TABLE [dbo].[UserDataHourlyDistanceView] (
     [User_Guid] uniqueidentifier  NOT NULL,
+    [Timestamp] datetime  NULL,
     [RunningDistance] int  NULL,
     [WalkingDistance] int  NULL,
     [TotalDistance] int  NULL
@@ -471,8 +484,9 @@ GO
 -- Creating table 'UserDataTotalDistanceView'
 CREATE TABLE [dbo].[UserDataTotalDistanceView] (
     [User_Guid] uniqueidentifier  NOT NULL,
-    [RunningDistance] int  NULL,
-    [WalkingDistance] int  NULL,
+    [Timestamp] datetime  NULL,
+    [RunningDistance] bigint  NULL,
+    [WalkingDistance] bigint  NULL,
     [TotalDistance] int  NULL
 );
 GO
@@ -481,7 +495,14 @@ GO
 CREATE TABLE [dbo].[UserDataTotalStepsView] (
     [User_Guid] uniqueidentifier  NOT NULL,
     [Activity] smallint  NOT NULL,
-    [TotalSteps] int  NULL
+    [Timestamp] datetime  NULL,
+    [TotalSteps] bigint  NULL
+);
+GO
+
+-- Creating table 'OAuthNonceSet'
+CREATE TABLE [dbo].[OAuthNonceSet] (
+    [Nonce] char(40)  NOT NULL
 );
 GO
 
@@ -691,10 +712,10 @@ ADD CONSTRAINT [PK_UserDataHourlyDistanceView]
     PRIMARY KEY CLUSTERED ([User_Guid] ASC);
 GO
 
--- Creating primary key on [User_Guid], [Activity] in table 'UserDataHourlyStepsView'
+-- Creating primary key on [User_Guid] in table 'UserDataHourlyStepsView'
 ALTER TABLE [dbo].[UserDataHourlyStepsView]
 ADD CONSTRAINT [PK_UserDataHourlyStepsView]
-    PRIMARY KEY CLUSTERED ([User_Guid], [Activity] ASC);
+    PRIMARY KEY CLUSTERED ([User_Guid] ASC);
 GO
 
 -- Creating primary key on [User_Guid] in table 'UserDataTotalDistanceView'
@@ -703,10 +724,16 @@ ADD CONSTRAINT [PK_UserDataTotalDistanceView]
     PRIMARY KEY CLUSTERED ([User_Guid] ASC);
 GO
 
--- Creating primary key on [User_Guid], [Activity] in table 'UserDataTotalStepsView'
+-- Creating primary key on [User_Guid] in table 'UserDataTotalStepsView'
 ALTER TABLE [dbo].[UserDataTotalStepsView]
 ADD CONSTRAINT [PK_UserDataTotalStepsView]
-    PRIMARY KEY CLUSTERED ([User_Guid], [Activity] ASC);
+    PRIMARY KEY CLUSTERED ([User_Guid] ASC);
+GO
+
+-- Creating primary key on [Nonce] in table 'OAuthNonceSet'
+ALTER TABLE [dbo].[OAuthNonceSet]
+ADD CONSTRAINT [PK_OAuthNonceSet]
+    PRIMARY KEY CLUSTERED ([Nonce] ASC);
 GO
 
 -- Creating primary key on [Guid] in table 'IPictureSet_TipCategory'
@@ -1125,20 +1152,6 @@ ON [dbo].[IPictureSet_RewardGiftPicture]
     ([RewardGift_Guid]);
 GO
 
--- Creating foreign key on [UserRewardGiftClaimed_Guid] in table 'UserRewardGiftShippingStatusSet'
-ALTER TABLE [dbo].[UserRewardGiftShippingStatusSet]
-ADD CONSTRAINT [FK_UserRewardGiftShippingStatusUserRewardGiftClaimed]
-    FOREIGN KEY ([UserRewardGiftClaimed_Guid])
-    REFERENCES [dbo].[IPictureSet_UserRewardGiftClaimed]
-        ([Guid])
-    ON DELETE NO ACTION ON UPDATE NO ACTION;
-
--- Creating non-clustered index for FOREIGN KEY 'FK_UserRewardGiftShippingStatusUserRewardGiftClaimed'
-CREATE INDEX [IX_FK_UserRewardGiftShippingStatusUserRewardGiftClaimed]
-ON [dbo].[UserRewardGiftShippingStatusSet]
-    ([UserRewardGiftClaimed_Guid]);
-GO
-
 -- Creating foreign key on [User_Guid] in table 'OAuthCredentialSet'
 ALTER TABLE [dbo].[OAuthCredentialSet]
 ADD CONSTRAINT [FK_OAuthCredentialUser]
@@ -1151,6 +1164,20 @@ ADD CONSTRAINT [FK_OAuthCredentialUser]
 CREATE INDEX [IX_FK_OAuthCredentialUser]
 ON [dbo].[OAuthCredentialSet]
     ([User_Guid]);
+GO
+
+-- Creating foreign key on [UserRewardGiftClaimed_Guid] in table 'UserRewardGiftShippingStatusSet'
+ALTER TABLE [dbo].[UserRewardGiftShippingStatusSet]
+ADD CONSTRAINT [FK_UserRewardGiftShippingStatusUserRewardGiftClaimed]
+    FOREIGN KEY ([UserRewardGiftClaimed_Guid])
+    REFERENCES [dbo].[IPictureSet_UserRewardGiftClaimed]
+        ([Guid])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_UserRewardGiftShippingStatusUserRewardGiftClaimed'
+CREATE INDEX [IX_FK_UserRewardGiftShippingStatusUserRewardGiftClaimed]
+ON [dbo].[UserRewardGiftShippingStatusSet]
+    ([UserRewardGiftClaimed_Guid]);
 GO
 
 -- Creating foreign key on [Guid] in table 'IPictureSet_TipCategory'

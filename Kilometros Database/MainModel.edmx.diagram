@@ -60,12 +60,10 @@
         <EntityTypeShape EntityType="MainModel.UserRewardGiftShippingStatus" Width="2.5" PointX="6.875" PointY="20.875" />
         <EntityTypeShape EntityType="MainModel.OAuthCredential" Width="2.25" PointX="3.375" PointY="13.375" />
         <AssociationConnector Association="MainModel.OAuthCredentialUser" />
-        <EntityTypeShape EntityType="MainModel.UserDataHourlyDistanceView" Width="2.375" PointX="0.625" PointY="2" />
-        <EntityTypeShape EntityType="MainModel.UserDataHourlyStepsView" Width="2.375" PointX="0.625" PointY="4.125" />
-        <EntityTypeShape EntityType="MainModel.UserDataTotalDistanceView" Width="2.375" PointX="0.625" PointY="6.125" />
-        <EntityTypeShape EntityType="MainModel.UserDataTotalStepsView" Width="2.375" PointX="0.625" PointY="8.25" />
         <AssociationConnector Association="MainModel.FK_UserRewardGiftShippingStatusUserRewardGiftClaimed" />
         <EntityTypeShape EntityType="MainModel.OAuthNonce" Width="1.5" PointX="8.125" PointY="2.125" />
+        <EntityTypeShape EntityType="MainModel.UserDataHourlyDistance" Width="2.375" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="MainModel.UserDataTotalDistance" Width="2.375" PointX="0.75" PointY="3" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
