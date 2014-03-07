@@ -7,8 +7,7 @@ namespace Kilometros_WebAPI.Models.HttpGet.DataController {
     public class DataDistanceResponse {
         public DateTime Timestamp;
 
-        public int RunningDistance;
-        public int WalkingDistance;
-        public int TotalDistance;
+        public long Distance;
+        public int Steps;
     }
 }

@@ -359,7 +359,7 @@ namespace KilometrosDatabase.Abstraction {
         /// <summary>
         /// Almacén de Distancia por Hora
         /// </summary>
-        public GenericRepository<UserDataHourlyDistance> UserDataHourlyDistanceView {
+        public GenericRepository<UserDataHourlyDistance> UserDataHourlyDistance {
             get {
                 if ( this._userDataHourlyDistance == null )
                     this._userDataHourlyDistance = new GenericRepository<UserDataHourlyDistance>(this._context);
@@ -372,7 +372,7 @@ namespace KilometrosDatabase.Abstraction {
         /// <summary>
         /// Almacén de Distancia Total
         /// </summary>
-        public GenericRepository<UserDataTotalDistance> UserDataTotalDistanceView {
+        public GenericRepository<UserDataTotalDistance> UserDataTotalDistance {
             get {
                 if ( this._userDataTotalDistance == null )
                     this._userDataTotalDistance = new GenericRepository<UserDataTotalDistance>(this._context);

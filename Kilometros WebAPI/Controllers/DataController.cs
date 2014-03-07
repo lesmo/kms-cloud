@@ -30,7 +30,7 @@ namespace Kilometros_WebAPI.Controllers {
         private WorkUnit Database = new WorkUnit();
 
         /// <summary>
-        /// Obtener los pasos dados por el usuario divididos por hora.
+        /// Obtener los pasos dados y la distancia recorrida por el usuario dividido por hora.
         /// </summary>
         /// <param name="from">Fecha a partir de la cual buscar datos.</param>
         /// <param name="until">Fecha hasta la cual buscar datos.</param>
@@ -39,59 +39,26 @@ namespace Kilometros_WebAPI.Controllers {
         /// Sólo puede solicitarse hasta un año como rango a la vez. No hay límite en cuanto a fechas en el pasado.
         /// </remarks>
         [HttpGet]
-        [Route("data/search/steps")]
-        public IEnumerable<DataStepsResponse> SearchSteps(DateTime from, DateTime until) {
-            // --- Establecer datos recibidos como fecha UTC ---
-            from
-                = DateTime.SpecifyKind(from, DateTimeKind.Utc);
-            until
-                = DateTime.SpecifyKind(until, DateTimeKind.Utc);
+        [Route("data/search/{activity}")]
+        public IEnumerable<DataDistanceResponse> SearchDistance(string activity, DateTime from, DateTime until) {
+            // --- Validar que activity esté soportado ---
+            activity
+                = activity.ToLowerInvariant();
+            string[] activityEnum
+                = Enum.GetNames(typeof(DataActivity));
+            short activityId
+                = 0;
 
-            // --- Validar los campos recibidos ---
-            TimeSpan timeSpan = until - from;
+            for ( short i = 1; i < activityEnum.Length; i++ ) {
+                if ( activityEnum[0].ToLowerInvariant() == activity )
+                    activityId = i;
+            }
 
-            if ( timeSpan.Days < 0 ) // orden correcto
-                throw new ArgumentOutOfRangeException();
-            if ( timeSpan.Days > 365 ) // menor a 1 año de rango (8000~ registros)
-                throw new ArgumentOutOfRangeException();
-
-            // --- Obtener pasos dados en el rango especificado ---
-            KmsIdentity identity
-                = (KmsIdentity)User.Identity;
-            User user
-                = identity.UserData;
-
-            IEnumerable<UserDataHourlyStepsView> stepsView
-                = Database.UserDataHourlyStepsView.GetAll(
-                    f => f.User_Guid == user.Guid,
-                    o => o.OrderBy(b => b.Timestamp)
+            if ( activityId == 0 )
+                throw new HttpNotFoundException(
+                    "301" + ControllerStrings.Warning301_ActivityInvalid
                 );
 
-            // --- Preparar y devolver respuesta ---
-            return
-                from s in stepsView
-                select new DataStepsResponse() {
-                    Timestamp
-                        = s.Timestamp.Value,
-                    Activity
-                        = DataActivityString[s.Activity],
-                    Steps
-                        = s.TotalSteps.Value
-                };
-        }
-
-        /// <summary>
-        /// Obtener la distancia recorrida por el usuario dividido por hora.
-        /// </summary>
-        /// <param name="from">Fecha a partir de la cual buscar datos.</param>
-        /// <param name="until">Fecha hasta la cual buscar datos.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Sólo puede solicitarse hasta un año como rango a la vez. No hay límite en cuanto a fechas en el pasado.
-        /// </remarks>
-        [HttpGet]
-        [Route("data/search/distance")]
-        public IEnumerable<DataDistanceResponse> SearchDistance(DateTime from, DateTime until) {
             // --- Establecer datos recibidos como fecha UTC ---
             from
                 = DateTime.SpecifyKind(from, DateTimeKind.Utc);
@@ -112,9 +79,12 @@ namespace Kilometros_WebAPI.Controllers {
             User user
                 = identity.UserData;
 
-            IEnumerable<UserDataHourlyDistanceView> distanceView
-                = Database.UserDataHourlyDistanceView.GetAll(
-                    f => f.User_Guid == user.Guid && f.Timestamp > from && f.Timestamp < until,
+            IEnumerable<UserDataHourlyDistance> distanceView
+                = Database.UserDataHourlyDistance.GetAll(
+                    f =>
+                        f.User_Guid == user.Guid
+                        && f.Activity == activityId
+                        && f.Timestamp > from && f.Timestamp < until,
                     o => o.OrderBy(b => b.Timestamp)
                 );
 
@@ -125,12 +95,10 @@ namespace Kilometros_WebAPI.Controllers {
                     Timestamp
                         = d.Timestamp,
 
-                    RunningDistance
-                        = d.RunningDistance,
-                    WalkingDistance
-                        = d.WalkingDistance,
-                    TotalDistance
-                        = d.RunningDistance + d.WalkingDistance
+                    Distance
+                        = d.Distance,
+                    Steps
+                        = d.Steps
                 };
         }
 
@@ -139,100 +107,63 @@ namespace Kilometros_WebAPI.Controllers {
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Route("data/total/distance")]
-        public DataTotalDistanceResponse GetDistanceTotal() {
+        [Route("data/total")]
+        public DataTotalResponse GetDistanceTotal() {
             KmsIdentity identity
                 = (KmsIdentity)User.Identity;
             User user
                 = identity.UserData;
 
             // --- Obtener Distancia Total ---
-            UserDataTotalDistanceView distanceView
-                = Database.UserDataTotalDistanceView.GetFirst(
+            IEnumerable<UserDataTotalDistance> distanceView
+                = Database.UserDataTotalDistance.GetAll(
                     o => o.User_Guid == user.Guid
                 );
+            UserDataTotalDistance distanceRunning
+                = (
+                    from d in distanceView
+                    where d.Activity == DataActivity.Running
+                    select d
+                ).FirstOrDefault();
+            UserDataTotalDistance distanceWalking
+                = (
+                    from d in distanceView
+                    where d.Activity == DataActivity.Walking
+                    select d
+                ).FirstOrDefault();
 
             // --- Verificar si se tiene la cabecera {If-Modified-Since} ---
             DateTimeOffset? ifModifiedSince
                 = Request.Headers.IfModifiedSince;
 
             if ( ifModifiedSince.HasValue ) {
-                if ( ifModifiedSince.Value.DateTime > distanceView.Timestamp )
+                if (
+                    ifModifiedSince.Value.DateTime > distanceRunning.Timestamp
+                    && ifModifiedSince.Value.DateTime > distanceWalking.Timestamp
+                )
                     throw new HttpNotModifiedException();
             }
 
             // --- Preparar y devolver respuesta ---
-            return new DataTotalDistanceResponse() {
+            return new DataTotalResponse() {
                 RunningTotalDistance
-                    = distanceView.RunningDistance,
+                    = distanceRunning.TotalDistance,
                 WalkingTotalDistance
-                    = distanceView.WalkingDistance,
+                    = distanceWalking.TotalDistance,
                 TotalDistance
-                    = distanceView.TotalDistance,
+                    = distanceRunning.TotalDistance + distanceWalking.TotalDistance,
 
-                LastModified
-                    = distanceView.Timestamp
-            };
-        }
-
-        /// <summary>
-        /// Obtener el total de pasos dados por el Usuario
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        [Route("data/total/steps")]
-        public DataTotalStepsResponse GetStepsTotal() {
-            KmsIdentity identity
-                = (KmsIdentity)User.Identity;
-            User user
-                = identity.UserData;
-
-            // --- Obtener Pasos Totales ---
-            IEnumerable<UserDataTotalStepsView> stepsView
-                = Database.UserDataTotalStepsView.GetAll(
-                    o => o.User_Guid == user.Guid
-                );
-            DateTime stepsMaxTimestamp
-                = (
-                    from s in stepsView
-                    where s.Activity == DataActivity.Running || s.Activity == DataActivity.Walking
-                    select s.Timestamp
-                ).Max();
-
-            // --- Verificar si se tiene la cabecera {If-Modified-Since} ---
-            DateTimeOffset? ifModifiedSince
-                = Request.Headers.IfModifiedSince;
-
-            if ( ifModifiedSince.HasValue ) {
-                if ( ifModifiedSince.Value.DateTime > stepsMaxTimestamp )
-                    throw new HttpNotModifiedException();
-            }
-
-            // --- Obtener Pasos Totales Corriendo y Caminando ---
-            UserDataTotalStepsView stepsRunning
-                = (
-                    from s in stepsView
-                    where s.Activity == DataActivity.Running
-                    select s
-                ).FirstOrDefault();
-            UserDataTotalStepsView stepsWalking
-                = (
-                    from s in stepsView
-                    where s.Activity == DataActivity.Walking
-                    select s
-                ).FirstOrDefault();
-
-            // --- Preparar y devolver respuesta ---
-            return new DataTotalStepsResponse() {
                 RunningTotalSteps
-                    = stepsRunning.TotalSteps,
+                    = distanceRunning.TotalSteps,
                 WalkingTotalSteps
-                    = stepsWalking.TotalSteps,
+                    = distanceWalking.TotalSteps,
                 TotalSteps
-                    = stepsRunning.TotalSteps + stepsWalking.TotalSteps,
+                    = distanceRunning.TotalSteps + distanceWalking.TotalSteps,
 
                 LastModified
-                    = stepsMaxTimestamp
+                    = distanceRunning.Timestamp > distanceWalking.Timestamp
+                    ? distanceRunning.Timestamp
+                    : distanceWalking.Timestamp
             };
         }
 

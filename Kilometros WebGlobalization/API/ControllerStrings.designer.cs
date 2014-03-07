@@ -169,6 +169,15 @@ namespace Kilometros_WebGlobalization.API {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Activity requested is invalid.
+        /// </summary>
+        public static string Warning301_ActivityInvalid {
+            get {
+                return ResourceManager.GetString("Warning301_ActivityInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Account Data received is invalid.
         /// </summary>
         public static string Warning501_AccountDataInvalid {
