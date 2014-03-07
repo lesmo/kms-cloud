@@ -28,6 +28,27 @@ namespace Kilometros_WebAPI.MessageHandlers {
             HttpRequestMessageHeadersHelper reqHeadersHelper
                 = new HttpRequestMessageHeadersHelper(request);
 
+            // --- Validar que no ésta URI no esté en lista de ByPass ---
+            if (
+                WebApiConfig.KmsOAuthConfig.BypassOAuthAbsoluteUris.Contains(
+                    request.RequestUri.AbsolutePath.TrimEnd(new char[] { '/' })
+                )
+            ) {
+                // Crear Principal genérico Anónimo y continuar ejecución
+                GenericPrincipal anonPrincipal
+                    = new GenericPrincipal(
+                        new KmsIdentity(),
+                        new string[] { "Anonymous" }
+                    );
+
+                MiscHelper.SetPrincipal(anonPrincipal);
+
+                return await base.SendAsync(
+                    request,
+                    cancellationToken
+                );
+            }
+
             // --- Validar que se recibió cabecera Authorization correctamente ---
             if ( request.Headers.Authorization.Scheme != "OAuth" ) {
                 HttpResponseMessage response
@@ -80,7 +101,7 @@ namespace Kilometros_WebAPI.MessageHandlers {
 
             Helpers.MiscHelper.SetPrincipal(principal);
 
-            // --- Continuar con la ejecución
+            // --- Continuar con la ejecución ---
             return await base.SendAsync(
                 request, 
                 cancellationToken
