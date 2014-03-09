@@ -32,6 +32,7 @@ namespace Kilometros_WebAPI.Controllers {
         /// <summary>
         /// Obtener los pasos dados y la distancia recorrida por el usuario dividido por hora.
         /// </summary>
+        /// <param name="activity">Actividad a buscar</param>
         /// <param name="from">Fecha a partir de la cual buscar datos.</param>
         /// <param name="until">Fecha hasta la cual buscar datos.</param>
         /// <returns></returns>
@@ -78,12 +79,14 @@ namespace Kilometros_WebAPI.Controllers {
                 = (KmsIdentity)User.Identity;
             User user
                 = identity.UserData;
+            DataActivity dataActivity
+                = (DataActivity)activityId;
 
             IEnumerable<UserDataHourlyDistance> distanceView
                 = Database.UserDataHourlyDistance.GetAll(
                     f =>
                         f.User_Guid == user.Guid
-                        && f.Activity == activityId
+                        && f.Activity == dataActivity
                         && f.Timestamp > from && f.Timestamp < until,
                     o => o.OrderBy(b => b.Timestamp)
                 );
@@ -174,7 +177,25 @@ namespace Kilometros_WebAPI.Controllers {
         /// <returns></returns>
         [HttpPost]
         [Route("data")]
-        public IHttpActionResult PostData([FromBody]IEnumerable<DataPost> dataPost) {
+        public IHttpActionResult PostData([FromBody]DataPost dataPost) {
+            // --- Validar que Activity esté soportado ---
+            string activity
+                = dataPost.Activity.ToLowerInvariant();
+            string[] activityEnum
+                = Enum.GetNames(typeof(DataActivity));
+            short activityId
+                = 0;
+
+            for ( short i = 1; i < activityEnum.Length; i++ ) {
+                if ( activityEnum[0].ToLowerInvariant() == activity )
+                    activityId = i;
+            }
+
+            if ( activityId == 0 )
+                throw new HttpNotFoundException(
+                    "301" + ControllerStrings.Warning301_ActivityInvalid
+                );
+
             // --- Determinar la última fecha registrada ---
             KmsIdentity identity
                 = (KmsIdentity)User.Identity;
@@ -191,38 +212,37 @@ namespace Kilometros_WebAPI.Controllers {
                 ? DateTime.MinValue
                 : lastData.Timestamp;
 
-            // --- Determinar los registros que se almacenarán en BD ---
+            // --- Determinar los registros si se almacenarán en BD ---
             // Especificar que fechas son UTC
-            foreach ( DataPost item in dataPost )
-                item.Timestamp
+            dataPost.Timestamp
                     = DateTime.SpecifyKind(
-                        item.Timestamp,
+                        dataPost.Timestamp,
                         DateTimeKind.Utc
                     );
 
             // TODO: Incluir un algoritmo que mejore la solución al problema
             //       de datos replicados y sincronía.
-            IEnumerable<DataPost> finalPost
-                = (
-                    from d in dataPost
-                    where d.Timestamp > lastDataTimestamp
-                    select d
+            if ( dataPost.Timestamp > lastDataTimestamp )
+                throw new HttpConflictException(
+                    ""
                 );
 
-            // --- Almacenar los nuevos registros ---
+            // --- Almacenar el nuevos registros ---
             List<Data> addedData 
                 = new List<Data>();
 
-            foreach ( DataPost data in finalPost ) {
-                Data newData
-                    = new Data(){
-                         Timestamp = data.Timestamp,
-                         Steps = data.Steps
-                    };
+            Data newData
+                = new Data(){
+                    Timestamp
+                        = dataPost.Timestamp,
+                    Activity
+                        = (DataActivity)activityId,
+                    Steps
+                        = dataPost.Steps
+                };
 
-                Database.DataStore.Add(newData);
-                addedData.Add(newData);
-            }
+            Database.DataStore.Add(newData);
+            Database.SaveChanges();
             
             return Ok();
         }

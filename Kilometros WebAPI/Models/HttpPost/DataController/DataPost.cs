@@ -7,5 +7,6 @@ namespace Kilometros_WebAPI.Models.HttpPost.DataController {
     public class DataPost {
         public DateTime Timestamp;
         public Int16 Steps;
+        public string Activity;
     }
 }

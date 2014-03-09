@@ -8,6 +8,6 @@ namespace Kilometros_WebAPI.Models.HttpGet.DataController {
         public DateTime Timestamp;
 
         public long Distance;
-        public int Steps;
+        public long Steps;
     }
 }

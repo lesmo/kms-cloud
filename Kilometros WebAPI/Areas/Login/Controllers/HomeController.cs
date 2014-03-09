@@ -160,7 +160,7 @@ namespace Kilometros_WebAPI.Areas.Login.Controllers {
             string callbackUri
                 = token.CallbackUri ?? "http://api.kms.me/oauth/nocallback#";
 
-            if ( !callbackUri.EndsWith('?') || !callbackUri.EndsWith('#') )
+            if ( !callbackUri.EndsWith("?") || !callbackUri.EndsWith("#") )
                 callbackUri += "?";
 
             return Redirect(string.Format(
