@@ -193,6 +193,7 @@
           <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="RegionCode" Type="nchar" MaxLength="2" Nullable="false" />
           <Property Name="Reward_Guid" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Exclude" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="RewardSet">
           <Key>
@@ -1625,6 +1626,7 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
           <Property Type="Int64" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="String" Name="RegionCode" Nullable="false" MaxLength="2" FixedLength="true" Unicode="true" />
           <NavigationProperty Name="Reward" Relationship="MainModel.RewardRewardRegionalization" FromRole="RewardRegionalization" ToRole="Reward" />
+          <Property Name="Exclude" Type="Boolean" Nullable="false" DefaultValue="False" />
         </EntityType>
         <Association Name="RewardRewardRegionalization">
           <End Type="MainModel.Reward" Role="Reward" Multiplicity="1" />
@@ -1928,9 +1930,9 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
           </Key>
           <Property Name="User_Guid" Type="Guid" Nullable="false" />
           <Property Name="Activity" Type="MainModel.DataActivity" Nullable="false" />
-          <Property Name="Timestamp" Type="DateTime" Precision="3" Nullable="false" />
-          <Property Name="Steps" Type="Int64" Nullable="false" />
-          <Property Name="Distance" Type="Int64" Nullable="false" />
+          <Property Name="Timestamp" Type="DateTime" Precision="3" />
+          <Property Name="Steps" Type="Int64" />
+          <Property Name="Distance" Type="Int64" />
         </EntityType>
         <EntityType Name="UserDataTotalDistance">
           <Key>
@@ -1939,9 +1941,9 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
           </Key>
           <Property Name="User_Guid" Type="Guid" Nullable="false" />
           <Property Name="Activity" Type="MainModel.DataActivity" Nullable="false" />
-          <Property Name="Timestamp" Type="DateTime" Precision="3" Nullable="false" />
-          <Property Name="TotalSteps" Type="Int64" Nullable="false" />
-          <Property Name="TotalDistance" Type="Int64" Nullable="false" />
+          <Property Name="Timestamp" Type="DateTime" Precision="3" />
+          <Property Name="TotalSteps" Type="Int64" />
+          <Property Name="TotalDistance" Type="Int64" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -2061,7 +2063,8 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
     <EntitySetMapping Name="RewardRegionalizationSet">
       <EntityTypeMapping TypeName="IsTypeOf(MainModel.RewardRegionalization)">
         <MappingFragment StoreEntitySet="RewardRegionalizationSet">
-          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Exclude" ColumnName="Exclude" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="RegionCode" ColumnName="RegionCode" />
         </MappingFragment>
       </EntityTypeMapping>

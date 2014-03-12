@@ -14,8 +14,14 @@ namespace KilometrosDatabase
     
     public partial class RewardRegionalization
     {
+        public RewardRegionalization()
+        {
+            this.Exclude = false;
+        }
+    
         public long Id { get; set; }
         public string RegionCode { get; set; }
+        public bool Exclude { get; set; }
     
         public virtual Reward Reward { get; set; }
     }
