@@ -26,6 +26,13 @@ namespace Kilometros_WebAPI.Controllers {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        ///     Devuelve la información de canje del Regalo especificado.
+        /// </summary>
+        /// <param name="giftId">
+        ///     ID del Regalo, obtenido en el Payload de la Notificación Push o en
+        ///     el Historial de Recompensas (rewards/history).
+        /// </param>
         [HttpGet]
         [Route("my/gifts/{giftId}")]
         public GiftResponse GetRewardGift(string giftId) {
@@ -54,7 +61,7 @@ namespace Kilometros_WebAPI.Controllers {
             // --- Verificar que el Regalo haya sido reclamado por el Usuario ---
             UserRewardGiftClaimed userRewardGiftClaim
                 = Database.UserRewardGiftClaimedStore.GetFirst(
-                    r => r.RewardGift == rewardGift && r.RedeemedByUser == user
+                    r => r.RewardGift.Guid == rewardGift.Guid && r.RedeemedByUser.Guid == user.Guid
                 );
             if ( userRewardGiftClaim == null )
                 throw new HttpNotFoundException(
@@ -117,8 +124,15 @@ namespace Kilometros_WebAPI.Controllers {
             }
         }
 
+        /// <summary>
+        ///     Reclama o canjea el Regalo conseguido por el Usuario.
+        /// </summary>
+        /// <param name="giftId">
+        ///     ID del Regalo, obtenido en el Payload de la Notificación Push o en
+        ///     el Historial de Recompensas (rewards/history).
+        /// </param>
         [HttpPost]
-        [Route("my/gifts/claim/{giftId}")]
+        [Route("my/gifts/{giftId}")]
         public GiftClaimResponse ClaimRewardGift(string giftId) {
             KmsIdentity identity
                 = (KmsIdentity)User.Identity;
