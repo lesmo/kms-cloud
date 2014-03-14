@@ -36,7 +36,7 @@ namespace Kilometros_WebAPI.Areas.Login.Controllers {
             return View();
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("oauth/login/basic")]
         public ActionResult LoginBasic(string oauth_token) {
             // --- Validar cabecera Authorization ---
@@ -99,15 +99,15 @@ namespace Kilometros_WebAPI.Areas.Login.Controllers {
             
             if ( token == null ) {
                 Response.StatusCode
-                    = 401;
+                    = 403;
                 Response.Status 
-                    = "Unauthorized";
+                    = "Forbidden";
                 return View("OAuthTokenInvalid");
             }
             
             if ( ! token.ApiKey.BasicLoginEnabled ) {
                 Response.StatusCode
-                    = 401;
+                    = 403;
                 Response.Status
                     = "Unauthorized";
                 return View("OAuthTokenInvalid");
@@ -115,9 +115,9 @@ namespace Kilometros_WebAPI.Areas.Login.Controllers {
 
             if ( token.LoginAttempts > 10 ) {
                 Response.StatusCode
-                    = 401;
+                    = 403;
                 Response.Status
-                    = "Unauthorized";
+                    = "Forbidden";
 
                 Database.TokenStore.Delete(token.Guid);
 
@@ -160,15 +160,25 @@ namespace Kilometros_WebAPI.Areas.Login.Controllers {
             string callbackUri
                 = token.CallbackUri ?? "http://api.kms.me/oauth/nocallback#";
 
-            if ( !callbackUri.EndsWith("?") || !callbackUri.EndsWith("#") )
-                callbackUri += "?";
+            if ( callbackUri == "oob" ) {
+                ViewData.Add(
+                    "oob_verifier",
+                    token.VerificationCode.Value.ToString("00000000000000000000000000000000")
+                );
+                return View("OAuthBasicLoginSuccess");
+            } else {
+                if ( !callbackUri.EndsWith("?") && !callbackUri.EndsWith("#") )
+                    callbackUri += "?";
 
-            return Redirect(string.Format(
-                "{0}oauth_token={1}&oauth_verifier={2}",
-                token.CallbackUri,
-                token.Guid.ToString("00000000000000000000000000000000"),
-                token.Secret.ToString("00000000000000000000000000000000")
-            ));
+                return Redirect(
+                    string.Format(
+                        "{0}oauth_token={1}&oauth_verifier={2}",
+                        token.CallbackUri,
+                        token.Guid.ToString("00000000000000000000000000000000"),
+                        token.Secret.ToString("00000000000000000000000000000000")
+                    )
+                );
+            }
         }
 
         [HttpGet]

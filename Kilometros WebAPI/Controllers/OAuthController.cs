@@ -97,7 +97,7 @@ namespace Kilometros_WebAPI.Controllers {
 
             if ( token.VerificationCode != oAuth.VerifierCode ) {
                 throw new HttpUnauthorizedException(
-                    "120" + ControllerStrings.Warning104_RequestTokenInvalid
+                    "120 " + ControllerStrings.Warning104_RequestTokenInvalid
                 );
             }
 

@@ -206,11 +206,12 @@
     <Compile Include="Controllers\MyAccountController.cs" />
     <Compile Include="Controllers\MyContactInfoController.cs" />
     <Compile Include="Controllers\MyPhysiqueController.cs" />
+    <Compile Include="Controllers\OAuth3rdPartyAddController.cs" />
     <Compile Include="Controllers\OAuthController.cs" />
     <Compile Include="Controllers\RegisterController.cs" />
     <Compile Include="Controllers\MyGiftsController.cs" />
     <Compile Include="Controllers\RewardsController.cs" />
-    <Compile Include="Controllers\OAuthThirdPartyController.cs" />
+    <Compile Include="Controllers\OAuth3rdPartyLoginController.cs" />
     <Compile Include="Controllers\TipsController.cs" />
     <Compile Include="ExceptionFilters\HttpStatusExceptionFilter.cs" />
     <Compile Include="ExceptionFilters\DbValidationExceptionFilter.cs" />
@@ -262,6 +263,15 @@
     </Content>
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Areas\Login\Views\Home\OAuthBasicLoginSuccess.cshtml" />
+    <None Include="Scripts\jquery-1.8.2.intellisense.js" />
+    <Content Include="Scripts\jquery-1.8.2.js" />
+    <Content Include="Scripts\jquery-1.8.2.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -273,7 +283,6 @@
   <ItemGroup>
     <Folder Include="Areas\HelpPage\Views\StaticPages\" />
     <Folder Include="Areas\Login\Models\" />
-    <Folder Include="Areas\Login\Views\Home\" />
     <Folder Include="Areas\Login\Views\Shared\" />
   </ItemGroup>
   <ItemGroup>
