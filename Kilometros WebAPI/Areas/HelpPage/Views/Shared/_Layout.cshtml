@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -7,6 +7,27 @@
     @RenderSection("scripts", required: false)
 </head>
 <body>
+    <header class="help-page">
+        <div class="content-wrapper">
+            <a href="@Url.Action("Index")">
+                <span id="kms-api-logo"></span>
+            </a>
+
+            <nav>
+                <ul>
+                    <li>
+                        @Html.ActionLink("REST API", "Index")
+                    </li>
+                    <li>
+                        @Html.ActionLink("OAuth KMS", "Index")
+                    </li>
+                    <li>
+                        @Html.ActionLink("Cabeceras HTTP", "Index")
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
     @RenderBody()
 </body>
 </html>
