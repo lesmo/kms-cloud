@@ -208,9 +208,6 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="MainModel.edmx.sql" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Kilometros WebGlobalization\Kilometros WebGlobalization.csproj">
       <Project>{9aaf5681-cf18-414d-9853-a20fffa64eba}</Project>
       <Name>Kilometros WebGlobalization</Name>
