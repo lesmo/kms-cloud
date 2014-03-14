@@ -16,11 +16,19 @@ using Kilometros_WebAPI.Exceptions;
 using Kilometros_WebGlobalization.API;
 
 namespace Kilometros_WebAPI.Controllers {
+    /// <summary>
+    ///     Devuelve y modifica la Ínformación de la Contacto del Usuario en la Nube KMS.
+    /// </summary>
     [Authorize]
     public class MyContactInfoController : ApiController {
         public KilometrosDatabase.Abstraction.WorkUnit Database
             = new KilometrosDatabase.Abstraction.WorkUnit();
 
+        /// <summary>
+        ///     Devuelve la Información de Contacto del Usuario en la Nube KMS.
+        /// </summary>
+        /// <returns>
+        /// </returns>
         [HttpGet]
         [Route("my/contact-info")]
         public ContactInfoResponse GetContactInfo() {
@@ -57,6 +65,13 @@ namespace Kilometros_WebAPI.Controllers {
             };
         }
 
+        /// <summary>
+        ///     Establece la Información de Contacto del Usuario en la Nube KMS.
+        /// </summary>
+        /// <param name="dataPost">
+        ///     Nueva Información de Contacto del Usuario en la Nube KMS.
+        /// </param>
+        /// <returns></returns>
         [HttpPost]
         [Route("my/account")]
         public IHttpActionResult PostAccount([FromBody]ContactInfoPost dataPost) {

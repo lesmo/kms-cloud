@@ -17,9 +17,18 @@ namespace Kilometros_WebAPI.Controllers {
         KilometrosDatabase.Abstraction.WorkUnit Database
             = new KilometrosDatabase.Abstraction.WorkUnit();
 
+        /// <summary>
+        ///     Devuelve el historial de los Regalos conseguidos por el Usuario.
+        /// </summary>
         [HttpGet]
-        [Route("my/gifts/{giftGuidBase64}")]
-        public GiftResponse GetRewardGift(string giftGuidBase64) {
+        [Route("my/gifts/history")]
+        public IEnumerable<GiftResponse> GetRewards() {
+            throw new NotImplementedException();
+        }
+
+        [HttpGet]
+        [Route("my/gifts/{giftId}")]
+        public GiftResponse GetRewardGift(string giftId) {
             KmsIdentity identity
                 = (KmsIdentity)User.Identity;
             User user
@@ -27,7 +36,7 @@ namespace Kilometros_WebAPI.Controllers {
 
             // --- Buscar Regalo solicitado ---
             Guid? giftGuid
-                = MiscHelper.GuidFromBase64(giftGuidBase64);
+                = MiscHelper.GuidFromBase64(giftId);
             if ( ! giftGuid.HasValue )
                 throw new HttpNotFoundException(
                     ControllerStrings.Warning701_GiftNotFound
@@ -109,8 +118,8 @@ namespace Kilometros_WebAPI.Controllers {
         }
 
         [HttpPost]
-        [Route("my/gifts/{giftGuidBase64}")]
-        public GiftClaimResponse ClaimRewardGift(string giftGuidBase64) {
+        [Route("my/gifts/claim/{giftId}")]
+        public GiftClaimResponse ClaimRewardGift(string giftId) {
             KmsIdentity identity
                 = (KmsIdentity)User.Identity;
             User user
@@ -118,7 +127,7 @@ namespace Kilometros_WebAPI.Controllers {
 
             // --- Buscar Regalo solicitado ---
             Guid? giftGuid
-                = MiscHelper.GuidFromBase64(giftGuidBase64);
+                = MiscHelper.GuidFromBase64(giftId);
             if ( !giftGuid.HasValue )
                 throw new HttpNotFoundException(
                     ControllerStrings.Warning701_GiftNotFound
@@ -139,6 +148,18 @@ namespace Kilometros_WebAPI.Controllers {
                     r => r.User == user && r.Reward.RewardGift.Contains(rewardGift)
                 );
             if ( userEarnedReward == null )
+                throw new HttpNotFoundException(
+                    ControllerStrings.Warning701_GiftNotFound
+                );
+
+            // --- Verificar que el Regalo no haya sido Reclamado por el Usuario ---
+            bool userClaimedGift
+                = (
+                    from r in rewardGift.UserRewardGiftClaimed
+                    where r.RedeemedByUser.Guid == user.Guid && r.RewardGift.Guid == giftGuid.Value
+                    select r
+                ).FirstOrDefault() != null;
+            if ( userClaimedGift )
                 throw new HttpNotFoundException(
                     ControllerStrings.Warning701_GiftNotFound
                 );
@@ -165,7 +186,8 @@ namespace Kilometros_WebAPI.Controllers {
                 );
 
             // --- Asociar al Usuario con el Reclamo (efectivamente reclamando el regalo del usuario) ---
-            giftClaim.RedeemedByUser = user;
+            giftClaim.RedeemedByUser
+                = user;
 
             Database.UserRewardGiftClaimedStore.Update(giftClaim);
             Database.SaveChanges();

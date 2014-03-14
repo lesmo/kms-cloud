@@ -17,27 +17,35 @@ using Kilometros_WebAPI.Exceptions;
 
 namespace Kilometros_WebAPI.Controllers {
     /// <summary>
-    /// Permite obtener y enviar Datos generados por el Podómetro de KMS.
+    ///     Permite subir y descargar Datos generados por los Dispositivos KMS, o los Servicios de Terceros
+    ///     soportados por la Nube KMS.
     /// </summary>
     [Authorize]
     public class DataController : ApiController {
-        private readonly Dictionary<DataActivity, string> DataActivityString = new Dictionary<DataActivity,string> {
-            {DataActivity.Running, "run"},
-            {DataActivity.Walking, "walk"},
-            {DataActivity.Sleep, "sleep"}
-        };
+        //private readonly Dictionary<DataActivity, string> DataActivityString = new Dictionary<DataActivity,string> {
+        //    {DataActivity.Running, "run"},
+        //    {DataActivity.Walking, "walk"},
+        //    {DataActivity.Sleep, "sleep"}
+        //};
 
         private WorkUnit Database = new WorkUnit();
 
         /// <summary>
-        /// Obtener los pasos dados y la distancia recorrida por el usuario dividido por hora.
+        ///     Devuelve los pasos dados y la distancia recorrida por el Usuario divididos por hora,
+        ///     únicamente en el rango temporal establecido.
         /// </summary>
-        /// <param name="activity">Actividad a buscar</param>
-        /// <param name="from">Fecha a partir de la cual buscar datos.</param>
-        /// <param name="until">Fecha hasta la cual buscar datos.</param>
+        /// <param name="activity">
+        ///     Actividad a buscar. Puede ser: "running", "walking" o "sleeping".
+        /// </param>
+        /// <param name="from">
+        ///     Fecha a partir de la cual buscar datos.
+        /// </param>
+        /// <param name="until">
+        ///     Fecha hasta la cual buscar datos.
+        /// </param>
         /// <returns></returns>
         /// <remarks>
-        /// Sólo puede solicitarse hasta un año como rango a la vez. No hay límite en cuanto a fechas en el pasado.
+        ///     Sólo puede solicitarse hasta un año como rango a la vez. No hay límite en cuanto a fechas en el pasado.
         /// </remarks>
         [HttpGet]
         [Route("data/search/{activity}")]
@@ -106,9 +114,11 @@ namespace Kilometros_WebAPI.Controllers {
         }
 
         /// <summary>
-        /// Obtener la distancia total recorrida por el Usuario
+        ///     Devuelve los pasos totales dados y la distancia total recorrida por el Usuario.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        ///     Los pasos totales dados y las distancias totales recorridas por el Usuario.
+        /// </returns>
         [HttpGet]
         [Route("data/total")]
         public DataTotalResponse GetDistanceTotal() {
@@ -171,10 +181,14 @@ namespace Kilometros_WebAPI.Controllers {
         }
 
         /// <summary>
-        /// Enviar los Datos generados por el Podómetro KMS.
+        ///     Subir Datos generados por el Dispositivo KMS.
         /// </summary>
-        /// <param name="dataPost">Datos de la Pulsera</param>
-        /// <returns></returns>
+        /// <param name="dataPost">
+        ///     Datos del Dispositivo KMS.
+        /// </param>
+        /// <returns>
+        ///     
+        /// </returns>
         [HttpPost]
         [Route("data")]
         public IHttpActionResult PostData([FromBody]DataPost dataPost) {

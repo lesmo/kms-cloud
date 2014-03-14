@@ -9,7 +9,7 @@
 {
     <table class="help-page-table">
         <thead>
-            <tr><th>Name</th><th>Description</th><th>Type</th><th>Additional information</th></tr>
+            <tr><th>Parámetro</th><th>Descripción</th><th>Tipo</th><th>Comentarios</th></tr>
         </thead>
         <tbody>
             @foreach (ParameterDescription parameter in Model)
@@ -33,7 +33,7 @@
                         }
                         else
                         {
-                            <p>None.</p>
+                            <p>-</p>
                         }
                     </td>
                 </tr>
@@ -43,6 +43,6 @@
 }
 else
 {
-    <p>None.</p>
+    <p>Ninguno.</p>
 }
 

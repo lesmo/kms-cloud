@@ -14,20 +14,21 @@ using System.Web;
 
 namespace Kilometros_WebAPI.Controllers {
     /// <summary>
-    /// Permite obtener y modificar la Ínformación de la Cuenta de Usuario.
+    ///     Devuelve y modifica la Ínformación de la Cuenta de Usuario en la Nube KMS.
     /// </summary>
     [Authorize]
     public class MyAccountController : ApiController {
         /// <summary>
-        /// Acceso a los Repositorios de la BD.
+        ///     Acceso a los Repositorios de la BD.
         /// </summary>
         public KilometrosDatabase.Abstraction.WorkUnit Database
             = new KilometrosDatabase.Abstraction.WorkUnit();
 
         /// <summary>
-        /// Devuelve la Información de Cuenta de Usuario del Usuario.
+        ///     Devuelve la Información de Cuenta de Usuario en la Nube KMS.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// </returns>
         [HttpGet]
         [Route("my/account")]
         public AccountResponse GetAccount() {
@@ -51,9 +52,11 @@ namespace Kilometros_WebAPI.Controllers {
         }
 
         /// <summary>
-        /// Establece la Información de Contacto del Usuario.
+        ///     Establece la Información de Cuenta de Usuario en la Nube KMS.
         /// </summary>
-        /// <param name="accountPost">Información de Contacto nueva.</param>
+        /// <param name="accountPost">
+        ///     Nueva Información de Cuenta de Usuario en la Nube KMS.
+        /// </param>
         /// <returns></returns>
         [HttpPost]
         [Route("my/account")]

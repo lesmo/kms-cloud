@@ -208,7 +208,6 @@
     <Compile Include="Controllers\MyPhysiqueController.cs" />
     <Compile Include="Controllers\OAuth3rdPartyAddController.cs" />
     <Compile Include="Controllers\OAuthController.cs" />
-    <Compile Include="Controllers\RegisterController.cs" />
     <Compile Include="Controllers\MyGiftsController.cs" />
     <Compile Include="Controllers\RewardsController.cs" />
     <Compile Include="Controllers\OAuth3rdPartyLoginController.cs" />

@@ -13,17 +13,25 @@ using Kilometros_WebAPI.Models.HttpPost.AccountCreateController;
 
 namespace Kilometros_WebAPI.Controllers {
     /// <summary>
-    ///     Permite generar una nueva Cuenta de KMS. Para crear una nueva cuenta que permitirá
-    ///     login con Facebook, Twitter, Fitbit o Nike+, será necesario crear una cuenta en
-    ///     éste <i>recurso</i> y posteriormente utilizar el apropiado en
-    ///     <see cref="OAuth3rdPartyAddController">OAuth3rdPartyAdd</see>.
+    ///     Permite generar una nueva Cuenta en la Nube de KMS. Para crear una nueva cuenta
+    ///     que permitirá login con Facebook, Twitter, Fitbit o Nike+, será necesario crear
+    ///     una cuenta en éste recurso y posteriormente utilizar el apropiado en OAuth3rdPartyAdd.
     /// </summary>
     public class AccountCreateController : ApiController {
         KilometrosDatabase.Abstraction.WorkUnit Database
             = new KilometrosDatabase.Abstraction.WorkUnit();
 
+        /// <summary>
+        ///     Crea una nueva Cuenta en la Nube KMS.
+        /// </summary>
+        /// <param name="dataPost">
+        ///     Información de la nueva cuenta de Usuario.
+        /// </param>
+        /// <returns>
+        ///     
+        /// </returns>
         [HttpPost]
-        [Route("account/kms")]
+        [Route("account")]
         public IHttpActionResult CreateKmsAccount([FromBody]CreateKmsAccountPost dataPost) {
             // --- Validar que no haya sesión iniciada ---
             KmsIdentity identity
@@ -34,7 +42,7 @@ namespace Kilometros_WebAPI.Controllers {
                     "201" + ControllerStrings.Warning201_CannotCreateUserWithSessionOpen
                 );
 
-            // --- Validar que no haya un usuario con sesión iniciada ---
+            // --- Validar que no haya un usuario con el mismo Email ---
             User userSearch
                 =  Database.UserStore.GetFirst(
                     f => f.Email == dataPost.Email.ToLower()

@@ -53,16 +53,16 @@ namespace Kilometros_WebAPI.Controllers {
             List<RewardResponse> response
                 = new List<RewardResponse>();
 
-            foreach ( UserEarnedReward reward in rewards ) {
+            foreach ( UserEarnedReward earnedReward in rewards ) {
                 // Obtener Recompensa en el idioma actual
                 RewardGlobalization rewardGlobalization
                     = Database.RewardStore.GetGlobalization(
-                        reward.Reward
+                        earnedReward.Reward
                     ) as RewardGlobalization;
 
                 // Buscar y obtener regalos asociados
                 IEnumerable<RewardGift> rewardGifts
-                    = reward.Reward.RewardGift;
+                    = earnedReward.Reward.RewardGift;
                 List<RewardGiftResponse> rewardGiftsList
                     = new List<RewardGiftResponse>();
 
@@ -128,14 +128,14 @@ namespace Kilometros_WebAPI.Controllers {
                 // Obtener Regiones a las que aplica la Recompensa
                 List<string> rewardRegions
                     = new List<string>();
-                foreach ( RewardRegionalization region in reward.Reward.RewardRegionalization )
+                foreach ( RewardRegionalization region in earnedReward.Reward.RewardRegionalization )
                     rewardRegions.Add(region.RegionCode);
 
                 response.Add(new RewardResponse() {
                     RewardId
-                        = MiscHelper.Base64FromGuid(reward.Guid),
+                        = MiscHelper.Base64FromGuid(earnedReward.Guid),
                     EarnDate
-                        = reward.CreationDate,
+                        = earnedReward.CreationDate,
 
                     Title
                         = rewardGlobalization.Title,
@@ -155,8 +155,8 @@ namespace Kilometros_WebAPI.Controllers {
         }
 
         [HttpGet]
-        [Route("rewards/{rewardGuidBase64}")]
-        public RewardResponse GetReward(string rewardGuidBase64) {
+        [Route("rewards/{earnedRewardId}")]
+        public RewardResponse GetReward(string earnedRewardId) {
             KmsIdentity identity
                 = (KmsIdentity)User.Identity;
             User user
@@ -164,7 +164,7 @@ namespace Kilometros_WebAPI.Controllers {
 
             // --- Obtener la Recompensa solicitada ---
             Guid? rewardGuid
-                = MiscHelper.GuidFromBase64(rewardGuidBase64);
+                = MiscHelper.GuidFromBase64(earnedRewardId);
             if ( ! rewardGuid.HasValue )
                 throw new HttpNotFoundException(
                     ControllerStrings.Warning901_RewardNotFound
@@ -173,6 +173,10 @@ namespace Kilometros_WebAPI.Controllers {
             UserEarnedReward reward
                 = Database.UserEarnedRewardStore.Get(rewardGuid.Value);
             if ( reward == null )
+                throw new HttpNotFoundException(
+                    ControllerStrings.Warning901_RewardNotFound
+                );
+            if ( reward.User.Guid != user.Guid )
                 throw new HttpNotFoundException(
                     ControllerStrings.Warning901_RewardNotFound
                 );
@@ -189,14 +193,15 @@ namespace Kilometros_WebAPI.Controllers {
                     = new List<string>();
                 foreach ( RewardGiftPicture picture in rewardGift.RewardGiftPictures )
                     rewardGiftPictures.Add(
-                        picture.Guid.ToString() + "." + picture.PictureExtension
+                        picture.Guid.ToString("00000000000000000000000000000000")
+                        + "." + picture.PictureExtension
                     );
 
                 // Determinar si el Regalo se reclamó por el Usuario
                 bool userClaimed
                     = (
                         from uc in rewardGift.UserRewardGiftClaimed
-                        where uc.RedeemedByUser == user
+                        where uc.RedeemedByUser.Guid == user.Guid
                         select uc
                     ).FirstOrDefault() != null;
 
@@ -205,6 +210,7 @@ namespace Kilometros_WebAPI.Controllers {
                     = Database.RewardGiftStore.GetGlobalization(
                         rewardGift
                     ) as RewardGiftGlobalization;
+
                 if ( rewardGiftGlobalization == null ) {
                     rewardGiftsList.Add(new RewardGiftResponse() {
                         RewardGiftId
