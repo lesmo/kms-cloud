@@ -1930,9 +1930,9 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
           </Key>
           <Property Name="User_Guid" Type="Guid" Nullable="false" />
           <Property Name="Activity" Type="MainModel.DataActivity" Nullable="false" />
-          <Property Name="Timestamp" Type="DateTime" Precision="3" />
-          <Property Name="Steps" Type="Int64" />
-          <Property Name="Distance" Type="Int64" />
+          <Property Name="Timestamp" Type="DateTime" Precision="3" Nullable="false" />
+          <Property Name="Steps" Type="Int64" Nullable="false" />
+          <Property Name="Distance" Type="Int64" Nullable="false" />
         </EntityType>
         <EntityType Name="UserDataTotalDistance">
           <Key>
@@ -1941,9 +1941,9 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
           </Key>
           <Property Name="User_Guid" Type="Guid" Nullable="false" />
           <Property Name="Activity" Type="MainModel.DataActivity" Nullable="false" />
-          <Property Name="Timestamp" Type="DateTime" Precision="3" />
-          <Property Name="TotalSteps" Type="Int64" />
-          <Property Name="TotalDistance" Type="Int64" />
+          <Property Name="Timestamp" Type="DateTime" Precision="3" Nullable="false" />
+          <Property Name="TotalSteps" Type="Int64" Nullable="false" />
+          <Property Name="TotalDistance" Type="Int64" Nullable="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>

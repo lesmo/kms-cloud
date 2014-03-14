@@ -22,7 +22,7 @@ namespace Kilometros_WebAPI.Controllers {
 
         [HttpPost]
         [Route("oauth/3rd/facebook/login")]
-        public void FacebookLogin([FromBody]string facebook_token) {
+        public void FacebookLogin([FromBody]string token) {
             KmsIdentity identity
                 = (KmsIdentity)User.Identity;
 
@@ -31,7 +31,7 @@ namespace Kilometros_WebAPI.Controllers {
 
             OAuthCredential oAuthCredential
                 = Database.OAuthCredentialStore.GetFirst(
-                    f => f.OAuthProvider == OAuthService.Facebook && f.Token == facebook_token
+                    f => f.OAuthProvider == OAuthService.Facebook && f.Token == token
                 );
 
             if ( oAuthCredential == null ) {

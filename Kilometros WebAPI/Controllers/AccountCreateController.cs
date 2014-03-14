@@ -12,6 +12,12 @@ using KilometrosDatabase;
 using Kilometros_WebAPI.Models.HttpPost.AccountCreateController;
 
 namespace Kilometros_WebAPI.Controllers {
+    /// <summary>
+    ///     Permite generar una nueva Cuenta de KMS. Para crear una nueva cuenta que permitirá
+    ///     login con Facebook, Twitter, Fitbit o Nike+, será necesario crear una cuenta en
+    ///     éste <i>recurso</i> y posteriormente utilizar el apropiado en
+    ///     <see cref="OAuth3rdPartyAddController">OAuth3rdPartyAdd</see>.
+    /// </summary>
     public class AccountCreateController : ApiController {
         KilometrosDatabase.Abstraction.WorkUnit Database
             = new KilometrosDatabase.Abstraction.WorkUnit();
