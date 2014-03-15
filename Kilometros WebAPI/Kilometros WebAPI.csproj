@@ -203,12 +203,12 @@
     <Compile Include="Areas\Login\LoginAreaRegistration.cs" />
     <Compile Include="Controllers\AccountCreateController.cs" />
     <Compile Include="Controllers\DataController.cs" />
-    <Compile Include="Controllers\MyAccountController.cs" />
-    <Compile Include="Controllers\MyContactInfoController.cs" />
-    <Compile Include="Controllers\MyPhysiqueController.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ContactInfoController.cs" />
+    <Compile Include="Controllers\PhysiqueController.cs" />
     <Compile Include="Controllers\OAuth3rdPartyAddController.cs" />
     <Compile Include="Controllers\OAuthController.cs" />
-    <Compile Include="Controllers\MyGiftsController.cs" />
+    <Compile Include="Controllers\GiftsController.cs" />
     <Compile Include="Controllers\RewardsController.cs" />
     <Compile Include="Controllers\OAuth3rdPartyLoginController.cs" />
     <Compile Include="Controllers\TipsController.cs" />

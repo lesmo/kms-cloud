@@ -17,7 +17,7 @@ using Kilometros_WebGlobalization.API;
 
 namespace Kilometros_WebAPI.Controllers {
     [Authorize]
-    public class MyPhysiqueController : ApiController {
+    public class PhysiqueController : ApiController {
         public KilometrosDatabase.Abstraction.WorkUnit Database
             = new KilometrosDatabase.Abstraction.WorkUnit();
 

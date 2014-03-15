@@ -13,7 +13,7 @@ using System.Web.Http;
 
 namespace Kilometros_WebAPI.Controllers {
     [Authorize]
-    public class MyGiftsController : ApiController {
+    public class GiftsController : ApiController {
         KilometrosDatabase.Abstraction.WorkUnit Database
             = new KilometrosDatabase.Abstraction.WorkUnit();
 

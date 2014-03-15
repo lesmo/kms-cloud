@@ -17,7 +17,7 @@ namespace Kilometros_WebAPI.Controllers {
     ///     Devuelve y modifica la Ínformación de la Cuenta de Usuario en la Nube KMS.
     /// </summary>
     [Authorize]
-    public class MyAccountController : ApiController {
+    public class AccountController : ApiController {
         /// <summary>
         ///     Acceso a los Repositorios de la BD.
         /// </summary>

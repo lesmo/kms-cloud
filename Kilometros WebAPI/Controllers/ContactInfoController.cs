@@ -20,7 +20,7 @@ namespace Kilometros_WebAPI.Controllers {
     ///     Devuelve y modifica la Ínformación de la Contacto del Usuario en la Nube KMS.
     /// </summary>
     [Authorize]
-    public class MyContactInfoController : ApiController {
+    public class ContactInfoController : ApiController {
         public KilometrosDatabase.Abstraction.WorkUnit Database
             = new KilometrosDatabase.Abstraction.WorkUnit();
 
