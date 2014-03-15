@@ -23,6 +23,8 @@ namespace KilometrosDatabase
             this.Data = new HashSet<Data>();
             this.UserTipHistory = new HashSet<UserTipHistory>();
             this.OAuthCredential = new HashSet<OAuthCredential>();
+            this.UserFriendSet = new HashSet<UserFriendSet>();
+            this.UserFriendSet1 = new HashSet<UserFriendSet>();
         }
     
         public System.Guid Guid { get; private set; }
@@ -45,5 +47,7 @@ namespace KilometrosDatabase
         public virtual ICollection<Data> Data { get; set; }
         public virtual ICollection<UserTipHistory> UserTipHistory { get; set; }
         public virtual ICollection<OAuthCredential> OAuthCredential { get; set; }
+        public virtual ICollection<UserFriendSet> UserFriendSet { get; set; }
+        public virtual ICollection<UserFriendSet> UserFriendSet1 { get; set; }
     }
 }

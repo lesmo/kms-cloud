@@ -12,12 +12,12 @@ namespace KilometrosDatabase
     using System;
     using System.Collections.Generic;
     
-    public partial class UserDataTotalDistance
+    public partial class UserFriendSet
     {
-        public System.Guid User_Guid { get; set; }
-        public DataActivity Activity { get; set; }
-        public Nullable<System.DateTime> Timestamp { get; set; }
-        public Nullable<long> TotalSteps { get; set; }
-        public Nullable<long> TotalDistance { get; set; }
+        public System.Guid Id { get; set; }
+        public bool Accepted { get; set; }
+    
+        public virtual User Friend { get; set; }
+        public virtual User User { get; set; }
     }
 }

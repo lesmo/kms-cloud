@@ -49,5 +49,6 @@ namespace KilometrosDatabase
         public DbSet<OAuthNonce> OAuthNonceSet { get; set; }
         public DbSet<UserDataHourlyDistance> UserDataHourlyDistance { get; set; }
         public DbSet<UserDataTotalDistance> UserDataTotalDistance { get; set; }
+        public DbSet<UserFriendSet> UserFriendSet { get; set; }
     }
 }

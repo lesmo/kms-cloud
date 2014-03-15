@@ -167,6 +167,9 @@
     <Compile Include="UserEarnedReward.cs">
       <DependentUpon>MainModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="UserFriendSet.cs">
+      <DependentUpon>MainModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="UserMotionLevelHistory.cs">
       <DependentUpon>MainModel.tt</DependentUpon>
     </Compile>

@@ -73,7 +73,7 @@ namespace Kilometros_WebAPI.Controllers {
         /// </param>
         /// <returns></returns>
         [HttpPost]
-        [Route("my/account")]
+        [Route("my/contact-info")]
         public IHttpActionResult PostAccount([FromBody]ContactInfoPost dataPost) {
             HttpResponseMessage response
                 = Request.CreateResponse();

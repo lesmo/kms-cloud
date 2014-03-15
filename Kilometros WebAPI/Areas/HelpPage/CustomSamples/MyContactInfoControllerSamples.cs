@@ -11,18 +11,27 @@ namespace Kilometros_WebAPI.Areas.HelpPage.CustomSamples {
     public class MyContactInfoControllerSamples {
         public static void Register(Dictionary<Type, object> typeSamples, HttpConfiguration config) {
             // --- Petición ---
-            typeSamples.Add(typeof(AccountPost), new AccountPost() {
-                Email = DefaultValues.Email1,
-                PreferredCultureCode = DefaultValues.CultureCode1,
-                RegionCode = DefaultValues.CultureCode1,
-                Password = DefaultValues.Base64String
-            });
+            typeSamples.Add(
+                typeof(AccountPost),
+                new AccountPost() {
+                    Email
+                        = DefaultValues.Email1,
+                    PreferredCultureCode
+                        = DefaultValues.CultureCode1,
+                    RegionCode
+                        = DefaultValues.CultureCode1,
+                    Password
+                        = DefaultValues.Base64String
+                }
+            );
+
             config.SetSampleRequest(
                 string.Format(
                     "Email={0}\n"
                     + "&PreferredCultureCode={1}\n"
-                    + "&RegionCode={2}"
+                    + "&RegionCode={2}\n"
                     + "&Password={3}",
+
                     HttpUtility.UrlEncode(DefaultValues.Email1),
                     HttpUtility.UrlEncode(DefaultValues.CultureCode1),
                     HttpUtility.UrlEncode(DefaultValues.RegionCode1),
@@ -34,12 +43,19 @@ namespace Kilometros_WebAPI.Areas.HelpPage.CustomSamples {
             );
 
             // --- Respuesta ---
-            typeSamples.Add(typeof(AccountResponse), new AccountResponse() {
-                AccountCreationDate = DefaultValues.DateTime,
-                Email = DefaultValues.Email1,
-                PreferredCultureCode = DefaultValues.CultureCode1,
-                RegionCode = DefaultValues.RegionCode1
-            });
+            typeSamples.Add(
+                typeof(AccountResponse),
+                new AccountResponse() {
+                    AccountCreationDate
+                        = DefaultValues.DateTime,
+                    Email
+                        = DefaultValues.Email1,
+                    PreferredCultureCode
+                        = DefaultValues.CultureCode1,
+                    RegionCode
+                        = DefaultValues.RegionCode1
+                }
+            );
         }
     }
 }

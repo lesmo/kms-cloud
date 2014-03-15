@@ -64,6 +64,9 @@
         <EntityTypeShape EntityType="MainModel.OAuthNonce" Width="1.5" PointX="8.125" PointY="2.125" />
         <EntityTypeShape EntityType="MainModel.UserDataHourlyDistance" Width="2.375" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="MainModel.UserDataTotalDistance" Width="2.375" PointX="0.75" PointY="3" />
+        <EntityTypeShape EntityType="MainModel.UserFriendSet" Width="1.5" PointX="1.625" PointY="9" />
+        <AssociationConnector Association="MainModel.FK_UserFriendSet_UserSet_Friend_Guid" />
+        <AssociationConnector Association="MainModel.FK_UserFriendSet_UserSet_User_Guid" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

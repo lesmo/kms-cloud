@@ -227,6 +227,8 @@
     </Compile>
     <Compile Include="Helpers\HttpRequestMessageHeadersHelper.cs" />
     <Compile Include="Helpers\MiscHelper.cs" />
+    <Compile Include="MagicTriggers\RewardsPushTrigger.cs" />
+    <Compile Include="MagicTriggers\TipsPushTrigger.cs" />
     <Compile Include="MessageHandlers\ResponseLastModifiedHandler.cs" />
     <Compile Include="Models\HttpGet\DataController\DataDistanceResponse.cs" />
     <Compile Include="Models\HttpGet\DataController\DataTotalResponse.cs" />

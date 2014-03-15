@@ -265,6 +265,15 @@
           <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Reward_Guid" Type="uniqueidentifier" Nullable="false" />
         </EntityType>
+        <EntityType Name="UserFriendSet">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Friend_Guid" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Accepted" Type="bit" Nullable="false" />
+        </EntityType>
         <EntityType Name="UserMotionLevelHistorySet">
           <Key>
             <PropertyRef Name="Id" />
@@ -667,6 +676,30 @@ warning 6002: The table/view 'KilometrosDatabase.dbo.UserDataTotalDistance' does
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_UserFriendSet_UserSet_Friend_Guid">
+          <End Role="UserSet" Type="Self.UserSet" Multiplicity="1" />
+          <End Role="UserFriendSet" Type="Self.UserFriendSet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserSet">
+              <PropertyRef Name="Guid" />
+            </Principal>
+            <Dependent Role="UserFriendSet">
+              <PropertyRef Name="Friend_Guid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserFriendSet_UserSet_User_Guid">
+          <End Role="UserSet" Type="Self.UserSet" Multiplicity="1" />
+          <End Role="UserFriendSet" Type="Self.UserFriendSet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserSet">
+              <PropertyRef Name="Guid" />
+            </Principal>
+            <Dependent Role="UserFriendSet">
+              <PropertyRef Name="User_Guid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_UserMotionLevelHistoryMotionLevel">
           <End Role="MotionLevelSet" Type="Self.MotionLevelSet" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -836,6 +869,7 @@ warning 6002: The table/view 'KilometrosDatabase.dbo.UserDataTotalDistance' does
           <EntitySet Name="TokenSet" EntityType="Self.TokenSet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserBodySet" EntityType="Self.UserBodySet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserEarnedRewardSet" EntityType="Self.UserEarnedRewardSet" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserFriendSet" EntityType="Self.UserFriendSet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserMotionLevelHistorySet" EntityType="Self.UserMotionLevelHistorySet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserRewardGiftShippingStatusSet" EntityType="Self.UserRewardGiftShippingStatusSet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserSet" EntityType="Self.UserSet" Schema="dbo" store:Type="Tables" />
@@ -957,6 +991,14 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
           <AssociationSet Name="FK_UserEarnedRewardReward" Association="Self.FK_UserEarnedRewardReward">
             <End Role="RewardSet" EntitySet="RewardSet" />
             <End Role="UserEarnedRewardSet" EntitySet="UserEarnedRewardSet" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserFriendSet_UserSet_Friend_Guid" Association="Self.FK_UserFriendSet_UserSet_Friend_Guid">
+            <End Role="UserSet" EntitySet="UserSet" />
+            <End Role="UserFriendSet" EntitySet="UserFriendSet" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserFriendSet_UserSet_User_Guid" Association="Self.FK_UserFriendSet_UserSet_User_Guid">
+            <End Role="UserSet" EntitySet="UserSet" />
+            <End Role="UserFriendSet" EntitySet="UserFriendSet" />
           </AssociationSet>
           <AssociationSet Name="FK_UserMotionLevelHistoryMotionLevel" Association="Self.FK_UserMotionLevelHistoryMotionLevel">
             <End Role="MotionLevelSet" EntitySet="MotionLevelSet" />
@@ -1144,6 +1186,15 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
           <EntitySet Name="OAuthNonceSet" EntityType="MainModel.OAuthNonce" />
           <EntitySet Name="UserDataHourlyDistance" EntityType="MainModel.UserDataHourlyDistance" />
           <EntitySet Name="UserDataTotalDistance" EntityType="MainModel.UserDataTotalDistance" />
+          <EntitySet Name="UserFriendSet" EntityType="MainModel.UserFriendSet" />
+          <AssociationSet Name="FK_UserFriendSet_UserSet_Friend_Guid" Association="MainModel.FK_UserFriendSet_UserSet_Friend_Guid">
+            <End Role="User" EntitySet="UserSet" />
+            <End Role="UserFriendSet" EntitySet="UserFriendSet" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserFriendSet_UserSet_User_Guid" Association="MainModel.FK_UserFriendSet_UserSet_User_Guid">
+            <End Role="User" EntitySet="UserSet" />
+            <End Role="UserFriendSet" EntitySet="UserFriendSet" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="User">
           <Documentation>
@@ -1224,6 +1275,8 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
           <Property Name="UtcOffset" Type="Int16" Nullable="true" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="LastName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="UserFriendSet" Relationship="MainModel.FK_UserFriendSet_UserSet_Friend_Guid" FromRole="User" ToRole="UserFriendSet" />
+          <NavigationProperty Name="UserFriendSet1" Relationship="MainModel.FK_UserFriendSet_UserSet_User_Guid" FromRole="User" ToRole="UserFriendSet" />
         </EntityType>
         <EntityType Name="Token">
           <Documentation>
@@ -1930,9 +1983,9 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
           </Key>
           <Property Name="User_Guid" Type="Guid" Nullable="false" />
           <Property Name="Activity" Type="MainModel.DataActivity" Nullable="false" />
-          <Property Name="Timestamp" Type="DateTime" Precision="3" Nullable="false" />
-          <Property Name="Steps" Type="Int64" Nullable="false" />
-          <Property Name="Distance" Type="Int64" Nullable="false" />
+          <Property Name="Timestamp" Type="DateTime" Precision="3" />
+          <Property Name="Steps" Type="Int64" />
+          <Property Name="Distance" Type="Int64" />
         </EntityType>
         <EntityType Name="UserDataTotalDistance">
           <Key>
@@ -1941,10 +1994,27 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
           </Key>
           <Property Name="User_Guid" Type="Guid" Nullable="false" />
           <Property Name="Activity" Type="MainModel.DataActivity" Nullable="false" />
-          <Property Name="Timestamp" Type="DateTime" Precision="3" Nullable="false" />
-          <Property Name="TotalSteps" Type="Int64" Nullable="false" />
-          <Property Name="TotalDistance" Type="Int64" Nullable="false" />
+          <Property Name="Timestamp" Type="DateTime" Precision="3" />
+          <Property Name="TotalSteps" Type="Int64" />
+          <Property Name="TotalDistance" Type="Int64" />
         </EntityType>
+        <EntityType Name="UserFriendSet">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="Accepted" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Friend" Relationship="MainModel.FK_UserFriendSet_UserSet_Friend_Guid" FromRole="UserFriendSet" ToRole="User" />
+          <NavigationProperty Name="User" Relationship="MainModel.FK_UserFriendSet_UserSet_User_Guid" FromRole="UserFriendSet" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_UserFriendSet_UserSet_Friend_Guid">
+          <End Type="MainModel.User" Role="User" Multiplicity="1" />
+          <End Type="MainModel.UserFriendSet" Role="UserFriendSet" Multiplicity="*" />
+        </Association>
+        <Association Name="FK_UserFriendSet_UserSet_User_Guid">
+          <End Type="MainModel.User" Role="User" Multiplicity="1" />
+          <End Type="MainModel.UserFriendSet" Role="UserFriendSet" Multiplicity="*" />
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2486,6 +2556,30 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="UserFriendSet">
+            <EntityTypeMapping TypeName="MainModel.UserFriendSet">
+              <MappingFragment StoreEntitySet="UserFriendSet">
+                <ScalarProperty Name="Accepted" ColumnName="Accepted" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="FK_UserFriendSet_UserSet_Friend_Guid" TypeName="MainModel.FK_UserFriendSet_UserSet_Friend_Guid" StoreEntitySet="UserFriendSet">
+            <EndProperty Name="UserFriendSet">
+              <ScalarProperty Name="Id" ColumnName="Id" />
+            </EndProperty>
+            <EndProperty Name="User">
+              <ScalarProperty Name="Guid" ColumnName="Friend_Guid" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="FK_UserFriendSet_UserSet_User_Guid" TypeName="MainModel.FK_UserFriendSet_UserSet_User_Guid" StoreEntitySet="UserFriendSet">
+            <EndProperty Name="UserFriendSet">
+              <ScalarProperty Name="Id" ColumnName="Id" />
+            </EndProperty>
+            <EndProperty Name="User">
+              <ScalarProperty Name="Guid" ColumnName="User_Guid" />
+            </EndProperty>
+          </AssociationSetMapping>
   </EntityContainerMapping>
 </Mapping></edmx:Mappings>
   </edmx:Runtime>
