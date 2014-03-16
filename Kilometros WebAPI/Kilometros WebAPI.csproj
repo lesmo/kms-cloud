@@ -35,9 +35,9 @@
     <PublishDatabaseSettings>
       <Objects>
         <ObjectGroup Name="MainModelContainer-Deployment" Order="1">
-          <Destination Path="" />
+          <Destination Path="Data Source=tcp:ics1j1r8vx.database.windows.net,1433%3bInitial Catalog=kms-api-aAzKXwik7v%3bUser ID=kms-api%40ics1j1r8vx%3bPassword=LrNH8bCQ" />
           <Object Type="DbFullSql">
-            <PreSource Path="Data Source=LESMO-ZENBOOK\SQLEXPRESS%3bInitial Catalog=KmsCloud%3bIntegrated Security=True%3bApplication Name=EntityFramework" ScriptSchema="True" ScriptData="False" CopyAllFullTextCatalogs="False" DriDefaults="True" />
+            <PreSource Path="Data Source=.\SQLEXPRESS%3bInitial Catalog=KmsCloud%3bIntegrated Security=True%3bMultipleActiveResultSets=True%3bApplication Name=EntityFramework" ScriptSchema="True" ScriptData="False" CopyAllFullTextCatalogs="False" DriDefaults="True" />
             <Source Path="obj\Debug\AutoScripts\MainModelContainer-Deployment_SchemaOnly.sql" Transacted="True" />
           </Object>
         </ObjectGroup>
@@ -268,6 +268,7 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Areas\Login\Views\Home\OAuthBasicLoginSuccess.cshtml" />
+    <None Include="Properties\PublishProfiles\KMS Web API.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.8.2.js" />
     <Content Include="Scripts\jquery-1.8.2.min.js" />
@@ -364,9 +365,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Login\Views\web.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Properties\PublishProfiles\kms-web-api.pubxml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
