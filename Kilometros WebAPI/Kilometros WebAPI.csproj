@@ -40,6 +40,9 @@
             <PreSource Path="Data Source=.\SQLEXPRESS%3bInitial Catalog=KmsCloud%3bIntegrated Security=True%3bMultipleActiveResultSets=True%3bApplication Name=EntityFramework" ScriptSchema="True" ScriptData="False" CopyAllFullTextCatalogs="False" DriDefaults="True" />
             <Source Path="obj\Debug\AutoScripts\MainModelContainer-Deployment_SchemaOnly.sql" Transacted="True" />
           </Object>
+          <Object Type="DbFullSql" xmlns="">
+            <Source Path="..\Kilometros Database\MainModelInitialize.sql" Transacted="False" />
+          </Object>
         </ObjectGroup>
       </Objects>
     </PublishDatabaseSettings>
