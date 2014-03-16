@@ -272,6 +272,7 @@
           <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
           <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Friend_Guid" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CreationDate" Type="datetime" Nullable="false" />
           <Property Name="Accepted" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="UserMotionLevelHistorySet">
@@ -306,6 +307,7 @@
           <Property Name="RegionCode" Type="char" MaxLength="5" />
           <Property Name="PreferredCultureCode" Type="varchar" MaxLength="16" />
           <Property Name="UtcOffset" Type="smallint" />
+          <Property Name="PictureUri" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="UserTipHistorySet">
           <Key>
@@ -320,12 +322,12 @@
 warning 6002: The table/view 'KilometrosDatabase.dbo.UserDataHourlyDistance' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="UserDataHourlyDistance">
           <Key>
-            <PropertyRef Name="User_Guid" />
+            <PropertyRef Name="Timestamp" />
             <PropertyRef Name="Activity" />
           </Key>
           <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Activity" Type="smallint" Nullable="false" />
-          <Property Name="Timestamp" Type="datetime" />
+          <Property Name="Timestamp" Type="datetime" Nullable="false" />
           <Property Name="Steps" Type="bigint" />
           <Property Name="Distance" Type="bigint" />
         </EntityType>
@@ -333,12 +335,12 @@ warning 6002: The table/view 'KilometrosDatabase.dbo.UserDataHourlyDistance' doe
 warning 6002: The table/view 'KilometrosDatabase.dbo.UserDataTotalDistance' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="UserDataTotalDistance">
           <Key>
-            <PropertyRef Name="User_Guid" />
+            <PropertyRef Name="Timestamp" />
             <PropertyRef Name="Activity" />
           </Key>
           <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Activity" Type="smallint" Nullable="false" />
-          <Property Name="Timestamp" Type="datetime" />
+          <Property Name="Timestamp" Type="datetime" Nullable="false" />
           <Property Name="TotalSteps" Type="bigint" />
           <Property Name="TotalDistance" Type="bigint" />
         </EntityType>
@@ -1186,7 +1188,7 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
           <EntitySet Name="OAuthNonceSet" EntityType="MainModel.OAuthNonce" />
           <EntitySet Name="UserDataHourlyDistance" EntityType="MainModel.UserDataHourlyDistance" />
           <EntitySet Name="UserDataTotalDistance" EntityType="MainModel.UserDataTotalDistance" />
-          <EntitySet Name="UserFriendSet" EntityType="MainModel.UserFriendSet" />
+          <EntitySet Name="UserFriendSet" EntityType="MainModel.UserFriend" />
           <AssociationSet Name="FK_UserFriendSet_UserSet_Friend_Guid" Association="MainModel.FK_UserFriendSet_UserSet_Friend_Guid">
             <End Role="User" EntitySet="UserSet" />
             <End Role="UserFriendSet" EntitySet="UserFriendSet" />
@@ -1194,6 +1196,14 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
           <AssociationSet Name="FK_UserFriendSet_UserSet_User_Guid" Association="MainModel.FK_UserFriendSet_UserSet_User_Guid">
             <End Role="User" EntitySet="UserSet" />
             <End Role="UserFriendSet" EntitySet="UserFriendSet" />
+          </AssociationSet>
+          <AssociationSet Name="UserUserDataTotalDistance" Association="MainModel.UserUserDataTotalDistance">
+            <End Role="UserDataTotalDistance" EntitySet="UserDataTotalDistance" />
+            <End Role="User" EntitySet="UserSet" />
+          </AssociationSet>
+          <AssociationSet Name="UserDataHourlyDistanceUser" Association="MainModel.UserDataHourlyDistanceUser">
+            <End Role="UserDataHourlyDistance" EntitySet="UserDataHourlyDistance" />
+            <End Role="User" EntitySet="UserSet" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="User">
@@ -1275,8 +1285,11 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
           <Property Name="UtcOffset" Type="Int16" Nullable="true" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="LastName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="UserFriendSet" Relationship="MainModel.FK_UserFriendSet_UserSet_Friend_Guid" FromRole="User" ToRole="UserFriendSet" />
-          <NavigationProperty Name="UserFriendSet1" Relationship="MainModel.FK_UserFriendSet_UserSet_User_Guid" FromRole="User" ToRole="UserFriendSet" />
+          <NavigationProperty Name="UserFriended" Relationship="MainModel.FK_UserFriendSet_UserSet_Friend_Guid" FromRole="User" ToRole="UserFriendSet" />
+          <NavigationProperty Name="UserFriend" Relationship="MainModel.FK_UserFriendSet_UserSet_User_Guid" FromRole="User" ToRole="UserFriendSet" />
+          <NavigationProperty Name="UserDataTotalDistance" Relationship="MainModel.UserUserDataTotalDistance" FromRole="User" ToRole="UserDataTotalDistance" />
+          <NavigationProperty Name="UserDataHourlyDistance" Relationship="MainModel.UserDataHourlyDistanceUser" FromRole="User" ToRole="UserDataHourlyDistance" />
+          <Property Name="PictureUri" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Token">
           <Documentation>
@@ -1978,27 +1991,27 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
         </EntityType>
         <EntityType Name="UserDataHourlyDistance">
           <Key>
-            <PropertyRef Name="User_Guid" />
+            <PropertyRef Name="Timestamp" />
             <PropertyRef Name="Activity" />
           </Key>
-          <Property Name="User_Guid" Type="Guid" Nullable="false" />
           <Property Name="Activity" Type="MainModel.DataActivity" Nullable="false" />
-          <Property Name="Timestamp" Type="DateTime" Precision="3" />
+          <Property Name="Timestamp" Type="DateTime" Precision="3" Nullable="false" />
           <Property Name="Steps" Type="Int64" />
           <Property Name="Distance" Type="Int64" />
+          <NavigationProperty Name="User" Relationship="MainModel.UserDataHourlyDistanceUser" FromRole="UserDataHourlyDistance" ToRole="User" />
         </EntityType>
         <EntityType Name="UserDataTotalDistance">
           <Key>
-            <PropertyRef Name="User_Guid" />
+            <PropertyRef Name="Timestamp" />
             <PropertyRef Name="Activity" />
           </Key>
-          <Property Name="User_Guid" Type="Guid" Nullable="false" />
           <Property Name="Activity" Type="MainModel.DataActivity" Nullable="false" />
-          <Property Name="Timestamp" Type="DateTime" Precision="3" />
+          <Property Name="Timestamp" Type="DateTime" Precision="3" Nullable="false" />
           <Property Name="TotalSteps" Type="Int64" />
           <Property Name="TotalDistance" Type="Int64" />
+          <NavigationProperty Name="User" Relationship="MainModel.UserUserDataTotalDistance" FromRole="UserDataTotalDistance" ToRole="User" />
         </EntityType>
-        <EntityType Name="UserFriendSet">
+        <EntityType Name="UserFriend">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -2006,14 +2019,23 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
           <Property Name="Accepted" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Friend" Relationship="MainModel.FK_UserFriendSet_UserSet_Friend_Guid" FromRole="UserFriendSet" ToRole="User" />
           <NavigationProperty Name="User" Relationship="MainModel.FK_UserFriendSet_UserSet_User_Guid" FromRole="UserFriendSet" ToRole="User" />
+          <Property Name="CreationDate" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
         <Association Name="FK_UserFriendSet_UserSet_Friend_Guid">
           <End Type="MainModel.User" Role="User" Multiplicity="1" />
-          <End Type="MainModel.UserFriendSet" Role="UserFriendSet" Multiplicity="*" />
+          <End Type="MainModel.UserFriend" Role="UserFriendSet" Multiplicity="*" />
         </Association>
         <Association Name="FK_UserFriendSet_UserSet_User_Guid">
           <End Type="MainModel.User" Role="User" Multiplicity="1" />
-          <End Type="MainModel.UserFriendSet" Role="UserFriendSet" Multiplicity="*" />
+          <End Type="MainModel.UserFriend" Role="UserFriendSet" Multiplicity="*" />
+        </Association>
+        <Association Name="UserUserDataTotalDistance">
+          <End Type="MainModel.UserDataTotalDistance" Role="UserDataTotalDistance" Multiplicity="0..1" />
+          <End Type="MainModel.User" Role="User" Multiplicity="1" />
+        </Association>
+        <Association Name="UserDataHourlyDistanceUser">
+          <End Type="MainModel.UserDataHourlyDistance" Role="UserDataHourlyDistance" Multiplicity="*" />
+          <End Type="MainModel.User" Role="User" Multiplicity="1" />
         </Association>
       </Schema>
     </edmx:ConceptualModels>
@@ -2024,7 +2046,8 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
     <EntitySetMapping Name="UserSet">
       <EntityTypeMapping TypeName="IsTypeOf(MainModel.User)">
         <MappingFragment StoreEntitySet="UserSet">
-          <ScalarProperty Name="Guid" ColumnName="Guid" />
+          <ScalarProperty Name="PictureUri" ColumnName="PictureUri" />
+                <ScalarProperty Name="Guid" ColumnName="Guid" />
           <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
           <ScalarProperty Name="Email" ColumnName="Email" />
           <ScalarProperty Name="Password" ColumnName="Password" />
@@ -2541,7 +2564,6 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
                 <ScalarProperty Name="Steps" ColumnName="Steps" />
                 <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
                 <ScalarProperty Name="Activity" ColumnName="Activity" />
-                <ScalarProperty Name="User_Guid" ColumnName="User_Guid" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2552,13 +2574,13 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
                 <ScalarProperty Name="TotalSteps" ColumnName="TotalSteps" />
                 <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
                 <ScalarProperty Name="Activity" ColumnName="Activity" />
-                <ScalarProperty Name="User_Guid" ColumnName="User_Guid" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="UserFriendSet">
-            <EntityTypeMapping TypeName="MainModel.UserFriendSet">
+            <EntityTypeMapping TypeName="MainModel.UserFriend">
               <MappingFragment StoreEntitySet="UserFriendSet">
+                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
                 <ScalarProperty Name="Accepted" ColumnName="Accepted" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
@@ -2578,6 +2600,26 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
             </EndProperty>
             <EndProperty Name="User">
               <ScalarProperty Name="Guid" ColumnName="User_Guid" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="UserUserDataTotalDistance" TypeName="MainModel.UserUserDataTotalDistance" StoreEntitySet="UserDataTotalDistance">
+            <EndProperty Name="User">
+              <ScalarProperty Name="Guid" ColumnName="User_Guid" />
+            </EndProperty>
+            <EndProperty Name="UserDataTotalDistance">
+              <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
+              <ScalarProperty Name="Activity" ColumnName="Activity" />
+            </EndProperty>
+            <Condition ColumnName="Activity" IsNull="false" />
+            <Condition ColumnName="User_Guid" IsNull="false" />
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="UserDataHourlyDistanceUser" TypeName="MainModel.UserDataHourlyDistanceUser" StoreEntitySet="UserDataHourlyDistance">
+            <EndProperty Name="User">
+              <ScalarProperty Name="Guid" ColumnName="User_Guid" />
+            </EndProperty>
+            <EndProperty Name="UserDataHourlyDistance">
+              <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
+              <ScalarProperty Name="Activity" ColumnName="Activity" />
             </EndProperty>
           </AssociationSetMapping>
   </EntityContainerMapping>

@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="6f40ef275d544d0abf63300d689db0ce" Name="Main Diagram" ZoomLevel="74" >
+      <Diagram DiagramId="6f40ef275d544d0abf63300d689db0ce" Name="Main Diagram" ZoomLevel="67" >
         <EntityTypeShape EntityType="MainModel.User" Width="2.125" PointX="6.25" PointY="8.125" />
         <EntityTypeShape EntityType="MainModel.Token" Width="1.5" PointX="6.375" PointY="4.625" />
         <EntityTypeShape EntityType="MainModel.ApiKey" Width="2.125" PointX="5.625" PointY="1" />
@@ -63,10 +63,12 @@
         <AssociationConnector Association="MainModel.FK_UserRewardGiftShippingStatusUserRewardGiftClaimed" />
         <EntityTypeShape EntityType="MainModel.OAuthNonce" Width="1.5" PointX="8.125" PointY="2.125" />
         <EntityTypeShape EntityType="MainModel.UserDataHourlyDistance" Width="2.375" PointX="0.75" PointY="0.75" />
-        <EntityTypeShape EntityType="MainModel.UserDataTotalDistance" Width="2.375" PointX="0.75" PointY="3" />
-        <EntityTypeShape EntityType="MainModel.UserFriendSet" Width="1.5" PointX="1.625" PointY="9" />
+        <EntityTypeShape EntityType="MainModel.UserDataTotalDistance" Width="2.375" PointX="1.25" PointY="3.25" />
+        <EntityTypeShape EntityType="MainModel.UserFriend" Width="1.5" PointX="1.625" PointY="9" />
         <AssociationConnector Association="MainModel.FK_UserFriendSet_UserSet_Friend_Guid" />
         <AssociationConnector Association="MainModel.FK_UserFriendSet_UserSet_User_Guid" />
+        <AssociationConnector Association="MainModel.UserUserDataTotalDistance" />
+        <AssociationConnector Association="MainModel.UserDataHourlyDistanceUser" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

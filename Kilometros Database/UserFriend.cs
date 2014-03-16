@@ -12,10 +12,11 @@ namespace KilometrosDatabase
     using System;
     using System.Collections.Generic;
     
-    public partial class UserFriendSet
+    public partial class UserFriend
     {
         public System.Guid Id { get; set; }
         public bool Accepted { get; set; }
+        public System.DateTime CreationDate { get; set; }
     
         public virtual User Friend { get; set; }
         public virtual User User { get; set; }

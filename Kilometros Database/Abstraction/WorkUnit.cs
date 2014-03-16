@@ -109,6 +109,19 @@ namespace KilometrosDatabase.Abstraction {
         private GenericRepository<ContactInfo> _contactInfoRepository = null;
 
         /// <summary>
+        /// Almacén de Amigos de los Usuarios
+        /// </summary>
+        public GenericRepository<UserFriend> UserFriendStore {
+            get {
+                if ( this._userFriendRepository == null )
+                    this._userFriendRepository = new GenericRepository<UserFriend>(this._context);
+
+                return this._userFriendRepository;
+            }
+        }
+        private GenericRepository<UserFriend> _userFriendRepository = null;
+
+        /// <summary>
         /// Almacén de Credenciales OAuth the terceros
         /// </summary>
         public GenericRepository<OAuthCredential> OAuthCredentialStore {

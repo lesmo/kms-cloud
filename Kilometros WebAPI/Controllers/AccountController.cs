@@ -42,6 +42,12 @@ namespace Kilometros_WebAPI.Controllers {
             return new AccountResponse() {
                 AccountCreationDate
                     = user.CreationDate,
+                UserId
+                    = MiscHelper.Base64FromGuid(user.Guid),
+                Name
+                    = user.Name,
+                LastName
+                    = user.LastName,
                 Email
                     = user.Email,
                 PreferredCultureCode

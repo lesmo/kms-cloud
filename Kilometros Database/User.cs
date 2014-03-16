@@ -23,8 +23,9 @@ namespace KilometrosDatabase
             this.Data = new HashSet<Data>();
             this.UserTipHistory = new HashSet<UserTipHistory>();
             this.OAuthCredential = new HashSet<OAuthCredential>();
-            this.UserFriendSet = new HashSet<UserFriendSet>();
-            this.UserFriendSet1 = new HashSet<UserFriendSet>();
+            this.UserFriended = new HashSet<UserFriend>();
+            this.UserFriend = new HashSet<UserFriend>();
+            this.UserDataHourlyDistance = new HashSet<UserDataHourlyDistance>();
         }
     
         public System.Guid Guid { get; private set; }
@@ -36,6 +37,7 @@ namespace KilometrosDatabase
         public Nullable<short> UtcOffset { get; set; }
         public string Name { get; set; }
         public string LastName { get; set; }
+        public string PictureUri { get; set; }
     
         public virtual ICollection<Token> Token { get; set; }
         public virtual UserBody UserBody { get; set; }
@@ -47,7 +49,9 @@ namespace KilometrosDatabase
         public virtual ICollection<Data> Data { get; set; }
         public virtual ICollection<UserTipHistory> UserTipHistory { get; set; }
         public virtual ICollection<OAuthCredential> OAuthCredential { get; set; }
-        public virtual ICollection<UserFriendSet> UserFriendSet { get; set; }
-        public virtual ICollection<UserFriendSet> UserFriendSet1 { get; set; }
+        public virtual ICollection<UserFriend> UserFriended { get; set; }
+        public virtual ICollection<UserFriend> UserFriend { get; set; }
+        public virtual UserDataTotalDistance UserDataTotalDistance { get; set; }
+        public virtual ICollection<UserDataHourlyDistance> UserDataHourlyDistance { get; set; }
     }
 }

@@ -5,6 +5,14 @@ using System.Web;
 
 namespace Kilometros_WebAPI.Areas.HelpPage.CustomSamples {
     public static class DefaultValues {
+        public const string Name1
+            = "Tim";
+        public const string Name2
+            = "Dan";
+        public const string LastName1
+            = "Burton";
+        public const string LastName2
+            = "Brown";
         public const string Email1
             = "tim@burton.com";
         public const string Email2

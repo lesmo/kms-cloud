@@ -48,12 +48,24 @@ namespace Kilometros_WebAPI.Areas.HelpPage.CustomSamples {
                 new AccountResponse() {
                     AccountCreationDate
                         = DefaultValues.DateTime,
+                    UserId
+                        = DefaultValues.GuidBase641,
+                    Name
+                        = DefaultValues.Name1,
+                    LastName
+                        = DefaultValues.LastName1,
                     Email
                         = DefaultValues.Email1,
                     PreferredCultureCode
                         = DefaultValues.CultureCode1,
                     RegionCode
-                        = DefaultValues.RegionCode1
+                        = DefaultValues.RegionCode1,
+                    PictureUri
+                        = string.Format(
+                            "http://api.kms.me/media/img/{0}.{1}",
+                            DefaultValues.GuidBase642,
+                            "png"
+                        )
                 }
             );
         }
