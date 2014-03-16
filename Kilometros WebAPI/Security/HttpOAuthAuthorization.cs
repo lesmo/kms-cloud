@@ -343,7 +343,7 @@ namespace Kilometros_WebAPI.Security {
             
             if ( this.Token != null )
                 hmacSha1Key
-                    += this.Token.Secret.ToString("00000000000000000000000000000000");
+                    += "&" + this.Token.Secret.ToString("00000000000000000000000000000000");
 
             // - [4] Calcular HMAC-SHA1 de BaseString -
             // Obtener HMAC-SHA1
