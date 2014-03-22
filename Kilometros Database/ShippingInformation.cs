@@ -17,9 +17,8 @@ namespace KilometrosDatabase
         public long Id { get; set; }
         public string RegionCode { get; set; }
         public string Address { get; set; }
-        public double Latitude { get; set; }
-        public double Longitude { get; set; }
-        public System.DateTime LastEditDate { get; set; }
+        public System.Data.Spatial.DbGeography Coordinates { get; set; }
+        public Nullable<System.DateTime> LastEditDate { get; set; }
     
         public virtual User User { get; set; }
     }

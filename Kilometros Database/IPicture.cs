@@ -15,7 +15,7 @@ namespace KilometrosDatabase
     public partial class IPicture
     {
         public System.Guid Guid { get; set; }
-        public System.DateTime CreationDate { get; set; }
+        public Nullable<System.DateTime> CreationDate { get; set; }
         public byte[] Picture { get; set; }
         public string PictureMimeType { get; set; }
         public string PictureExtension { get; set; }

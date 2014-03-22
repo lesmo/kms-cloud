@@ -16,6 +16,6 @@ namespace KilometrosDatabase
     {
         public long Id { get; set; }
         public string CultureCode { get; set; }
-        public System.DateTime CreationDate { get; set; }
+        public Nullable<System.DateTime> CreationDate { get; set; }
     }
 }

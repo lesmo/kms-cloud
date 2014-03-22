@@ -22,8 +22,8 @@ namespace KilometrosDatabase
     
         public System.Guid Guid { get; set; }
         public System.DateTime CreationDate { get; set; }
-        public string DistanceTrigger { get; set; }
-        public string DaysTrigger { get; set; }
+        public Nullable<long> DistanceTrigger { get; set; }
+        public long DaysTrigger { get; set; }
         public string Source { get; set; }
     
         public virtual TipCategory TipCategory { get; set; }

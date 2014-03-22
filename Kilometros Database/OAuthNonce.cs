@@ -15,5 +15,6 @@ namespace KilometrosDatabase
     public partial class OAuthNonce
     {
         public string Nonce { get; set; }
+        public System.DateTime CreationDate { get; set; }
     }
 }

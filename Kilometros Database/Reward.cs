@@ -22,8 +22,8 @@ namespace KilometrosDatabase
         }
     
         public System.Guid Guid { get; set; }
-        public string DistanceTrigger { get; set; }
-        public string DaysTrigger { get; set; }
+        public long DistanceTrigger { get; set; }
+        public long DaysTrigger { get; set; }
         public string Source { get; set; }
     
         public virtual ICollection<RewardGift> RewardGift { get; set; }

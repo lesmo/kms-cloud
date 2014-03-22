@@ -25,6 +25,7 @@ namespace KilometrosDatabase
         public string Token { get; set; }
         public string Secret { get; set; }
         public bool IsInvalid { get; set; }
+        public System.DateTime CreationDate { get; set; }
     
         public virtual User User { get; set; }
     }
