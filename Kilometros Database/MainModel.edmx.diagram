@@ -30,7 +30,7 @@
         <EntityTypeShape EntityType="MainModel.RewardGlobalization" Width="2.25" PointX="14.875" PointY="14.25" />
         <AssociationConnector Association="MainModel.RewardRewardGlobalization" />
         <EntityTypeShape EntityType="MainModel.UserRewardGiftClaimed" Width="2.5" PointX="6.875" PointY="17.875" />
-        <EntityTypeShape EntityType="MainModel.RewardRegionalization" Width="2.25" PointX="8.25" PointY="13.625" />
+        <EntityTypeShape EntityType="MainModel.RewardRegionalization" Width="2.25" PointX="8.75" PointY="13.875" />
         <AssociationConnector Association="MainModel.RewardRewardRegionalization" ></AssociationConnector>
         <EntityTypeShape EntityType="MainModel.RewardGiftGlobalization" Width="2.25" PointX="14.25" PointY="17.375" />
         <AssociationConnector Association="MainModel.RewardGiftRewardGiftGlobalization" />

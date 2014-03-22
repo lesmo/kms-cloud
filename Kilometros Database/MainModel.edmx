@@ -191,7 +191,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="RegionCode" Type="nchar" MaxLength="2" Nullable="false" />
+          <Property Name="RegionCode" Type="varchar" MaxLength="32" Nullable="false" />
           <Property Name="Reward_Guid" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Exclude" Type="bit" Nullable="false" />
         </EntityType>
@@ -304,7 +304,7 @@
           <Property Name="LastName" Type="nvarchar(max)" />
           <Property Name="Email" Type="varchar" MaxLength="255" Nullable="false" />
           <Property Name="Password" Type="varbinary(max)" />
-          <Property Name="RegionCode" Type="char" MaxLength="5" />
+          <Property Name="RegionCode" Type="varchar" MaxLength="32" />
           <Property Name="PreferredCultureCode" Type="varchar" MaxLength="16" />
           <Property Name="UtcOffset" Type="smallint" />
           <Property Name="PictureUri" Type="varchar(max)" />
@@ -322,8 +322,9 @@
 warning 6002: The table/view 'KilometrosDatabase.dbo.UserDataHourlyDistance' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="UserDataHourlyDistance">
           <Key>
-            <PropertyRef Name="Timestamp" />
+            <PropertyRef Name="User_Guid" />
             <PropertyRef Name="Activity" />
+            <PropertyRef Name="Timestamp" />
           </Key>
           <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Activity" Type="smallint" Nullable="false" />
@@ -335,8 +336,9 @@ warning 6002: The table/view 'KilometrosDatabase.dbo.UserDataHourlyDistance' doe
 warning 6002: The table/view 'KilometrosDatabase.dbo.UserDataTotalDistance' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="UserDataTotalDistance">
           <Key>
-            <PropertyRef Name="Timestamp" />
+            <PropertyRef Name="User_Guid" />
             <PropertyRef Name="Activity" />
+            <PropertyRef Name="Timestamp" />
           </Key>
           <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Activity" Type="smallint" Nullable="false" />
@@ -1244,7 +1246,7 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
               <Summary>Información de la Complexión Física del Usuario.</Summary>
             </Documentation>
           </NavigationProperty>
-          <Property Type="String" Name="RegionCode" Nullable="true" FixedLength="true" MaxLength="5" Unicode="false" >
+          <Property Type="String" Name="RegionCode" Nullable="true" FixedLength="false" MaxLength="32" Unicode="false" >
             <Documentation>
               <Summary>Código de País/Región y Estado/Subdivisión según lo definido en el ISO-3166-2 (AA-AAA).</Summary>
             </Documentation>
@@ -1690,7 +1692,7 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
             <PropertyRef Name="Id" />
           </Key>
           <Property Type="Int64" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="String" Name="RegionCode" Nullable="false" MaxLength="2" FixedLength="true" Unicode="true" />
+          <Property Type="String" Name="RegionCode" Nullable="false" MaxLength="32" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Reward" Relationship="MainModel.RewardRewardRegionalization" FromRole="RewardRegionalization" ToRole="Reward" />
           <Property Name="Exclude" Type="Boolean" Nullable="false" DefaultValue="False" />
         </EntityType>
