@@ -33,7 +33,7 @@ namespace KilometrosDatabase {
             set {
                 // > Calcular Hash y establecer el valor a almacenarse en BD
                 SHA256 hashing
-                    = SHA256.Create();
+                    = new SHA256CryptoServiceProvider();
                 byte[] stringBytes
                     = Encoding.UTF8.GetBytes(value);
                 byte[] computedHash
