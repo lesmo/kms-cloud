@@ -1,6 +1,7 @@
 ﻿using Kilometros_WebAPI.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -30,6 +31,7 @@ namespace Kilometros_WebAPI.ExceptionFilters {
             if (
                 httpContext.Exception.Message != null
                 && !(httpContext.Exception is HttpNoContentException)
+                && !(httpContext.Exception is DbEntityValidationException)
             ) {
                 httpContext.Response.Content
                     = new StringContent(httpContext.Exception.Message);
