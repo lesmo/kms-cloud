@@ -30,8 +30,8 @@ namespace Kilometros_WebAPI.ExceptionFilters {
 
             if (
                 httpContext.Exception.Message != null
+                && (httpContext.Exception is HttpProcessException)
                 && !(httpContext.Exception is HttpNoContentException)
-                && !(httpContext.Exception is DbEntityValidationException)
             ) {
                 httpContext.Response.Content
                     = new StringContent(httpContext.Exception.Message);

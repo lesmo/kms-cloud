@@ -36,6 +36,8 @@ namespace Kilometros_WebAPI.ExceptionFilters {
                     = new StringContent(responseMessage);
             } else if ( ! Debugger.IsAttached ) {
                 // Throw in ELMAH call
+            } else {
+                throw new Exception("Ahoy! An exception!", httpContext.Exception);
             }
         }
     }
