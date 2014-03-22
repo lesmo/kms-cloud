@@ -1,5 +1,5 @@
-﻿using Kilometros_WebAPI.Models.HttpGet.DataController;
-using Kilometros_WebAPI.Models.HttpPost.DataController;
+﻿using Kilometros_WebAPI.Models.ResponseModels;
+using Kilometros_WebAPI.Models.RequestModels;
 using Kilometros_WebAPI.Security;
 using KilometrosDatabase.Helpers;
 using KilometrosDatabase.Abstraction;
@@ -93,7 +93,7 @@ namespace Kilometros_WebAPI.Controllers {
             IEnumerable<UserDataHourlyDistance> distanceView
                 = Database.UserDataHourlyDistance.GetAll(
                     f =>
-                        f.User_Guid == user.Guid
+                        f.User.Guid == user.Guid
                         && f.Activity == dataActivity
                         && f.Timestamp > from && f.Timestamp < until,
                     o => o.OrderBy(b => b.Timestamp)
@@ -130,7 +130,7 @@ namespace Kilometros_WebAPI.Controllers {
             // --- Obtener Distancia Total ---
             IEnumerable<UserDataTotalDistance> distanceView
                 = Database.UserDataTotalDistance.GetAll(
-                    o => o.User_Guid == user.Guid
+                    o => o.User.Guid == user.Guid
                 );
             UserDataTotalDistance distanceRunning
                 = (

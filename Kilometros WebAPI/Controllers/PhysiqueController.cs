@@ -6,8 +6,8 @@ using System.Net.Http;
 using System.Web;
 using System.Web.Http;
 
-using Kilometros_WebAPI.Models.HttpGet.My_Controllers;
-using Kilometros_WebAPI.Models.HttpPost.My_Controller;
+using Kilometros_WebAPI.Models.RequestModels;
+using Kilometros_WebAPI.Models.ResponseModels;
 using Kilometros_WebAPI.Security;
 using Kilometros_WebAPI.Helpers;
 using KilometrosDatabase;

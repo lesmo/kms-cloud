@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace Kilometros_WebAPI.Models.HttpGet.DataController {
+namespace Kilometros_WebAPI.Models.ResponseModels {
     /// <summary>
     ///     Información sobre Total de pasos y distancias alcanzadas.
     /// </summary>
@@ -11,32 +11,32 @@ namespace Kilometros_WebAPI.Models.HttpGet.DataController {
         /// <summary>
         ///     Distancia total alcanzada corriendo.
         /// </summary>
-        public long RunningTotalDistance;
+        public long RunningTotalDistance { get; set; }
         /// <summary>
         ///     Distancia total alcanzada caminando.
         /// </summary>
-        public long WalkingTotalDistance;
+        public long WalkingTotalDistance { get; set; }
         /// <summary>
         ///     Distancia total alcanzada.
         /// </summary>
-        public long TotalDistance;
+        public long TotalDistance { get; set; }
 
         /// <summary>
         ///     Pasos totales dados corriendo.
         /// </summary>
-        public long RunningTotalSteps;
+        public long RunningTotalSteps { get; set; }
         /// <summary>
         ///     Pasos totales dados caminando.
         /// </summary>
-        public long WalkingTotalSteps;
+        public long WalkingTotalSteps { get; set; }
         /// <summary>
         ///     Pasos totales dados.
         /// </summary>
-        public long TotalSteps;
+        public long TotalSteps { get; set; }
 
         /// <summary>
         ///     Fecha del último dato registrado.
         /// </summary>
-        public DateTime LastModified;
+        public DateTime LastModified { get; set; }
     }
 }

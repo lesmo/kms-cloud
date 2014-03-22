@@ -1,6 +1,6 @@
 ﻿using Kilometros_WebAPI.Exceptions;
 using Kilometros_WebAPI.Helpers;
-using Kilometros_WebAPI.Models.HttpGet.My_Controllers;
+using Kilometros_WebAPI.Models.ResponseModels;
 using Kilometros_WebAPI.Security;
 using Kilometros_WebGlobalization.API;
 using KilometrosDatabase;

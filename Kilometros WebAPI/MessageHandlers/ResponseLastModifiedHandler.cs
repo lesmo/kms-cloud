@@ -1,4 +1,5 @@
-﻿using Kilometros_WebAPI.Models.HttpGet;
+﻿using Kilometros_WebAPI.Models;
+using Kilometros_WebAPI.Models.ResponseModels;
 using System;
 using System.Collections.Generic;
 using System.Globalization;

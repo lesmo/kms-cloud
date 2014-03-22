@@ -15,7 +15,10 @@ using System.Web;
 
 namespace Kilometros_WebAPI.Security {
     public class HttpOAuthAuthorization {
-        public static HttpOAuthAuthorization FromAuthenticationHeader(AuthenticationHeaderValue authHeader, WorkUnit database) {
+        public static HttpOAuthAuthorization FromAuthenticationHeader(
+            AuthenticationHeaderValue authHeader,
+            WorkUnit database
+        ) {
             return new HttpOAuthAuthorization(authHeader.Parameter, database);
         }
 
@@ -287,7 +290,7 @@ namespace Kilometros_WebAPI.Security {
 
             // - [3] Agregar parámetros ordenados a BaseString -
             // Ordenar parámetros en POST o GET (QueryString) según sea el caso
-            if ( request.Method == HttpMethod.Post ) {
+            if ( request.Method != HttpMethod.Get ) {
                 // Obtener variables en cuerpo
                 StreamReader contentStreamReader
                     = new StreamReader(contentStream);
@@ -339,11 +342,11 @@ namespace Kilometros_WebAPI.Security {
 
             // Generar llave de HMAC-SHA1
             string hmacSha1Key
-                = this.ConsumerKey.Secret.ToString("00000000000000000000000000000000");
+                = this.ConsumerKey.Secret.ToString("00000000000000000000000000000000") + "&";
             
             if ( this.Token != null )
                 hmacSha1Key
-                    += "&" + this.Token.Secret.ToString("00000000000000000000000000000000");
+                    += this.Token.Secret.ToString("00000000000000000000000000000000");
 
             // - [4] Calcular HMAC-SHA1 de BaseString -
             // Obtener HMAC-SHA1

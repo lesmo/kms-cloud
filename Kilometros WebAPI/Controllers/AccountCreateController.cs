@@ -9,7 +9,8 @@ using System.Net.Http;
 using System.Web.Http;
 
 using KilometrosDatabase;
-using Kilometros_WebAPI.Models.HttpPost.AccountCreateController;
+using Kilometros_WebAPI.Models.ResponseModels;
+using Kilometros_WebAPI.Models.RequestModels;
 
 namespace Kilometros_WebAPI.Controllers {
     /// <summary>
@@ -72,9 +73,7 @@ namespace Kilometros_WebAPI.Controllers {
                 UtcOffset
                     = dataPost.UtcOffset
             };
-
-            // TODO: Añadir validación de Email?
-
+            
             Database.UserStore.Add(user);
             Database.SaveChanges();
 
