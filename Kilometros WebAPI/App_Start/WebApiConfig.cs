@@ -5,12 +5,6 @@ using System.Web.Http;
 
 namespace Kilometros_WebAPI {
     public static class WebApiConfig {
-        public static class KmsHttpHeaders {
-            public const string ApiKey = "X-Kms-Api-Key";
-            public const string RequestSignature = "X-Kms-Api-Request-Signature";
-            public const string Token = "X-Kms-Api-Token";
-        }
-
         public static class KmsOAuthConfig {
             public static readonly string[] RequiredParams = {
                 "oauth_consumer_key",
@@ -23,10 +17,10 @@ namespace Kilometros_WebAPI {
             };
 
             public const string ApiRealm = "api.kms.me";
-            public const string GuiRealm = "kms.me";
+            public const string GuiRealm = "gui.api.kms.me";
 
             public static readonly string[] BypassOAuthAbsoluteUris = {
-                "/register/kms"
+                "/account"
             };
         }
         
