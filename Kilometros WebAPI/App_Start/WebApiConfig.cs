@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using System.Web.Mvc;
 
 namespace Kilometros_WebAPI {
     public static class WebApiConfig {
@@ -20,7 +21,7 @@ namespace Kilometros_WebAPI {
             public const string GuiRealm = "gui.api.kms.me";
 
             public static readonly string[] BypassOAuthAbsoluteUris = {
-                "/account"
+                //"/account"
             };
         }
         
@@ -34,6 +35,7 @@ namespace Kilometros_WebAPI {
             config.MessageHandlers.Add(new MessageHandlers.ResponseEncoder());
             config.MessageHandlers.Add(new MessageHandlers.ResponseLastModifiedHandler());
             config.MessageHandlers.Add(new MessageHandlers.RequestSecurityHandler());
+            config.MessageHandlers.Add(new MessageHandlers.RequestArrayHandler());
 
             // --- Configurar rutas ---
             // Todas las rutas se establecen con el tag [Route(--)]
