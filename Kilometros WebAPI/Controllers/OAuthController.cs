@@ -9,20 +9,15 @@ using KilometrosDatabase;
 using Kilometros_WebAPI.Security;
 using Kilometros_WebAPI.Exceptions;
 using Kilometros_WebGlobalization.API;
+using Kilometros_WebAPI.Models.RequestModels;
 
 namespace Kilometros_WebAPI.Controllers {
-    public class OAuthController : ApiController {
-        public KilometrosDatabase.Abstraction.WorkUnit Database
-            = new KilometrosDatabase.Abstraction.WorkUnit();
-
+    public class OAuthController : IKMSController {
         [HttpPost]
         [Route("oauth/request_token")]
-        public IHttpActionResult OAuthRequestToken() {
-            KmsIdentity identity
-                = (KmsIdentity)User.Identity;
-
+        public HttpResponseMessage OAuthRequestToken() {
             // --- Evitar doble Login ---
-            if ( identity.IsAuthenticated )
+            if ( Identity.IsAuthenticated )
                 throw new HttpAlreadyLoggedInException(
                     ControllerStrings.Warning100_CannotLoginAgain
                 );
@@ -31,14 +26,16 @@ namespace Kilometros_WebAPI.Controllers {
             Token token
                 = new Token() {
                     ApiKey
-                        = identity.ApiKey,
+                        = Database.ApiKeyStore.Get(Identity.ApiKey.Guid),
                     Guid
                         = Guid.NewGuid(),
                     Secret
                         = Guid.NewGuid(),
 
                     CallbackUri
-                        = identity.OAuth.CallbackUri.AbsoluteUri,
+                        = OAuth.CallbackUri == null
+                        ? "oob"
+                        : OAuth.CallbackUri.AbsoluteUri,
 
                     CreationDate
                         = DateTime.UtcNow,
@@ -52,50 +49,48 @@ namespace Kilometros_WebAPI.Controllers {
             Database.SaveChanges();
 
             // --- Preparar y devolver detalles de Token OAuth ---
-            StringBuilder responseString
-                = new StringBuilder();
+            return new HttpResponseMessage() {
+                RequestMessage
+                    = Request,
 
-            responseString.Append("oauth_token=");
-            responseString.Append(
-                token.Guid.ToString("00000000000000000000000000000000")
-            );
-            responseString.Append('&');
+                StatusCode
+                    = HttpStatusCode.OK,
+                Content
+                    = new StringContent(
+                        string.Format(
+                            "oauth_token={0}"
+                            + "&oauth_token_secret={1}"
+                            + "&oauth_callback_confirmed={2}"
+                            + "&x_token_expires={3}",
 
-            responseString.Append("oauth_token_secret=");
-            responseString.Append(
-                token.Secret.ToString("00000000000000000000000000000000")
-            );
-            responseString.Append('&');
-
-            responseString.Append("oauth_callback_confirmed=");
-            responseString.Append(
-                identity.OAuth.CallbackUri == null
-                    ? "false"
-                    : "true"
-            );
-            responseString.Append('&');
-
-            responseString.Append("oauth_token_expires=");
-            responseString.Append(10 * 60);
-
-            return Ok<StringContent>(
-                new StringContent(responseString.ToString())
-            );
+                            token.Guid.ToString("N"),
+                            token.Secret.ToString("N"),
+                            Identity.OAuth.CallbackUri == null
+                                ? "false"
+                                : "true",
+                            10 * 60
+                        )
+                    )
+            };
         }
 
-        [Authorize]
+
         [HttpPost]
         [Route("oauth/access_token")]
-        public IHttpActionResult OAuthAccessToken() {
+        public HttpResponseMessage OAuthAccessToken([FromBody]OAuthAccessTokenPost oAuthVerifier) {
             // --- Obtener información de OAuth y buscar Token ---
-            KmsIdentity identity
-                = (KmsIdentity)User.Identity;
-            HttpOAuthAuthorization oAuth
-                = identity.OAuth;
-            Token token
-                = identity.Token;
+            Guid verifierCode;
 
-            if ( token.VerificationCode != oAuth.VerifierCode ) {
+            if ( string.IsNullOrEmpty(oAuthVerifier.oauth_verifier) && OAuth.VerifierCode.HasValue ) {
+                verifierCode
+                    = OAuth.VerifierCode.Value;
+            } else if ( !Guid.TryParse(oAuthVerifier.oauth_verifier, out verifierCode) ) {
+                throw new HttpUnauthorizedException(
+                    "120 " + ControllerStrings.Warning104_RequestTokenInvalid
+                );
+            }
+
+            if ( OAuth.Token.VerificationCode != verifierCode ) {
                 throw new HttpUnauthorizedException(
                     "120 " + ControllerStrings.Warning104_RequestTokenInvalid
                 );
@@ -105,16 +100,16 @@ namespace Kilometros_WebAPI.Controllers {
             Token newToken
                 = new Token() {
                     ApiKey
-                        = oAuth.ConsumerKey,
+                        = OAuth.ConsumerKey,
                     Guid
                         = Guid.NewGuid(),
                     Secret
                         = Guid.NewGuid(),
                     VerificationCode
-                        = token.VerificationCode,
+                        = null,
 
                     User
-                        = token.User,
+                        = OAuth.Token.User,
 
                     CreationDate
                         = DateTime.UtcNow,
@@ -123,69 +118,66 @@ namespace Kilometros_WebAPI.Controllers {
                     LastUseDate
                         = DateTime.UtcNow,
                     LoginAttempts
-                        = token.LoginAttempts,
+                        = OAuth.Token.LoginAttempts,
                 };
 
             Database.TokenStore.Add(newToken);
-            Database.TokenStore.Delete(token.Guid);
+            Database.TokenStore.Delete(OAuth.Token.Guid);
             Database.SaveChanges();
 
             // --- Preparar y devolver respuesta ---
-            StringBuilder responseString
-                = new StringBuilder();
+            return new HttpResponseMessage() {
+                RequestMessage
+                    = Request,
 
-            responseString.Append("oauth_token=");
-            responseString.Append(
-                token.Guid.ToString("00000000000000000000000000000000")
-            );
-            responseString.Append('&');
-
-            responseString.Append("oauth_token_secret=");
-            responseString.Append(
-                token.Secret.ToString("00000000000000000000000000000000")
-            );
-
-            return Ok<StringContent>(
-                new StringContent(responseString.ToString())
-            );
+                StatusCode
+                    = HttpStatusCode.OK,
+                Content
+                    = new StringContent(
+                        string.Format(
+                            "oauth_token={0}&oauth_token_secret={1}",
+                            newToken.Guid.ToString("N"),
+                            newToken.Secret.ToString("N")
+                        )
+                    )
+            };
         }
 
         [Authorize]
         [HttpGet]
         [Route("oauth/session")]
-        public IHttpActionResult GetToken() {
-            KmsIdentity identity
-                = (KmsIdentity)User.Identity;
+        public HttpResponseMessage GetToken() {
             Token token
-                = identity.Token;
+                = OAuth.Token;
 
             if ( token.ExpirationDate.HasValue ) {
                 token.ExpirationDate
                     = token.ExpirationDate.Value.AddDays(90);
 
-                this.Database.TokenStore.Update(token);
-                this.Database.SaveChanges();
+                Database.TokenStore.Update(token);
+                Database.SaveChanges();
 
-                return Ok();
+                return new HttpResponseMessage(HttpStatusCode.OK);
             } else {
                 // TODO: Tal vez notificar que no se hizo nada?
-                return Ok();
+                return new HttpResponseMessage(HttpStatusCode.OK);
             }
         }
 
         [Authorize]
         [HttpDelete]
         [Route("oauth/session")]
-        public IHttpActionResult DeleteToken() {
-            KmsIdentity identity
-                = (KmsIdentity)User.Identity;
+        public HttpResponseMessage DeleteToken() {
+            KMSIdentity identity
+                = (KMSIdentity)User.Identity;
             Token token
                 = identity.Token;
 
             Database.TokenStore.Delete(token.Guid);
+            Database.SaveChanges();
 
-            throw new HttpNoContentException(
-                ControllerStrings.Warning103_TokenDeleteOk
+            return new HttpResponseMessage(
+                HttpStatusCode.NoContent
             );
         }
     }

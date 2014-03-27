@@ -21,15 +21,7 @@ namespace Kilometros_WebAPI.Controllers {
     ///     soportados por la Nube KMS.
     /// </summary>
     [Authorize]
-    public class DataController : ApiController {
-        //private readonly Dictionary<DataActivity, string> DataActivityString = new Dictionary<DataActivity,string> {
-        //    {DataActivity.Running, "run"},
-        //    {DataActivity.Walking, "walk"},
-        //    {DataActivity.Sleep, "sleep"}
-        //};
-
-        private WorkUnit Database = new WorkUnit();
-
+    public class DataController : IKMSController {
         /// <summary>
         ///     Devuelve los pasos dados y la distancia recorrida por el Usuario divididos por hora,
         ///     únicamente en el rango temporal establecido.
@@ -83,10 +75,8 @@ namespace Kilometros_WebAPI.Controllers {
                 throw new ArgumentOutOfRangeException();
 
             // --- Obtener distancias recorridas en el rango especificado ---
-            KmsIdentity identity
-                = (KmsIdentity)User.Identity;
             User user
-                = identity.UserData;
+                = OAuth.Token.User;
             DataActivity dataActivity
                 = (DataActivity)activityId;
 
@@ -100,7 +90,7 @@ namespace Kilometros_WebAPI.Controllers {
                 );
 
             // --- Preparar y devolver respueta ---
-            return
+            return (
                 from d in distanceView
                 select new DataDistanceResponse() {
                     Timestamp
@@ -110,7 +100,8 @@ namespace Kilometros_WebAPI.Controllers {
                         = d.Distance,
                     Steps
                         = d.Steps
-                };
+                }
+            );
         }
 
         /// <summary>
@@ -122,10 +113,8 @@ namespace Kilometros_WebAPI.Controllers {
         [HttpGet]
         [Route("data/total")]
         public DataTotalResponse GetDistanceTotal() {
-            KmsIdentity identity
-                = (KmsIdentity)User.Identity;
             User user
-                = identity.UserData;
+                = OAuth.Token.User;
 
             // --- Obtener Distancia Total ---
             IEnumerable<UserDataTotalDistance> distanceView
@@ -191,7 +180,7 @@ namespace Kilometros_WebAPI.Controllers {
         /// </returns>
         [HttpPost]
         [Route("data")]
-        public IHttpActionResult PostData([FromBody]DataPost dataPost) {
+        public HttpResponseMessage PostData([FromBody]DataPost dataPost) {
             // --- Validar que Activity esté soportado ---
             string activity
                 = dataPost.Activity.ToLowerInvariant();
@@ -211,14 +200,15 @@ namespace Kilometros_WebAPI.Controllers {
                 );
 
             // --- Determinar la última fecha registrada ---
-            KmsIdentity identity
-                = (KmsIdentity)User.Identity;
             User user
-                = identity.UserData;
-
+                = OAuth.Token.User;
+            UserBody userBody
+                = Database.UserBodyStore.GetFirst(
+                    f => f.User.Guid == user.Guid
+                );
             Data lastData
                 = Database.DataStore.GetFirst(
-                    f => f.User == user,
+                    f => f.User.Guid == user.Guid,
                     o => o.OrderByDescending(b => b.Timestamp)
                 );
             DateTime lastDataTimestamp
@@ -229,36 +219,62 @@ namespace Kilometros_WebAPI.Controllers {
             // --- Determinar los registros si se almacenarán en BD ---
             // Especificar que fechas son UTC
             dataPost.Timestamp
-                    = DateTime.SpecifyKind(
-                        dataPost.Timestamp,
-                        DateTimeKind.Utc
-                    );
+                = DateTime.SpecifyKind(
+                    dataPost.Timestamp,
+                    DateTimeKind.Utc
+                );
 
             // TODO: Incluir un algoritmo que mejore la solución al problema
             //       de datos replicados y sincronía.
-            if ( dataPost.Timestamp > lastDataTimestamp )
+            if ( dataPost.Timestamp < lastDataTimestamp )
                 throw new HttpConflictException(
                     ""
                 );
 
-            // --- Almacenar el nuevos registros ---
-            List<Data> addedData 
-                = new List<Data>();
+            // --- Determinar el largo de zancada ---
+            int strideLength;
+            switch ( (DataActivity)activityId ) {
+                case DataActivity.Running :
+                    strideLength
+                        = userBody.StrideLengthRunning;
+                    break;
+                case DataActivity.Walking :
+                    strideLength
+                        = userBody.StrideLengthWalking;
+                    break;
 
+                default :
+                    strideLength
+                        = 0;
+                    break ;
+            }
+
+            // --- Almacenar el nuevo registro ---
             Data newData
                 = new Data(){
+                    User
+                        = user,
+
                     Timestamp
                         = dataPost.Timestamp,
                     Activity
                         = (DataActivity)activityId,
                     Steps
-                        = dataPost.Steps
+                        = dataPost.Steps,
+                    StrideLength
+                        = strideLength
                 };
 
             Database.DataStore.Add(newData);
             Database.SaveChanges();
             
-            return Ok();
+            return new HttpResponseMessage() {
+                RequestMessage
+                    = Request,
+
+                StatusCode
+                    = HttpStatusCode.OK
+            };
         }
     }
 }

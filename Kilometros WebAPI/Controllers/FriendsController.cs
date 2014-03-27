@@ -2,6 +2,7 @@
 using Kilometros_WebAPI.Helpers;
 using Kilometros_WebAPI.Models.ResponseModels;
 using Kilometros_WebAPI.Security;
+using Kilometros_WebGlobalization.API;
 using KilometrosDatabase;
 using System;
 using System.Collections.Generic;
@@ -15,23 +16,15 @@ namespace Kilometros_WebAPI.Controllers {
     ///     Permite interactuar con la lista de Amigos del Usuario.
     /// </summary>
     [Authorize]
-    public class FriendsController : ApiController {
-        /// <summary>
-        ///     Acceso a los Repositorios de la BD.
-        /// </summary>
-        public KilometrosDatabase.Abstraction.WorkUnit Database
-            = new KilometrosDatabase.Abstraction.WorkUnit();
-
+    public class FriendsController : IKMSController {
         /// <summary>
         ///     Devuelve la lista de Amigos.
         /// </summary>
         [HttpGet]
         [Route("friends")]
         public IEnumerable<FriendResponse> GetFriendsList() {
-            KmsIdentity identity
-                = (KmsIdentity)User.Identity;
             User user
-                = identity.UserData;
+                = OAuth.Token.User;
             IEnumerable<UserFriend> userFriends
                 = Database.UserFriendStore.GetAll(
                     f =>
@@ -61,8 +54,8 @@ namespace Kilometros_WebAPI.Controllers {
         [HttpGet]
         [Route("friends/highscores")]
         public IEnumerable<FriendScoreResponse> GetFriendsHighscores() {
-            KmsIdentity identity
-                = (KmsIdentity)User.Identity;
+            KMSIdentity identity
+                = (KMSIdentity)User.Identity;
             User user
                 = identity.UserData;
 
@@ -108,11 +101,9 @@ namespace Kilometros_WebAPI.Controllers {
         /// </summary>
         [HttpPost]
         [Route("friends/requests/{userId}")]
-        public IHttpActionResult RequestFriendship(string userId) {
-            KmsIdentity identity
-                = (KmsIdentity)User.Identity;
+        public HttpResponseMessage RequestFriendship(string userId) {
             User user
-                = identity.UserData;
+                = OAuth.Token.User;
             Guid friendUserGuid
                 = MiscHelper.GuidFromBase64(userId).Value;
 
@@ -121,7 +112,7 @@ namespace Kilometros_WebAPI.Controllers {
                 = Database.UserStore.Get(friendUserGuid);
             if ( friendUser == null )
                 throw new HttpNotFoundException(
-                    ""
+                    "401 " + ControllerStrings.Warning401_FriendNotFound
                 );
 
             // --- Validar que no exista la Amistad ---
@@ -134,7 +125,7 @@ namespace Kilometros_WebAPI.Controllers {
 
             if ( alreadyFriends )
                 throw new HttpConflictException(
-                    "401 " + ""
+                    "402 " + ControllerStrings.Warning402_FriendshipAlreadyExists
                 );
 
             // --- Crear la solicitud de Amistad ---
@@ -147,11 +138,18 @@ namespace Kilometros_WebAPI.Controllers {
                     Friend
                         = friendUser
                 };
+
             Database.UserFriendStore.Add(friendship);
             Database.SaveChanges();
 
             // --- Devolver respuesta ---
-            return Ok();
+            return new HttpResponseMessage() {
+                RequestMessage
+                    = Request,
+
+                StatusCode
+                    = HttpStatusCode.OK
+            };
         }
 
         /// <summary>
@@ -161,11 +159,9 @@ namespace Kilometros_WebAPI.Controllers {
         /// <returns></returns>
         [HttpPost]
         [Route("friends/requests/{userId}/accept")]
-        public IHttpActionResult AcceptFriendship(string userId) {
-            KmsIdentity identity
-                = (KmsIdentity)User.Identity;
+        public HttpResponseMessage AcceptFriendship(string userId) {
             User user
-                = identity.UserData;
+                = OAuth.Token.User;
             Guid friendUserGuid
                 = MiscHelper.GuidFromBase64(userId).Value;
 
@@ -174,7 +170,7 @@ namespace Kilometros_WebAPI.Controllers {
                 = Database.UserStore.Get(friendUserGuid);
             if ( friendUser == null )
                 throw new HttpNotFoundException(
-                    ""
+                    "401 " + ControllerStrings.Warning401_FriendNotFound
                 );
 
             // --- Validar que la Solicitud de Amistad exista ---
@@ -185,9 +181,10 @@ namespace Kilometros_WebAPI.Controllers {
                         && f.Friend.Guid == friendUser.Guid
                         && f.Accepted == false
                 );
+
             if ( friendship == null )
                 throw new HttpNotFoundException(
-                    ""
+                    "403 " + ControllerStrings.Warning403_FriendshipRequestNotFound
                 );
 
             // --- Aceptar la Amistad ---
@@ -197,7 +194,13 @@ namespace Kilometros_WebAPI.Controllers {
             Database.SaveChanges();
 
             // --- Devolver respuesta ---
-            return Ok();
+            return new HttpResponseMessage() {
+                RequestMessage
+                    = Request,
+
+                StatusCode
+                    = HttpStatusCode.OK
+            };
         }
 
         /// <summary>
@@ -206,10 +209,8 @@ namespace Kilometros_WebAPI.Controllers {
         [HttpGet]
         [Route("friends/requests/received")]
         public IEnumerable<FriendResponse> GetReceivedFriendRequests() {
-            KmsIdentity identity
-                = (KmsIdentity)User.Identity;
             User user
-                = identity.UserData;
+                = OAuth.Token.User;
             IEnumerable<UserFriend> userFriends
                 = Database.UserFriendStore.GetAll(
                     f =>
@@ -242,10 +243,8 @@ namespace Kilometros_WebAPI.Controllers {
         [HttpGet]
         [Route("friends/requests/sent")]
         public IEnumerable<FriendResponse> GetSentFriendRequests() {
-            KmsIdentity identity
-                = (KmsIdentity)User.Identity;
             User user
-                = identity.UserData;
+                = OAuth.Token.User;
             IEnumerable<UserFriend> userFriends
                 = Database.UserFriendStore.GetAll(
                     f =>

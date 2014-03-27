@@ -13,10 +13,7 @@ using System.Web.Http;
 
 namespace Kilometros_WebAPI.Controllers {
     [Authorize]
-    public class GiftsController : ApiController {
-        KilometrosDatabase.Abstraction.WorkUnit Database
-            = new KilometrosDatabase.Abstraction.WorkUnit();
-
+    public class GiftsController : IKMSController {
         /// <summary>
         ///     Devuelve el historial de los Regalos conseguidos por el Usuario.
         /// </summary>
@@ -36,10 +33,8 @@ namespace Kilometros_WebAPI.Controllers {
         [HttpGet]
         [Route("my/gifts/{giftId}")]
         public GiftResponse GetRewardGift(string giftId) {
-            KmsIdentity identity
-                = (KmsIdentity)User.Identity;
             User user
-                = identity.UserData;
+                = OAuth.Token.User;
 
             // --- Buscar Regalo solicitado ---
             Guid? giftGuid
@@ -134,10 +129,8 @@ namespace Kilometros_WebAPI.Controllers {
         [HttpPost]
         [Route("my/gifts/{giftId}")]
         public GiftClaimResponse ClaimRewardGift(string giftId) {
-            KmsIdentity identity
-                = (KmsIdentity)User.Identity;
             User user
-                = identity.UserData;
+                = OAuth.Token.User;
 
             // --- Buscar Regalo solicitado ---
             Guid? giftGuid

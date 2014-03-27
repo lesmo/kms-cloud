@@ -20,10 +20,7 @@ namespace Kilometros_WebAPI.Controllers {
     ///     Devuelve y modifica la Ínformación de la Contacto del Usuario en la Nube KMS.
     /// </summary>
     [Authorize]
-    public class ContactInfoController : ApiController {
-        public KilometrosDatabase.Abstraction.WorkUnit Database
-            = new KilometrosDatabase.Abstraction.WorkUnit();
-
+    public class ContactInfoController : IKMSController {
         /// <summary>
         ///     Devuelve la Información de Contacto del Usuario en la Nube KMS.
         /// </summary>
@@ -32,10 +29,8 @@ namespace Kilometros_WebAPI.Controllers {
         [HttpGet]
         [Route("my/contact-info")]
         public ContactInfoResponse GetContactInfo() {
-            KmsIdentity identity
-                = MiscHelper.GetPrincipal<KmsIdentity>();
             ContactInfo contactInfo
-                = identity.UserData.ContactInfo;
+                = OAuth.Token.User.ContactInfo;
 
             // --- Validar si existe Información de Contacto registrada ---
             if ( contactInfo == null )
@@ -74,15 +69,10 @@ namespace Kilometros_WebAPI.Controllers {
         /// <returns></returns>
         [HttpPost]
         [Route("my/contact-info")]
-        public IHttpActionResult PostAccount([FromBody]ContactInfoPost dataPost) {
-            HttpResponseMessage response
-                = Request.CreateResponse();
-
-            KmsIdentity identity
-                = MiscHelper.GetPrincipal<KmsIdentity>();
+        public HttpResponseMessage PostAccount([FromBody]ContactInfoPost dataPost) {
             ContactInfo contactInfo
-                = identity.UserData.ContactInfo ?? new ContactInfo() {
-                    User = identity.UserData
+                = OAuth.Token.User.ContactInfo ?? new ContactInfo() {
+                    User = OAuth.Token.User
                 };
 
             contactInfo.HomePhone
@@ -92,14 +82,20 @@ namespace Kilometros_WebAPI.Controllers {
             contactInfo.WorkPhone
                 = dataPost.WorkPhone;
 
-            if ( identity.UserData.ContactInfo == null )
+            if ( OAuth.Token.User.ContactInfo == null )
                 Database.ContactInfoStore.Add(contactInfo);
             else
                 Database.ContactInfoStore.Update(contactInfo);
 
             Database.SaveChanges();
 
-            return Ok();
+            return new HttpResponseMessage() {
+                RequestMessage
+                    = Request,
+
+                StatusCode
+                    = HttpStatusCode.OK
+            };
         }
     }
 }

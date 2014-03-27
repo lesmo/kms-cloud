@@ -17,17 +17,12 @@ using Kilometros_WebGlobalization.API;
 
 namespace Kilometros_WebAPI.Controllers {
     [Authorize]
-    public class PhysiqueController : ApiController {
-        public KilometrosDatabase.Abstraction.WorkUnit Database
-            = new KilometrosDatabase.Abstraction.WorkUnit();
-
+    public class PhysiqueController : IKMSController {
         [HttpGet]
         [Route("my/physique")]
         public PhysiqueResponse GetPhysique() {
-            KmsIdentity identity
-                = MiscHelper.GetPrincipal<KmsIdentity>();
             UserBody physique
-                = identity.UserData.UserBody;
+                = OAuth.Token.User.UserBody;
 
             // --- Validar si existe Perfil Físico ---
             if ( physique == null )
@@ -46,8 +41,6 @@ namespace Kilometros_WebAPI.Controllers {
 
             // --- Preparar y devolver respuesta ---
             return new PhysiqueResponse() {
-                Age
-                    = physique.Age,
                 Height
                     = physique.Height,
                 Weight
@@ -67,17 +60,13 @@ namespace Kilometros_WebAPI.Controllers {
 
         [HttpPost]
         [Route("my/physique")]
-        public IHttpActionResult PostPhysique([FromBody]PhysiquePost dataPost) {
-            KmsIdentity identity
-                = MiscHelper.GetPrincipal<KmsIdentity>();
+        public HttpResponseMessage PostPhysique([FromBody]PhysiquePost dataPost) {
             UserBody physique
-                = identity.UserData.UserBody ?? new UserBody() {
+                = OAuth.Token.User.UserBody ?? new UserBody() {
                     User
-                        = identity.UserData
+                        = OAuth.Token.User
                 };
 
-            physique.Age
-                = dataPost.Age;
             physique.Height
                 = dataPost.Height;
             physique.Weight
@@ -89,11 +78,15 @@ namespace Kilometros_WebAPI.Controllers {
             physique.StrideLengthWalking
                 = dataPost.StrideLengthWalking;
 
-            if ( identity.UserData.UserBody == null )
+            if ( OAuth.Token.User.UserBody == null )
                 Database.UserBodyStore.Add(physique);
             else
                 Database.UserBodyStore.Update(physique);
-            return Ok();
+
+            return new HttpResponseMessage() {
+                StatusCode
+                    = HttpStatusCode.OK
+            };
         }
     }
 }

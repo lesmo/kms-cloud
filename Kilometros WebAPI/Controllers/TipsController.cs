@@ -14,13 +14,10 @@ using System.Web.Http;
 
 namespace Kilometros_WebAPI.Controllers {
     [Authorize]
-    public class TipsController : ApiController {
-        KilometrosDatabase.Abstraction.WorkUnit Database
-            = new KilometrosDatabase.Abstraction.WorkUnit();
-
+    public class TipsController : IKMSController {
         [HttpGet]
         [Route("tips/categories")]
-        public TipCategoryResponse[] GetTipsCategories() {
+        public IEnumerable<TipCategoryResponse> GetTipsCategories() {
             // --- Obtener el último Idioma + Cultura añadido ---
             TipCategoryGlobalization lastTipCategoryGlobalization
                 = Database.TipCategoryGlobalizationStore.GetFirst(
@@ -77,16 +74,14 @@ namespace Kilometros_WebAPI.Controllers {
                 }
             }
 
-            return tipCategoriesResponse.ToArray();
+            return tipCategoriesResponse;
         }
 
         [HttpGet]
         [Route("tips/history")]
-        public TipResponse[] GetTipsHistory(int page = 1) {
-            KmsIdentity identity
-                = (KmsIdentity)User.Identity;
+        public IEnumerable<TipResponse> GetTipsHistory(int page = 1) {
             User user
-                = identity.UserData;
+                = OAuth.Token.User;
 
             // --- Obtener el último Tip conseguido ---
             UserTipHistory lastTipHistory
@@ -185,7 +180,7 @@ namespace Kilometros_WebAPI.Controllers {
                 });
             }
 
-            return response.ToArray();
+            return response;
         }
 
         [HttpGet]

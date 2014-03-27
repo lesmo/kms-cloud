@@ -13,17 +13,12 @@ using System.Web.Http;
 
 namespace Kilometros_WebAPI.Controllers {
     [Authorize]
-    public class RewardsController : ApiController {
-        KilometrosDatabase.Abstraction.WorkUnit Database
-            = new KilometrosDatabase.Abstraction.WorkUnit();
-
+    public class RewardsController : IKMSController {
         [HttpGet]
         [Route("rewards/history")]
         public IEnumerable<RewardResponse> GetRewardsHistory(int page = 1) {
-            KmsIdentity identity
-                = (KmsIdentity)User.Identity;
             User user
-                = identity.UserData;
+                = OAuth.Token.User;
 
             // --- Obtener la última Recompensa conseguida ---
             UserEarnedReward lastReward
@@ -157,10 +152,8 @@ namespace Kilometros_WebAPI.Controllers {
         [HttpGet]
         [Route("rewards/{earnedRewardId}")]
         public RewardResponse GetReward(string earnedRewardId) {
-            KmsIdentity identity
-                = (KmsIdentity)User.Identity;
             User user
-                = identity.UserData;
+                = OAuth.Token.User;
 
             // --- Obtener la Recompensa solicitada ---
             Guid? rewardGuid
