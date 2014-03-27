@@ -30,6 +30,7 @@ namespace KilometrosDatabase
         public bool TokenUpgradeRequired { get; set; }
         public bool DebugEnabled { get; set; }
         public bool BasicLoginEnabled { get; set; }
+        public bool AccuntCreateEnabled { get; set; }
     
         public virtual ICollection<Token> Token { get; set; }
         public virtual ApiKey ApiKeyPrevious { get; set; }
