@@ -13,6 +13,22 @@ using Kilometros_WebGlobalization.Database;
 namespace KilometrosDatabase {
     public partial class User : IValidatableObject {
         /// <summary>
+        /// Devuelve la Edad del Usuario a partir de la Fecha de Nacimiento almacenada
+        /// en la Base de Datos.
+        /// </summary>
+        public short Age {
+            get {
+                short age
+                    = (short)(DateTime.Today.Year - this.BirthDate.Year);
+
+                if ( this.BirthDate > DateTime.Today.AddYears(-age) )
+                    age--;
+
+                return age;
+            }
+        }
+
+        /// <summary>
         /// Genera el Hash de la cadena que se asigne, o devuelve la representación
         /// en Texto del Hash en {User.Password}. La contraseña se trata como UTF-8.
         /// </summary>
@@ -42,7 +58,7 @@ namespace KilometrosDatabase {
                     = hashing.ComputeHash(computedHash);
                 
                 // > Almacenar nuevos valores
-                this.Password = computedHash2;
+                this.Password = computedHash;
                 this._passwordHashString = null; // Forzar la re-conversión del Hash a Texto
             }
         }
@@ -75,6 +91,22 @@ namespace KilometrosDatabase {
         /// </summary>
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext) {
             List<ValidationResult> validationErrors = new List<ValidationResult>();
+
+            // > Validar que la Edad esté entre 0 y 110
+            if ( this.Age < 0 )
+                validationErrors.Add(
+                    new ValidationResult(
+                        EntityValidationStrings.UserTooYoung,
+                        new[] { "Age" }
+                    )
+                );
+            if ( this.Age > 110 )
+                validationErrors.Add(
+                    new ValidationResult(
+                        EntityValidationStrings.UserTooOld,
+                        new[] { "Age" }
+                    )
+                );
 
             // > Validar dirección de correo electrónico
             try {

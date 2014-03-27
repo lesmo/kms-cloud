@@ -17,22 +17,6 @@ namespace KilometrosDatabase {
             List<ValidationResult> validationErrors
                 = new List<ValidationResult>();
 
-            // > Validar que la Edad esté entre 0 y 110
-            if ( this.Age < 0)
-                validationErrors.Add(
-                    new ValidationResult(
-                        EntityValidationStrings.UserTooYoung,
-                        new[] { "Age" }
-                    )
-                );
-            if ( this.Age > 110 )
-                validationErrors.Add(
-                    new ValidationResult(
-                        EntityValidationStrings.UserTooOld,
-                        new[] { "Age" }
-                    )
-                );
-
             // > Validar que la Altura del usuario sea entre 40cm y 300cm
             if ( this.Height < 40 )
                 validationErrors.Add(
@@ -71,7 +55,7 @@ namespace KilometrosDatabase {
                 validationErrors.Add(
                     new ValidationResult(
                         EntityValidationStrings.GenderInvalid,
-                        new[] { "Sex" }
+                        new[] { "Gender" }
                     )
                 );
 

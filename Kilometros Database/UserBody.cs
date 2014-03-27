@@ -14,8 +14,7 @@ namespace KilometrosDatabase
     
     public partial class UserBody
     {
-        public long Id { get; internal set; }
-        public short Age { get; set; }
+        public long Id { get; set; }
         public short Height { get; set; }
         public int Weight { get; set; }
         public string Sex { get; set; }

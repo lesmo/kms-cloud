@@ -28,13 +28,14 @@ namespace KilometrosDatabase
             this.UserDataHourlyDistance = new HashSet<UserDataHourlyDistance>();
         }
     
-        public System.Guid Guid { get; private set; }
+        public System.Guid Guid { get; set; }
         public System.DateTime CreationDate { get; set; }
         public string Email { get; set; }
         public byte[] Password { get; set; }
         public string RegionCode { get; set; }
         public string PreferredCultureCode { get; set; }
         public Nullable<short> UtcOffset { get; set; }
+        public System.DateTime BirthDate { get; set; }
         public string Name { get; set; }
         public string LastName { get; set; }
         public string PictureUri { get; set; }
