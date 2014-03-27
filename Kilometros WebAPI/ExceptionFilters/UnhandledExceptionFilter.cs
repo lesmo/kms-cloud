@@ -2,6 +2,7 @@
 using Kilometros_WebGlobalization.API;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
@@ -12,7 +13,10 @@ using System.Web.Http.Filters;
 namespace Kilometros_WebAPI.ExceptionFilters {
     public class UnhandledExceptionFilter : ExceptionFilterAttribute {
         public override void OnException(HttpActionExecutedContext httpContext) {
-            if ( httpContext.Exception is HttpProcessException ) {
+            if (
+                httpContext.Exception is HttpProcessException
+                || httpContext.Exception is DbEntityValidationException
+            ) {
                 return;
             } else if ( httpContext.Exception is NotImplementedException ) {
                 httpContext.Response
