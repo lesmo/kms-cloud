@@ -209,6 +209,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ContactInfoController.cs" />
     <Compile Include="Controllers\FriendsController.cs" />
+    <Compile Include="Controllers\BaseClasses\IKMSController.cs" />
     <Compile Include="Controllers\PhysiqueController.cs" />
     <Compile Include="Controllers\OAuth3rdPartyAddController.cs" />
     <Compile Include="Controllers\OAuthController.cs" />
@@ -233,7 +234,10 @@
     <Compile Include="Helpers\MiscHelper.cs" />
     <Compile Include="MagicTriggers\RewardsPushTrigger.cs" />
     <Compile Include="MagicTriggers\TipsPushTrigger.cs" />
+    <Compile Include="MessageHandlers\RequestArrayHandler.cs" />
     <Compile Include="MessageHandlers\ResponseLastModifiedHandler.cs" />
+    <Compile Include="Models\RequestModels\OAuth3rdLoginPost.cs" />
+    <Compile Include="Models\RequestModels\OAuthAccessTokenPost.cs" />
     <Compile Include="Models\ResponseModels\DataDistanceResponse.cs" />
     <Compile Include="Models\ResponseModels\DataTotalResponse.cs" />
     <Compile Include="Models\ResponseModels\FriendResponse.cs" />
@@ -271,6 +275,7 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Areas\Login\Views\Home\OAuthBasicLoginSuccess.cshtml" />
+    <Content Include="Areas\Login\Views\Home\OAuthTokenInvalid.cshtml" />
     <None Include="Properties\PublishProfiles\KMS Web API.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.8.2.js" />
