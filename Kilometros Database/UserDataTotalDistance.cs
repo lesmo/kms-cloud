@@ -16,8 +16,8 @@ namespace KilometrosDatabase
     {
         public DataActivity Activity { get; set; }
         public System.DateTime Timestamp { get; set; }
-        public Nullable<long> TotalSteps { get; set; }
-        public Nullable<long> TotalDistance { get; set; }
+        public long TotalSteps { get; set; }
+        public long TotalDistance { get; set; }
     
         public virtual User User { get; set; }
     }

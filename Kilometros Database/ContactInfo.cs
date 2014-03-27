@@ -18,7 +18,7 @@ namespace KilometrosDatabase
         public string HomePhone { get; set; }
         public string MobilePhone { get; set; }
         public string WorkPhone { get; set; }
-        public Nullable<System.DateTime> LastEditDate { get; set; }
+        public System.DateTime LastEditDate { get; set; }
     
         public virtual User User { get; set; }
     }

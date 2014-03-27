@@ -17,6 +17,7 @@
           <Property Name="TokenUpgradeRequired" Type="bit" Nullable="false" />
           <Property Name="DebugEnabled" Type="bit" Nullable="false" />
           <Property Name="BasicLoginEnabled" Type="bit" Nullable="false" />
+          <Property Name="AccuntCreateEnabled" Type="bit" Nullable="false" />
           <Property Name="ApiKeyNext_Guid" Type="uniqueidentifier" />
         </EntityType>
         <EntityType Name="ContactInfoSet">
@@ -27,7 +28,7 @@
           <Property Name="HomePhone" Type="nvarchar" MaxLength="24" />
           <Property Name="MobilePhone" Type="nvarchar" MaxLength="24" />
           <Property Name="WorkPhone" Type="nvarchar" MaxLength="24" />
-          <Property Name="LastEditDate" Type="datetime" />
+          <Property Name="LastEditDate" Type="datetime" StoreGeneratedPattern="Computed" />
           <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
         </EntityType>
         <EntityType Name="DataSet">
@@ -214,7 +215,7 @@
           <Property Name="RegionCode" Type="varchar" MaxLength="6" Nullable="false" />
           <Property Name="Address" Type="nvarchar(max)" Nullable="false" />
           <Property Name="Coordinates" Type="geography" Nullable="false" />
-          <Property Name="LastEditDate" Type="datetime" />
+          <Property Name="LastEditDate" Type="datetime" StoreGeneratedPattern="Computed" />
           <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
         </EntityType>
         <EntityType Name="TipSet">
@@ -248,10 +249,9 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Age" Type="smallint" Nullable="false" />
           <Property Name="Height" Type="smallint" Nullable="false" />
           <Property Name="Weight" Type="int" Nullable="false" />
-          <Property Name="Sex" Type="nchar" MaxLength="1" Nullable="false" />
+          <Property Name="Sex" Type="char" MaxLength="1" Nullable="false" />
           <Property Name="StrideLengthWalking" Type="int" Nullable="false" />
           <Property Name="StrideLengthRunning" Type="int" Nullable="false" />
           <Property Name="LastEditDate" Type="datetime" Nullable="false" />
@@ -300,7 +300,8 @@
             <PropertyRef Name="Guid" />
           </Key>
           <Property Name="Guid" Type="uniqueidentifier" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="CreationDate" Type="datetime" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="CreationDate" Type="datetime" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="BirthDate" Type="date" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="LastName" Type="nvarchar" MaxLength="128" />
           <Property Name="Email" Type="varchar" MaxLength="255" Nullable="false" />
@@ -1214,12 +1215,12 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
           <Key>
             <PropertyRef Name="Guid" />
           </Key>
-          <Property Type="Guid" Name="Guid" Nullable="false" annotation:StoreGeneratedPattern="Identity" cg:SetterAccess="Private" >
+          <Property Type="Guid" Name="Guid" Nullable="false" annotation:StoreGeneratedPattern="Identity" cg:SetterAccess="Public" >
             <Documentation>
               <Summary>Guid que representa al Usuario.</Summary>
             </Documentation>
           </Property>
-          <Property Type="DateTime" Name="CreationDate" Nullable="false" cg:SetterAccess="Public" annotation:StoreGeneratedPattern="Identity" Precision="3" >
+          <Property Type="DateTime" Name="CreationDate" Nullable="false" cg:SetterAccess="Public" annotation:StoreGeneratedPattern="Computed" Precision="3" >
             <Documentation>
               <Summary>Fecha de Creación del Usuario</Summary>
             </Documentation>
@@ -1284,6 +1285,7 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
           <NavigationProperty Name="UserTipHistory" Relationship="MainModel.UserTipHistoryUser" FromRole="User" ToRole="UserTipHistory" />
           <NavigationProperty Name="OAuthCredential" Relationship="MainModel.OAuthCredentialUser" FromRole="User" ToRole="OAuthCredential" />
           <Property Name="UtcOffset" Type="Int16" Nullable="true" />
+          <Property Name="BirthDate" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="LastName" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="UserFriended" Relationship="MainModel.FK_UserFriendSet_UserSet_Friend_Guid" FromRole="User" ToRole="UserFriendSet" />
@@ -1381,6 +1383,7 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
           <NavigationProperty Name="ApiKeyNext" Relationship="MainModel.ApiKeyHistory" FromRole="ApiKey1" ToRole="ApiKey" />
           <Property Name="DebugEnabled" Type="Boolean" Nullable="false" DefaultValue="False" />
           <Property Name="BasicLoginEnabled" Type="Boolean" Nullable="false" DefaultValue="False" />
+          <Property Name="AccuntCreateEnabled" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="Tip">
           <Documentation>
@@ -1457,7 +1460,7 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
           </End>
         </Association>
         <Association Name="UserToken">
-          <End Type="MainModel.User" Role="User" Multiplicity="1" >
+          <End Type="MainModel.User" Role="User" Multiplicity="0..1" >
             <OnDelete Action="Cascade" />
           </End>
           <End Type="MainModel.Token" Role="Token" Multiplicity="*" >
@@ -1542,13 +1545,8 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Type="Int64" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" cg:SetterAccess="Internal" />
+          <Property Type="Int64" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" cg:SetterAccess="Public" />
           <NavigationProperty Name="User" Relationship="MainModel.UserUserBody" FromRole="UserBody" ToRole="User" />
-          <Property Type="Int16" Name="Age" Nullable="false" >
-            <Documentation>
-              <Summary>Edad del Usuario</Summary>
-            </Documentation>
-          </Property>
           <Property Type="Int16" Name="Height" Nullable="false" >
             <Documentation>
               <Summary>Altura del Usuario (en cm)</Summary>
@@ -1559,7 +1557,7 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
               <Summary>Peso del Usuario (en gr)</Summary>
             </Documentation>
           </Property>
-          <Property Type="String" Name="Sex" Nullable="false" MaxLength="1" FixedLength="true" Unicode="true" >
+          <Property Type="String" Name="Sex" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" >
             <Documentation>
               <Summary>Sexo del Usuario (M o F)</Summary>
               <LongDescription>El carácter F es Femenino, el carácter M es masculino.</LongDescription>
@@ -1815,7 +1813,7 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
               <Summary>Teléfono del Trabajo del Usuario (en formato &lt;Número&gt; x &lt;Extensión&gt;)</Summary>
             </Documentation>
           </Property>
-          <Property Type="DateTime" Name="LastEditDate" annotation:StoreGeneratedPattern="None" Precision="3" >
+          <Property Type="DateTime" Name="LastEditDate" annotation:StoreGeneratedPattern="Computed" Precision="3" Nullable="false" >
             <Documentation>
               <Summary>Última fecha de modificación de la Información de Contacto.</Summary>
             </Documentation>
@@ -1839,7 +1837,7 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
           <Property Type="String" Name="Address" Nullable="false" Unicode="true" MaxLength="Max" FixedLength="false" />
           <NavigationProperty Name="User" Relationship="MainModel.UserShippingInformation" FromRole="ShippingInformation" ToRole="User" />
           <Property Name="Coordinates" Type="Geography" Nullable="false" />
-          <Property Type="DateTime" Name="LastEditDate" annotation:StoreGeneratedPattern="None" Precision="3" >
+          <Property Type="DateTime" Name="LastEditDate" annotation:StoreGeneratedPattern="Computed" Precision="3" >
             <Documentation>
               <Summary>Última fecha de modificación de la Información de Envío del Usuario.</Summary>
             </Documentation>
@@ -1998,8 +1996,8 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
           </Key>
           <Property Name="Activity" Type="MainModel.DataActivity" Nullable="false" />
           <Property Name="Timestamp" Type="DateTime" Precision="3" Nullable="false" />
-          <Property Name="Steps" Type="Int64" />
-          <Property Name="Distance" Type="Int64" />
+          <Property Name="Steps" Type="Int64" Nullable="false" />
+          <Property Name="Distance" Type="Int64" Nullable="false" />
           <NavigationProperty Name="User" Relationship="MainModel.UserDataHourlyDistanceUser" FromRole="UserDataHourlyDistance" ToRole="User" />
         </EntityType>
         <EntityType Name="UserDataTotalDistance">
@@ -2009,8 +2007,8 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
           </Key>
           <Property Name="Activity" Type="MainModel.DataActivity" Nullable="false" />
           <Property Name="Timestamp" Type="DateTime" Precision="3" Nullable="false" />
-          <Property Name="TotalSteps" Type="Int64" />
-          <Property Name="TotalDistance" Type="Int64" />
+          <Property Name="TotalSteps" Type="Int64" Nullable="false" />
+          <Property Name="TotalDistance" Type="Int64" Nullable="false" />
           <NavigationProperty Name="User" Relationship="MainModel.UserUserDataTotalDistance" FromRole="UserDataTotalDistance" ToRole="User" />
         </EntityType>
         <EntityType Name="UserFriend">
@@ -2048,7 +2046,8 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
     <EntitySetMapping Name="UserSet">
       <EntityTypeMapping TypeName="IsTypeOf(MainModel.User)">
         <MappingFragment StoreEntitySet="UserSet">
-          <ScalarProperty Name="PictureUri" ColumnName="PictureUri" />
+          <ScalarProperty Name="BirthDate" ColumnName="BirthDate" />
+                <ScalarProperty Name="PictureUri" ColumnName="PictureUri" />
                 <ScalarProperty Name="Guid" ColumnName="Guid" />
           <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
           <ScalarProperty Name="Email" ColumnName="Email" />
@@ -2078,7 +2077,8 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
     <EntitySetMapping Name="ApiKeySet">
       <EntityTypeMapping TypeName="IsTypeOf(MainModel.ApiKey)">
         <MappingFragment StoreEntitySet="ApiKeySet">
-          <ScalarProperty Name="Guid" ColumnName="Guid" />
+          <ScalarProperty Name="AccuntCreateEnabled" ColumnName="AccuntCreateEnabled" />
+                <ScalarProperty Name="Guid" ColumnName="Guid" />
           <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
           <ScalarProperty Name="Platform" ColumnName="Platform" />
           <ScalarProperty Name="Description" ColumnName="Description" />
@@ -2126,7 +2126,6 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
       <EntityTypeMapping TypeName="IsTypeOf(MainModel.UserBody)">
         <MappingFragment StoreEntitySet="UserBodySet">
           <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="Age" ColumnName="Age" />
           <ScalarProperty Name="Height" ColumnName="Height" />
           <ScalarProperty Name="Weight" ColumnName="Weight" />
           <ScalarProperty Name="Sex" ColumnName="Sex" />
@@ -2350,6 +2349,7 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
       <EndProperty Name="Token">
         <ScalarProperty Name="Guid" ColumnName="Guid" />
       </EndProperty>
+            <Condition ColumnName="User_Guid" IsNull="false" />
     </AssociationSetMapping>
     <AssociationSetMapping Name="TipCategoryTipCategoryGlobalization" TypeName="MainModel.TipCategoryTipCategoryGlobalization" StoreEntitySet="IGlobalizationSet_TipCategoryGlobalization">
       <EndProperty Name="TipCategory">
