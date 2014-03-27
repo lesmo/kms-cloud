@@ -9,11 +9,14 @@ namespace Kilometros_WebAPI.Areas.Login {
         }
 
         public override void RegisterArea(AreaRegistrationContext context) {
-            //context.MapRoute(
-            //    "Login_default",
-            //    "login/{controller}/{action}/{id}",
-            //    new { action = "Index", id = UrlParameter.Optional }
-            //);
+            context.MapRoute(
+                "OAuth_LoginBasic",
+                "oauth/authorize-basic",
+                new {
+                    controller = "Home",
+                    action = "LoginBasic"
+                }
+            );
         }
     }
 }

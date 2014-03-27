@@ -14,8 +14,8 @@ namespace Kilometros_WebAPI.Areas.Login.Controllers {
 
         private void BasicAuthChallengeResponse() {
             Response.StatusCode
-                    = 401;
-            Response.Status
+                = 401;
+            Response.StatusDescription
                 = "Unauthorized";
             Response.AddHeader(
                 "WWW-Authenticate",
@@ -30,19 +30,26 @@ namespace Kilometros_WebAPI.Areas.Login.Controllers {
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Route("oauth/login")]
+        [HttpPost]
         public ActionResult LoginGui(string oauth_token) {
             // TODO: Buscar cookie de sesión para
             return View();
         }
-
-        [HttpPost]
-        [Route("oauth/login/basic")]
-        public ActionResult LoginBasic(string oauth_token) {
+        
+        public ActionResult LoginBasic(string oauth_token = null) {
             // --- Validar cabecera Authorization ---
+            Guid oAuthTokenGuid
+                = new Guid();
+
+            if ( oauth_token == null || ! Guid.TryParse(oauth_token, out oAuthTokenGuid) ) {
+                BasicAuthChallengeResponse();
+                return View("OAuthTokenInvalid");
+            }
+
             if (
-                string.IsNullOrEmpty(Request.Headers["Authorization"])
-                && ! Request.Headers["Authorization"].StartsWith("Basic")
+                ! Request.Headers.AllKeys.Contains("Authorization")
+                || string.IsNullOrEmpty(Request.Headers["Authorization"])
+                || ! Request.Headers["Authorization"].StartsWith("Basic")
             ) {
                 BasicAuthChallengeResponse();
                 return View("OAuthTokenInvalid");
@@ -82,6 +89,8 @@ namespace Kilometros_WebAPI.Areas.Login.Controllers {
                         =  sha256.ComputeHash(
                             Encoding.ASCII.GetBytes(credentialsPassword)
                         );
+                    credentialsPasswordBytes
+                        = sha256.ComputeHash(credentialsPasswordBytes);
                 } catch {
                     BasicAuthChallengeResponse();
                     return View();
@@ -93,14 +102,12 @@ namespace Kilometros_WebAPI.Areas.Login.Controllers {
             
             // --- Buscar Token y validarlo ---
             Token token
-                = Database.TokenStore.Get(
-                    new Guid(oauth_token)
-                );
+                = Database.TokenStore.Get(oAuthTokenGuid);
             
             if ( token == null ) {
                 Response.StatusCode
                     = 403;
-                Response.Status 
+                Response.StatusDescription
                     = "Forbidden";
                 return View("OAuthTokenInvalid");
             }
@@ -108,15 +115,15 @@ namespace Kilometros_WebAPI.Areas.Login.Controllers {
             if ( ! token.ApiKey.BasicLoginEnabled ) {
                 Response.StatusCode
                     = 403;
-                Response.Status
-                    = "Unauthorized";
+                Response.StatusDescription
+                    = "Forbidden";
                 return View("OAuthTokenInvalid");
             }
 
             if ( token.LoginAttempts > 10 ) {
                 Response.StatusCode
                     = 403;
-                Response.Status
+                Response.StatusDescription
                     = "Forbidden";
 
                 Database.TokenStore.Delete(token.Guid);
@@ -163,7 +170,7 @@ namespace Kilometros_WebAPI.Areas.Login.Controllers {
             if ( callbackUri == "oob" ) {
                 ViewData.Add(
                     "oob_verifier",
-                    token.VerificationCode.Value.ToString("00000000000000000000000000000000")
+                    token.VerificationCode.Value.ToString("N")
                 );
                 return View("OAuthBasicLoginSuccess");
             } else {
@@ -174,8 +181,8 @@ namespace Kilometros_WebAPI.Areas.Login.Controllers {
                     string.Format(
                         "{0}oauth_token={1}&oauth_verifier={2}",
                         token.CallbackUri,
-                        token.Guid.ToString("00000000000000000000000000000000"),
-                        token.Secret.ToString("00000000000000000000000000000000")
+                        token.Guid.ToString("N"),
+                        token.Secret.ToString("N")
                     )
                 );
             }
