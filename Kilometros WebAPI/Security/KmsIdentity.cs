@@ -6,7 +6,7 @@ using System.Security.Principal;
 using System.Web;
 
 namespace Kilometros_WebAPI.Security {
-    public class KmsIdentity : IIdentity {
+    public class KMSIdentity : IIdentity {
         public User UserData {
             get {
                 if ( this._oAuth != null && this._oAuth.Token != null && this._oAuth.Token.User != null )
@@ -34,7 +34,8 @@ namespace Kilometros_WebAPI.Security {
 
         public bool IsAuthenticated {
             get {
-                if ( this._oAuth != null && this._oAuth.Token != null)
+                // Si hay un Token y NO tiene Verifier, entonces verificamos si tiene un Usuario asociado
+                if ( this._oAuth != null && this._oAuth.Token != null && ! this._oAuth.Token.VerificationCode.HasValue)
                     return this._oAuth.Token.User != null;
                 else
                     return false;
@@ -66,7 +67,7 @@ namespace Kilometros_WebAPI.Security {
         }
         private HttpOAuthAuthorization _oAuth;
 
-        public KmsIdentity(HttpOAuthAuthorization httpOAuth = null, string authenticationType = "KmsToken") {
+        public KMSIdentity(HttpOAuthAuthorization httpOAuth = null, string authenticationType = "KmsToken") {
             if ( httpOAuth == null )
                 return;
 

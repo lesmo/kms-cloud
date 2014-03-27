@@ -21,11 +21,54 @@ namespace Kilometros_WebAPI.Security {
         ) {
             return new HttpOAuthAuthorization(authHeader.Parameter, database);
         }
+        
+        /// <summary>
+        ///     Crea una nueva instancia de Autorización HTTP OAuth 1.0a a partir de otra instancia similar,
+        ///     pero modificando el Contexto de Base de Datos al que están asociados los objetos Consumer
+        ///     y Token por el que se especifique.
+        /// </summary>
+        /// <param name="oAuthObject">
+        ///     Instancia a partir de la cual generar la nueva instancia.
+        /// </param>
+        /// <param name="database">
+        ///     Contexto de Base de Datos a utilizar para asociar el Consumer y Token.
+        /// </param>
+        public HttpOAuthAuthorization(HttpOAuthAuthorization oAuthObject, WorkUnit database) {
+            this.CallbackUri
+                = oAuthObject.CallbackUri;
+            this.ConsumerKey
+                = database.ApiKeyStore.Get(oAuthObject.ConsumerKey.Guid);
+            this.Nonce
+                = oAuthObject.Nonce;
+            this.oAuthParameters
+                = oAuthObject.oAuthParameters;
+            this.Signature
+                = oAuthObject.Signature;
+            this.Timestamp
+                = oAuthObject.Timestamp;
+            if ( oAuthObject.Token != null )
+                this.Token
+                    = database.TokenStore.Get(oAuthObject.Token.Guid);
+            this.VerifierCode
+                = oAuthObject.VerifierCode;
+            this.Version
+                = oAuthObject.Version;
+        }
 
+        /// <summary>
+        ///     Crea una nueva instancia de Autorización HTTP OAuth 1.0a a partir de los parámetros
+        ///     de la cabecera HTTP Authorization.
+        /// </summary>
+        /// <param name="oAuthParametersLine">
+        ///     Cadena después de "OAuth " de la cabecera HTTP Authorization.
+        /// </param>
+        /// <param name="database">
+        ///     Contexto de Base de Datos a utilizar para identificar el Consumer y Token.
+        /// </param>
         public HttpOAuthAuthorization(string oAuthParametersLine, WorkUnit database) {
             // --- Obtener parámetros de OAuth ---
             string[] oAuthParametersStrings
-                = oAuthParametersLine.Split(new char[] { ',' });
+                = oAuthParametersLine.Trim().Split(new char[] { ',' });
 
             foreach ( string param in oAuthParametersStrings ) {
                 string[] paramKeyValue
@@ -56,8 +99,8 @@ namespace Kilometros_WebAPI.Security {
             if ( oAuthParameters.ContainsKey("oauth_consumer_key") ) {
                 this.ConsumerKey
                     = database.ApiKeyStore.Get(
-                    new Guid(oAuthParameters["oauth_consumer_key"])
-                );
+                        new Guid(oAuthParameters["oauth_consumer_key"])
+                    );
             } else {
                 this.ConsumerKey
                     = null;
@@ -66,17 +109,19 @@ namespace Kilometros_WebAPI.Security {
             if ( oAuthParameters.ContainsKey("oauth_token") ) {
                 this.Token
                     = database.TokenStore.Get(
-                    new Guid(oAuthParameters["oauth_token"])
-                );
+                        new Guid(oAuthParameters["oauth_token"])
+                    );
 
                 if (
-                    this.Token.ExpirationDate.HasValue
+                    this.Token != null
+                    && this.Token.ExpirationDate.HasValue
                     && this.Token.ExpirationDate.Value < DateTime.UtcNow
                 ) {
                     database.TokenStore.Delete(this.Token.Guid);
                     database.SaveChanges();
 
-                    this.Token = null;
+                    this.Token
+                        = null;
                 }
             } else {
                 this.Token
@@ -89,7 +134,9 @@ namespace Kilometros_WebAPI.Security {
                 && oAuthParameters["oauth_signature_method"] == "HMAC-SHA1"
             ) {
                 this.Signature
-                    = oAuthParameters["oauth_signature"];
+                    = HttpUtility.UrlDecode(
+                        oAuthParameters["oauth_signature"]
+                    );
             } else {
                 this.Signature
                     = null;
@@ -98,12 +145,10 @@ namespace Kilometros_WebAPI.Security {
             if ( oAuthParameters.ContainsKey("oauth_timestamp") ) {
                 string oAuthTimestampString
                     = oAuthParameters["oauth_timestamp"];
-                Int64 oAuthTimestampSeconds
-                    = 0;
-                Int64.TryParse(
-                    oAuthTimestampString,
-                    out oAuthTimestampSeconds
-                );
+                long oAuthTimestampSeconds
+                    = long.Parse(
+                        oAuthTimestampString
+                    );
                 
                 // Crear objeto de fecha
                 DateTime timestampBase
@@ -142,9 +187,12 @@ namespace Kilometros_WebAPI.Security {
             }
 
             if ( oAuthParameters.ContainsKey("oauth_nonce") ) {
+                string oAuthNonce
+                    = oAuthParameters["oauth_nonce"];
+
                 OAuthNonce nonce
                     = database.OAuthNonceStore.GetFirst(
-                        f => f.Nonce == oAuthParameters["oauth_nonce"]
+                        f => f.Nonce == oAuthNonce
                     );
 
                 if ( nonce == null ) {
@@ -153,8 +201,8 @@ namespace Kilometros_WebAPI.Security {
                             Nonce
                                 = oAuthParameters["oauth_nonce"]
                         };
-                    
-                    database.OAuthNonceStore.Add(nonce);
+                        
+                    database.OAuthNonceStore.Add(this.Nonce);
                     database.SaveChanges();
                 } else {
                     this.Nonce
@@ -229,6 +277,15 @@ namespace Kilometros_WebAPI.Security {
         /// </summary>
         public readonly Guid? VerifierCode;
 
+        /// <summary>
+        /// Devuelve si ésta petición se realizó con un Request Token.
+        /// </summary>
+        public bool IsRequestToken {
+            get {
+                return this.IsValid && this.Token != null && this.Token.User == null;
+            }
+        }
+
         public bool IsValid {
             get {
                 return this._isValid && this.IsInternalyValid;
@@ -258,22 +315,22 @@ namespace Kilometros_WebAPI.Security {
 
             // --- Validar firma de petición ---
             Stream contentStream
-                = null;
-            await request.Content.CopyToAsync(contentStream);
+                = await request.Content.ReadAsStreamAsync();
+            //request.Content.CopyToAsync(contentStream).Wait();
 
             // - Preparar contenedor para Base String -
             StringBuilder baseString
                 = new StringBuilder();
-            List<KeyValuePair<string, string>> contentItems
-                = new List<KeyValuePair<string, string>>();
-            foreach ( KeyValuePair<string, string> param in oAuthParameters ) {
+            NameValueCollection contentItems
+                = new NameValueCollection();
+            foreach ( KeyValuePair<string, string> param in this.oAuthParameters ) {
                 if ( param.Key == "oauth_signature" ) // esto afecta hash generado
                     continue;
 
-                contentItems.Add(new KeyValuePair<string, string>(
+                contentItems.Add(
                     param.Key,
                     param.Value
-                ));
+                );
             }
 
             // - [1] Agregar método HTTP -
@@ -282,71 +339,86 @@ namespace Kilometros_WebAPI.Security {
 
             // - [2] Agregar URL de petición -
             baseString.Append(
-                HttpUtility.UrlEncode(
+                Uri.EscapeDataString(
                     request.RequestUri.ToString()
                 )
             );
             baseString.Append('&');
 
-            // - [3] Agregar parámetros ordenados a BaseString -
+            // - [3] Agregar parámetros BaseString -
             // Ordenar parámetros en POST o GET (QueryString) según sea el caso
-            if ( request.Method != HttpMethod.Get ) {
-                // Obtener variables en cuerpo
-                StreamReader contentStreamReader
-                    = new StreamReader(contentStream);
-                string contentString
-                    = contentStreamReader.ReadToEnd();
-                NameValueCollection contentNameValueCollection
-                    = HttpUtility.ParseQueryString(contentString);
+            StringBuilder contentString
+                = new StringBuilder();
 
-                // Concatenar valores de cabecera Authorization de OAuth
-                for ( int i = 0; i < contentNameValueCollection.Count; i++ ) {
-                    contentItems.Add(new KeyValuePair<string, string>(
-                        contentNameValueCollection.GetKey(i),
-                        contentNameValueCollection.GetValues(i).FirstOrDefault()
-                    ));
+            if ( request.GetQueryNameValuePairs().Count() > 0 ) {
+                foreach ( KeyValuePair<string, string> item in request.GetQueryNameValuePairs().OrderBy(b => b.Key) )
+                    contentItems.Add(
+                        item.Key,
+                        item.Value
+                    );
+            }
+
+            if ( request.Content.IsFormData() )  {
+                NameValueCollection formData
+                    = await request.Content.ReadAsFormDataAsync();
+                List<KeyValuePair<string, string>> formDataList
+                    = new List<KeyValuePair<string, string>>();
+
+                foreach ( string key in formData.AllKeys ) {
+                    string[] values
+                        = formData.GetValues(key);
+
+                    foreach ( string value in values ) {
+                        contentItems.Add(
+                            key,
+                            value
+                        );
+
+                        formDataList.Add(
+                            new KeyValuePair<string, string>(
+                                key,
+                                value
+                            )
+                        );
+                    }
                 }
 
-            } else {
-                foreach ( KeyValuePair<string, string> item in request.GetQueryNameValuePairs() )
-                    contentItems.Add(item);
+                request.Content
+                    = new FormUrlEncodedContent(
+                        formDataList
+                    );
             }
 
-            // Ordenar parámetros
-            contentItems
-                = (
-                    from i in contentItems
-                    orderby i.Key, i.Value
-                    select i
-                ).ToList<KeyValuePair<string, string>>();
+            foreach ( string key in contentItems.AllKeys.OrderBy(b => b).ToArray() ) {
+                string[] values
+                    = contentItems.GetValues(key);
 
-            // Agregar parámetros a BaseString
-            foreach ( KeyValuePair<string, string> item in contentItems ) {
-                // Nombre de parámetro
-                baseString.Append(
-                    HttpUtility.UrlEncode(
-                        item.Key
-                    )
-                );
-
-                // = (símbolo igual)
-                baseString.Append("%3D");
-
-                // Valor de parámetro
-                baseString.Append(
-                    HttpUtility.UrlEncode(
-                        item.Value
-                    )
-                );
+                foreach ( string value in values.OrderBy(b => b).ToArray() ) {
+                    contentString.Append(
+                        string.Format(
+                            "{0}={1}&",
+                            Uri.EscapeDataString(key),
+                            Uri.EscapeDataString(value)
+                        )
+                    );
+                }
             }
+
+            baseString.Append(
+                Uri.EscapeDataString(
+                    contentString.ToString().Remove(
+                        contentString.Length - 1
+                    )
+                )
+            );
 
             // Generar llave de HMAC-SHA1
             string hmacSha1Key
-                = this.ConsumerKey.Secret.ToString("00000000000000000000000000000000") + "&";
+                = this.ConsumerKey.Secret.ToString("N") + "&";
             
             if ( this.Token != null )
                 hmacSha1Key
-                    += this.Token.Secret.ToString("00000000000000000000000000000000");
+                    += this.Token.Secret.ToString("N");
 
             // - [4] Calcular HMAC-SHA1 de BaseString -
             // Obtener HMAC-SHA1
