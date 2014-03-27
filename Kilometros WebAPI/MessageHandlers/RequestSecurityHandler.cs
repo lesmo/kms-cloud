@@ -37,7 +37,7 @@ namespace Kilometros_WebAPI.MessageHandlers {
                 // Crear Principal genérico Anónimo y continuar ejecución
                 GenericPrincipal anonPrincipal
                     = new GenericPrincipal(
-                        new KmsIdentity(),
+                        new KMSIdentity(),
                         new string[] { "Anonymous" }
                     );
 
@@ -73,10 +73,17 @@ namespace Kilometros_WebAPI.MessageHandlers {
                     request.Headers.Authorization,
                     Database
                 );
+
             bool httpOAuthValidRequest
+                = false;
+            httpOAuthValidRequest
                 = await httpOAuth.ValidateRequestAsync(request);
 
-            if ( !httpOAuthValidRequest ) {
+            if ( httpOAuthValidRequest ) {
+                // Actualizar LastUseDate de Token
+                if( httpOAuth.Token != null )
+                    Database.TokenStore.Update(httpOAuth.Token);
+            } else {
                 HttpResponseMessage response
                     = new HttpResponseMessage(HttpStatusCode.Unauthorized);
 
@@ -94,8 +101,8 @@ namespace Kilometros_WebAPI.MessageHandlers {
             }
 
             // --- Establecer contexto de seguridad ---
-            KmsIdentity identity
-                = new KmsIdentity(httpOAuth);
+            KMSIdentity identity
+                = new KMSIdentity(httpOAuth);
             GenericPrincipal principal
                 = new GenericPrincipal(identity, new string[] { "User" });
 
