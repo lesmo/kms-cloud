@@ -127,9 +127,11 @@ namespace KilometrosDatabase.Abstraction.Interfaces {
             }
 
             TEntity returnValue
-                = orderBy != null
-                ? orderBy(query).Take(1).FirstOrDefault()
-                : query.Take(1).FirstOrDefault();
+                = (
+                    orderBy != null
+                    ? orderBy(query).Take(1)
+                    : query.Take(1)
+                ).FirstOrDefault();
 
             returnValue
                 = EntityDatesUtcKind.ConvertDatesKindToUtc<TEntity>(
@@ -169,9 +171,8 @@ namespace KilometrosDatabase.Abstraction.Interfaces {
             // Obtener sólo las propiedades configuradas a establecerse con fecha y hora actuales
             IEnumerable<PropertyInfo> setDateProperties =
                 from thisProperty in this._type.GetProperties()
-                join dateProperty
-                    in RepositoryConfig.DateTimeEntityPropertiesConfig.AutosetOnInsert
-                    on thisProperty.Name equals dateProperty
+                where
+                    RepositoryConfig.DateTimeEntityPropertiesConfig.AutosetOnInsert.Contains(thisProperty.Name)
                 select thisProperty;
 
             // Establecer el valor de las propiedades
@@ -180,14 +181,10 @@ namespace KilometrosDatabase.Abstraction.Interfaces {
             foreach ( PropertyInfo property in setDateProperties ) {
                 dynamic value = property.GetValue(entity);
 
-                if ( 
-                    value.GetType() == dateTimeType
-                    && value == null
-                ) {
+                if ( typeof(DateTime) == value.GetType() )
                     property.SetValue(entity, DateTime.UtcNow);
-                }
             }
-
+                
             this._dbSet.Add(entity);
         }
 
@@ -230,23 +227,16 @@ namespace KilometrosDatabase.Abstraction.Interfaces {
             // Obtener sólo las propiedades configuradas a establecerse con fecha y hora actuales
             IEnumerable<PropertyInfo> setDateProperties =
                 from thisProperty in this._type.GetProperties()
-                join dateProperty
-                    in RepositoryConfig.DateTimeEntityPropertiesConfig.AutosetOnUpdate
-                    on thisProperty.Name equals dateProperty
+                where
+                    RepositoryConfig.DateTimeEntityPropertiesConfig.AutosetOnUpdate.Contains(thisProperty.Name)
                 select thisProperty;
 
             // Establecer el valor de las propiedades
-            Type dateTimeType
-                = typeof(DateTime);
             foreach ( PropertyInfo property in setDateProperties ) {
                 dynamic value = property.GetValue(entity);
 
-                if (
-                    value.GetType() == dateTimeType
-                    && value == null
-                ) {
+                if ( value.GetType() == typeof(DateTime) )
                     property.SetValue(entity, DateTime.UtcNow);
-                }
             }
 
             this._dbSet.Attach(entity);

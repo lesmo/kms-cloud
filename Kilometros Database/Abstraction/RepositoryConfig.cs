@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 namespace KilometrosDatabase.Abstraction {
     internal static class RepositoryConfig {
         public static class DateTimeEntityPropertiesConfig {
-            public static readonly string[] AutosetOnInsert = {
+            public static string[] AutosetOnInsert = {
                 "CreationDate",
                 "LastUseDate",
                 "LastEditDate"
             };
 
-            public static readonly string[] AutosetOnUpdate = {
+            public static string[] AutosetOnUpdate = {
                 "LastUseDate",
                 "LastEditDate"
             };
