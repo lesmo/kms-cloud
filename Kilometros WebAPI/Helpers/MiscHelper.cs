@@ -33,11 +33,15 @@ namespace Kilometros_WebAPI.Helpers {
                 HttpContext.Current.User = principal;
         }
 
-        internal static PrincipalType GetPrincipal<PrincipalType>() {
+        internal static IPrincipal GetPrincipal() {
             if ( Thread.CurrentPrincipal != null )
-                return (PrincipalType)Thread.CurrentPrincipal;
+                return Thread.CurrentPrincipal;
             else
-                return (PrincipalType)HttpContext.Current.User;
+                return HttpContext.Current.User;
+        }
+
+        internal static T GetPrincipal<T>() {
+            return (T)GetPrincipal();
         }
 
         internal static Task<HttpResponseMessage> ReturnHttpResponseAndHalt(HttpResponseMessage response) {
