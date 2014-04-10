@@ -124,6 +124,24 @@ namespace Kilometros_WebGlobalization.WebApp {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} friends.
+        /// </summary>
+        public static string FriendCount {
+            get {
+                return ResourceManager.GetString("FriendCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1 friend.
+        /// </summary>
+        public static string FriendCountSingular {
+            get {
+                return ResourceManager.GetString("FriendCountSingular", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to My Profile.
         /// </summary>
         public static string MyProfile {
@@ -138,6 +156,15 @@ namespace Kilometros_WebGlobalization.WebApp {
         public static string NextRewardIn {
             get {
                 return ResourceManager.GetString("NextRewardIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You haven&apos;t earned any rewards yet!.
+        /// </summary>
+        public static string NoRewardsEarned {
+            get {
+                return ResourceManager.GetString("NoRewardsEarned", resourceCulture);
             }
         }
         
@@ -165,6 +192,15 @@ namespace Kilometros_WebGlobalization.WebApp {
         public static string SearchPlaceholder {
             get {
                 return ResourceManager.GetString("SearchPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to See more.
+        /// </summary>
+        public static string SeeMore {
+            get {
+                return ResourceManager.GetString("SeeMore", resourceCulture);
             }
         }
         

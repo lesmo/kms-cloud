@@ -145,6 +145,14 @@
     <value>Who are we</value>
     <comment>Footer "Who are we" link</comment>
   </data>
+  <data name="FriendCount" xml:space="preserve">
+    <value>{0} friends</value>
+    <comment>"2 friends" title in the Sidebar</comment>
+  </data>
+  <data name="FriendCountSingular" xml:space="preserve">
+    <value>1 friend</value>
+    <comment>"1 friend" title in the Sidebar</comment>
+  </data>
   <data name="MyProfile" xml:space="preserve">
     <value>My Profile</value>
     <comment>Navigation "My Profile"</comment>
@@ -152,6 +160,9 @@
   <data name="NextRewardIn" xml:space="preserve">
     <value>Next reward in</value>
     <comment>Left sidebar "Next reward in" tag</comment>
+  </data>
+  <data name="NoRewardsEarned" xml:space="preserve">
+    <value>You haven't earned any rewards yet!</value>
   </data>
   <data name="Overview" xml:space="preserve">
     <value>Overview</value>
@@ -164,6 +175,10 @@
   <data name="SearchPlaceholder" xml:space="preserve">
     <value>Type here to search ...</value>
     <comment>Navigation search textbox</comment>
+  </data>
+  <data name="SeeMore" xml:space="preserve">
+    <value>See more</value>
+    <comment>"See more" link at the bottom of Sidebar list(s)</comment>
   </data>
   <data name="Tips" xml:space="preserve">
     <value>Tips</value>

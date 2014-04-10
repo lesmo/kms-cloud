@@ -2,7 +2,8 @@
     LayoutValues layoutValues
         = (LayoutValues)ViewData["LayoutValues"];
 
-    layoutValues = layoutValues ?? new LayoutValues();
+    layoutValues
+        = layoutValues ?? new LayoutValues();
 }
 
 <!DOCTYPE html>
@@ -11,129 +12,236 @@
     <meta charset="utf-8" />
     <meta name="description" content="The description of my page" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>KMS :: @(ViewBag.Title ?? "Mueve al mundo")</title>
+    @* user-scalable=no << Eliminado de {viewport} cuz' then it's not responsive *@
+    
+    <title>KMS :: @(ViewBag.Title ?? LayoutStrings.DefaultTitle)</title>
 
     @* Styles *@
-    @Styles.Render("~/css")
+    @Html.RenderCssBundle("~/Assets/Stylesheets.css.bundle", BundleOptions.Combined)
 </head>
 <body>
     <header>
-        <a href="@Url.Action("Index", "Entry")">
-            <span id="kms-head-logo"></span>
-        </a>
+        <div class="contenedor">
+            <a href="@Url.Action("Index", "Entry")">
+                <h1>
+                    <span class="ocultar">KMS</span>
+                    <img src="@Url.Content("~/Images/Header/Header.KmsLogo.png")" alt="KMS">
+                </h1>
+            </a>
+            <nav>
+                <ul>
+                    <li>
+                        @Html.ActionLink(
+                            LayoutStrings.Overview,
+                            "Index",
+                            "Entry",
+                            null, new {
+                                @class = layoutValues.Section == LayoutValues.MainSection.Home ? "active" : ""
+                            }
+                        )
+                    </li>
+                    <li>
+                        @Html.ActionLink(
+                            LayoutStrings.Tips,
+                            "Index",
+                            "Entry",
+                            null, new {
+                                @class = layoutValues.Section == LayoutValues.MainSection.Tips ? "active" : ""
+                            }
+                        )
+                    </li>
+                    <li>
+                        @Html.ActionLink(
+                            LayoutStrings.Rewards,
+                            "Index",
+                            "Entry",
+                            null, new {
+                                @class = layoutValues.Section == LayoutValues.MainSection.Rewards ? "active" : ""
+                            }
+                        )
+                    </li>
+                    <li>
+                        @Html.ActionLink(
+                            LayoutStrings.MyProfile,
+                            "Index",
+                            "Entry",
+                            null, new {
+                                @class = layoutValues.Section == LayoutValues.MainSection.MyProfile ? "active" : ""
+                            }
+                        )
+                    </li>
+                </ul>
+            </nav>
 
-        <div>
-            @using ( Html.BeginForm("Index", "Search", FormMethod.Get) ) {
-                <input type="text" name="kms-q" placeholder="@LayoutStrings.SearchPlaceholder" />
-                <input type="submit" value="Search" />
-            }
-
-            <ul>
-                <li>
-                    @Html.ActionLink(
-                        LayoutStrings.Home,
-                        "Index",
-                        "Entry",
-                        null, new {
-                            @class = layoutValues.Section == LayoutValues.MainSection.Home ? "active" : ""
-                        }
-                    )
-                </li>
-                <li>
-                    @Html.ActionLink(
-                        LayoutStrings.Tips,
-                        "Index",
-                        "Entry",
-                        null, new {
-                            @class = layoutValues.Section == LayoutValues.MainSection.Tips ? "active" : ""
-                        }
-                    )
-                </li>
-                <li>
-                    @Html.ActionLink(
-                        LayoutStrings.Compare,
-                        "Index",
-                        "Entry",
-                        null, new {
-                            @class = layoutValues.Section == LayoutValues.MainSection.Compare ? "active" : ""
-                        }
-                    )
-                </li>
-                <li>
-                    @Html.ActionLink(
-                        LayoutStrings.Rewards,
-                        "Index",
-                        "Entry",
-                        null, new {
-                            @class = layoutValues.Section == LayoutValues.MainSection.Rewards ? "active" : ""
-                        }
-                    )
-                </li>
-                <li>
-                    @Html.ActionLink(
-                        LayoutStrings.MyProfile,
-                        "Index",
-                        "Entry",
-                        null, new {
-                            @class = layoutValues.Section == LayoutValues.MainSection.MyProfile ? "active" : ""
-                        }
-                    )
-                </li>
-            </ul>
-
-            @if ( layoutValues.UnreadMessages > 0 ) {
-                <span id="messages-icon" class="unread">
+            <div class="alertas-header">
+                @if ( layoutValues.UnreadMessages > 0 ) {
                     <span>@layoutValues.UnreadMessages</span>
-                </span>
-            } else {
-                <span id="messages-icon"></span>
-            }
-
-            <span id="user-icon">
-                <span class="icon">
-                    <span></span>
-                </span>
-                @if ( layoutValues.UserNameKnown ) {
-                    <span class="name">
-                        @layoutValues.UserName<br/>
-                        <small>@layoutValues.UserLastname</small>
-                    </span>
                 }
-            </span>
+            </div>
+            <div class="buscador-header">
+                @using ( Html.BeginForm("Index", "Search", FormMethod.Get) ) {
+                    <input type="search" name="kms-q" placeholder="@LayoutStrings.SearchPlaceholder" />
+                }
+            </div>
         </div>
     </header>
 
-    <div id="body" class="container_16">
-        @RenderBody()
+    <div id="wrap">
+        @* -- Left Sidebar --- *@
+        <aside id="sidebar">
+            @* - Datos generales del Usuario - *@
+            <section id="Usuario">
+                <h2>@layoutValues.UserName @layoutValues.UserLastname</h2>
+                <figure>
+                    <img src="@layoutValues.UserPicture.AbsoluteUri">
+                </figure>
+                <span class="distancia">
+                    @layoutValues.TotalDistanceString @(layoutValues.RegionInfo.IsMetric ? "kms" : "mi")
+                </span>
+                <span class="origen">
+                    @layoutValues.LocationString
+                </span>
+            </section>
+
+            @* - Próxima Recompensa - *@
+            <section id="recompensaDash">
+                <span class="proxRecomp">@LayoutStrings.NextRewardIn</span>
+                <span class="bandera">
+                    <img src="@Url.Content("~/Images/Sidebar/Sidebar.Medal.gif")" alt="">
+                </span>
+                <span class="kms">
+                    @layoutValues.NextRewardsDistanceSpanString @(layoutValues.RegionInfo.IsMetric ? "kms" : "mi")
+                </span>
+                <div id="barra">
+                    <div class="progreso" style="width: 80%;"></div>
+                </div>
+            </section>
+
+            @* - Recompensas Desbloqueadas - *@
+            <section id="tusRecompensas">
+                <h3>@LayoutStrings.YourRewards</h3>
+                <ul>
+                    @if ( layoutValues.LastRewards.Length > 0 ) {
+                        @foreach ( LayoutReward reward in layoutValues.LastRewards ) {
+                            <li>
+                                <span class="recompensa">
+                                    @reward.Title
+                                </span>
+                                <span class="kilometros">
+                                    @reward.TotalDistanceString @(layoutValues.RegionInfo.IsMetric ? "km" : "mi")
+                                </span>
+                            </li>
+                        }
+                    } else {
+                        <li>
+                            <span class="recompensa"><i>@LayoutStrings.NoRewardsEarned</i></span>
+                        </li>
+                    }
+                </ul>
+
+                @Html.ActionLink(LayoutStrings.SeeMore, "Index", "Entry")
+            </section>
+
+            <section id="amigos">
+                @if ( layoutValues.TotalFriends > 0 ) {
+                    @if ( layoutValues.TotalFriends > 1 ) {
+                        <h3>@String.Format(LayoutStrings.FriendCount, layoutValues.TotalFriends)</h3>
+                    } else {
+                        <h3>@LayoutStrings.FriendCountSingular</h3>
+                    }
+
+                    <ul>
+                        @foreach ( LayoutFriend friend in layoutValues.Top5Friends ) {
+                            <li>
+                                <figure>
+                                    <img src="@friend.PictureUri.AbsoluteUri" alt="@friend.Name @friend.LastName">
+                                </figure>
+                                <span class="datos">
+                                    <span class="nombre">@friend.Name @friend.LastName</span>
+                                    <span class="kms">@friend.TotalDistanceCentimeters @(layoutValues.RegionInfo.IsMetric ? "kms" : "mi")</span>
+                                </span>
+                            </li>
+                        }
+                    </ul>
+                }
+
+                @Html.ActionLink("Ver todos", "Index", "Entry")
+            </section>
+
+        </aside>
+
+        @* -- Body -- *@
+        <section id="contenidos">
+            @RenderBody()
+        </section>
+
+        <div style="clear:both"></div>
     </div>
 
-    <footer class="container_16">
-        <div class="grid_2">
-            <h4>Producto</h4>
-        </div>
-        <div class="grid_2">
-            <h4>Servicios</h4>
-        </div>
-        <div class="grid_2">
-            <h4>Tiendas</h4>
-        </div>
-        <div class="grid_2">
-            <h4>KMS</h4>
-        </div>
-        <div class="grid_6">
-            <h4>Redes</h4>
-        </div>
-        <div class="clear"></div>
-
-        <div class="grid_12">
-            <small>&copy; @DateTime.Now.Year - Sharp Dynamics S de RL de CV</small>
+    <footer>
+        <div class="contenedor">
+            <nav>
+                <ul>
+                    <li>
+                        @Html.ActionLink(
+                            LayoutStrings.FooterProduct,
+                            "Index",
+                            "Entry"
+                        )
+                    </li>
+                    <li>
+                        @Html.ActionLink(
+                            LayoutStrings.FooterServices,
+                            "Index",
+                            "Entry"
+                        )
+                    </li>
+                    <li>
+                        @Html.ActionLink(
+                            LayoutStrings.FooterStores,
+                            "Index",
+                            "Entry"
+                        )
+                    </li>
+                    <li>
+                        @Html.ActionLink(
+                            LayoutStrings.FooterUs,
+                            "Index",
+                            "Entry"
+                        )
+                    </li>
+                    <li>
+                        @Html.ActionLink(
+                            LayoutStrings.FooterKms,
+                            "Index",
+                            "Entry"
+                        )
+                    </li>
+                </ul>
+            </nav>
+            <ul class="redes">
+                <li>
+                    <a href="https://www.facebook.com/Kms.mex" target="_blank">
+                        <img src="@Url.Content("~/Images/Footer/Footer.Facebook.png")" alt="Facebook: KMS.mex">
+                    </a>
+                </li>
+                <li>
+                    <a href="https://twitter.com/kmsmex" target="_blank">
+                        <img src="@Url.Content("~/Images/Footer/Footer.Twitter.png")" alt="Twitter: &#64kmsmex">
+                    </a>
+                </li>
+                <li>
+                    @* TODO: Establecer {subject} y {body} a texto predefinido *@
+                    <a href="mailto:dime@kms.me" target="_blank">
+                        <img src="@Url.Content("~/Images/Footer/Footer.Mail.png")" alt="Email: dime&#64kms.me">
+                    </a>
+                </li>
+            </ul>
         </div>
     </footer>
 
     @* Scripts *@
-    @*Scripts.Render("~/lib/modernizr")*@
-    @Scripts.Render("~/js")
+    @Html.RenderJsBundle("~/Assets/Javascript.js.bundle", BundleOptions.Combined)
 
     @* Footer Scripts (Optional) *@
     @RenderSection("scripts", required: false)

@@ -9,11 +9,9 @@ namespace Kilometros_WebApp.Models.Views {
         public enum MainSection {
             Home,
             Tips,
-            Compare,
             Rewards,
             MyProfile
         }
-
 
         public MainSection Section
             = MainSection.Home;
@@ -36,10 +34,16 @@ namespace Kilometros_WebApp.Models.Views {
         public string UserLastname
             = "";
 
+        /// <summary>
+        /// Información sobre la Región del Usuario
+        /// </summary>
         public RegionInfo RegionInfo {
             get;
             set;
         }
+        /// <summary>
+        /// Información sobre la Cultura del Usuario
+        /// </summary>
         public CultureInfo CultureInfo {
             get;
             set;
@@ -77,7 +81,7 @@ namespace Kilometros_WebApp.Models.Views {
         }
 
         /// <summary>
-        /// Distancia en Kilómetros restantes para liberar la próxima recompensa
+        /// Distancia Restante para liberar la próxima recompensa
         /// </summary>
         public double NextRewardsDistanceSpan {
             get {
@@ -85,6 +89,17 @@ namespace Kilometros_WebApp.Models.Views {
                     return (this.NextRewardDistanceCentimeters - this.TotalDistanceCentimeters) / 1000;
                 else
                     return (this.NextRewardDistanceCentimeters - this.TotalDistanceCentimeters) / 160934.4;
+            }
+        }
+
+        /// <summary>
+        /// Distancia Restante Distancia Restante para liberar la próxima recompensa en las unidades de la región del Usuario, en el formato de la Cultura del Usuario
+        /// </summary>
+        public string NextRewardsDistanceSpanString {
+            get {
+                return this.NextRewardsDistanceSpan.ToString(
+                    this.CultureInfo.NumberFormat
+                );
             }
         }
 
@@ -99,6 +114,57 @@ namespace Kilometros_WebApp.Models.Views {
         /// <summary>
         /// Cadena que representa el lugar geográfico del usuario (País, Estado, Municipio)
         /// </summary>
-        public string LocationString;
+        public string LocationString {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Colección de las últimas recompensas obtenidas por el Usuario
+        /// </summary>
+        public LayoutReward[] LastRewards {
+            get {
+                return this._lastRewards;
+            }
+            set {
+                this._lastRewards = value;
+                
+                foreach ( LayoutReward reward in this._lastRewards ) {
+                    reward.RegionInfo
+                        = this.RegionInfo;
+                    reward.CultureInfo
+                        = this.CultureInfo;
+                }
+            }
+        }
+        private LayoutReward[] _lastRewards;
+
+        /// <summary>
+        /// Colección del Top 5 de Amigos
+        /// </summary>
+        public LayoutFriend[] Top5Friends {
+            get {
+                return this._top5Friends;
+            }
+            set {
+                this._top5Friends = value;
+
+                foreach ( LayoutFriend friend in this._top5Friends ) {
+                    friend.RegionInfo
+                        = this.RegionInfo;
+                    friend.CultureInfo
+                        = this.CultureInfo;
+                }
+            }
+        }
+        private LayoutFriend[] _top5Friends;
+
+        /// <summary>
+        /// Número total de Amigos
+        /// </summary>
+        public int TotalFriends {
+            get;
+            set;
+        }
     }
 }
