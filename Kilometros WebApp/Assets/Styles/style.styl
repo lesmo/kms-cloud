@@ -1,0 +1,512 @@
+@import "vendors/grid.styl"
+//////////
+// GRID //
+//////////
+
+// Specify the number of columns and set column and gutter widths
+columns = 16
+column-width = 50
+gutter-width = 20
+total-width = 100%
+$Ancho = 980px
+$Azul-KMS = #00C5DB
+$Aqua-KMS = #00CCC3
+$Rosa-KMS = #FF6168
+$Verde-KMS = #A7D06A
+$Dorado-KMS = #D1B55D
+$Gris-KMS = #F2F2F2
+$Gris-Claro-KMS = #dfdfdf
+$Gris-MuyOscuro-KMS = #666666
+$Gris-Oscuro-KMS = #808080
+
+body
+	margin 0
+	padding 0
+	background-image url("../../Images/Background/Background.Landscape.gif"), url("../../Images/Background/Background.Clouds.jpg")
+	background-color $Azul-KMS
+	background-position bottom, center
+	background-repeat repeat-x, no-repeat
+	background-size 320px, contain
+	color $Gris-Oscuro-KMS
+h1, h2, h3, h4, h5, h6
+	color $Gris-MuyOscuro-KMS
+img
+	max-width 100%
+header
+	position fixed
+	width 100%
+	height 3em
+	background white
+	display block
+	clear both
+	z-index 200
+	box-shadow 0 3px 5px rgba(0,0,0,.1)
+	border-bottom 3px solid $Gris-Claro-KMS
+	h1
+		margin 0
+		padding .1em 0 0 0
+		display inline-block
+		vertical-align middle
+	nav
+		display inline-block
+		vertical-align middle
+		margin-left 1em
+		ul
+			padding 0
+			margin 0
+			li
+				display inline-block
+				text-align center
+				a
+					text-decoration none
+					color $Azul-KMS
+					padding .5em 1em
+					transition all .25s ease
+					&:hover, &.activo
+						color white
+						background $Rosa-KMS
+	.alertas-header
+		background url("../../Images/Header/Header.Notifications.jpg")
+		background-size contain
+		display inline-block
+		vertical-align middle
+		width 35px
+		height 28px
+		text-align right
+		position relative
+		cursor pointer
+		span
+			display inline-block
+			background $Rosa-KMS
+			width 1.25em
+			height 1.25em
+			border-radius 100%
+			color white
+			text-align center
+			position absolute
+			top -.5em
+			right -.5em
+	.buscador-header
+		display inline-block
+		float right
+		padding-top .55em
+		color $Azul-KMS
+		input
+			border 2px solid $Gris-Claro-KMS
+			padding .25em 1em
+			color $Azul-KMS
+		&:focus
+			border 2px solid $Azul-KMS
+footer
+	color white
+	position relative
+	bottom 0
+	left 0
+	width 100%
+	height 90px
+	clear both
+	&:after
+		content url("../../Images/Background/Background.Girl.gif")
+		position absolute
+		top -166px
+		right 0
+		z-index -100
+	nav
+		margin-top 1em
+		display inline-block
+		ul
+			margin 0
+			padding 0
+			li
+				display inline-block
+				&:after
+						content " / "
+						font-weight bold
+				&:last-child:after
+					content " "
+				a
+					color white
+					font-weight light
+					text-decoration none
+	.redes
+		display inline-block
+		float right
+		li
+			display inline-block
+			margin 0 .5em
+#wrap
+	width $Ancho
+	margin 5em auto 3em
+	background white
+	position relative
+	z-index 100
+#sidebar
+	column(4)
+	box-sizing border-box
+	background $Gris-KMS
+	display inline-block
+	vertical-align top
+	height auto
+	padding-top 1em
+	padding-bottom 1em
+	margin-top -1em
+	margin-bottom -1em
+	margin-left 0
+	color $Gris-Oscuro-KMS
+	position relative
+	border-right 2px solid #ddd
+	&:after
+		content url("../../Images/Sidebar/Sidebar.Shadow.Down.png")
+		position absolute
+		right -1.1em
+		bottom 0
+		width 1em
+		height 1em
+	&:before
+		content url("../../Images/Sidebar/Sidebar.Shadow.Up.png")
+		position absolute
+		right -1.1em
+		top 0
+		width 1em
+		height 1em
+	h2
+		font-size 1.25em
+	h3
+		color $Gris-MuyOscuro-KMS
+		border-bottom 1px solid $Gris-Claro-KMS
+		margin 0
+		padding-bottom .5em
+		font-size .9em
+	a
+		color $Azul-KMS
+		text-decoration none
+	#Usuario
+		text-align center
+		padding 0 1em
+		figure
+			border-radius 100px
+			border 1px solid $Azul-KMS
+			padding 1em
+			overflow hidden
+			width 120px
+			height 120px
+			margin 1em auto
+			img
+				width 120px
+				height 120px
+				border-radius 100%
+		.distancia
+			display block
+			font-size 2.5em
+			color $Azul-KMS
+	#recompensaDash
+		margin-top 1em
+		color $Dorado-KMS
+		padding 1em
+		text-align center
+		.proxRecomp
+			display block
+			margin-bottom .5em
+		.kms
+			font-size 2.5em
+			display inline-block
+			vertical-align middle
+		.bandera
+			display inline-block
+			vertical-align middle
+		#barra
+			width 100%
+			height 1em
+			background #F6DC7F
+			border-radius 1em
+			overflow hidden
+			margin-top .5em
+			.progreso
+				background #DBBA4D
+				background-image url("../../Images/Sidebar/Sidebar.Bar.gif")
+				height 1em
+				border-radius 1em
+			
+	#tusRecompensas
+		padding 1em
+		text-align left
+		ul
+			padding 0 0 .5em 0
+			margin 0
+			li
+				border-bottom 1px solid $Gris-Claro-KMS
+				display block
+				margin .25em 0
+				padding .25em 0
+				.recompensa
+					width 70%
+					display inline-block
+					text-align left
+				.kilometros
+					width 25%
+					display inline-block
+					text-align right
+					color $Azul-KMS
+	#amigos
+		padding 1em
+		ul
+			padding 0
+			margin-top 1em
+			margin-bottom 0
+			li
+				display inline-block
+				margin-bottom .75em
+				padding-bottom .5em
+				border-bottom 1px solid $Gris-Claro-KMS
+				figure
+					width 25%
+					height 25%
+					margin 0 2% 0 0
+					display inline-block
+					vertical-align middle
+					border-radius 100%
+					overflow hidden
+					img
+						border-radius 100%
+				.datos
+					width 70%
+					display inline-block
+					vertical-align middle
+					overflow hidden
+					.nombre
+						display block
+						clear both
+					.kms
+						color $Azul-KMS
+#contenidos
+	column(12)
+	display inline-block
+	vertical-align top
+	overflow hidden
+	text-align center
+.contenedor
+	width $Ancho
+	margin 0 auto
+	display block
+	clear both
+	overflow hidden
+.ocultar
+	display none
+.titulo
+	text-align center
+	padding 1.5em 0
+	display block
+	clear both
+	hr
+		margin-top 1em
+		border 0px solid
+		border-top: 1px solid $Gris-Claro-KMS
+	h2
+		margin -1em 0 0 0
+		background #fff
+		display inline-table
+		padding 0 1em
+		color $Azul-KMS
+#badge
+	text-align center
+	margin 0
+	padding 0
+
+#recompensasLiberadas
+	text-align center
+	.recompensa
+		column(5)
+		float none
+		display inline-block
+		vertical-align top
+		text-align center
+		margin-bottom 1em
+		h3
+			color $Verde-KMS
+			font-size 1.5em
+			font-weight lighter
+			margin .5em
+		p
+			margin .5em 0
+		strong
+			color $Gris-Claro-KMS
+			font-size 1.75em
+#tipsGodines
+	text-align center
+	overflow hidden
+	#Navegacion-Tips
+		margin-top 3em
+		nav
+			background $Gris-Claro-KMS
+			height 3em
+			ul
+				column(11)
+				padding 0
+				margin 0
+				li
+					display inline-block
+					height 1em
+					padding 1em .75em
+					float left
+					cursor pointer
+					border-radius .25em
+					&.activo
+						background $Azul-KMS
+						color white
+						border-radius .25em
+					&:hover
+						background $Azul-KMS
+						color white
+						border-radius .25em
+			input
+				margin .5em .5em 0
+				width 185px
+				background transparent
+				border 2px solid $Gris-Oscuro-KMS
+				padding .25em 1em
+		#contenidosAjax
+			padding-top 1em
+			height 800px
+			overflow-y auto
+			figure
+				column(2)
+				push(.5)
+				display inline-block
+				vertical-align top
+			article
+				column(8)
+				push(.5)
+				display inline-block
+				vertical-align top
+				text-align left
+				em
+					color $Rosa-KMS
+				strong
+					color $Azul-KMS
+#actividad
+	.tresCol
+		column(3.5)
+		font-size 2.25em
+		letter-spacing 0
+		color $Rosa-KMS
+		margin-top 1em
+		line-heigt 0
+		p
+			margin 0
+			display block
+		em
+			font-size .75rem
+			margin 0
+			display block
+		.peque
+			font-size 1.5rem
+	.equivalencias
+		column (9)
+		color $Rosa-KMS
+		li
+			column(5)
+			figure
+				column(6)
+				margin 0
+				padding 0
+			>span
+				column(10)
+				color $Gris-Oscuro-KMS
+				span
+					display block
+	#graficas
+		display block
+		clear both
+		padding 1em 0
+		#graficaDiaria
+			column(16)
+			h2:before
+				content url("../../Images/Gui/Gui.Graph.jpg")
+				margin-right 1em
+				vertical-align middle
+				display inline-block
+		#graficaMensual
+			column(8)
+			h2:before
+				content url("../../Images/Gui/Gui.Monthly.jpg")
+				margin-right 1em
+				vertical-align middle
+				display inline-block
+		#graficaActividad
+			column(8)
+			h2:before
+				content url("../../Images/Gui/Gui.Activity.jpg")
+				margin-right 1em
+				vertical-align middle
+				display inline-block
+		.tituloGrafica
+			text-align left
+			h2
+				font-size .75rem
+				display block
+				float left
+				background white
+				padding-right 1em
+				color $Azul-KMS
+			hr
+				display block
+				margin-top 1.1em
+				border 0 solid
+				border-top 1px solid $Azul-KMS
+		#chartActividad
+			float left
+		#datos
+			margin-top 3em
+			text-align center
+			display inline-block
+			p
+				font-size .75rem
+				margin .25em
+			span
+				font-weight bold
+				display block
+				&.actividadColor
+					border-bottom 5px solid #C2F27B
+					margin-bottom 1em
+				&.suenoColor
+					border-bottom 5px solid #A7D06A
+.tipGodin
+		column(14)
+		display inline-block
+		float none
+		figure
+			column(3)
+			display inline-block
+			float none
+		article
+			column(10)
+			push(1)
+			display inline-block
+			float none
+			h2
+				color $Verde-KMS
+				margin 0
+.titulo-tip-godin
+	column(14)
+	display inline-block
+	float none
+	overflow hidden
+	clear both
+	h3
+		display inline-block
+		float left
+		background white
+		padding-right 1em
+		color $Azul-KMS
+	hr
+		border 0 solid
+		border-top 2px solid $Azul-KMS
+		margin-top 1.75em
+		&:after
+			content " "
+			display block
+			width 1.5em
+			height 1.75em
+			background $Azul-KMS
+			float right
+			border-radius 0 0 .25em .25em

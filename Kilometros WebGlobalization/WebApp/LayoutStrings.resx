@@ -121,13 +121,41 @@
     <value>Compare</value>
     <comment>Navigation "Compare"</comment>
   </data>
-  <data name="Home" xml:space="preserve">
-    <value>Home</value>
-    <comment>Navigation "Home"</comment>
+  <data name="DefaultTitle" xml:space="preserve">
+    <value>Moving the world</value>
+    <comment>Slogan shown when no title is displayed</comment>
+  </data>
+  <data name="FooterKms" xml:space="preserve">
+    <value>KMS</value>
+    <comment>What? Like a pleonasm to "Who are we"</comment>
+  </data>
+  <data name="FooterProduct" xml:space="preserve">
+    <value>Product</value>
+    <comment>Footer "Product" link</comment>
+  </data>
+  <data name="FooterServices" xml:space="preserve">
+    <value>Services</value>
+    <comment>Footer "Services" link</comment>
+  </data>
+  <data name="FooterStores" xml:space="preserve">
+    <value>Stores</value>
+    <comment>Footer "Stores" link</comment>
+  </data>
+  <data name="FooterUs" xml:space="preserve">
+    <value>Who are we</value>
+    <comment>Footer "Who are we" link</comment>
   </data>
   <data name="MyProfile" xml:space="preserve">
     <value>My Profile</value>
     <comment>Navigation "My Profile"</comment>
+  </data>
+  <data name="NextRewardIn" xml:space="preserve">
+    <value>Next reward in</value>
+    <comment>Left sidebar "Next reward in" tag</comment>
+  </data>
+  <data name="Overview" xml:space="preserve">
+    <value>Overview</value>
+    <comment>Navigation "Overview"</comment>
   </data>
   <data name="Rewards" xml:space="preserve">
     <value>Rewards</value>
@@ -140,5 +168,9 @@
   <data name="Tips" xml:space="preserve">
     <value>Tips</value>
     <comment>Navigation "Tips"</comment>
+  </data>
+  <data name="YourRewards" xml:space="preserve">
+    <value>Your rewards</value>
+    <comment>Left sidebar "Your rewards" tag</comment>
   </data>
 </root>
