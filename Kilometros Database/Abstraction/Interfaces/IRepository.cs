@@ -19,45 +19,6 @@ namespace KilometrosDatabase.Abstraction.Interfaces {
         private Type _type = typeof(TEntity);
 
         /// <summary>
-        /// Devuelve la Entidad que representa los valores y textos en el
-        /// idioma y cultura especificados.
-        /// </summary>
-        /// <param name="entity">Entidad de la cuál se desprenderá la Globalización</param>
-        /// <param name="culture">Cultura e Idioma que se intentará obtener</param>
-        /// <returns>Entidad de Globalización o {null} si no se encontró ninguna</returns>
-        public IGlobalization GetGlobalization(
-            TEntity entity,
-            CultureInfo culture = null
-        ) {
-            if ( culture == null )
-                culture = CultureInfo.CurrentCulture;
-
-            string currentCultureCode
-                = culture.Name.ToLowerInvariant();
-
-            PropertyInfo globalizationProperty = (
-                from thisProperty in this._type.GetProperties()
-                where thisProperty.GetType() == typeof(ICollection<IGlobalization>)
-                select thisProperty
-            ).FirstOrDefault();
-
-            if ( globalizationProperty == null )
-                throw new ArgumentException("Entity does not support globalization");
-
-            ICollection<IGlobalization> entityGlobalizationCollection
-                = globalizationProperty.GetValue(entity) as ICollection<IGlobalization>;
-                
-            return (
-                from IGlobalization eg in entityGlobalizationCollection
-                where eg.CultureCode == currentCultureCode
-                    || eg.CultureCode.StartsWith(
-                        CultureInfo.CurrentCulture.TwoLetterISOLanguageName
-                    )
-                select eg
-            ).FirstOrDefault();
-        }
-
-        /// <summary>
         /// Inicializar el Contexto de Base de Datos utilizado por éste Repositorio.
         /// </summary>
         /// <param name="dbContext">Contenedor de las Clases (Contexto de Base de Datos)</param>
@@ -76,7 +37,8 @@ namespace KilometrosDatabase.Abstraction.Interfaces {
         public virtual IEnumerable<TEntity> GetAll(
             Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-            string[] include = null
+            string[] include = null,
+            int limit = 0
         ) {
             IQueryable<TEntity> query
                 = (IQueryable<TEntity>)this._dbSet.AsQueryable();
@@ -90,10 +52,22 @@ namespace KilometrosDatabase.Abstraction.Interfaces {
                         = query.Include(includeItem);
             }
 
-            List<TEntity>returnValue
-                = orderBy != null
-                ? orderBy(query).ToList()
-                : query.ToList();
+            List<TEntity>returnValue;
+
+            if ( orderBy ==  null ) {
+                returnValue
+                    = limit > 1
+                    ? orderBy(query).Take(limit).ToList()
+                    : orderBy(query).ToList();
+            } else {
+                returnValue
+                    = limit > 1
+                    ? query.Take(limit).ToList()
+                    : query.ToList();
+            }
+
+            if ( limit == 1 )
+                throw new ArgumentException("When limit is equal to 1, you should use GetFirst method.", "limit");
 
             for ( int i = 0; i < returnValue.Count; i++ ) {
                 returnValue[i]
