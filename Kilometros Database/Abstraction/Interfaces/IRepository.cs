@@ -33,12 +33,16 @@ namespace KilometrosDatabase.Abstraction.Interfaces {
         /// <summary>
         /// Devuelve todos las Entidades almacenadas en la BD, opcionalmente filtrándolas.
         /// </summary>
+        /// <param name="filter">Función aplicada para filtrar los registros.</param>
+        /// <param name="orderBy">Función aplicada para ordenar los registros.</param>
+        /// <param name="extra">Función aplicada después de filtrar y ordenar los registros.</param>
+        /// <param name="include">Arreglo con Entidades relacionadas que deberían cargarse en memoria junto con el resultado.</param>
         /// <returns>Enumeración de los objetos almacenados en la BD.</returns>
         public virtual IEnumerable<TEntity> GetAll(
             Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-            string[] include = null,
-            int limit = 0
+            Func<IOrderedQueryable<TEntity>, IQueryable<TEntity>> extra = null,
+            string[] include = null
         ) {
             IQueryable<TEntity> query
                 = (IQueryable<TEntity>)this._dbSet.AsQueryable();
@@ -56,18 +60,15 @@ namespace KilometrosDatabase.Abstraction.Interfaces {
 
             if ( orderBy ==  null ) {
                 returnValue
-                    = limit > 1
-                    ? orderBy(query).Take(limit).ToList()
-                    : orderBy(query).ToList();
+                    = extra == null
+                    ? query.ToList()
+                    : extra(query.OrderBy(o => 0)).ToList();
             } else {
                 returnValue
-                    = limit > 1
-                    ? query.Take(limit).ToList()
-                    : query.ToList();
+                    = extra == null
+                    ? orderBy(query).ToList()
+                    : extra(orderBy(query)).ToList();
             }
-
-            if ( limit == 1 )
-                throw new ArgumentException("When limit is equal to 1, you should use GetFirst method.", "limit");
 
             for ( int i = 0; i < returnValue.Count; i++ ) {
                 returnValue[i]
@@ -86,6 +87,7 @@ namespace KilometrosDatabase.Abstraction.Interfaces {
         public virtual TEntity GetFirst(
             Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            Func<IOrderedQueryable<TEntity>, IQueryable<TEntity>> extra = null,
             string[] include = null
         ) {
             IQueryable<TEntity> query
@@ -100,12 +102,19 @@ namespace KilometrosDatabase.Abstraction.Interfaces {
                         = query.Include(includeItem);
             }
 
-            TEntity returnValue
-                = (
-                    orderBy != null
-                    ? orderBy(query).Take(1)
-                    : query.Take(1)
-                ).FirstOrDefault();
+            TEntity returnValue;
+
+            if ( orderBy == null ) {
+                returnValue
+                    = extra == null
+                    ? query.Take(1).FirstOrDefault()
+                    : extra(query.OrderBy(o => 0)).Take(1).FirstOrDefault();
+            } else {
+                returnValue
+                    = extra == null
+                    ? orderBy(query).Take(1).FirstOrDefault()
+                    : extra(orderBy(query)).Take(1).FirstOrDefault();
+            }
 
             returnValue
                 = EntityDatesUtcKind.ConvertDatesKindToUtc<TEntity>(
