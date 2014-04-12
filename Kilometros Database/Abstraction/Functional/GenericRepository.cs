@@ -11,12 +11,12 @@ namespace KilometrosDatabase.Abstraction {
     /// <summary>
     /// Repositorio Genérico.
     /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
+    /// <typeparam name="TEntity">Tipo de la Entidad representada por éste Repositorio.</typeparam>
     public sealed class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : class {
         /// <summary>
         /// Repositorio Genérico.
         /// </summary>
         /// <param name="dbContext">Contexto de BD, normalmente {MainModelContainer}</param>
-        public GenericRepository(MainModelContainer dbContext) : base(dbContext) {}
+        public GenericRepository(MainModelContainer dbContext) : base(dbContext) { }
     }
 }

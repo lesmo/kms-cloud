@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KilometrosDatabase.Abstraction.Functional;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity.Validation;
 using System.Linq;
@@ -223,15 +224,15 @@ namespace KilometrosDatabase.Abstraction {
         /// <summary>
         /// Almacén de Recompensas
         /// </summary>
-        public GenericRepository<Reward> RewardStore {
+        public RewardRepository RewardStore {
             get {
                 if ( this._rewardRepository == null )
-                    this._rewardRepository = new GenericRepository<Reward>(this._context);
+                    this._rewardRepository = new RewardRepository(this._context);
 
                 return this._rewardRepository;
             }
         }
-        private GenericRepository<Reward> _rewardRepository = null;
+        private RewardRepository _rewardRepository = null;
 
         /// <summary>
         /// Almacén de la Regionalización de las Recompensas
