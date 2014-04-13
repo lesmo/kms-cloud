@@ -120,9 +120,6 @@
   <data name="GenericNotImplemented" xml:space="preserve">
     <value>Ooops! We're still developing that one... sorry</value>
   </data>
-  <data name="GenericValidationError" xml:space="preserve">
-    <value>Validation error: {0}</value>
-  </data>
   <data name="Warning100_CannotLoginAgain" xml:space="preserve">
     <value>User is already logged in</value>
   </data>
@@ -135,8 +132,17 @@
   <data name="Warning104_RequestTokenInvalid" xml:space="preserve">
     <value>OAuth Request Token is invalid, expired or Verifier Code is invalid</value>
   </data>
-  <data name="Warning105_SocialTokenInvalid" xml:space="preserve">
-    <value>Social Network Token is invalid, expired or doesn't exist</value>
+  <data name="Warning105_SocialTokenNotFound" xml:space="preserve">
+    <value>Social Network Token is invalid, expired or it has not been associated to any account</value>
+  </data>
+  <data name="Warning106_RequestTokenRequired" xml:space="preserve">
+    <value>OAuth Request Token is required to engage in this resource's action</value>
+  </data>
+  <data name="Warning107_ConsumerNotAllowed" xml:space="preserve">
+    <value>OAuth Consumer Key does not have permission to access, modify or create this resource</value>
+  </data>
+  <data name="Warning108_RequestTokenExchanged" xml:space="preserve">
+    <value>OAuth Request Token is no longer valid, use provided credentials as Access Token</value>
   </data>
   <data name="Warning201_CannotCreateUserWithSessionOpen" xml:space="preserve">
     <value>User is logged in and cannot register a new account</value>
@@ -156,6 +162,18 @@
   <data name="Warning301_ActivityInvalid" xml:space="preserve">
     <value>Activity requested is invalid</value>
   </data>
+  <data name="Warning302_DataTimestampTooOld" xml:space="preserve">
+    <value>There is already Data with provided Timestamp</value>
+  </data>
+  <data name="Warning401_FriendNotFound" xml:space="preserve">
+    <value>User requested could not be found</value>
+  </data>
+  <data name="Warning402_FriendshipAlreadyExists" xml:space="preserve">
+    <value>Friendship with requested User already exists</value>
+  </data>
+  <data name="Warning403_FriendshipRequestNotFound" xml:space="preserve">
+    <value>Friendship Request could not be found</value>
+  </data>
   <data name="Warning501_AccountDataInvalid" xml:space="preserve">
     <value>Account Data received is invalid</value>
   </data>
@@ -166,7 +184,7 @@
     <value>Gift requested could not be found, or ID is invalid</value>
   </data>
   <data name="Warning702_GiftOutOfStock" xml:space="preserve">
-    <value>Gift request is out of stock</value>
+    <value>Gift requested is out of stock</value>
   </data>
   <data name="Warning801_TipNotFound" xml:space="preserve">
     <value>Tip requested could not be found, or ID is invalid</value>

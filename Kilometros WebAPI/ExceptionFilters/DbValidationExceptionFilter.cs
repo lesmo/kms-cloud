@@ -21,7 +21,7 @@ namespace Kilometros_WebAPI.ExceptionFilters {
 
                 string responseText
                     = string.Format(
-                        "{0}: {1}",
+                        ControllerStrings.GenericValidationError,
                         dbFirstValidationError.PropertyName,
                         dbFirstValidationError.ErrorMessage
                     );
