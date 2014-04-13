@@ -19,6 +19,14 @@ namespace Kilometros_WebApp {
                     id = UrlParameter.Optional
                 }
             );
+
+            routes.MapRoute(
+                name: "DynamicResources",
+                url: "DynamicResources/{action}/{filename}.{ext}",
+                defaults: new {
+                    controller = "DynamicResources"
+                }
+            );
         }
     }
 }

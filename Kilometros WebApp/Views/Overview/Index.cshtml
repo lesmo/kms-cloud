@@ -1,0 +1,154 @@
+﻿@{
+	OverviewValues overviewValues
+		= (OverviewValues)ViewData["OverviewValues"];
+
+	overviewValues
+		= overviewValues ?? new OverviewValues();
+}
+<div id="actividad">
+	<aside class="tresCol">
+		<p>
+			@overviewValues.TodaySleepTime.Hours <span class="peque">hrs</span>
+			@overviewValues.TodaySleepTime.Minutes <span class="peque">min</span>
+		</p>
+		<em>@OverviewStrings.TodaySleepTime.ToUpper()</em>
+	</aside>
+	<aside class="tresCol">
+		<p>
+			@overviewValues.TodayDistanceString
+			<span class="peque">@(overviewValues.RegionInfo.IsMetric ? "kms" : "mi")</span>
+		</p>
+		<em>@OverviewStrings.TodayTraveled.ToUpper()</em>
+	</aside>
+	<aside class="equivalencias">
+		<ul>
+			<li>
+				<figure>
+					<img src="@Url.Content("~/Images/Gui/Overview/Gui.Co2.jpg")" alt="@OverviewStrings.Co2Alt">
+				</figure>
+				<span>
+					<span class="leyenda">CO<sub>2</sub></span>
+					<span class="numero">@overviewValues.EquivalentCo2String</span>
+				</span>
+			</li>
+			<li>
+				<figure>
+					<img src="@Url.Content("~/Images/Gui/Overview/Gui.Kcal.jpg")" alt="@OverviewStrings.KcalAlt">
+				</figure>
+				<span>
+					<span class="leyenda">kcal</span>
+					<span class="numero">@overviewValues.EquivalentKcalString</span>
+				</span>
+			</li>
+			<li>
+				<figure>
+					<img src="@Url.Content("~/Images/Gui/Overview/Gui.Savings.jpg")" alt="@OverviewStrings.Savings">
+				</figure>
+				<span>
+					<span class="leyenda">@OverviewStrings.SavingsTag</span>
+					<span class="numero">@overviewValues.EquivalentCashString</span>
+				</span>
+			</li>
+		</ul>
+		<em>Equivalencias</em>
+	</aside>
+	<section id="graficas">
+		<article id="graficaDiaria">
+			<span class="tituloGrafica">
+				<h2>@OverviewStrings.DailyGraph</h2>
+				<hr />
+			</span>
+			<canvas id="chartDiario" width="700" height="300"></canvas>
+		</article>
+		<article id="graficaMensual">
+			<span class="tituloGrafica">
+				<h2>@OverviewStrings.MonthlyGraph</h2>
+				<hr />
+			</span>
+			<canvas id="chartMensual" width="350" height="300"></canvas>
+		</article>
+		<article id="graficaActividad">
+			<span class="tituloGrafica">
+				<h2>@OverviewStrings.ActivityGraph</h2>
+				<hr />
+			</span>
+			<canvas id="chartActividad" width="250" height="200"></canvas>
+			<div id="datos">
+				<p>Caminando</p>
+				<span class="actividadColor">67.6%</span>
+				<p>Corriendo</p>
+				<span class="actividadColor">67.6%</span>
+				<p>Sueño</p>
+				<span class="suenoColor">32.4 %</span>
+			</div>
+		</article>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+		<script src="chart.js"></script>
+		<script>
+			//Esto es el Diario
+			var diarioData = {
+				labels: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24"],
+				datasets: [
+				{
+					fillColor: "rgba(220,220,220,0)",
+					strokeColor: "rgba(0, 197, 219, 1)",
+					pointColor: "rgba(0, 197, 219, 1)",
+					pointStrokeColor: "#fff",
+					data: [6500, 5900, 9000, 8100, 5600, 5500, 6500, 5900, 9000, 8100, 5600, 5500, 6500, 5900, 9000, 8100, 5600, 5500, 6500, 5900, 9000, 8100, 5600, 5500]
+				}
+				]
+			}
+			var chartDiario = document.getElementById("chartDiario").getContext("2d");
+			new Chart(chartDiario).Line(diarioData);
+
+			//Ahi va el Mensual
+			var mensualData = {
+				labels: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre"],
+				datasets: [
+				{
+					fillColor: "rgba(0, 197, 219, 1)",
+					strokeColor: "rgba(220,220,220,1)",
+					data: [65, 59, 90, 81, 56, 55, 20, 20, 0]
+				}
+				]
+			}
+			var chartMensual = document.getElementById("chartMensual").getContext("2d");
+			new Chart(chartMensual).Bar(mensualData);
+
+			//Ahi va el Actividad
+			var ActividadData = [
+			{
+				value: 67.6,
+				color: "#A7D06A"
+			},
+			{
+				value: 32.4,
+				color: "#C2F27B"
+			}
+			]
+			var chartActividad = document.getElementById("chartActividad").getContext("2d");
+			new Chart(chartActividad).Doughnut(ActividadData);
+
+		</script>
+	</section>
+
+	<div class="titulo-tip-godin">
+		<h3>@OverviewStrings.TipOfTheDay.ToUpper()</h3>
+		<hr />
+	</div>
+	<div class="tipGodin">
+		<figure>
+			<img src="@overviewValues.TipOfTheDayCategoryIconUri.AbsoluteUri" alt="@overviewValues.TipOfTheDayCategory">
+		</figure>
+		<article>
+			<h2>@overviewValues.TipOfTheDayCategory</h2>
+			<p>@overviewValues.TipOfTheDayText</p>
+		</article>
+	</div>
+</div>
+
+@section FooterScripts {
+	<script type="text/javascript">
+		
+	</script>
+}
