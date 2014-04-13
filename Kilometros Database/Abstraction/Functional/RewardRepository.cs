@@ -122,7 +122,7 @@ namespace KilometrosDatabase.Abstraction.Functional {
         /// <returns>
         ///     Objetos almacenado en la BD.
         /// </returns>
-        public virtual Reward GetFirstForRegion(
+        public Reward GetFirstForRegion(
             string regionCode,
             Expression<Func<Reward, bool>> filter = null,
             Func<IQueryable<Reward>, IOrderedQueryable<Reward>> orderBy = null,
