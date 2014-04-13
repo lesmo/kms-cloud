@@ -12,19 +12,12 @@ namespace KilometrosDatabase
     using System;
     using System.Collections.Generic;
     
-    public partial class RegionSubdivision
+    public partial class RegionParticular
     {
-        public RegionSubdivision()
-        {
-            this.RegionParticular = new HashSet<RegionParticular>();
-        }
-    
         public long Id { get; set; }
-        public string IsoCode { get; set; }
+        public string Code { get; set; }
         public string Name { get; set; }
-        public short UtcOffset { get; set; }
     
-        public virtual Region Region { get; set; }
-        public virtual ICollection<RegionParticular> RegionParticular { get; set; }
+        public virtual RegionSubdivision RegionSubdivision { get; set; }
     }
 }

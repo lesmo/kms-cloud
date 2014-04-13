@@ -161,6 +161,15 @@
           <Property Name="CreationDate" Type="datetime" Nullable="false" />
           <Property Name="Nonce" Type="char" MaxLength="40" Nullable="false" />
         </EntityType>
+        <EntityType Name="RegionParticularSet">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" Nullable="false" />
+          <Property Name="Code" Type="varchar" MaxLength="24" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="RegionSubdivision_Id" Type="bigint" Nullable="false" />
+        </EntityType>
         <EntityType Name="RegionSet">
           <Key>
             <PropertyRef Name="Id" />
@@ -421,6 +430,18 @@ warning 6002: The table/view 'KilometrosDatabase.dbo.UserDataTotalDistance' does
             </Principal>
             <Dependent Role="RegionSubdivisionSet">
               <PropertyRef Name="Region_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RegionRegionSubdivisionRegionParticular">
+          <End Role="RegionSubdivisionSet" Type="Self.RegionSubdivisionSet" Multiplicity="1" />
+          <End Role="RegionParticularSet" Type="Self.RegionParticularSet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RegionSubdivisionSet">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RegionParticularSet">
+              <PropertyRef Name="RegionSubdivision_Id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -863,6 +884,7 @@ warning 6002: The table/view 'KilometrosDatabase.dbo.UserDataTotalDistance' does
           <EntitySet Name="MotionLevelSet" EntityType="Self.MotionLevelSet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OAuthCredentialSet" EntityType="Self.OAuthCredentialSet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OAuthNonceSet" EntityType="Self.OAuthNonceSet" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RegionParticularSet" EntityType="Self.RegionParticularSet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RegionSet" EntityType="Self.RegionSet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RegionSubdivisionSet" EntityType="Self.RegionSubdivisionSet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RewardGiftSet" EntityType="Self.RewardGiftSet" Schema="dbo" store:Type="Tables" />
@@ -919,6 +941,10 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
           <AssociationSet Name="FK_RegionRegionSubdivision" Association="Self.FK_RegionRegionSubdivision">
             <End Role="RegionSet" EntitySet="RegionSet" />
             <End Role="RegionSubdivisionSet" EntitySet="RegionSubdivisionSet" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RegionRegionSubdivisionRegionParticular" Association="Self.FK_RegionRegionSubdivisionRegionParticular">
+            <End Role="RegionSubdivisionSet" EntitySet="RegionSubdivisionSet" />
+            <End Role="RegionParticularSet" EntitySet="RegionParticularSet" />
           </AssociationSet>
           <AssociationSet Name="FK_RewardGiftGlobalization_inherits_IGlobalization" Association="Self.FK_RewardGiftGlobalization_inherits_IGlobalization">
             <End Role="IGlobalizationSet" EntitySet="IGlobalizationSet" />
@@ -1206,6 +1232,11 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
           <AssociationSet Name="UserDataHourlyDistanceUser" Association="MainModel.UserDataHourlyDistanceUser">
             <End Role="UserDataHourlyDistance" EntitySet="UserDataHourlyDistance" />
             <End Role="User" EntitySet="UserSet" />
+          </AssociationSet>
+          <EntitySet Name="RegionParticularSet" EntityType="MainModel.RegionParticular" />
+          <AssociationSet Name="FK_RegionRegionSubdivisionRegionParticular" Association="MainModel.FK_RegionRegionSubdivisionRegionParticular">
+            <End Role="RegionSubdivision" EntitySet="RegionSubdivisionSet" />
+            <End Role="RegionParticularSet" EntitySet="RegionParticularSet" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="User">
@@ -1813,7 +1844,7 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
               <Summary>Teléfono del Trabajo del Usuario (en formato &lt;Número&gt; x &lt;Extensión&gt;)</Summary>
             </Documentation>
           </Property>
-          <Property Type="DateTime" Name="LastEditDate" annotation:StoreGeneratedPattern="Computed" Precision="3" Nullable="false" >
+          <Property Type="DateTime" Name="LastEditDate" annotation:StoreGeneratedPattern="Computed" Precision="3" >
             <Documentation>
               <Summary>Última fecha de modificación de la Información de Contacto.</Summary>
             </Documentation>
@@ -1872,6 +1903,7 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
           <Property Type="String" Name="Name" Nullable="false" Unicode="true" MaxLength="128" FixedLength="false" />
           <NavigationProperty Name="Region" Relationship="MainModel.RegionRegionSubdivision" FromRole="RegionSubdivision" ToRole="Region" />
           <Property Name="UtcOffset" Type="Int16" Nullable="false" />
+          <NavigationProperty Name="RegionParticular" Relationship="MainModel.FK_RegionRegionSubdivisionRegionParticular" FromRole="RegionSubdivision" ToRole="RegionParticularSet" />
         </EntityType>
         <Association Name="RegionRegionSubdivision">
           <End Type="MainModel.Region" Role="Region" Multiplicity="1" />
@@ -2036,6 +2068,19 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
         <Association Name="UserDataHourlyDistanceUser">
           <End Type="MainModel.UserDataHourlyDistance" Role="UserDataHourlyDistance" Multiplicity="*" />
           <End Type="MainModel.User" Role="User" Multiplicity="1" />
+        </Association>
+        <EntityType Name="RegionParticular">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" />
+          <Property Name="Code" Type="String" Nullable="false" MaxLength="24" FixedLength="false" Unicode="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="RegionSubdivision" Relationship="MainModel.FK_RegionRegionSubdivisionRegionParticular" FromRole="RegionParticularSet" ToRole="RegionSubdivision" />
+        </EntityType>
+        <Association Name="FK_RegionRegionSubdivisionRegionParticular">
+          <End Type="MainModel.RegionSubdivision" Role="RegionSubdivision" Multiplicity="1" />
+          <End Type="MainModel.RegionParticular" Role="RegionParticularSet" Multiplicity="*" />
         </Association>
       </Schema>
     </edmx:ConceptualModels>
@@ -2623,6 +2668,23 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
             <EndProperty Name="UserDataHourlyDistance">
               <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
               <ScalarProperty Name="Activity" ColumnName="Activity" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <EntitySetMapping Name="RegionParticularSet">
+            <EntityTypeMapping TypeName="MainModel.RegionParticular">
+              <MappingFragment StoreEntitySet="RegionParticularSet">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="FK_RegionRegionSubdivisionRegionParticular" TypeName="MainModel.FK_RegionRegionSubdivisionRegionParticular" StoreEntitySet="RegionParticularSet">
+            <EndProperty Name="RegionParticularSet">
+              <ScalarProperty Name="Id" ColumnName="Id" />
+            </EndProperty>
+            <EndProperty Name="RegionSubdivision">
+              <ScalarProperty Name="Id" ColumnName="RegionSubdivision_Id" />
             </EndProperty>
           </AssociationSetMapping>
   </EntityContainerMapping>
