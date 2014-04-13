@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data.Entity;
+using KilometrosDatabase.Abstraction.Interfaces;
+
+// > NOTA: De momento, GenericRepository funciona más como Proxy a la Clase Genérica Abstracta {IRepository}
+//         que como cualquier otra cosa. Habría que considerar la posibilidad de re-estructurar la Librería
+//         forma tal que {IRepository} se vuelva {GenericRepository} y retirar los Espacios de Nombres
+//         {Interfaces} y {UnitTesting}.
 
 namespace KilometrosDatabase.Abstraction {
-    using System.Data.Entity;
-    using KilometrosDatabase.Abstraction.Interfaces;
-
     /// <summary>
     /// Repositorio Genérico.
     /// </summary>
