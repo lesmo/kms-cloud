@@ -18,7 +18,7 @@ namespace KilometrosDatabase.EntityLocalization {
         private Dictionary<int, T> _globalization
             = new Dictionary<int, T>();
 
-        public T GetGlobalization(CultureInfo culture = null) {
+        public virtual T GetGlobalization(CultureInfo culture = null) {
             // > Determinar si no se tiene ya en memoria la Globalización de ésta Entidad
             if ( culture == null )
                 culture = CultureInfo.CurrentCulture;
