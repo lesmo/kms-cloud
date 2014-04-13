@@ -13,8 +13,36 @@ namespace KilometrosDatabase.Abstraction.Functional {
     ///     Repositorio de Recompensas.
     /// </summary>
     public sealed class RewardRepository : IRepository<Reward> {
+        /// <summary>
+        ///     Crea la abstracción de acceso como Repositorio a Recompensas.
+        /// </summary>
+        /// <param name="dbContext">
+        ///     Contexto de BD, normalmente {MainModelContainer}.
+        /// </param>
         public RewardRepository(MainModelContainer dbContext) : base(dbContext) { }
 
+        /// <summary>
+        ///     Devuelve las Recompensas del Código de Región especificado, aplicándole los
+        ///     filtros, ordenamientos y transformaciones extras aplicables.
+        /// </summary>
+        /// <param name="regionCode">
+        ///     Código de Región del que se busca obtener las Recompensas.
+        /// </param>
+        /// <param name="filter">
+        ///     Función aplicada para filtrar los registros.
+        /// </param>
+        /// <param name="orderBy">
+        ///     Función aplicada para ordenar los registros.
+        /// </param>
+        /// <param name="extra">
+        ///     Función aplicada después de filtrar y ordenar los registros.
+        /// </param>
+        /// <param name="include">
+        ///     Arreglo con Entidades relacionadas que deberían cargarse en memoria junto con el resultado.
+        /// </param>
+        /// <returns>
+        ///     Enumeración de los objetos almacenados en la BD.
+        /// </returns>
         public IEnumerable<Reward> GetAllForRegion(
             string regionCode,
             Expression<Func<Reward, bool>> filter = null,
