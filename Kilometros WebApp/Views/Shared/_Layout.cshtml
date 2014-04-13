@@ -122,7 +122,7 @@
                 <h3>@LayoutStrings.YourRewards</h3>
                 <ul>
                     @if ( layoutValues.LastRewards.Length > 0 ) {
-                        @foreach ( LayoutReward reward in layoutValues.LastRewards ) {
+                        foreach ( LayoutReward reward in layoutValues.LastRewards ) {
                             <li>
                                 <span class="recompensa">
                                     @reward.Title
@@ -144,14 +144,14 @@
 
             <section id="amigos">
                 @if ( layoutValues.TotalFriends > 0 ) {
-                    @if ( layoutValues.TotalFriends > 1 ) {
+                    if ( layoutValues.TotalFriends > 1 ) {
                         <h3>@String.Format(LayoutStrings.FriendCount, layoutValues.TotalFriends)</h3>
                     } else {
                         <h3>@LayoutStrings.FriendCountSingular</h3>
                     }
 
                     <ul>
-                        @foreach ( LayoutFriend friend in layoutValues.Top5Friends ) {
+                        @foreach ( LayoutFriend friend in layoutValues.TopFriends ) {
                             <li>
                                 <figure>
                                     <img src="@friend.PictureUri.AbsoluteUri" alt="@friend.Name @friend.LastName">
