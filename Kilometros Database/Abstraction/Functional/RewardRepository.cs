@@ -114,5 +114,28 @@ namespace KilometrosDatabase.Abstraction.Functional {
                 include
             );
         }
+
+        /// <summary>
+        ///     Devuelve una sola Recompensa del Código de Región especificado, aplicándole los
+        ///     filtros, ordenamientos y transformaciones extras aplicables.
+        /// </summary>
+        /// <returns>
+        ///     Objetos almacenado en la BD.
+        /// </returns>
+        public virtual Reward GetFirstForRegion(
+            string regionCode,
+            Expression<Func<Reward, bool>> filter = null,
+            Func<IQueryable<Reward>, IOrderedQueryable<Reward>> orderBy = null,
+            Func<IOrderedQueryable<Reward>, IQueryable<Reward>> extra = null,
+            string[] include = null
+        ) {
+            return this.GetAllForRegion(
+                regionCode,
+                filter,
+                orderBy,
+                x => extra(x).Take(1),
+                include
+            ).FirstOrDefault();
+        }
     }
 }
