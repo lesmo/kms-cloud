@@ -121,6 +121,27 @@ namespace KilometrosDatabase.Abstraction.Interfaces {
         }
 
         /// <summary>
+        /// Devuelve la Entidad asignada éste GUID , en representación de cadena compacta, o ID.
+        /// </summary>
+        /// <param name="compactBase64">Cadena de Representación Compacta del GUID, o ID.</param>
+        /// <returns>Entidad</returns>
+        public virtual TEntity Get(string compactBase64) {
+            Guid guid
+                = new Guid().FromBase64String(compactBase64);
+
+            if ( guid == default(Guid) ) {
+                Int64 id;
+
+                if ( Int64.TryParse(compactBase64, out id) )
+                    return this.Get(id);
+                else
+                    return null;
+            } else {
+                return this.Get(guid);
+            }
+        }
+
+        /// <summary>
         /// Añade una nueva Entidad a la BD.
         /// </summary>
         /// <param name="entity">Entidad a añadir</param>
