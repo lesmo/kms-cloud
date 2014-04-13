@@ -76,7 +76,7 @@ namespace Kilometros_WebApp.Controllers {
 				if ( this._layoutValues != null )
 					return this._layoutValues;
 
-				if ( this.CurrentUser == null )
+				if ( CurrentUser == null )
 					return null;
 
 				// > Inicializar objeto
@@ -87,17 +87,17 @@ namespace Kilometros_WebApp.Controllers {
 						= RegionInfo.CurrentRegion,
 
 					UserName
-						= this.CurrentUser.Name,
+						= CurrentUser.Name,
 					UserLastname
-						= this.CurrentUser.LastName,
+						= CurrentUser.LastName,
 					UserPicture
-						= new Uri(this.CurrentUser.PictureUri),
+						= new Uri(CurrentUser.PictureUri),
 
 					LocationString
 						= "{Not Implemented}",
 
 					TotalDistanceCentimeters
-						= this.CurrentUser.UserDataTotalDistance.TotalDistance,
+						= CurrentUser.UserDataTotalDistance.TotalDistance,
 				};
 
 				// > Obtener distancia restante para la Próxima Recompensa del Usuario
@@ -105,10 +105,10 @@ namespace Kilometros_WebApp.Controllers {
 					= Database.RewardStore.GetFirstForRegion(
 						regionCode:
 							// + Obtener la Recompensa para el Código de Región del Usuario
-							this.CurrentUser.RegionCode,
+							CurrentUser.RegionCode,
 						filter: f =>
 							// + Obtener la Recompensa inmediata siguiente según la Distancia del Usuario
-							f.DistanceTrigger > this.CurrentUser.UserDataTotalDistance.TotalDistance,
+							f.DistanceTrigger > CurrentUser.UserDataTotalDistance.TotalDistance,
 						orderBy: o =>
 							// + Ordenar las Recompensas según su Distancia de Debloqueo (Descendiente)
 							o.OrderByDescending(b => b.DistanceTrigger)
@@ -116,20 +116,20 @@ namespace Kilometros_WebApp.Controllers {
 
 				if ( nextReward == null )
 					throw new InvalidOperationException(
-						"Current User's [" + this.CurrentUser.Guid.ToString("N") + "] Next Reward could "
+						"Current User's [" + CurrentUser.Guid.ToString("N") + "] Next Reward could "
 						+ "not be mapped to any Reward because Database is empty, or Regional limitations "
 						+ "return no Rewards. Never must a User be mapped to no next Reward."
 					);
 				else
 					this._layoutValues.NextRewardDistanceCentimeters
-						= nextReward.DistanceTrigger - this.CurrentUser.UserDataTotalDistance.TotalDistance;
+						= nextReward.DistanceTrigger - CurrentUser.UserDataTotalDistance.TotalDistance;
 
 				// > Obtener Últimas Recompensas del Usuario
 				IEnumerable<KilometrosDatabase.UserEarnedReward> earnedRewards
 					= Database.UserEarnedRewardStore.GetAll(
 						filter: f =>
 							// + Recompensas Ganadas por el Usuario
-							f.User.Guid == this.CurrentUser.Guid,
+							f.User.Guid == CurrentUser.Guid,
 						orderBy: o =>
 							// + Ordenar por Fecha de Creación (Descendiente)
 							o.OrderByDescending(b => b.CreationDate),
@@ -194,8 +194,8 @@ namespace Kilometros_WebApp.Controllers {
 					= Database.UserFriendStore.GetAll(
 						filter: f => 
 							// + Relaciones que contengan el GUID del Usuario en Amigo o Usuario
-							f.Friend.Guid == this.CurrentUser.Guid
-							|| f.User.Guid == this.CurrentUser.Guid,
+							f.Friend.Guid == CurrentUser.Guid
+							|| f.User.Guid == CurrentUser.Guid,
 						orderBy: o =>
 							// + Ordenar por Distancia Total Recorrida (Descendiente)
 							o.OrderByDescending(
@@ -208,7 +208,8 @@ namespace Kilometros_WebApp.Controllers {
 							new string[] { "User.UserDataTotalDistance" }
 					).Select( s =>
 						// + Obtener sólo el objeto del Usuario (no interesa el objeto de Amistad)
-						s.User.Guid == this.CurrentUser.Guid && s.User.UserDataTotalDistance.TotalDistance > s.Friend.UserDataTotalDistance.TotalDistance
+						s.User.Guid == CurrentUser.Guid
+						&& s.User.UserDataTotalDistance.TotalDistance > s.Friend.UserDataTotalDistance.TotalDistance
 							? s.User
 							: s.Friend
 					);
