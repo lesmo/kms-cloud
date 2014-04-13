@@ -19,7 +19,7 @@ namespace KilometrosDatabase.EntityLocalization {
             if ( this._globalization.ContainsKey(culture) )
                 return this._globalization[culture];
 
-            // > Obtener propiedad que apunta a entdidad IGlobalization
+            // > Obtener propiedad que apunta a entidad IGlobalization
             string currentCultureCode
                 = culture.Name.ToLowerInvariant();
 
