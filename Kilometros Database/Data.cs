@@ -19,6 +19,9 @@ namespace KilometrosDatabase
         public int Steps { get; set; }
         public DataActivity Activity { get; set; }
         public int StrideLength { get; set; }
+        public int EqualsKcal { get; set; }
+        public int EqualsCo2 { get; set; }
+        public int EqualsCash { get; set; }
     
         public virtual User User { get; set; }
     }

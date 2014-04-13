@@ -19,7 +19,7 @@
         <EntityTypeShape EntityType="MainModel.TipGlobalization" Width="2.25" PointX="17.625" PointY="7.625" />
         <AssociationConnector Association="MainModel.TipTipGlobalization" />
         <AssociationConnector Association="MainModel.TipTipMotionLevel" />
-        <EntityTypeShape EntityType="MainModel.Data" Width="2" PointX="9" PointY="9.75" />
+        <EntityTypeShape EntityType="MainModel.Data" Width="2" PointX="9.125" PointY="9.625" />
         <EntityTypeShape EntityType="MainModel.UserBody" Width="1.875" PointX="9" PointY="3.75" />
         <AssociationConnector Association="MainModel.UserUserBody" />
         <EntityTypeShape EntityType="MainModel.MotionLevelGlobalization" Width="2.25" PointX="17.625" PointY="10.75" />
@@ -40,7 +40,7 @@
         <EntityTypeShape EntityType="MainModel.UserMotionLevelHistory" Width="2" PointX="12.5" PointY="8.75" />
         <AssociationConnector Association="MainModel.UserUserMotionLevelHistory" />
         <AssociationConnector Association="MainModel.UserMotionLevelHistoryMotionLevel" />
-        <EntityTypeShape EntityType="MainModel.UserEarnedReward" Width="1.875" PointX="11.5" PointY="10.875" />
+        <EntityTypeShape EntityType="MainModel.UserEarnedReward" Width="1.875" PointX="11.5" PointY="11.25" />
         <AssociationConnector Association="MainModel.UserUserEarnedReward" />
         <AssociationConnector Association="MainModel.UserEarnedRewardReward" />
         <EntityTypeShape EntityType="MainModel.ContactInfo" Width="1.5" PointX="4.25" PointY="7.25" />

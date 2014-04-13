@@ -40,6 +40,9 @@
           <Property Name="Activity" Type="smallint" Nullable="false" />
           <Property Name="Steps" Type="int" Nullable="false" />
           <Property Name="StrideLength" Type="int" Nullable="false" />
+          <Property Name="EqualsKcal" Type="int" Nullable="false" />
+          <Property Name="EqualsCo2" Type="int" Nullable="false" />
+          <Property Name="EqualsCash" Type="int" Nullable="false" />
           <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
         </EntityType>
         <EntityType Name="IGlobalizationSet">
@@ -1568,6 +1571,9 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
           <NavigationProperty Name="User" Relationship="MainModel.UserData" FromRole="Data" ToRole="User" />
           <Property Name="Activity" Type="MainModel.DataActivity" Nullable="false" />
           <Property Name="StrideLength" Type="Int32" Nullable="false" />
+          <Property Name="EqualsKcal" Type="Int32" Nullable="false" />
+          <Property Name="EqualsCo2" Type="Int32" Nullable="false" />
+          <Property Name="EqualsCash" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="UserBody">
           <Documentation>
@@ -2028,8 +2034,8 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
           </Key>
           <Property Name="Activity" Type="MainModel.DataActivity" Nullable="false" />
           <Property Name="Timestamp" Type="DateTime" Precision="3" Nullable="false" />
-          <Property Name="Steps" Type="Int64" Nullable="false" />
-          <Property Name="Distance" Type="Int64" Nullable="false" />
+          <Property Name="Steps" Type="Int64" />
+          <Property Name="Distance" Type="Int64" />
           <NavigationProperty Name="User" Relationship="MainModel.UserDataHourlyDistanceUser" FromRole="UserDataHourlyDistance" ToRole="User" />
         </EntityType>
         <EntityType Name="UserDataTotalDistance">
@@ -2039,8 +2045,8 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
           </Key>
           <Property Name="Activity" Type="MainModel.DataActivity" Nullable="false" />
           <Property Name="Timestamp" Type="DateTime" Precision="3" Nullable="false" />
-          <Property Name="TotalSteps" Type="Int64" Nullable="false" />
-          <Property Name="TotalDistance" Type="Int64" Nullable="false" />
+          <Property Name="TotalSteps" Type="Int64" />
+          <Property Name="TotalDistance" Type="Int64" />
           <NavigationProperty Name="User" Relationship="MainModel.UserUserDataTotalDistance" FromRole="UserDataTotalDistance" ToRole="User" />
         </EntityType>
         <EntityType Name="UserFriend">
@@ -2159,7 +2165,10 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
     <EntitySetMapping Name="DataSet">
       <EntityTypeMapping TypeName="IsTypeOf(MainModel.Data)">
         <MappingFragment StoreEntitySet="DataSet">
-          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="EqualsCash" ColumnName="EqualsCash" />
+                <ScalarProperty Name="EqualsCo2" ColumnName="EqualsCo2" />
+                <ScalarProperty Name="EqualsKcal" ColumnName="EqualsKcal" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
           <ScalarProperty Name="Steps" ColumnName="Steps" />
           <ScalarProperty Name="Activity" ColumnName="Activity" />
