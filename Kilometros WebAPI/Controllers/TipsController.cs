@@ -187,16 +187,10 @@ namespace Kilometros_WebAPI.Controllers {
         [Route("tips/{tipGuidBase64}")]
         public TipResponse GetTip(string tipGuidBase64) {
             // --- Obtener Tip Guid e intentar buscarlo ---
-            Guid? tipGuid
-                = MiscHelper.GuidFromBase64(tipGuidBase64);
-
-            if ( ! tipGuid.HasValue )
-                throw new HttpNotFoundException(
-                    ControllerStrings.Warning801_TipNotFound
-                );
-
+            Guid tipGuid
+                = new Guid().FromBase64String(tipGuidBase64);
             UserTipHistory tip
-                = Database.UserTipHistoryStore.Get(tipGuid.Value);
+                = Database.UserTipHistoryStore.Get(tipGuid);
 
             if ( tip == null )
                 throw new HttpNotFoundException(

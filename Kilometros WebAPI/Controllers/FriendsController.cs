@@ -105,7 +105,7 @@ namespace Kilometros_WebAPI.Controllers {
             User user
                 = OAuth.Token.User;
             Guid friendUserGuid
-                = MiscHelper.GuidFromBase64(userId).Value;
+                = new Guid().FromBase64String(userId);
 
             // --- Validar que el Usuario al que se enviará la solicitud exista ---
             User friendUser
@@ -163,7 +163,7 @@ namespace Kilometros_WebAPI.Controllers {
             User user
                 = OAuth.Token.User;
             Guid friendUserGuid
-                = MiscHelper.GuidFromBase64(userId).Value;
+                = new Guid().FromBase64String(userId);
 
             // --- Validar que el Usuario al que se le aceptará la solicitud exista ---
             User friendUser

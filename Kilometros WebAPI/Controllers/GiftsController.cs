@@ -35,19 +35,12 @@ namespace Kilometros_WebAPI.Controllers {
         public GiftResponse GetRewardGift(string giftId) {
             User user
                 = OAuth.Token.User;
+            Guid giftGuid
+                = new Guid().FromBase64String(giftId);
 
             // --- Buscar Regalo solicitado ---
-            Guid? giftGuid
-                = MiscHelper.GuidFromBase64(giftId);
-            if ( ! giftGuid.HasValue )
-                throw new HttpNotFoundException(
-                    ControllerStrings.Warning701_GiftNotFound
-                );
-
             RewardGift rewardGift
-                = Database.RewardGiftStore.Get(
-                    giftGuid.Value
-                );
+                = Database.RewardGiftStore.Get(giftGuid);
             if ( rewardGift == null )
                 throw new HttpNotFoundException(
                     ControllerStrings.Warning701_GiftNotFound
@@ -131,19 +124,12 @@ namespace Kilometros_WebAPI.Controllers {
         public GiftClaimResponse ClaimRewardGift(string giftId) {
             User user
                 = OAuth.Token.User;
+            Guid giftGuid
+                = new Guid().FromBase64String(giftId);
 
             // --- Buscar Regalo solicitado ---
-            Guid? giftGuid
-                = MiscHelper.GuidFromBase64(giftId);
-            if ( !giftGuid.HasValue )
-                throw new HttpNotFoundException(
-                    ControllerStrings.Warning701_GiftNotFound
-                );
-
             RewardGift rewardGift
-                = Database.RewardGiftStore.Get(
-                    giftGuid.Value
-                );
+                = Database.RewardGiftStore.Get(giftGuid);
             if ( rewardGift == null )
                 throw new HttpNotFoundException(
                     ControllerStrings.Warning701_GiftNotFound

@@ -154,17 +154,12 @@ namespace Kilometros_WebAPI.Controllers {
         public RewardResponse GetReward(string earnedRewardId) {
             User user
                 = OAuth.Token.User;
+            Guid rewardGuid
+                = new Guid().FromBase64String(earnedRewardId);
 
             // --- Obtener la Recompensa solicitada ---
-            Guid? rewardGuid
-                = MiscHelper.GuidFromBase64(earnedRewardId);
-            if ( ! rewardGuid.HasValue )
-                throw new HttpNotFoundException(
-                    ControllerStrings.Warning901_RewardNotFound
-                );
-
             UserEarnedReward reward
-                = Database.UserEarnedRewardStore.Get(rewardGuid.Value);
+                = Database.UserEarnedRewardStore.Get(rewardGuid);
             if ( reward == null )
                 throw new HttpNotFoundException(
                     ControllerStrings.Warning901_RewardNotFound
