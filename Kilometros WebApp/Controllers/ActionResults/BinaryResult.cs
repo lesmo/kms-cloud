@@ -6,11 +6,17 @@ using System.Web.Mvc;
 
 namespace Kilometros_WebApp.Controllers {
     public class BinaryResult : ActionResult {
+        /// <summary>
+        ///     Cuerpo de la respuesta.
+        /// </summary>
         public byte[] Content {
             get;
             set;
         }
         
+        /// <summary>
+        ///     Tipo MIME del Contenido de la respuesta.
+        /// </summary>
         public string ContentType {
             get;
             set;
@@ -20,7 +26,9 @@ namespace Kilometros_WebApp.Controllers {
             context.HttpContext.Response.Clear(); 
 
             context.HttpContext.Response.ContentType
-                = this.ContentType;
+                = string.IsNullOrEmpty(this.ContentType)
+                ? "application/octet-stream"
+                : this.ContentType;
             context.HttpContext.Response.OutputStream.Write(
                 this.Content,
                 0,
