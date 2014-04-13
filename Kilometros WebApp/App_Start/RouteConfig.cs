@@ -27,6 +27,14 @@ namespace Kilometros_WebApp {
                     controller = "DynamicResources"
                 }
             );
+
+            routes.MapRoute(
+                name: "DynamicResources",
+                url: "DynamicResources/Ajax/{action}.json",
+                defaults: new {
+                    controller = "Ajax"
+                }
+            );
         }
     }
 }
