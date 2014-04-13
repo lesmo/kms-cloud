@@ -81,7 +81,7 @@ namespace KilometrosDatabase.Abstraction.Interfaces {
         }
 
         /// <summary>
-        /// Devuelve una sola Entidad, opcionalmente filtrándo del universo.
+        /// Devuelve una sola Entidad, opcionalmente filtrándo el universo.
         /// </summary>
         /// <returns>Objetos almacenado en la BD.</returns>
         public virtual TEntity GetFirst(
@@ -90,38 +90,12 @@ namespace KilometrosDatabase.Abstraction.Interfaces {
             Func<IOrderedQueryable<TEntity>, IQueryable<TEntity>> extra = null,
             string[] include = null
         ) {
-            IQueryable<TEntity> query
-                = (IQueryable<TEntity>)this._dbSet.AsQueryable();
-
-            if ( filter != null )
-                query = query.Where(filter);
-
-            if ( include != null && include.Length > 0 ) {
-                foreach ( string includeItem in include )
-                    query
-                        = query.Include(includeItem);
-            }
-
-            TEntity returnValue;
-
-            if ( orderBy == null ) {
-                returnValue
-                    = extra == null
-                    ? query.Take(1).FirstOrDefault()
-                    : extra(query.OrderBy(o => 0)).Take(1).FirstOrDefault();
-            } else {
-                returnValue
-                    = extra == null
-                    ? orderBy(query).Take(1).FirstOrDefault()
-                    : extra(orderBy(query)).Take(1).FirstOrDefault();
-            }
-
-            returnValue
-                = EntityDatesUtcKind.ConvertDatesKindToUtc<TEntity>(
-                    returnValue
-                );
-
-            return returnValue;
+            return this.GetAll(
+                filter,
+                orderBy,
+                x => extra(x).Take(1),
+                include
+            ).FirstOrDefault();
         }
 
         /// <summary>
