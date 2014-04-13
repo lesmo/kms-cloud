@@ -29,7 +29,7 @@ namespace Kilometros_WebApp.Controllers {
 				KilometrosDatabase.Tip lastTip
 					= Database.UserTipHistoryStore.GetFirst(
 						filter: f =>
-							f.User.Guid == this.CurrentUser.Guid,
+							f.User.Guid == CurrentUser.Guid,
 						orderBy: o =>
 							o.OrderByDescending(b => b.CreationDate),
 						include:
@@ -60,7 +60,7 @@ namespace Kilometros_WebApp.Controllers {
 				KilometrosDatabase.Data[] lastDayData
 					=  Database.DataStore.GetAll(
 						filter: f =>
-							f.User.Guid == this.CurrentUser.Guid
+							f.User.Guid == CurrentUser.Guid
 							&& f.Timestamp < DateTime.UtcNow
 							&& f.Timestamp > DateTime.UtcNow.AddHours(-24),
 						orderBy: o =>
