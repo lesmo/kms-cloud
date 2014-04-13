@@ -179,26 +179,8 @@ namespace Kilometros_WebAPI.Controllers {
         ///     
         /// </returns>
         [HttpPost]
-        [Route("data")]
-        public HttpResponseMessage PostData([FromBody]DataPost dataPost) {
-            // --- Validar que Activity esté soportado ---
-            string activity
-                = dataPost.Activity.ToLowerInvariant();
-            string[] activityEnum
-                = Enum.GetNames(typeof(DataActivity));
-            short activityId
-                = 0;
-
-            for ( short i = 1; i < activityEnum.Length; i++ ) {
-                if ( activityEnum[0].ToLowerInvariant() == activity )
-                    activityId = i;
-            }
-
-            if ( activityId == 0 )
-                throw new HttpNotFoundException(
-                    "301" + ControllerStrings.Warning301_ActivityInvalid
-                );
-
+        [Route("data/bulk")]
+        public HttpResponseMessage PostDataBulk([FromBody]IEnumerable<DataPost> dataPost) {
             // --- Determinar la última fecha registrada ---
             User user
                 = OAuth.Token.User;
@@ -218,42 +200,138 @@ namespace Kilometros_WebAPI.Controllers {
 
             // --- Determinar los registros si se almacenarán en BD ---
             // Especificar que fechas son UTC
+            foreach ( DataPost i in dataPost )
+                i.Timestamp
+                    = DateTime.SpecifyKind(
+                        i.Timestamp,
+                        DateTimeKind.Utc
+                    );
+
+            // TODO: Incluir un algoritmo que mejore la solución al problema
+            //       de datos replicados y sincronía.
+            HashSet<DataPost> finalDataPost
+                = new HashSet<DataPost>();
+
+            foreach ( DataPost i in dataPost ) {
+                if ( i.Timestamp > lastDataTimestamp )
+                    finalDataPost.Add(i);
+            }
+
+            // --- Almacenar los nuevos Datos ---
+            foreach ( DataPost i in dataPost )
+                this.PrepareDataInsert(i, userBody);
+
+            Database.SaveChanges();
+            
+            return new HttpResponseMessage() {
+                RequestMessage
+                    = Request,
+
+                StatusCode
+                    = HttpStatusCode.OK
+            };
+        }
+
+        /// <summary>
+        ///     Subir un solo Dato generado por el Dispositivo KMS.
+        /// </summary>
+        /// <param name="dataPost">
+        ///     Dato del Dispositivo KMS.
+        /// </param>
+        /// <returns>
+        ///     
+        /// </returns>
+        public HttpResponseMessage PostData([FromBody]DataPost dataPost) {
+            // --- Determinar la última fecha registrada ---
+            User user
+                = OAuth.Token.User;
+            UserBody userBody
+                = Database.UserBodyStore.GetFirst(
+                    f => f.User.Guid == user.Guid
+                );
+            Data lastData
+                = Database.DataStore.GetFirst(
+                    f => f.User.Guid == user.Guid,
+                    o => o.OrderByDescending(b => b.Timestamp)
+                );
+            DateTime lastDataTimestamp
+                = lastData == null
+                ? DateTime.MinValue
+                : lastData.Timestamp;
+
+            // --- Determinar los registros si se almacenarán en BD ---
+            // Especificar que fecha es UTC
             dataPost.Timestamp
                 = DateTime.SpecifyKind(
                     dataPost.Timestamp,
                     DateTimeKind.Utc
                 );
-
-            // TODO: Incluir un algoritmo que mejore la solución al problema
-            //       de datos replicados y sincronía.
+            
             if ( dataPost.Timestamp < lastDataTimestamp )
                 throw new HttpConflictException(
-                    ""
+                    ControllerStrings.Warning302_DataTimestampTooOld
+                );
+
+            this.PrepareDataInsert(dataPost, userBody);
+            Database.SaveChanges();
+
+            return new HttpResponseMessage() {
+                RequestMessage
+                    = Request,
+
+                StatusCode
+                    = HttpStatusCode.OK
+            };
+        }
+
+        /// <summary>
+        /// Prepara la inserción de Datos, sin consultar detalles del
+        /// Perfil Físico del Usuario aún.
+        /// </summary>
+        /// <param name="dataPost"></param>
+        /// <param name="userBody"></param>
+        private void PrepareDataInsert(DataPost dataPost, UserBody userBody) {
+            // --- Validar que Activity esté soportado ---
+            string activity
+                = dataPost.Activity.ToLowerInvariant();
+            string[] activityEnum
+                = Enum.GetNames(typeof(DataActivity));
+            short activityId
+                = 0;
+
+            for ( short i = 1; i < activityEnum.Length; i++ ) {
+                if ( activityEnum[0].ToLowerInvariant() == activity )
+                    activityId = i;
+            }
+
+            if ( activityId == 0 )
+                throw new HttpNotFoundException(
+                    "301" + ControllerStrings.Warning301_ActivityInvalid
                 );
 
             // --- Determinar el largo de zancada ---
             int strideLength;
             switch ( (DataActivity)activityId ) {
-                case DataActivity.Running :
+                case DataActivity.Running:
                     strideLength
                         = userBody.StrideLengthRunning;
                     break;
-                case DataActivity.Walking :
+                case DataActivity.Walking:
                     strideLength
                         = userBody.StrideLengthWalking;
                     break;
 
-                default :
+                default:
                     strideLength
                         = 0;
-                    break ;
+                    break;
             }
 
-            // --- Almacenar el nuevo registro ---
+            // --- Añadir el nuevo registro ---
             Data newData
-                = new Data(){
+                = new Data() {
                     User
-                        = user,
+                        = userBody.User,
 
                     Timestamp
                         = dataPost.Timestamp,
@@ -266,15 +344,7 @@ namespace Kilometros_WebAPI.Controllers {
                 };
 
             Database.DataStore.Add(newData);
-            Database.SaveChanges();
-            
-            return new HttpResponseMessage() {
-                RequestMessage
-                    = Request,
-
-                StatusCode
-                    = HttpStatusCode.OK
-            };
         }
     }
+
 }

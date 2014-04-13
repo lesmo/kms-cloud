@@ -90,7 +90,7 @@ namespace Kilometros_WebAPI.Controllers {
                     RedeemPicture
                         = string.Format(
                             "{0}.{1}",
-                            MiscHelper.Base64FromGuid(userRewardGiftClaim.Guid),
+                            userRewardGiftClaim.Guid.ToBase64String(),
                             userRewardGiftClaim.PictureExtension
                         ),
 
@@ -109,7 +109,7 @@ namespace Kilometros_WebAPI.Controllers {
                     RedeemPicture
                         = string.Format(
                             "{0}.{1}",
-                            MiscHelper.Base64FromGuid(userRewardGiftClaim.Guid),
+                            userRewardGiftClaim.Guid.ToBase64String(),
                             userRewardGiftClaim.PictureExtension
                         ),
 
@@ -210,7 +210,7 @@ namespace Kilometros_WebAPI.Controllers {
                 RedeemPicture
                     = string.Format(
                         "{0}.{1}",
-                        MiscHelper.Base64FromGuid(giftClaim.Guid),
+                        giftClaim.Guid.ToBase64String(),
                         giftClaim.PictureExtension
                     )
             };

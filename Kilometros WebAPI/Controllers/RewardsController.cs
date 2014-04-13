@@ -86,7 +86,7 @@ namespace Kilometros_WebAPI.Controllers {
                     if ( rewardGiftGlobalization == null ) {
                         rewardGiftsList.Add(new RewardGiftResponse() {
                             RewardGiftId
-                                = MiscHelper.Base64FromGuid(rewardGift.Guid),
+                                = rewardGift.Guid.ToBase64String(),
 
                             Stock
                                 = rewardGift.Stock,
@@ -103,7 +103,7 @@ namespace Kilometros_WebAPI.Controllers {
                     } else {
                         rewardGiftsList.Add(new RewardGiftResponse() {
                             RewardGiftId
-                                = MiscHelper.Base64FromGuid(rewardGift.Guid),
+                                = rewardGift.Guid.ToBase64String(),
 
                             Stock
                                 = rewardGift.Stock,
@@ -128,7 +128,7 @@ namespace Kilometros_WebAPI.Controllers {
 
                 response.Add(new RewardResponse() {
                     RewardId
-                        = MiscHelper.Base64FromGuid(earnedReward.Guid),
+                        = earnedReward.Guid.ToBase64String(),
                     EarnDate
                         = earnedReward.CreationDate,
 
@@ -207,7 +207,7 @@ namespace Kilometros_WebAPI.Controllers {
                 if ( rewardGiftGlobalization == null ) {
                     rewardGiftsList.Add(new RewardGiftResponse() {
                         RewardGiftId
-                            = MiscHelper.Base64FromGuid(rewardGift.Guid),
+                            = rewardGift.Guid.ToBase64String(),
 
                         Stock
                             = rewardGift.Stock,
@@ -224,7 +224,7 @@ namespace Kilometros_WebAPI.Controllers {
                 } else {
                     rewardGiftsList.Add(new RewardGiftResponse() {
                         RewardGiftId
-                            = MiscHelper.Base64FromGuid(rewardGift.Guid),
+                            = rewardGift.Guid.ToBase64String(),
 
                         Stock
                             = rewardGift.Stock,
@@ -254,7 +254,7 @@ namespace Kilometros_WebAPI.Controllers {
             // --- Preparar y devolver respuesta ---
             return new RewardResponse() {
                 RewardId
-                    = MiscHelper.Base64FromGuid(reward.Guid),
+                    = reward.Guid.ToBase64String(),
                 EarnDate
                     = reward.CreationDate,
 

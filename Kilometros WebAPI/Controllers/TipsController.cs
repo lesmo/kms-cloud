@@ -53,7 +53,7 @@ namespace Kilometros_WebAPI.Controllers {
                     tipCategoriesResponse.Add(
                         new TipCategoryResponse() {
                             TipCategoryId
-                                = MiscHelper.Base64FromGuid(tipCategory.Guid),
+                                = tipCategory.Guid.ToBase64String(),
                             Name
                                 = null,
                             Description
@@ -64,7 +64,7 @@ namespace Kilometros_WebAPI.Controllers {
                     tipCategoriesResponse.Add(
                         new TipCategoryResponse() {
                             TipCategoryId
-                                = MiscHelper.Base64FromGuid(tipCategory.Guid),
+                                = tipCategory.Guid.ToBase64String(),
                             Name
                                 = tipCategoryLocale.Name,
                             Description 
@@ -141,7 +141,7 @@ namespace Kilometros_WebAPI.Controllers {
                         tipCategoryResponse
                             = new TipCategoryResponse() {
                                 TipCategoryId
-                                    = MiscHelper.Base64FromGuid(tipCategory.Guid),
+                                    = tipCategory.Guid.ToBase64String(),
                                 Name
                                     = null,
                                 Description
@@ -151,7 +151,7 @@ namespace Kilometros_WebAPI.Controllers {
                         tipCategoryResponse
                             = new TipCategoryResponse() {
                                 TipCategoryId
-                                    = MiscHelper.Base64FromGuid(tipCategory.Guid),
+                                    = tipCategory.Guid.ToBase64String(),
                                 Name    
                                     = tipCategoryLocale.Name,
                                 Description 
@@ -167,7 +167,7 @@ namespace Kilometros_WebAPI.Controllers {
 
                 response.Add(new TipResponse() {
                     TipId
-                        = MiscHelper.Base64FromGuid(tipHistory.Guid),
+                        = tipHistory.Guid.ToBase64String(),
                     TipCategory
                         = tipCategoryResponse,
 
@@ -218,7 +218,7 @@ namespace Kilometros_WebAPI.Controllers {
                 tipCategoryResponse
                     = new TipCategoryResponse() {
                         TipCategoryId
-                            = MiscHelper.Base64FromGuid(tipCategory.Guid),
+                            = tipCategory.Guid.ToBase64String(),
                         Name
                             = null,
                         Description 
@@ -228,7 +228,7 @@ namespace Kilometros_WebAPI.Controllers {
                 tipCategoryResponse
                     = new TipCategoryResponse() {
                         TipCategoryId
-                            = MiscHelper.Base64FromGuid(tipCategory.Guid),
+                            = tipCategory.Guid.ToBase64String(),
                         Name
                             = tipCategoryLocale.Name,
                         Description
@@ -240,7 +240,7 @@ namespace Kilometros_WebAPI.Controllers {
             TipResponse tipResponse
                 = new TipResponse() {
                     TipId
-                        = MiscHelper.Base64FromGuid(tip.Guid),
+                        = tip.Guid.ToBase64String(),
                     TipCategory
                         = tipCategoryResponse,
 

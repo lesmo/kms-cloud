@@ -36,7 +36,7 @@ namespace Kilometros_WebAPI.Controllers {
                 from f in userFriends
                 select new FriendResponse() {
                     UserId
-                        = MiscHelper.Base64FromGuid(f.Friend.Guid),
+                        = f.Friend.Guid.ToBase64String(),
                     Name
                         = f.Friend.Name,
                     LastName
@@ -78,7 +78,7 @@ namespace Kilometros_WebAPI.Controllers {
                     Friend
                         = new FriendResponse() {
                             UserId
-                                = MiscHelper.Base64FromGuid(u.Guid),
+                                = u.Guid.ToBase64String(),
                             CreationDate
                                 = DateTime.UtcNow,
                             Name
@@ -224,7 +224,7 @@ namespace Kilometros_WebAPI.Controllers {
                 from f in userFriends
                 select new FriendResponse() {
                     UserId
-                        = MiscHelper.Base64FromGuid(f.Friend.Guid),
+                        = f.Friend.Guid.ToBase64String(),
                     CreationDate
                         = f.CreationDate,
                     Name
@@ -258,7 +258,7 @@ namespace Kilometros_WebAPI.Controllers {
                 from f in userFriends
                 select new FriendResponse() {
                     UserId
-                        = MiscHelper.Base64FromGuid(f.Friend.Guid),
+                        = f.Friend.Guid.ToBase64String(),
                     CreationDate
                         = f.CreationDate,
                     Name

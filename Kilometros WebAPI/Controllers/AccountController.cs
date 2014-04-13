@@ -34,7 +34,7 @@ namespace Kilometros_WebAPI.Controllers {
                 AccountCreationDate
                     = user.CreationDate,
                 UserId
-                    = MiscHelper.Base64FromGuid(user.Guid),
+                    = user.Guid.ToBase64String(),
                 Name
                     = user.Name,
                 LastName
