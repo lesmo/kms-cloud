@@ -25,24 +25,35 @@ namespace Kilometros_WebAPI.Controllers {
         public IEnumerable<FriendResponse> GetFriendsList() {
             User user
                 = OAuth.Token.User;
-            IEnumerable<UserFriend> userFriends
+            IEnumerable<User> userFriends
                 = Database.UserFriendStore.GetAll(
-                    f =>
-                        f.User.Guid == user.Guid
-                        && f.Accepted == true
+                    filter:  f =>
+                        // + Obtener Amistades donde el Usuario sea partícipe
+                        (
+                            f.User.Guid == user.Guid
+                            || f.User.Guid == user.Guid
+                        ) && f.Accepted == true,
+                    include:
+                        // + Incluir el objeto de Usuario del Amigo, y el Usuario
+                        new string[] { "Friend", "User" }
+                ).Select( s =>
+                    // + Obtener únicamente el objeto de Usuario del Amigo, no del Usuario
+                    s.User.Guid == user.Guid
+                        ? s.Friend
+                        : s.User
                 );
-            
+
             return (
                 from f in userFriends
                 select new FriendResponse() {
                     UserId
-                        = f.Friend.Guid.ToBase64String(),
+                        = f.Guid.ToBase64String(),
                     Name
-                        = f.Friend.Name,
+                        = f.Name,
                     LastName
-                        = f.Friend.LastName,
+                        = f.LastName,
                     PictureUri
-                        = f.Friend.PictureUri
+                        = f.PictureUri
                 }
             );
         }
@@ -61,19 +72,26 @@ namespace Kilometros_WebAPI.Controllers {
 
             List<User> userFriends
                 = Database.UserFriendStore.GetAll(
-                    f =>
-                        f.User.Guid == user.Guid
-                        && f.Accepted == true,
-                    null,
-                    new string[] {"UserDataTotalDistance"}
-                ).Select<UserFriend, User>(
-                    u =>
-                        u.User
+                    filter: f =>
+                        // + Obtener Amistades que sean Aceptadas y c
+                        (
+                            f.User.Guid == user.Guid
+                            || f.User.Guid == user.Guid
+                        ) && f.Accepted == true,
+                    include:
+                        new string[] { "User.UserDataTotalDistance", "Friend.UserDataTotalDistance" }
+                ).Select(s =>
+                    // + Obtener únicamente el objeto de Usuario del Amigo, no del Usuario
+                    s.User.Guid == user.Guid
+                        ? s.Friend
+                        : s.User
                 ).ToList();
+
             userFriends.Add(user);
             
             return (
                 from u in userFriends
+                orderby u.UserDataTotalDistance.TotalDistance descending
                 select new FriendScoreResponse() {
                     Friend
                         = new FriendResponse() {
@@ -93,7 +111,7 @@ namespace Kilometros_WebAPI.Controllers {
                     IsMe
                         = u.Guid == user.Guid
                 }
-            ).OrderByDescending(b => b.TotalDistance);
+            );
         }
 
         /// <summary>
@@ -118,9 +136,15 @@ namespace Kilometros_WebAPI.Controllers {
             // --- Validar que no exista la Amistad ---
             bool alreadyFriends
                 = Database.UserFriendStore.GetFirst(
-                    f =>
-                        (f.User.Guid == user.Guid && f.Friend.Guid == friendUserGuid)
-                        || (f.Friend.Guid == user.Guid && f.User.Guid == friendUserGuid)
+                    filter: f =>
+                        // + Obtener Amistad donde el Usuario y el Amigo sean partícipes
+                        (
+                            f.User.Guid == user.Guid
+                            && f.Friend.Guid == friendUserGuid
+                        ) || (
+                            f.Friend.Guid == user.Guid
+                            && f.User.Guid == friendUserGuid
+                        )
                 ) != null;
 
             if ( alreadyFriends )
@@ -176,9 +200,12 @@ namespace Kilometros_WebAPI.Controllers {
             // --- Validar que la Solicitud de Amistad exista ---
             UserFriend friendship
                 = Database.UserFriendStore.GetFirst(
-                    f =>
-                        f.User.Guid == user.Guid
-                        && f.Friend.Guid == friendUser.Guid
+                    filter: f =>
+                        // + Obtener la Amistad en la que el Usuario actual está
+                        //   descrito como el Amigo, y el Amigo está descrito como
+                        //   el Usuario.
+                        f.User.Guid == friendUser.Guid
+                        && f.Friend.Guid == user.Guid
                         && f.Accepted == false
                 );
 
@@ -188,7 +215,8 @@ namespace Kilometros_WebAPI.Controllers {
                 );
 
             // --- Aceptar la Amistad ---
-            friendship.Accepted = true;
+            friendship.Accepted
+                = true;
 
             Database.UserFriendStore.Update(friendship);
             Database.SaveChanges();
@@ -213,15 +241,19 @@ namespace Kilometros_WebAPI.Controllers {
                 = OAuth.Token.User;
             IEnumerable<UserFriend> userFriends
                 = Database.UserFriendStore.GetAll(
-                    f =>
+                    filter: f =>
+                        // + Obtener Amistades donde el Usuario está descrito
+                        //   como el Amigo, y la Amistad no ha sido aceptada.
                         f.Friend.Guid == user.Guid
                         && f.Accepted == false,
-                    null,
-                    new string[] { "User", "Friend" }
+                    include:
+                        // + Incluir al Usuario y al Amigo
+                        new string[] { "User", "Friend" }
                 );
 
             return (
                 from f in userFriends
+                orderby f.CreationDate descending
                 select new FriendResponse() {
                     UserId
                         = f.Friend.Guid.ToBase64String(),
@@ -238,7 +270,7 @@ namespace Kilometros_WebAPI.Controllers {
         }
 
         /// <summary>
-        ///     Devuelve las Solicitudes de Amistad recibidas por el Usuario.
+        ///     Devuelve las Solicitudes de Amistad enviadas por el Usuario.
         /// </summary>
         [HttpGet]
         [Route("friends/requests/sent")]
@@ -247,15 +279,19 @@ namespace Kilometros_WebAPI.Controllers {
                 = OAuth.Token.User;
             IEnumerable<UserFriend> userFriends
                 = Database.UserFriendStore.GetAll(
-                    f =>
+                    filter: f =>
+                        // + Obtener Amistades donde el Usuario está descrito
+                        //   como el Usuario, y la Amistad no ha sido aceptada.
                         f.User.Guid == user.Guid
                         && f.Accepted == false,
-                    null,
-                    new string[] { "User", "Friend" }
+                    include:
+                        // + Incluir al Usuario y al Amigo
+                        new string[] { "User", "Friend" }
                 );
 
             return (
                 from f in userFriends
+                orderby f.CreationDate descending
                 select new FriendResponse() {
                     UserId
                         = f.Friend.Guid.ToBase64String(),
