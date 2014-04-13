@@ -142,14 +142,14 @@ namespace Kilometros_WebApp.Models.Views {
         /// <summary>
         /// Colección del Top 5 de Amigos
         /// </summary>
-        public LayoutFriend[] Top5Friends {
+        public LayoutFriend[] TopFriends {
             get {
-                return this._top5Friends;
+                return this._topFriends;
             }
             set {
-                this._top5Friends = value;
+                this._topFriends = value;
 
-                foreach ( LayoutFriend friend in this._top5Friends ) {
+                foreach ( LayoutFriend friend in this._topFriends ) {
                     friend.RegionInfo
                         = this.RegionInfo;
                     friend.CultureInfo
@@ -157,7 +157,7 @@ namespace Kilometros_WebApp.Models.Views {
                 }
             }
         }
-        private LayoutFriend[] _top5Friends;
+        private LayoutFriend[] _topFriends;
 
         /// <summary>
         /// Número total de Amigos

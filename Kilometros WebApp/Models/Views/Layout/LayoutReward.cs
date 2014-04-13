@@ -60,5 +60,15 @@ namespace Kilometros_WebApp.Models.Views {
                 );
             }
         }
+
+        public bool IncludesGift {
+            get;
+            set;
+        }
+
+        public bool IncludedGiftClaimedByUser {
+            get;
+            set;
+        }
     }
 }
