@@ -7,20 +7,30 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace KilometrosDatabase.EntityLocalization {
+    /// <summary>
+    ///     Permite acceder de forma rápida y fácil a la Entidad que almacena texto y otros
+    ///     recursos específicos de cada idioma.
+    /// </summary>
+    /// <typeparam name="T">
+    ///     Tipo de la Entidad que almacena el texto y otros recursos.
+    /// </typeparam>
     public abstract class IEntityGlobalization<T> where T : IGlobalization {
-        private Dictionary<CultureInfo, T> _globalization
-            = new Dictionary<CultureInfo,T>();
+        private Dictionary<int, T> _globalization
+            = new Dictionary<int, T>();
 
         public T GetGlobalization(CultureInfo culture = null) {
             // > Determinar si no se tiene ya en memoria la Globalización de ésta Entidad
             if ( culture == null )
                 culture = CultureInfo.CurrentCulture;
 
-            if ( this._globalization.ContainsKey(culture) )
-                return this._globalization[culture];
+            int hashCode
+                = culture.GetHashCode();
+
+            if ( this._globalization.ContainsKey(hashCode) )
+                return this._globalization[hashCode];
 
             // > Obtener propiedad que apunta a entidad IGlobalization
-            string currentCultureCode
+            string cultureCode
                 = culture.Name.ToLowerInvariant();
 
             PropertyInfo globalizationProperty = (
@@ -39,7 +49,8 @@ namespace KilometrosDatabase.EntityLocalization {
             IGlobalization globalization
                 = (
                     from g in entityGlobalizationCollection
-                    where g.CultureCode == currentCultureCode
+                    where
+                        g.CultureCode == cultureCode
                         || g.CultureCode.StartsWith(
                             culture.TwoLetterISOLanguageName
                         )
@@ -48,11 +59,11 @@ namespace KilometrosDatabase.EntityLocalization {
 
             // > Agregar Globalización a memoria y devolverla
             this._globalization.Add(
-                culture,
+                hashCode,
                 globalization == null ? null : (T)globalization
             );
-            
-            return this._globalization[culture];
+
+            return (T)globalization;
         }
     }
 }
