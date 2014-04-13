@@ -6,6 +6,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace KilometrosDatabase.Abstraction.Functional {
@@ -58,18 +59,25 @@ namespace KilometrosDatabase.Abstraction.Functional {
                 );
 
             // > Preparar Region Code
+            regionCode
+                = regionCode.ToLowerInvariant().Trim();
+
+            bool validRegionCode
+                =  new Regex(
+                    @"^([a-z]{2})(\-[a-z]{3}(\-[a-z]*)?)?$"
+                ).IsMatch(regionCode);
+
+            if ( validRegionCode )
+                throw new ArgumentException(
+                    "Region Code filter contains an invalid format.",
+                    "regionCode"
+                );
+
             string[] regionCodeParts
                 = new string[3] { null, null, null};
             regionCode.ToLowerInvariant().Split(
                 new char[] { '-' }, 3
             ).CopyTo(regionCodeParts, 0);
-
-            // TODO: Sustituir validación con RegEx
-            if ( regionCodeParts[1] == null && regionCodeParts[2] != null )
-                throw new ArgumentException(
-                    "Region Code filter contains an invalid format. Expected a Subdivision Code, but none was found and a Particular Region was found.",
-                    "regionCode"
-                );
 
             // > Determinar la condicional a utilizar para obtener sólo resultados
             //   que aplican a la Región especificada
