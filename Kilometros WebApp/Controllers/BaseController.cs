@@ -12,7 +12,7 @@ namespace Kilometros_WebApp.Controllers {
 	///     Controlador bbase que contiene propiedades y/o métodos extra para facilitar el
 	///     desarrollo de la WebApp.
 	/// </summary>
-	private abstract class BaseController : Controller {
+	public abstract class BaseController : Controller {
 		/// <summary>
 		///     Provee acceso a un Contexto de Base de Datos para el
 		///     controlador actual. Los objetos expuestos por Identity
