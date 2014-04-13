@@ -8,13 +8,12 @@ using System.Web.Mvc;
 
 namespace Kilometros_WebApp.Controllers {
 	public class DynamicResourcesController : BaseController {
-		//
-		// GET: /DynamicResources/
+		// GET: /DynamicResources/Image/{filename}.{ext}
 		public BinaryResult Image(string filename, string ext) {
 			IPicture picture
 				= Database.IPictureStore.Get(filename);
 
-			if ( picture == null )
+			if ( picture == null || picture.PictureExtension != ext )
 				throw new HttpException(
 					404,
 					"Not Found"
