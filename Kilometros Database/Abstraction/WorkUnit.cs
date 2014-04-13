@@ -396,5 +396,18 @@ namespace KilometrosDatabase.Abstraction {
         }
         private GenericRepository<UserDataTotalDistance> _userDataTotalDistance = null;
         #endregion
+
+        /// <summary>
+        ///     Acceso directo al almacén de imágenes
+        /// </summary>
+        public GenericRepository<IPicture> IPictureStore {
+            get {
+                if ( this._iPicture == null )
+                    this._iPicture = new GenericRepository<IPicture>(this._context);
+
+                return this._iPicture;
+            }
+        }
+        private GenericRepository<IPicture> _iPicture = null;
     }
 }
