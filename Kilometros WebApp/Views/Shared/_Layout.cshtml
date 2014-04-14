@@ -73,11 +73,12 @@
                 </ul>
             </nav>
 
-            <div class="alertas-header">
+            <a href="@Url.Action("Entry", "Index")" class="alertas-header">
                 @if ( layoutValues.UnreadMessages > 0 ) {
                     <span>@layoutValues.UnreadMessages</span>
                 }
-            </div>
+            </a>
+            <a href="@Url.Action("Entry", "Index")" class="configuracion-header"></a>
             <div class="buscador-header">
                 @using ( Html.BeginForm("Index", "Search", FormMethod.Get) ) {
                     <input type="search" name="kms-q" placeholder="@LayoutStrings.SearchPlaceholder" />
@@ -105,8 +106,8 @@
             </section>
 
             @* - Próxima Recompensa (o última recompensa ganada) - *@
-            @if ( string.IsNullOrEmpty(layoutValues.RecentlyUnlockedRewardGuid) ) {
-                <section id="recompensaDash">
+            <section id="recompensaDash">
+                @if ( string.IsNullOrEmpty(layoutValues.RecentlyUnlockedRewardGuid) ) {
                     <span class="proxRecomp">@LayoutStrings.NextRewardIn</span>
                     <span class="bandera">
                         <img src="@Url.Content("~/Images/Sidebar/Sidebar.Medal.gif")" alt="">
@@ -117,15 +118,21 @@
                     <div id="barra">
                         <div class="progreso" style="width: 80%;"></div>
                     </div>
-                </section>
-            } else {
-            }
+                } else {
+				    <img src="img/medalla.png" alt="">
+				    <a href="@Url.Action("Rewards", "Detail", new {
+                        id = layoutValues.RecentlyUnlockedRewardGuid
+                    })" class="botonDorado">
+					    @LayoutStrings.ViewReward.ToUpper()
+				    </a>
+                }
+			</section>
 
             <section id="tipDelDia">
                 <figure>
                     <img src="@layoutValues.TipOfTheDayCategoryIconUri" alt="">
                 </figure>
-                <h3>@LayoutStrings.TipOfTheDay</h3>
+                <h3>@LayoutStrings.TipOfTheDay.ToUpper()</h3>
                 <article>
                     @layoutValues.TipOfTheDayText
                 </article>

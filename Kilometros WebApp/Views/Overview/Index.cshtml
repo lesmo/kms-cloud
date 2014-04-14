@@ -6,20 +6,23 @@
 		= overviewValues ?? new OverviewValues();
 }
 <div id="actividad">
-	<aside class="tresCol">
-		<p>
-			@overviewValues.TodaySleepTime.Hours <span class="peque">hrs</span>
-			@overviewValues.TodaySleepTime.Minutes <span class="peque">min</span>
-		</p>
-		<em>@OverviewStrings.TodaySleepTime.ToUpper()</em>
-	</aside>
-	<aside class="tresCol">
-		<p>
-			@overviewValues.TodayDistanceString
-			<span class="peque">@(overviewValues.RegionInfo.IsMetric ? "kms" : "mi")</span>
-		</p>
-		<em>@OverviewStrings.TodayTraveled.ToUpper()</em>
-	</aside>
+	<div class="recorridoSueno">
+		<aside class="tresCol">
+            <p>
+                @overviewValues.TodaySleepTime.Hours <span class="peque">hrs</span>
+                @overviewValues.TodaySleepTime.Minutes <span class="peque">min</span>
+            </p>
+            <em>@OverviewStrings.TodaySleepTime.ToUpper()</em>
+		</aside>
+		<aside class="tresCol">
+            <p>
+                @overviewValues.TodayDistanceString
+                <span class="peque">@(overviewValues.RegionInfo.IsMetric ? "kms" : "mi")</span>
+            </p>
+            <em>@OverviewStrings.TodayTraveled.ToUpper()</em>
+		</aside>
+	</div>
+
 	<aside class="equivalencias">
 		<ul>
 			<li>
@@ -131,20 +134,6 @@
 
 		</script>
 	</section>
-
-	<div class="titulo-tip-godin">
-		<h3>@OverviewStrings.TipOfTheDay.ToUpper()</h3>
-		<hr />
-	</div>
-	<div class="tipGodin">
-		<figure>
-			<img src="@overviewValues.TipOfTheDayCategoryIconUri.AbsoluteUri" alt="@overviewValues.TipOfTheDayCategory">
-		</figure>
-		<article>
-			<h2>@overviewValues.TipOfTheDayCategory</h2>
-			<p>@overviewValues.TipOfTheDayText</p>
-		</article>
-	</div>
 </div>
 
 @section FooterScripts {

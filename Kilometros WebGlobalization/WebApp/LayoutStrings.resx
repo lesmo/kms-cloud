@@ -188,8 +188,8 @@
     <value>Tips</value>
     <comment>Navigation "Tips"</comment>
   </data>
-  <data name="YourRewards" xml:space="preserve">
-    <value>Your rewards</value>
-    <comment>Left sidebar "Your rewards" tag</comment>
+  <data name="ViewReward" xml:space="preserve">
+    <value>View reward</value>
+    <comment>"View reward" button on Sidebar</comment>
   </data>
 </root>

@@ -223,11 +223,11 @@ namespace Kilometros_WebGlobalization.WebApp {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your rewards.
+        ///   Looks up a localized string similar to View reward.
         /// </summary>
-        public static string YourRewards {
+        public static string ViewReward {
             get {
-                return ResourceManager.GetString("YourRewards", resourceCulture);
+                return ResourceManager.GetString("ViewReward", resourceCulture);
             }
         }
     }
