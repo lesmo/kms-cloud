@@ -158,7 +158,7 @@ namespace Kilometros_WebApp.Controllers {
 					= new Uri(
 						Url.Content(
 							string.Format(
-								"{0}/{1}.{1}",
+								"{0}/{1}.{2}",
 								"DynamicResources/Images",
 								tipOfTheDay.TipCategory.Guid.ToBase64String(),
 								tipOfTheDay.TipCategory.PictureExtension
