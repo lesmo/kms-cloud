@@ -25,6 +25,7 @@ namespace KilometrosDatabase
             this.OAuthCredential = new HashSet<OAuthCredential>();
             this.UserFriended = new HashSet<UserFriend>();
             this.UserFriend = new HashSet<UserFriend>();
+            this.UserDataTotalDistance = new HashSet<UserDataTotalDistance>();
             this.UserDataHourlyDistance = new HashSet<UserDataHourlyDistance>();
         }
     
@@ -52,7 +53,7 @@ namespace KilometrosDatabase
         public virtual ICollection<OAuthCredential> OAuthCredential { get; set; }
         public virtual ICollection<UserFriend> UserFriended { get; set; }
         public virtual ICollection<UserFriend> UserFriend { get; set; }
-        public virtual UserDataTotalDistance UserDataTotalDistance { get; set; }
+        public virtual ICollection<UserDataTotalDistance> UserDataTotalDistance { get; set; }
         public virtual ICollection<UserDataHourlyDistance> UserDataHourlyDistance { get; set; }
     }
 }
