@@ -2034,8 +2034,8 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
           </Key>
           <Property Name="Activity" Type="MainModel.DataActivity" Nullable="false" />
           <Property Name="Timestamp" Type="DateTime" Precision="3" Nullable="false" />
-          <Property Name="Steps" Type="Int64" />
-          <Property Name="Distance" Type="Int64" />
+          <Property Name="Steps" Type="Int64" Nullable="false" />
+          <Property Name="Distance" Type="Int64" Nullable="false" />
           <NavigationProperty Name="User" Relationship="MainModel.UserDataHourlyDistanceUser" FromRole="UserDataHourlyDistance" ToRole="User" />
         </EntityType>
         <EntityType Name="UserDataTotalDistance">
@@ -2045,8 +2045,8 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
           </Key>
           <Property Name="Activity" Type="MainModel.DataActivity" Nullable="false" />
           <Property Name="Timestamp" Type="DateTime" Precision="3" Nullable="false" />
-          <Property Name="TotalSteps" Type="Int64" />
-          <Property Name="TotalDistance" Type="Int64" />
+          <Property Name="TotalSteps" Type="Int64" Nullable="false" />
+          <Property Name="TotalDistance" Type="Int64" Nullable="false" />
           <NavigationProperty Name="User" Relationship="MainModel.UserUserDataTotalDistance" FromRole="UserDataTotalDistance" ToRole="User" />
         </EntityType>
         <EntityType Name="UserFriend">
@@ -2068,7 +2068,7 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
           <End Type="MainModel.UserFriend" Role="UserFriendSet" Multiplicity="*" />
         </Association>
         <Association Name="UserUserDataTotalDistance">
-          <End Type="MainModel.UserDataTotalDistance" Role="UserDataTotalDistance" Multiplicity="0..1" />
+          <End Type="MainModel.UserDataTotalDistance" Role="UserDataTotalDistance" Multiplicity="*" />
           <End Type="MainModel.User" Role="User" Multiplicity="1" />
         </Association>
         <Association Name="UserDataHourlyDistanceUser">
@@ -2667,8 +2667,6 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
               <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
               <ScalarProperty Name="Activity" ColumnName="Activity" />
             </EndProperty>
-            <Condition ColumnName="Activity" IsNull="false" />
-            <Condition ColumnName="User_Guid" IsNull="false" />
           </AssociationSetMapping>
           <AssociationSetMapping Name="UserDataHourlyDistanceUser" TypeName="MainModel.UserDataHourlyDistanceUser" StoreEntitySet="UserDataHourlyDistance">
             <EndProperty Name="User">

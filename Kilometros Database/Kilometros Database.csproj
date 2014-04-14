@@ -76,6 +76,7 @@
     <Compile Include="Helpers\Base36Encoder.cs" />
     <Compile Include="Helpers\Crc64.cs" />
     <Compile Include="Helpers\EntityDatesUtcKind.cs" />
+    <Compile Include="Helpers\GuidStringify.cs" />
     <Compile Include="Helpers\PredicateBuilder.cs" />
     <Compile Include="IGlobalization.cs">
       <DependentUpon>MainModel.tt</DependentUpon>
