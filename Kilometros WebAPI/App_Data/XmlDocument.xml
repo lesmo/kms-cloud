@@ -552,7 +552,7 @@
                 Los pasos totales dados y las distancias totales recorridas por el Usuario.
             </returns>
         </member>
-        <member name="M:Kilometros_WebAPI.Controllers.DataController.PostData(Kilometros_WebAPI.Models.RequestModels.DataPost)">
+        <member name="M:Kilometros_WebAPI.Controllers.DataController.PostDataBulk(System.Collections.Generic.IEnumerable{Kilometros_WebAPI.Models.RequestModels.DataPost})">
             <summary>
                 Subir Datos generados por el Dispositivo KMS.
             </summary>
@@ -562,6 +562,25 @@
             <returns>
                 
             </returns>
+        </member>
+        <member name="M:Kilometros_WebAPI.Controllers.DataController.PostData(Kilometros_WebAPI.Models.RequestModels.DataPost)">
+            <summary>
+                Subir un solo Dato generado por el Dispositivo KMS.
+            </summary>
+            <param name="dataPost">
+                Dato del Dispositivo KMS.
+            </param>
+            <returns>
+                
+            </returns>
+        </member>
+        <member name="M:Kilometros_WebAPI.Controllers.DataController.PrepareDataInsert(Kilometros_WebAPI.Models.RequestModels.DataPost,KilometrosDatabase.UserBody)">
+            <summary>
+            Prepara la inserción de Datos, sin consultar detalles del
+            Perfil Físico del Usuario aún.
+            </summary>
+            <param name="dataPost"></param>
+            <param name="userBody"></param>
         </member>
         <member name="T:Kilometros_WebAPI.Controllers.AccountController">
             <summary>
