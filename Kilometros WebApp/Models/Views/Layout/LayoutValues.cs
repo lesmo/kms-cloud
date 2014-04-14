@@ -129,12 +129,7 @@ namespace Kilometros_WebApp.Models.Views {
             set;
         }
 
-        public string TipOfTheDayText {
-            get;
-            set;
-        }
-
-        public Uri TipOfTheDayCategoryIconUri {
+        public TipModel TipOfTheDay {
             get;
             set;
         }

@@ -150,21 +150,28 @@ namespace Kilometros_WebApp.Controllers {
 							new string[] { "Tip.TipCategory" }
 					).Tip;
 
-				this._layoutValues.TipOfTheDayText
-					= tipOfTheDay.GetGlobalization(
-						this._layoutValues.CultureInfo
-					).Text;
-				this._layoutValues.TipOfTheDayCategoryIconUri
-					= new Uri(
-						Url.Content(
-							string.Format(
-								"{0}/{1}.{2}",
-								"DynamicResources/Images",
-								tipOfTheDay.TipCategory.Guid.ToBase64String(),
-								tipOfTheDay.TipCategory.PictureExtension
+				this._layoutValues.TipOfTheDay
+					= new TipModel() {
+						TipId
+							= tipOfTheDay.Guid.ToBase64String(),
+						Text
+							= tipOfTheDay.GetGlobalization(
+								this._layoutValues.CultureInfo
+							).Text,
+						Category
+							= tipOfTheDay.TipCategory.GetGlobalization<TipCategoryGlobalization>(
+								this._layoutValues.CultureInfo
+							).Name,
+						IconUri
+							= GetDynamicResourceUri(
+								method:
+									"Images",
+								filename:
+									tipOfTheDay.TipCategory.Guid.ToBase64String(),
+								ext:
+									tipOfTheDay.TipCategory.PictureExtension
 							)
-						)
-					);
+					};
 
 				// > Devolver valores
 				return this._layoutValues;
@@ -192,7 +199,7 @@ namespace Kilometros_WebApp.Controllers {
 			return new Uri(
 				Url.Content(
 					string.Format(
-						"{0}/{1}.{2}",
+						"~/{0}/{1}.{2}",
 						"DynamicResources/Images",
 						filename,
 						ext

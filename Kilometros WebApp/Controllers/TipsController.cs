@@ -1,4 +1,4 @@
-﻿using Kilometros_WebApp.Models.Views.Tips;
+﻿using Kilometros_WebApp.Models.Views;
 using KilometrosDatabase;
 using System;
 using System.Collections.Generic;
@@ -20,42 +20,6 @@ namespace Kilometros_WebApp.Controllers {
 				this._tipValues
 					= new TipsValues();
 
-				// > Obtener Tip del Día
-				Tip tipOfTheDay
-					= Database.UserTipHistoryStore.GetFirst(
-						filter: f =>
-							f.User.Guid == CurrentUser.Guid,
-						orderBy: o =>
-							o.OrderByDescending(b => b.CreationDate),
-						include:
-							new string[] { "Tip.TipCategory" }
-					).Tip;
-				TipGlobalization tipOfTheDayGlobalization
-					= tipOfTheDay.GetGlobalization(
-						LayoutValues.CultureInfo
-					);
-				TipCategoryGlobalization tipOfTheDayCategoryGlobalization
-					= tipOfTheDay.TipCategory.GetGlobalization<TipCategoryGlobalization>(
-						LayoutValues.CultureInfo
-					);
-
-				this._tipValues.TipOfTheDay
-					= new TipModel() {
-						Text
-							= tipOfTheDayGlobalization.Text,
-						Category
-							= tipOfTheDayCategoryGlobalization.Name,
-						IconUri
-							= GetDynamicResourceUri(
-								method:
-									"Images",
-								filename:
-									tipOfTheDay.TipCategory.Guid.ToBase64String(),
-								ext:
-									tipOfTheDay.TipCategory.PictureExtension
-							)
-					};
-
 				// > Devolver valores de Tips
 				return this._tipValues;
 			}
@@ -63,7 +27,7 @@ namespace Kilometros_WebApp.Controllers {
 		private TipsValues _tipValues;
 
 		// GET: /Tips/
-		public ActionResult Index(string cat = null, int page = 0) {
+		public ActionResult Index(string cat = null, int page = 1) {
 			// > Obtener las Categorías de Tips
 			IEnumerable<TipCategoryGlobalization> tipCategories
 				= Database.TipCategoryStore.GetAll().Select( s =>
@@ -151,6 +115,8 @@ namespace Kilometros_WebApp.Controllers {
 			TipsValues.Categories
 				= tipCategories.Select(s =>
 					new TipCategoryModel() {
+						CategoryId
+							= s.TipCategory.Guid.ToBase64String(),
 						Name
 							= s.Name,
 						IconUri
@@ -187,6 +153,14 @@ namespace Kilometros_WebApp.Controllers {
 									s.TipCategory.PictureExtension
 							)					}
 				).FirstOrDefault();
+
+			// + Páginas totales disponibles
+			TipsValues.CurrentCategoryTipsTotalPages
+				= Math.Ceiling(
+					(float)tipCategory.Tip.Where( w =>
+						w.UserTipHistory.User.Guid == CurrentUser.Guid
+					).Count() / TipsPerPage
+				);
 
 			// > Añadir valores a Vista
 			ViewData.Add(

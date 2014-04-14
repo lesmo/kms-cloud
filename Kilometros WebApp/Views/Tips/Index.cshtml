@@ -1,0 +1,102 @@
+﻿@{
+    LayoutValues layoutValues
+        = (LayoutValues)ViewData["LayoutValues"];
+    layoutValues
+        = layoutValues ?? new LayoutValues();
+
+    TipsValues tipsValues
+        = (TipsValues)ViewData["TipsValues"];
+    tipsValues
+        = tipsValues ?? new TipsValues();
+}
+
+<div id="tipsGodines">
+    <span class="tituloGrafica">
+        <h2>
+            <img src="@Url.Content("~/Images/Gui/Gui.Day.jpg")"> @LayoutStrings.TipOfTheDay.ToUpper()
+        </h2>
+        <hr />
+    </span>
+    <div class="tipGodin">
+        <figure>
+            <img src="@layoutValues.TipOfTheDay.IconUri.AbsoluteUri" alt="">
+        </figure>
+        <article>
+            <h2>@layoutValues.TipOfTheDay.Category</h2>
+            <p>@layoutValues.TipOfTheDay.Text</p>
+            <ul class="redes">
+                <li><a href="#" class="corona"></a></li>
+                <li><a href="#" class="facebook"></a></li>
+                <li><a href="#" class="twitter"></a></li>
+            </ul>
+        </article>
+    </div>
+
+    <span class="tituloGrafica">
+        <h2>
+            <img src="@Url.Content("~/Images/Gui/Gui.Day.jpg")">@TipsStrings.Categories
+        </h2>
+        <hr>
+    </span>
+    <div id="Navegacion-Tips">
+        <nav>
+            <ul>
+                @foreach ( TipCategoryModel category in tipsValues.Categories ) {
+                    if ( category.CategoryId == tipsValues.CurrentCategory.CategoryId ) {
+                        <li class="activo">
+                            <img src="@category.IconUri.AbsoluteUri" alt="@category.Name" />
+                        </li>
+                    } else {
+                        <li>
+                            <a href="@Url.Action("Tips", "Index", new { cat = category.CategoryId })">
+                                <img src="@category.IconUri.AbsoluteUri" alt="@category.Name" />
+                            </a>
+                        </li>
+                    }
+                }
+            </ul>
+        </nav>
+
+        <div id="contenidosAjax">
+            @foreach ( TipModel tip in tipsValues.CurrentCategoryTips ) {
+                <article class="tips-items">
+                    <div class="redesTips">
+                        <ul class="redes">
+                            <li><a href="#" class="corona"></a></li>
+                            <li><a href="#" class="facebook"></a></li>
+                            <li><a href="#" class="twitter"></a></li>
+                        </ul>
+                    </div>
+                    <div class="contenido-tips">
+                        <h3>@tip.Category</h3>
+                        <p>@tip.Text</p>
+                    </div>
+                </article>
+            }
+
+            <div class="paginacion">
+                <ul>
+                    <li><a href="">«</a></li>
+                    <li>
+                        <a href="@Url.Action("Tips", "Index", new {
+                            cat = tipsValues.CurrentCategory.CategoryId
+                        })">1</a>
+                    </li>
+                    @for ( int i = 2; i <= tipsValues.CurrentCategoryTipsTotalPages; i++ ) {
+                        <li>
+                            <a href="@Url.Action("Tips", "Index", new {
+                                cat = tipsValues.CurrentCategory.CategoryId,
+                                page = i
+                            })">@i</a>
+                        </li>
+                    }
+                    <li>
+                        <a href="@Url.Action("Tips", "Index", new {
+                            cat = tipsValues.CurrentCategoryTipsTotalPages
+                        })">@tipsValues.CurrentCategoryTipsTotalPages</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
