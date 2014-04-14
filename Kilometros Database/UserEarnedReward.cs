@@ -16,6 +16,7 @@ namespace KilometrosDatabase
     {
         public System.Guid Guid { get; set; }
         public System.DateTime CreationDate { get; set; }
+        public bool Discarded { get; set; }
     
         public virtual User User { get; set; }
         public virtual Reward Reward { get; set; }

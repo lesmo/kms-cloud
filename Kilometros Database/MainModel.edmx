@@ -2038,8 +2038,8 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
           </Key>
           <Property Name="Activity" Type="MainModel.DataActivity" Nullable="false" />
           <Property Name="Timestamp" Type="DateTime" Precision="3" Nullable="false" />
-          <Property Name="Steps" Type="Int64" />
-          <Property Name="Distance" Type="Int64" />
+          <Property Name="Steps" Type="Int64" Nullable="false" />
+          <Property Name="Distance" Type="Int64" Nullable="false" />
           <NavigationProperty Name="User" Relationship="MainModel.UserDataHourlyDistanceUser" FromRole="UserDataHourlyDistance" ToRole="User" />
         </EntityType>
         <EntityType Name="UserDataTotalDistance">
@@ -2049,8 +2049,8 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
           </Key>
           <Property Name="Activity" Type="MainModel.DataActivity" Nullable="false" />
           <Property Name="Timestamp" Type="DateTime" Precision="3" Nullable="false" />
-          <Property Name="TotalSteps" Type="Int64" />
-          <Property Name="TotalDistance" Type="Int64" />
+          <Property Name="TotalSteps" Type="Int64" Nullable="false" />
+          <Property Name="TotalDistance" Type="Int64" Nullable="false" />
           <NavigationProperty Name="User" Relationship="MainModel.UserUserDataTotalDistance" FromRole="UserDataTotalDistance" ToRole="User" />
         </EntityType>
         <EntityType Name="UserFriend">
