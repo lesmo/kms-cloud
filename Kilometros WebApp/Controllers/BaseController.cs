@@ -1,4 +1,5 @@
 ﻿using Kilometros_WebApp.Models.Views;
+using KilometrosDatabase;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -30,7 +31,7 @@ namespace Kilometros_WebApp.Controllers {
 		}
 		private KilometrosDatabase.Abstraction.WorkUnit _database = null;
 
-		protected KilometrosDatabase.User CurrentUser {
+		protected User CurrentUser {
 			get {
 				if ( this._currentUser != null )
 					return this._currentUser;
@@ -64,7 +65,7 @@ namespace Kilometros_WebApp.Controllers {
 				return this._currentUser;
 			}
 		}
-		private KilometrosDatabase.User _currentUser = null;
+		private User _currentUser = null;
 
 		/// <summary>
 		///     Devuelve los Valores que deben utilizarse en el Layout
@@ -97,144 +98,73 @@ namespace Kilometros_WebApp.Controllers {
 						= "{Not Implemented}",
 
 					TotalDistanceCentimeters
-						= CurrentUser.UserDataTotalDistance.TotalDistance,
+						= CurrentUser.UserDataTotalDistanceSum,
 				};
 
-				// > Obtener distancia restante para la Próxima Recompensa del Usuario
-				KilometrosDatabase.Reward nextReward
-					= Database.RewardStore.GetFirstForRegion(
-						regionCode:
-							// + Obtener la Recompensa para el Código de Región del Usuario
-							CurrentUser.RegionCode,
+				// > Obtener la última recompensa obtenida por el Usuario
+				UserEarnedReward lastReward
+					= Database.UserEarnedRewardStore.GetFirst(
 						filter: f =>
-							// + Obtener la Recompensa inmediata siguiente según la Distancia del Usuario
-							f.DistanceTrigger > CurrentUser.UserDataTotalDistance.TotalDistance,
-						orderBy: o =>
-							// + Ordenar las Recompensas según su Distancia de Debloqueo (Descendiente)
-							o.OrderByDescending(b => b.DistanceTrigger)
-					);
-
-				if ( nextReward == null )
-					throw new InvalidOperationException(
-						"Current User's [" + CurrentUser.Guid.ToString("N") + "] Next Reward could "
-						+ "not be mapped to any Reward because Database is empty, or Regional limitations "
-						+ "return no Rewards. Never must a User be mapped to no next Reward."
-					);
-				else
-					this._layoutValues.NextRewardDistanceCentimeters
-						= nextReward.DistanceTrigger - CurrentUser.UserDataTotalDistance.TotalDistance;
-
-				// > Obtener Últimas Recompensas del Usuario
-				IEnumerable<KilometrosDatabase.UserEarnedReward> earnedRewards
-					= Database.UserEarnedRewardStore.GetAll(
-						filter: f =>
-							// + Recompensas Ganadas por el Usuario
 							f.User.Guid == CurrentUser.Guid,
 						orderBy: o =>
-							// + Ordenar por Fecha de Creación (Descendiente)
-							o.OrderByDescending(b => b.CreationDate),
-						extra: x =>
-							// + Tomar los primeros 5
-							x.Take(5),
-						include:
-							// + También cargar Recompensa y Regalo
-							new string[]{"Reward.RewardGift"}
+							o.OrderByDescending(b => b.CreationDate)
 					);
 
-				HashSet<Guid> earnedRewardGiftGuidHashSet
-					= new HashSet<Guid>();
-				foreach ( KilometrosDatabase.UserEarnedReward earnedReward in earnedRewards ) {
-					foreach ( KilometrosDatabase.RewardGift rewardGift in earnedReward.Reward.RewardGift )
-						earnedRewardGiftGuidHashSet.Add(rewardGift.Guid);
+				if ( lastReward.Discarded ) {
+					// > Obtener distancia restante para la Próxima Recompensa del Usuario
+					Reward nextReward
+						= Database.RewardStore.GetFirstForRegion(
+							regionCode:
+						// + Obtener la Recompensa para el Código de Región del Usuario
+								CurrentUser.RegionCode,
+							filter: f =>
+								// + Obtener la Recompensa inmediata siguiente según la Distancia del Usuario
+								f.DistanceTrigger > CurrentUser.UserDataTotalDistanceSum,
+							orderBy: o =>
+								// + Ordenar las Recompensas según su Distancia de Debloqueo (Descendiente)
+								o.OrderByDescending(b => b.DistanceTrigger)
+						);
+
+					if ( nextReward == null )
+						throw new InvalidOperationException(
+							"Current User's [" + CurrentUser.Guid.ToString("N") + "] Next Reward could"
+							+ " not be mapped to any Reward because Database is empty, or Regional limitations"
+							+ " return no Rewards. Never must a User be mapped to no next Reward."
+						);
+					else
+						this._layoutValues.NextRewardDistanceCentimeters
+							= nextReward.DistanceTrigger - CurrentUser.UserDataTotalDistanceSum;
+				} else {
+					this._layoutValues.RecentlyUnlockedRewardGuid
+						= lastReward.Guid.ToBase64String();
 				}
 
-				Guid[] earnedRewardGiftGuids
-					= earnedRewardGiftGuidHashSet.ToArray();
-
-				Guid[] claimedRewardGiftGuids
-					= Database.UserRewardGiftClaimedStore.GetAll(
+				// > Obtener el Tip del Día
+				Tip tipOfTheDay
+					= Database.UserTipHistoryStore.GetFirst(
 						filter: f =>
-							// + Regalos Reclamados que correspondan a los obtenidos anteriormente
-							earnedRewardGiftGuids.Contains(f.RewardGift.Reward.Guid),
+							f.User.Guid == CurrentUser.Guid,
 						orderBy: o =>
-							// + Ordenar por Fecha de Creación (Descendiente)
-							o.OrderByDescending(b => b.CreationDate)
-					).Select( f =>
-						// + Obtener sólo el GUID del Regalo Reclamado
-						f.RewardGift.Guid
-					).ToArray();
-
-				this._layoutValues.LastRewards = (
-					from r in earnedRewards
-					select new LayoutReward() {
-						IncludesGift
-							= r.Reward.RewardGift != null,
-						IncludedGiftClaimedByUser
-							= (
-								from g in r.Reward.RewardGift
-								where claimedRewardGiftGuids.Contains(g.Guid)
-								select g.Guid
-							).Count() > 0,
-
-						Title
-							= r.Reward.GetGlobalization(this._layoutValues.CultureInfo).Title,
-						
-						CultureInfo
-							= this._layoutValues.CultureInfo,
-						RegionInfo
-							= this._layoutValues.RegionInfo,
-
-						TriggerDistanceCentimeters
-							= r.Reward.DistanceTrigger
-					}
-				).ToArray();
-
-				// > Obtener Top de Amigos (Marcadores)
-				IEnumerable<KilometrosDatabase.User> topFriends
-					= Database.UserFriendStore.GetAll(
-						filter: f => 
-							// + Relaciones que contengan el GUID del Usuario en Amigo o Usuario
-							f.Friend.Guid == CurrentUser.Guid
-							|| f.User.Guid == CurrentUser.Guid,
-						orderBy: o =>
-							// + Ordenar por Distancia Total Recorrida (Descendiente)
-							o.OrderByDescending(
-								b => b.Friend.UserDataTotalDistance.TotalDistance
-							).OrderByDescending(
-								b => b.User.UserDataTotalDistance.TotalDistance
-							),
+							o.OrderByDescending(b => b.CreationDate),
 						include:
-							// + También cargar objeto(s) de Usuario y Distancia Total Recorrida
-							new string[] { "User.UserDataTotalDistance" }
-					).Select( s =>
-						// + Obtener sólo el objeto del Usuario (no interesa el objeto de Amistad)
-						s.User.Guid == CurrentUser.Guid
-						&& s.User.UserDataTotalDistance.TotalDistance > s.Friend.UserDataTotalDistance.TotalDistance
-							? s.User
-							: s.Friend
+							new string[] { "Tip.TipCategory" }
+					).Tip;
+
+				this._layoutValues.TipOfTheDayText
+					= tipOfTheDay.GetGlobalization(
+						this._layoutValues.CultureInfo
+					).Text;
+				this._layoutValues.TipOfTheDayCategoryIconUri
+					= new Uri(
+						Url.Content(
+							string.Format(
+								"{0}/{1}.{1}",
+								"DynamicResources/Images",
+								tipOfTheDay.TipCategory.Guid.ToBase64String(),
+								tipOfTheDay.TipCategory.PictureExtension
+							)
+						)
 					);
-
-				// > Abstraer el Top de Amigos al objeto {LayoutFriend}
-				this._layoutValues.TopFriends
-					= (
-						from f in topFriends
-						select new LayoutFriend() {
-							CultureInfo
-								= this._layoutValues.CultureInfo,
-							RegionInfo
-								= this._layoutValues.RegionInfo,
-					
-							Name
-								= f.Name,
-							LastName
-								= f.LastName,
-							PictureUri
-								= new Uri(f.PictureUri),
-
-							TotalDistanceCentimeters
-								= f.UserDataTotalDistance.TotalDistance
-						}
-					).ToArray();
 
 				// > Devolver valores
 				return this._layoutValues;

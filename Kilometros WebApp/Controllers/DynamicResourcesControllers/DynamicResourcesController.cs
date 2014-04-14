@@ -8,8 +8,8 @@ using System.Web.Mvc;
 
 namespace Kilometros_WebApp.Controllers {
 	public class DynamicResourcesController : BaseController {
-		// GET: /DynamicResources/Image/{filename}.{ext}
-		public BinaryResult Image(string filename, string ext) {
+		// GET: /DynamicResources/Images/{filename}.{ext}
+		public BinaryResult Images(string filename, string ext) {
 			IPicture picture
 				= Database.IPictureStore.Get(filename);
 

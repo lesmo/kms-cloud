@@ -7,14 +7,14 @@ using System.Globalization;
 namespace Kilometros_WebApp.Models.Views {    
     public class LayoutValues {
         public enum MainSection {
-            Home,
+            MyProfile,
             Tips,
             Rewards,
-            MyProfile
+            Friends
         }
 
         public MainSection Section
-            = MainSection.Home;
+            = MainSection.MyProfile;
         public int UnreadMessages
             = 0;
 
@@ -120,49 +120,21 @@ namespace Kilometros_WebApp.Models.Views {
         }
 
         /// <summary>
-        /// Colección de las últimas recompensas obtenidas por el Usuario
+        /// Cadena de Representación Compacta del GUID de la Recompensa Desbloqueada recientemente.
+        /// Si es nula o vacía, no se ha desbloqueado una recompensa recientemente o ya se marcó como
+        /// descartada en alguna ocasión anterior por el API o la misma WebApp.
         /// </summary>
-        public LayoutReward[] LastRewards {
-            get {
-                return this._lastRewards;
-            }
-            set {
-                this._lastRewards = value;
-                
-                foreach ( LayoutReward reward in this._lastRewards ) {
-                    reward.RegionInfo
-                        = this.RegionInfo;
-                    reward.CultureInfo
-                        = this.CultureInfo;
-                }
-            }
+        public string RecentlyUnlockedRewardGuid {
+            get;
+            set;
         }
-        private LayoutReward[] _lastRewards;
 
-        /// <summary>
-        /// Colección del Top 5 de Amigos
-        /// </summary>
-        public LayoutFriend[] TopFriends {
-            get {
-                return this._topFriends;
-            }
-            set {
-                this._topFriends = value;
-
-                foreach ( LayoutFriend friend in this._topFriends ) {
-                    friend.RegionInfo
-                        = this.RegionInfo;
-                    friend.CultureInfo
-                        = this.CultureInfo;
-                }
-            }
+        public string TipOfTheDayText {
+            get;
+            set;
         }
-        private LayoutFriend[] _topFriends;
 
-        /// <summary>
-        /// Número total de Amigos
-        /// </summary>
-        public int TotalFriends {
+        public Uri TipOfTheDayCategoryIconUri {
             get;
             set;
         }

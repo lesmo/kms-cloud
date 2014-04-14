@@ -142,6 +142,15 @@ namespace Kilometros_WebGlobalization.WebApp {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Friends.
+        /// </summary>
+        public static string Friends {
+            get {
+                return ResourceManager.GetString("Friends", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to My Profile.
         /// </summary>
         public static string MyProfile {
@@ -169,15 +178,6 @@ namespace Kilometros_WebGlobalization.WebApp {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Overview.
-        /// </summary>
-        public static string Overview {
-            get {
-                return ResourceManager.GetString("Overview", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Rewards.
         /// </summary>
         public static string Rewards {
@@ -201,6 +201,15 @@ namespace Kilometros_WebGlobalization.WebApp {
         public static string SeeMore {
             get {
                 return ResourceManager.GetString("SeeMore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tip of the day.
+        /// </summary>
+        public static string TipOfTheDay {
+            get {
+                return ResourceManager.GetString("TipOfTheDay", resourceCulture);
             }
         }
         

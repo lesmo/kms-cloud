@@ -32,11 +32,11 @@
                 <ul>
                     <li>
                         @Html.ActionLink(
-                            LayoutStrings.Overview,
+                            LayoutStrings.MyProfile,
                             "Index",
                             "Entry",
                             null, new {
-                                @class = layoutValues.Section == LayoutValues.MainSection.Home ? "active" : ""
+                                @class = layoutValues.Section == LayoutValues.MainSection.MyProfile ? "active" : ""
                             }
                         )
                     </li>
@@ -62,11 +62,11 @@
                     </li>
                     <li>
                         @Html.ActionLink(
-                            LayoutStrings.MyProfile,
+                            LayoutStrings.Friends,
                             "Index",
                             "Entry",
                             null, new {
-                                @class = layoutValues.Section == LayoutValues.MainSection.MyProfile ? "active" : ""
+                                @class = layoutValues.Section == LayoutValues.MainSection.Friends ? "active" : ""
                             }
                         )
                     </li>
@@ -81,6 +81,7 @@
             <div class="buscador-header">
                 @using ( Html.BeginForm("Index", "Search", FormMethod.Get) ) {
                     <input type="search" name="kms-q" placeholder="@LayoutStrings.SearchPlaceholder" />
+                    <input type="submit" class="submit" value="">
                 }
             </div>
         </div>
@@ -103,76 +104,46 @@
                 </span>
             </section>
 
-            @* - Próxima Recompensa - *@
-            <section id="recompensaDash">
-                <span class="proxRecomp">@LayoutStrings.NextRewardIn</span>
-                <span class="bandera">
-                    <img src="@Url.Content("~/Images/Sidebar/Sidebar.Medal.gif")" alt="">
-                </span>
-                <span class="kms">
-                    @layoutValues.NextRewardsDistanceSpanString @(layoutValues.RegionInfo.IsMetric ? "kms" : "mi")
-                </span>
-                <div id="barra">
-                    <div class="progreso" style="width: 80%;"></div>
-                </div>
+            @* - Próxima Recompensa (o última recompensa ganada) - *@
+            @if ( string.IsNullOrEmpty(layoutValues.RecentlyUnlockedRewardGuid) ) {
+                <section id="recompensaDash">
+                    <span class="proxRecomp">@LayoutStrings.NextRewardIn</span>
+                    <span class="bandera">
+                        <img src="@Url.Content("~/Images/Sidebar/Sidebar.Medal.gif")" alt="">
+                    </span>
+                    <span class="kms">
+                        @layoutValues.NextRewardsDistanceSpanString @(layoutValues.RegionInfo.IsMetric ? "kms" : "mi")
+                    </span>
+                    <div id="barra">
+                        <div class="progreso" style="width: 80%;"></div>
+                    </div>
+                </section>
+            } else {
+            }
+
+            <section id="tipDelDia">
+                <figure>
+                    <img src="@layoutValues.TipOfTheDayCategoryIconUri" alt="">
+                </figure>
+                <h3>@LayoutStrings.TipOfTheDay</h3>
+                <article>
+                    @layoutValues.TipOfTheDayText
+                </article>
             </section>
 
-            @* - Recompensas Desbloqueadas - *@
-            <section id="tusRecompensas">
-                <h3>@LayoutStrings.YourRewards</h3>
+            <section id="redes-sidebar">
                 <ul>
-                    @if ( layoutValues.LastRewards.Length > 0 ) {
-                        foreach ( LayoutReward reward in layoutValues.LastRewards ) {
-                            <li>
-                                <span class="recompensa">
-                                    @reward.Title
-                                </span>
-                                <span class="kilometros">
-                                    @reward.TotalDistanceString @(layoutValues.RegionInfo.IsMetric ? "km" : "mi")
-                                </span>
-                            </li>
-                        }
-                    } else {
-                        <li>
-                            <span class="recompensa"><i>@LayoutStrings.NoRewardsEarned</i></span>
-                        </li>
-                    }
+                    <li><a href="#" class="corona"></a></li>
+                    <li><a href="#" class="facebook"></a></li>
+                    <li><a href="#" class="twitter"></a></li>
                 </ul>
-
-                @Html.ActionLink(LayoutStrings.SeeMore, "Index", "Entry")
             </section>
-
-            <section id="amigos">
-                @if ( layoutValues.TotalFriends > 0 ) {
-                    if ( layoutValues.TotalFriends > 1 ) {
-                        <h3>@String.Format(LayoutStrings.FriendCount, layoutValues.TotalFriends)</h3>
-                    } else {
-                        <h3>@LayoutStrings.FriendCountSingular</h3>
-                    }
-
-                    <ul>
-                        @foreach ( LayoutFriend friend in layoutValues.TopFriends ) {
-                            <li>
-                                <figure>
-                                    <img src="@friend.PictureUri.AbsoluteUri" alt="@friend.Name @friend.LastName">
-                                </figure>
-                                <span class="datos">
-                                    <span class="nombre">@friend.Name @friend.LastName</span>
-                                    <span class="kms">@friend.TotalDistanceCentimeters @(layoutValues.RegionInfo.IsMetric ? "kms" : "mi")</span>
-                                </span>
-                            </li>
-                        }
-                    </ul>
-                }
-
-                @Html.ActionLink("Ver todos", "Index", "Entry")
-            </section>
-
         </aside>
 
         @* -- Body -- *@
         <section id="contenidos">
             @RenderBody()
+            <div class="bottom-abajo"></div>
         </section>
 
         <div style="clear:both"></div>

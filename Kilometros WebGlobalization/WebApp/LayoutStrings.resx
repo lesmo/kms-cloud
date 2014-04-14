@@ -153,6 +153,10 @@
     <value>1 friend</value>
     <comment>"1 friend" title in the Sidebar</comment>
   </data>
+  <data name="Friends" xml:space="preserve">
+    <value>Friends</value>
+    <comment>Navigation "Friends"</comment>
+  </data>
   <data name="MyProfile" xml:space="preserve">
     <value>My Profile</value>
     <comment>Navigation "My Profile"</comment>
@@ -163,10 +167,6 @@
   </data>
   <data name="NoRewardsEarned" xml:space="preserve">
     <value>You haven't earned any rewards yet!</value>
-  </data>
-  <data name="Overview" xml:space="preserve">
-    <value>Overview</value>
-    <comment>Navigation "Overview"</comment>
   </data>
   <data name="Rewards" xml:space="preserve">
     <value>Rewards</value>
@@ -179,6 +179,10 @@
   <data name="SeeMore" xml:space="preserve">
     <value>See more</value>
     <comment>"See more" link at the bottom of Sidebar list(s)</comment>
+  </data>
+  <data name="TipOfTheDay" xml:space="preserve">
+    <value>Tip of the day</value>
+    <comment>"Tip of the day" title for the sidebar</comment>
   </data>
   <data name="Tips" xml:space="preserve">
     <value>Tips</value>

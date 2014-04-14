@@ -64,6 +64,7 @@
     <Compile Include="DataActivity.cs">
       <DependentUpon>MainModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="EntityExtras\User.cs" />
     <Compile Include="EntityLocalization\IEntityGlobalization.cs" />
     <Compile Include="EntityLocalization\EntitiesGlobalization.cs" />
     <Compile Include="EntityValidation\Data\Data.cs" />

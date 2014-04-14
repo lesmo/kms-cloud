@@ -135,20 +135,5 @@ namespace Kilometros_WebApp.Models.Views {
                 );
             }
         }
-
-        public string TipOfTheDayText {
-            get;
-            set;
-        }
-
-        public string TipOfTheDayCategory {
-            get;
-            set;
-        }
-
-        public Uri TipOfTheDayCategoryIconUri {
-            get;
-            set;
-        }
     }
 }
