@@ -66,6 +66,21 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>LoginStrings.resx</DependentUpon>
     </Compile>
+    <Compile Include="WebApp\OverviewStrings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OverviewStrings.resx</DependentUpon>
+    </Compile>
+    <Compile Include="WebApp\RewardsStrings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>RewardsStrings.resx</DependentUpon>
+    </Compile>
+    <Compile Include="WebApp\TipsStrings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TipsStrings.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -84,6 +99,18 @@
     <EmbeddedResource Include="WebApp\LoginStrings.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>LoginStrings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WebApp\OverviewStrings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>OverviewStrings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WebApp\RewardsStrings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>RewardsStrings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WebApp\TipsStrings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>TipsStrings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

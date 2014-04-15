@@ -122,22 +122,39 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Overview\" />
+    <Folder Include="Views\DynamicResources\" />
+    <Folder Include="Views\Login\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Bundler\Bundler.cs" />
+    <Compile Include="Controllers\BaseController\CurrentUserBase.cs" />
+    <Compile Include="Controllers\BaseController\GlobalizationBase.cs" />
+    <Compile Include="Controllers\BaseController\LayoutBase.cs" />
+    <Compile Include="Controllers\BaseController\UtilsBase.cs" />
+    <Compile Include="Controllers\DynamicResourcesControllers\AjaxController.cs" />
+    <Compile Include="Controllers\BaseController\DatabaseBase.cs" />
+    <Compile Include="Controllers\DynamicResourcesControllers\DynamicResourcesController.cs" />
     <Compile Include="Controllers\EntryController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\OverviewController.cs" />
+    <Compile Include="Controllers\RewardsController.cs" />
+    <Compile Include="Controllers\TipsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Views\Layout\LayoutFriend.cs" />
     <Compile Include="Models\Views\Layout\LayoutReward.cs" />
     <Compile Include="Models\Views\Layout\LayoutValues.cs" />
+    <Compile Include="Models\Views\Overview\OverviewValues.cs" />
+    <Compile Include="Models\Views\Rewards\RewardModel.cs" />
+    <Compile Include="Models\Views\Rewards\RewardUnknownModel.cs" />
+    <Compile Include="Models\Views\Rewards\RewardsValues.cs" />
+    <Compile Include="Models\Views\Tips\TipCategoryModel.cs" />
+    <Compile Include="Models\Views\Tips\TipModel.cs" />
+    <Compile Include="Models\Views\Tips\TipsValues.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -892,7 +909,24 @@
     <Content Include="Images\Footer\Footer.Mail.png" />
     <Content Include="Images\Footer\Footer.Facebook.png" />
     <Content Include="Images\Footer\Footer.Twitter.png" />
+    <Content Include="Images\Gui\Social\Gui.Crown.Hover.png" />
+    <Content Include="Images\Gui\Social\Gui.Crown.png" />
+    <Content Include="Images\Gui\Social\Gui.Facebook.Hover.png" />
+    <Content Include="Images\Gui\Social\Gui.Facebook.png" />
+    <Content Include="Images\Gui\Social\Gui.Twitter.Hover.png" />
+    <Content Include="Images\Gui\Social\Gui.Twitter.png" />
+    <Content Include="Images\Header\Header.Search.jpg" />
+    <Content Include="Images\Header\Header.Config.jpg" />
+    <Content Include="Images\Gui\Gui.Trophy.jpg" />
+    <Content Include="Images\Gui\Gui.Categories.jpg" />
+    <Content Include="Images\Gui\Gui.Day.jpg" />
+    <Content Include="Images\Gui\Overview\Gui.Savings.jpg" />
+    <Content Include="Images\Gui\Overview\Gui.Co2.jpg" />
     <Content Include="Images\Gui\Gui.Activity.jpg" />
+    <Content Include="Images\Gui\Overview\Gui.Kcal.jpg" />
+    <Content Include="Images\Gui\Gui.MiniMedal.jpg" />
+    <Content Include="Images\Gui\Rewards\Gui.GenericBadge.jpg" />
+    <Content Include="Images\Gui\Rewards\Gui.BigMedal.jpg" />
     <Content Include="Images\Header\Header.KmsLogo.png" />
     <Content Include="Images\Header\Header.Notifications.jpg" />
     <Content Include="Images\Gui\Gui.Graph.jpg" />
@@ -917,12 +951,14 @@
     <Content Include="Views\Entry\Contact.cshtml" />
     <Content Include="Views\Entry\Index.cshtml" />
     <Content Include="Assets\Scripts\Lib\jquery-1.10.2.min.map" />
-    <Content Include="Views\Login\Index.cshtml" />
     <Content Include="Assets\Scripts\Lib\jquery-1.10.2.min.js.map">
       <DependentUpon>jquery-1.10.2.js</DependentUpon>
     </Content>
     <Content Include="Assets\Stylesheets.css.bundle" />
     <Content Include="Assets\Styles\style.styl" />
+    <Content Include="Views\Overview\Index.cshtml" />
+    <Content Include="Views\Tips\Index.cshtml" />
+    <Content Include="Views\Rewards\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Kilometros Database\Kilometros Database.csproj">
