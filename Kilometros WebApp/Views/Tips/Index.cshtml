@@ -76,7 +76,11 @@
 
             <div class="paginacion">
                 <ul>
-                    <li><a href="">«</a></li>
+                    <li>
+                        <a href="@Url.Action("Tips", "Index", new {
+                            cat = tipsValues.CurrentCategory.CategoryId
+                        })">«</a>
+                    </li>
                     <li>
                         <a href="@Url.Action("Tips", "Index", new {
                             cat = tipsValues.CurrentCategory.CategoryId
