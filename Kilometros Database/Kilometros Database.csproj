@@ -79,6 +79,8 @@
     <Compile Include="Helpers\EntityDatesUtcKind.cs" />
     <Compile Include="Helpers\GuidStringify.cs" />
     <Compile Include="Helpers\PredicateBuilder.cs" />
+    <Compile Include="Helpers\UnitsConverter\ImperialDistanceConverter.cs" />
+    <Compile Include="Helpers\UnitsConverter\MetricDistanceConverter.cs" />
     <Compile Include="IGlobalization.cs">
       <DependentUpon>MainModel.tt</DependentUpon>
     </Compile>
