@@ -7,7 +7,10 @@ using System.Web.Routing;
 
 namespace Kilometros_WebApp {
     public class RouteConfig {
+        const string LanguageValidation
+            = @"[a-zA-Z]{2}-[a-zA-Z]{2}";
         public static void RegisterRoutes(RouteCollection routes) {
+
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
@@ -36,7 +39,7 @@ namespace Kilometros_WebApp {
                     },
                 constraints:
                     new {
-                        lang = @"\w{2,3}(-\w{4})?(-\w{2,3})?"
+                        lang = LanguageValidation
                     }
             );
 
@@ -60,7 +63,7 @@ namespace Kilometros_WebApp {
                 },
                 constraints:
                     new {
-                        lang = @"\w{2,3}(-\w{4})?(-\w{2,3})?"
+                        lang = LanguageValidation
                     }
             );
 
@@ -83,7 +86,7 @@ namespace Kilometros_WebApp {
                     },
                 constraints:
                     new {
-                        lang = @"\w{2,3}(-\w{4})?(-\w{2,3})?"
+                        lang = LanguageValidation
                     }
             );
         }
