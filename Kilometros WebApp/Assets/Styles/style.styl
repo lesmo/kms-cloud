@@ -65,6 +65,17 @@ header
 					&:hover, &.activo
 						color white
 						background $Rosa-KMS
+	.configuracion-header
+		background url("../../Images/Header/Header.Config.jpg")
+		background-size contain
+		display inline-block
+		vertical-align middle
+		width 28px
+		height 28px
+		text-align right
+		position relative
+		cursor pointer
+		margin 0 1em
 	.alertas-header
 		background url("../../Images/Header/Header.Notifications.jpg")
 		background-size contain
@@ -85,16 +96,26 @@ header
 			text-align center
 			position absolute
 			top -.5em
-			right -.5em
+			left -.5em
 	.buscador-header
 		display inline-block
 		float right
 		padding-top .55em
 		color $Azul-KMS
 		input
-			border 2px solid $Gris-Claro-KMS
+			border 2px solid #00CCC3
 			padding .25em 1em
 			color $Azul-KMS
+		input.submit
+			display inline-block
+			vertical-align top
+			background-color #00CCC3
+			background-image url("../../Images/Header/Header.Search.jpg")
+			background-position center
+			background-repeat no-repeat
+			border-color #00CCC3
+			margin 0
+			margin-left -.3em
 		&:focus
 			border 2px solid $Azul-KMS
 footer
@@ -128,12 +149,6 @@ footer
 					color white
 					font-weight light
 					text-decoration none
-	.redes
-		display inline-block
-		float right
-		li
-			display inline-block
-			margin 0 .5em
 #wrap
 	width $Ancho
 	margin 5em auto 3em
@@ -204,29 +219,20 @@ footer
 		color $Dorado-KMS
 		padding 1em
 		text-align center
-		.proxRecomp
+	#tipDelDia
+		figure
 			display block
-			margin-bottom .5em
-		.kms
-			font-size 2.5em
-			display inline-block
-			vertical-align middle
-		.bandera
-			display inline-block
-			vertical-align middle
-		#barra
-			width 100%
-			height 1em
-			background #F6DC7F
-			border-radius 1em
-			overflow hidden
-			margin-top .5em
-			.progreso
-				background #DBBA4D
-				background-image url("../../Images/Sidebar/Sidebar.Bar.gif")
-				height 1em
-				border-radius 1em
-			
+			padding 0
+			margin 0 auto
+			max-width 60px
+		h3
+			color #E7BB4D
+			text-align center
+			border-bottom 2px solid #E7BB4D
+			margin 0 1em
+		article
+			padding .5em 1em
+			text-align center
 	#tusRecompensas
 		padding 1em
 		text-align left
@@ -284,6 +290,7 @@ footer
 	vertical-align top
 	overflow hidden
 	text-align center
+	min-height 920px
 .contenedor
 	width $Ancho
 	margin 0 auto
@@ -315,7 +322,7 @@ footer
 #recompensasLiberadas
 	text-align center
 	.recompensa
-		column(5)
+		column(3)
 		float none
 		display inline-block
 		vertical-align top
@@ -337,33 +344,14 @@ footer
 	#Navegacion-Tips
 		margin-top 3em
 		nav
-			background $Gris-Claro-KMS
-			height 3em
+			display block
 			ul
-				column(11)
 				padding 0
 				margin 0
 				li
 					display inline-block
-					height 1em
-					padding 1em .75em
-					float left
-					cursor pointer
-					border-radius .25em
-					&.activo
-						background $Azul-KMS
-						color white
-						border-radius .25em
-					&:hover
-						background $Azul-KMS
-						color white
-						border-radius .25em
-			input
-				margin .5em .5em 0
-				width 185px
-				background transparent
-				border 2px solid $Gris-Oscuro-KMS
-				padding .25em 1em
+					margin 0 1em
+					
 		#contenidosAjax
 			padding-top 1em
 			height 800px
@@ -390,7 +378,10 @@ footer
 		letter-spacing 0
 		color $Rosa-KMS
 		margin-top 1em
-		line-heigt 0
+		line-height 0
+		float none
+		display inline-block
+		padding-left 1em
 		p
 			margin 0
 			display block
@@ -403,6 +394,9 @@ footer
 	.equivalencias
 		column (9)
 		color $Rosa-KMS
+		margin 1em auto
+		float none
+		display inline-block
 		li
 			column(5)
 			figure
@@ -439,20 +433,6 @@ footer
 				margin-right 1em
 				vertical-align middle
 				display inline-block
-		.tituloGrafica
-			text-align left
-			h2
-				font-size .75rem
-				display block
-				float left
-				background white
-				padding-right 1em
-				color $Azul-KMS
-			hr
-				display block
-				margin-top 1.1em
-				border 0 solid
-				border-top 1px solid $Azul-KMS
 		#chartActividad
 			float left
 		#datos
@@ -510,3 +490,206 @@ footer
 			background $Azul-KMS
 			float right
 			border-radius 0 0 .25em .25em
+.ocultar
+	display none
+.recorridoSueno
+	display block
+	overflow hidden
+	clear both
+	text-align center
+.bottom-abajo
+	display block
+	clear both
+	width 100%
+	height 3em
+.botonDorado
+	display inline-block
+	width 100%
+	background-color #E7BB4D
+	color white!important
+	padding .5em 0
+	margin .5em 0
+	font-size .85em
+	transition all .25s ease
+	&:hover
+		background-color #CE9F36
+#redes-sidebar
+	text-align center
+	position absolute
+	width 100%
+	bottom 0
+	left 0
+	ul
+		padding 0
+	li
+		display inline-block
+	a
+		display block
+		width 30px
+		height 30px
+		&.facebook
+			background-image url("../../Images/Gui/Social/Gui.Facebook.png")
+			background-size 30px
+			&:hover
+				background-image url("../../Images/Gui/Social/Gui.Facebook.Hover.png")
+		&.twitter
+			background-image url("../../Images/Gui/Social/Gui.Twitter.png")
+			background-size 30px
+			&:hover
+				background-image url("../../Images/Gui/Social/Gui.Twitter.Hover.png")
+		&.corona
+			background-image url("../../Images/Gui/Social/Gui.Crown.png")
+			background-size 30px
+			&:hover
+				background-image url("../../Images/Gui/Social/Gui.Crown.Hover.png")
+.tituloGrafica
+	text-align left
+	display block
+	clear both
+	overflow hidden
+	h2
+		font-size .75rem
+		display block
+		float left
+		background white
+		padding-right 1em
+		color $Azul-KMS
+	hr
+		display block
+		margin-top 1.1em
+		border 0 solid
+		border-top 1px solid $Azul-KMS
+	img
+		vertical-align middle
+.redes
+	display inline-block
+	float right
+	li
+		display inline-block
+		margin 0 .5em
+	a
+		display block
+		width 30px
+		height 30px
+		&.facebook
+			background-image url("../../Images/Gui/Social/Gui.Facebook.png")
+			background-size 30px
+			&:hover
+				background-image url("../../Images/Gui/Social/Gui.Facebook.Hover.png")
+		&.twitter
+			background-image url("../../Images/Gui/Social/Gui.Twitter.png")
+			background-size 30px
+			&:hover
+				background-image url("../../Images/Gui/Social/Gui.Twitter.Hover.png")
+		&.corona
+			background-image url("../../Images/Gui/Social/Gui.Crown.png")
+			background-size 30px
+			&:hover
+				background-image url("../../Images/Gui/Social/Gui.Crown.Hover.png")
+.tips-items
+	width 80%!important
+	display block!important
+	margin 0 auto!important
+	float none!important
+	clear both
+	margin-bottom 1em
+	.redes
+		margin 0
+	.redesTips
+		float left
+		width 30px
+		margin-right 1em
+	.contenido-tips
+		h3
+			color $Verde-KMS
+			margin 0
+			display inline-block
+.paginacion
+	ul
+		margin 0
+		padding 0
+		li
+			display inline-block
+		a
+			color black
+			display block
+			padding .5em
+			text-decoration none
+			&:hover
+				color white
+				background-color $Rosa-KMS
+.tipGodin
+	.redes
+		text-align center
+		width 100%
+		display block
+		padding 0
+		margin 0 auto
+
+.proxRecomp
+	display block
+	margin-bottom .5em
+.kms
+	font-size 2.5em
+	display inline-block
+	vertical-align middle
+.bandera
+	display inline-block
+	vertical-align middle
+#barra
+	width 100%
+	height 1em
+	background #F6DC7F
+	border-radius 1em
+	overflow hidden
+	margin-top .5em
+	.progreso
+		background #DBBA4D
+		background-image url("../../Images/Sidebar/Sidebar.Bar.gif")
+		height 1em
+		border-radius 1em
+#prox-recompensa
+	width 100%
+	clear both
+	.info-recomp
+		column(8)
+	.bandera
+		column(4)
+		push(1)
+	.proxRecomp
+		color $Dorado-KMS
+
+#recompensasLiberadas
+	width 80%
+	margin 0 auto
+	clear both
+	overflow hidden
+	.itemLiberada
+		clear both
+		overflow hidden
+		display block
+		margin-bottom 1em
+		figure
+			padding 0
+			margin 0
+		.info
+			column(9)
+			text-align left
+			figure
+				column(5)
+				margin 0 1em 0 0
+			h3
+				color $Verde-KMS
+				margin 0
+				font-size 2em
+			h4
+				margin 0
+			p
+				margin 0
+		.empresa
+			column(3)
+			figure
+				border 1px solid $Verde-KMS
+				display block
+				width 100%
+				padding .25em 2em
