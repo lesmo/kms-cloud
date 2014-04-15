@@ -12,7 +12,7 @@ using System.Web.Mvc;
 namespace Kilometros_WebApp.Controllers {
 	public class DynamicResourcesController : BaseController {
 		// GET: /DynamicResources/Images/{filename}.{ext}
-		public BinaryResult Images(string filename, string ext) {
+		public FileResult Images(string filename, string ext) {
 			IPicture picture
 				= Database.IPictureStore.Get(filename);
 
@@ -22,16 +22,14 @@ namespace Kilometros_WebApp.Controllers {
 					"Not Found"
 				);
 			else
-				return new BinaryResult() {
-					ContentType
-						= picture.PictureMimeType,
-					Content
-						= picture.Picture
-				};
+				return File(
+					picture.Picture,
+					picture.PictureMimeType
+				);
 		}
 
 		// GET: /DynamicResources/ImagesBW/{filename}.{ext}
-		public BinaryResult ImagesBW(string filename, string ext) {
+		public FileResult ImagesBW(string filename, string ext) {
 			IPicture picture
 				= Database.IPictureStore.Get(filename);
 
@@ -93,14 +91,12 @@ namespace Kilometros_WebApp.Controllers {
 				tempStream,
 				original.RawFormat
 			);
-			
+
 			// > Devolver imagen
-			return new BinaryResult() {
-				Content
-					= tempStream.ToArray(),
-				ContentType
-					= picture.PictureMimeType
-			};
+			return File(
+				tempStream,
+				picture.PictureMimeType
+			);
 		}
 	}
 }
