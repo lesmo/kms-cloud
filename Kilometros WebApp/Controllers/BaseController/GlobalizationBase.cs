@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 
 namespace Kilometros_WebApp.Controllers {
     public abstract partial class BaseController : Controller {
@@ -63,7 +64,11 @@ namespace Kilometros_WebApp.Controllers {
                 ?? GetCultureFromCookie()
                 ?? GetCultureFromUserPreferences()
                 ?? GetCultureFromUserAgent()
-                ?? new CultureInfo("en-GB");
+                ?? new CultureInfo(SupportedCultures.Cultures.First());
+
+            // > Verificar que la cultura esté catalogada como soportada
+            if ( ! SupportedCultures.Cultures.Any(a => a.ToLower() == culture.Name) )
+                culture = new CultureInfo(SupportedCultures.Cultures.First());
 
             // > Establecer/Actualizar Cookie con el nuevo Código de Cultura
             Response.Cookies.Set(
@@ -73,17 +78,25 @@ namespace Kilometros_WebApp.Controllers {
                 }
             );
 
-            // > Si se determinó una Cultura diferente a la de la URL, re-dirigir a la URL con
-            //   el Código de Cultura correcto
-            if (
-                RouteData.Values["lang"] == null
-                || ((string)RouteData.Values["lang"]).ToLowerInvariant() != culture.Name.ToLowerInvariant()
-            ) {
+            // > Si se determinó una Cultura y la URL no lo refleja, redirigir a la URL que
+            //   lo refleja.
+            if ( RouteData.Values["lang"] == null ) {
                 Response.Redirect(
-                    UrlCultureCodeRegex.Replace(
+                    new Uri(
+                        Request.Url,
+                        "/" + culture.Name + Request.Url.PathAndQuery
+                    ).AbsoluteUri
+                );
+
+                return null;
+            } else if ( ((string)RouteData.Values["lang"]).ToLower() != culture.Name.ToLower() ) {
+                string tmp
+                    = UrlCultureCodeRegex.Replace(
                         Request.Url.AbsoluteUri,
                         "/" + culture.Name
-                    ),
+                    );
+                Response.Redirect(
+                    tmp,
                     true
                 );
 
@@ -97,28 +110,16 @@ namespace Kilometros_WebApp.Controllers {
             return culture;
         }
 
-        private RegionInfo GetRegionFromUrl() {
-            if ( RouteData.Values["lang"] == null )
-                return null;
+        protected override void Initialize(RequestContext request) {
+            base.Initialize(request);
 
-            Match regexMatch
-                = UrlCultureCodeRegex.Match(
-                    "/" + (string)RouteData.Values["lang"]
-                );
-
-            if ( regexMatch.Success == false )
-                return null;
-
-            try {
-                return new RegionInfo(regexMatch.Groups[2].Value);
-            } catch ( ArgumentException ) {
-                return null;
-            }
-        }
-
-        protected override void ExecuteCore() {
             CultureInfo culture
                 = GetUserCultureInfo();
+
+            if ( culture == null ) {
+                Response.End();
+                return;
+            }
 
             Thread.CurrentThread.CurrentCulture
                 = culture;
@@ -129,8 +130,6 @@ namespace Kilometros_WebApp.Controllers {
             //   contenga la información regional actualizada, y no la del servidor
             Thread.CurrentThread.CurrentCulture.ClearCachedData();
             Thread.CurrentThread.CurrentUICulture.ClearCachedData();
-            
-            base.ExecuteCore();
         }
     }
 }

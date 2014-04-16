@@ -10,36 +10,7 @@ namespace Kilometros_WebApp {
         const string LanguageValidation
             = @"[a-zA-Z]{2}-[a-zA-Z]{2}";
         public static void RegisterRoutes(RouteCollection routes) {
-
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-
-            routes.MapRoute(
-                name:
-                    "Default",
-                url:
-                    "{controller}/{action}",
-                defaults:
-                    new {
-                        controller = "Overview",
-                        action = "Index"
-                    }
-            );
-
-            routes.MapRoute(
-                name:
-                    "DefaultGlobalization",
-                url:
-                    "{lang}/{controller}/{action}",
-                defaults:
-                    new {
-                        controller = "Entry",
-                        action = "Index"
-                    },
-                constraints:
-                    new {
-                        lang = LanguageValidation
-                    }
-            );
 
             routes.MapRoute(
                 name:
@@ -81,6 +52,46 @@ namespace Kilometros_WebApp {
                 defaults:
                     new {
                         controller = "Ajax"
+                    },
+                constraints:
+                    new {
+                        lang = LanguageValidation
+                    }
+            );
+
+            routes.MapRoute(
+                name:
+                    "RootGlobalization",
+                url:
+                    "{lang}",
+                defaults:
+                    new {
+                        controller = "Overview",
+                        action = "Index"
+                    }
+            );
+
+            routes.MapRoute(
+                name:
+                    "Default",
+                url:
+                    "{controller}/{action}",
+                defaults:
+                    new {
+                        controller = "Overview",
+                        action = "Index"
+                    }
+            );
+
+            routes.MapRoute(
+                name:
+                    "DefaultGlobalization",
+                url:
+                    "{lang}/{controller}/{action}",
+                defaults:
+                    new {
+                        controller = "Overview",
+                        action = "Index"
                     },
                 constraints:
                     new {
