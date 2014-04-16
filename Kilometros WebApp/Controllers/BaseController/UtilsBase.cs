@@ -22,15 +22,19 @@ namespace Kilometros_WebApp.Controllers {
         ///     URI absoluta que apunta al recurso descrito por los parámetros.
         /// </returns>
         protected Uri GetDynamicResourceUri(string method, string filename, string ext) {
-            return new Uri(
-                Url.Content(
+            string contentUrl
+                = Url.Content(
                     string.Format(
                         "~/{0}/{1}.{2}",
                         "DynamicResources/Images",
                         filename,
                         ext
                     )
-                )
+                );
+
+            return new Uri(
+                Request.Url,
+                contentUrl
             );
         }
     }

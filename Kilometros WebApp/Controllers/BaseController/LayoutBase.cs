@@ -23,11 +23,6 @@ namespace Kilometros_WebApp.Controllers {
 
                 // > Inicializar objeto
                 this._layoutValues = new LayoutValues() {
-                    CultureInfo
-                        = CultureInfo.CurrentCulture,
-                    RegionInfo
-                        = RegionInfo.CurrentRegion,
-
                     UserName
                         = CurrentUser.Name,
                     UserLastname
@@ -39,7 +34,7 @@ namespace Kilometros_WebApp.Controllers {
                         = "{Not Implemented}",
 
                     TotalDistanceCentimeters
-                        = CurrentUser.UserDataTotalDistanceSum,
+                        = CurrentUser.UserDataTotalDistanceSum.TotalDistance,
                 };
 
                 // > Obtener la última recompensa obtenida por el Usuario
@@ -60,7 +55,7 @@ namespace Kilometros_WebApp.Controllers {
                                 CurrentUser.RegionCode,
                             filter: f =>
                                 // + Obtener la Recompensa inmediata siguiente según la Distancia del Usuario
-                                f.DistanceTrigger > CurrentUser.UserDataTotalDistanceSum,
+                                f.DistanceTrigger > CurrentUser.UserDataTotalDistanceSum.TotalDistance,
                             orderBy: o =>
                                 // + Ordenar las Recompensas según su Distancia de Debloqueo (Descendiente)
                                 o.OrderByDescending(b => b.DistanceTrigger)
@@ -74,10 +69,13 @@ namespace Kilometros_WebApp.Controllers {
                         );
                     else
                         this._layoutValues.NextRewardDistanceCentimeters
-                            = nextReward.DistanceTrigger - CurrentUser.UserDataTotalDistanceSum;
+                            = nextReward.DistanceTrigger - CurrentUser.UserDataTotalDistanceSum.TotalDistance;
                 } else {
-                    this._layoutValues.RecentlyUnlockedRewardId
-                        = lastReward.Guid.ToBase64String();
+                    this._layoutValues.RecentlyUnlockedReward
+                        = new RewardModel() {
+                            RewardId
+                                = lastReward.Guid.ToBase64String()
+                        };
                 }
 
                 // > Obtener el Tip del Día
@@ -96,13 +94,9 @@ namespace Kilometros_WebApp.Controllers {
                         TipId
                             = tipOfTheDay.Guid.ToBase64String(),
                         Text
-                            = tipOfTheDay.GetGlobalization(
-                                this._layoutValues.CultureInfo
-                            ).Text,
+                            = tipOfTheDay.GetGlobalization().Text,
                         Category
-                            = tipOfTheDay.TipCategory.GetGlobalization<TipCategoryGlobalization>(
-                                this._layoutValues.CultureInfo
-                            ).Name,
+                            = tipOfTheDay.TipCategory.GetGlobalization().Name,
                         IconUri
                             = GetDynamicResourceUri(
                                 method:

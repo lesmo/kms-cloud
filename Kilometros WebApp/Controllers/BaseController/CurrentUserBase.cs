@@ -18,10 +18,8 @@ namespace Kilometros_WebApp.Controllers {
                 Guid userGuid;
 
                 try {
-                    byte[] userGuidBytes
-                        = Convert.FromBase64String(User.Identity.Name);
                     userGuid
-                        = new Guid(userGuidBytes);
+                        = new Guid().FromBase64String(User.Identity.Name);
                 } catch {
                     FormsAuthentication.SignOut();
                     return null;
