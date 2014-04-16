@@ -17,12 +17,11 @@ namespace Kilometros_WebApp {
                 name:
                     "Default",
                 url:
-                    "{controller}/{action}/{id}",
+                    "{controller}/{action}",
                 defaults:
                     new {
-                        controller = "Entry",
-                        action = "Index",
-                        id = UrlParameter.Optional
+                        controller = "Overview",
+                        action = "Index"
                     }
             );
 
@@ -30,12 +29,11 @@ namespace Kilometros_WebApp {
                 name:
                     "DefaultGlobalization",
                 url:
-                    "{lang}/{controller}/{action}/{id}",
+                    "{lang}/{controller}/{action}",
                 defaults:
                     new {
                         controller = "Entry",
-                        action = "Index",
-                        id = UrlParameter.Optional
+                        action = "Index"
                     },
                 constraints:
                     new {
