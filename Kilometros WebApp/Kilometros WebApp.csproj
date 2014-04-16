@@ -961,6 +961,7 @@
     <Content Include="Views\Rewards\Index.cshtml" />
     <Content Include="Views\Friends\Index.cshtml" />
     <Content Include="Views\Login\Index.cshtml" />
+    <Content Include="Assets\Styles\grid.styl" />
     <None Include="Web.RemoteDebug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1020,6 +1021,9 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <PropertyGroup>
+    <PostBuildEvent>"$(ProjectDir)bundler\node.exe" "$(ProjectDir)bundler\bundler.js" "$(ProjectDir)Assets" "$(ProjectDir)Assets"</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
