@@ -11,92 +11,37 @@ namespace Kilometros_WebApp {
             = @"[a-zA-Z]{2}-[a-zA-Z]{2}";
         public static void RegisterRoutes(RouteCollection routes) {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-
+            
             routes.MapRoute(
-                name:
-                    "DynamicResources",
-                url:
-                    "DynamicResources/{action}/{filename}.{ext}",
-                defaults: new {
-                    controller = "DynamicResources"
-                }
+                "DynamicResources",
+                "{controller}/{filename}.{ext}"
             );
 
-            routes.MapRoute(
-                name:
-                    "DynamicResourcesGlobalization",
-                url:
-                    "{lang}/DynamicResources/{action}/{filename}.{ext}",
-                defaults: new {
-                    controller = "DynamicResources"
+            routes.MapTranslatedRoute(
+                "DefaultGlobalization",
+                "{lang}/{controller}/{action}",
+                new {
+                    controller = "Overview",
+                    action = "index"
                 },
-                constraints:
-                    new {
-                        lang = LanguageValidation
-                    }
-            );
-
-            routes.MapRoute(
-                name: "DynamicResourcesAjax",
-                url: "DynamicResources/Ajax/{action}.json",
-                defaults: new {
-                    controller = "Ajax"
+                new {
+                    controller = RouteTranslationConfig.ControllerGlobalization
+                },
+                new {
+                    lang = LanguageValidation
                 }
             );
 
-            routes.MapRoute(
-                name:
-                    "DynamicResourcesAjaxGlobalization",
-                url:
-                    "{lang}/DynamicResources/Ajax/{action}.json",
-                defaults:
-                    new {
-                        controller = "Ajax"
-                    },
-                constraints:
-                    new {
-                        lang = LanguageValidation
-                    }
-            );
-
-            routes.MapRoute(
-                name:
-                    "RootGlobalization",
-                url:
-                    "{lang}",
-                defaults:
-                    new {
-                        controller = "Overview",
-                        action = "Index"
-                    }
-            );
-
-            routes.MapRoute(
-                name:
-                    "Default",
-                url:
-                    "{controller}/{action}",
-                defaults:
-                    new {
-                        controller = "Overview",
-                        action = "Index"
-                    }
-            );
-
-            routes.MapRoute(
-                name:
-                    "DefaultGlobalization",
-                url:
-                    "{lang}/{controller}/{action}",
-                defaults:
-                    new {
-                        controller = "Overview",
-                        action = "Index"
-                    },
-                constraints:
-                    new {
-                        lang = LanguageValidation
-                    }
+            routes.MapTranslatedRoute(
+                "Default",
+                "{controller}/{action}",
+                new {
+                    controller = "Overview",
+                    action = "index"
+                },
+                new {
+                    controller = RouteTranslationConfig.ControllerGlobalization
+                }
             );
         }
     }

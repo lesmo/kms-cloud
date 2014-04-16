@@ -22,7 +22,7 @@
 <body data-distanceUnit="@(RegionInfo.CurrentRegion.IsMetric ? "kms" : "mi")" data-weightUnit="@(RegionInfo.CurrentRegion.IsMetric ? "kg" : "lb")">
 	<header>
 		<div class="contenedor">
-			<a href="@Url.Action("Index", "Entry")">
+			<a href="@Url.Action("Overview", "Index", new { lang = CultureInfo.CurrentCulture.Name })">
 				<h1>
 					<span class="ocultar">KMS</span>
 					<img src="@Url.Content("~/Images/Header/Header.KmsLogo.png")" alt="KMS">
@@ -32,40 +32,44 @@
 				<ul>
 					<li>
 						@Html.ActionLink(
-							LayoutStrings.MyProfile,
+							LayoutStrings.MyProfile.ToUpper(),
 							"Index",
-							"Entry",
-							null, new {
+							"Overview",
+							null,
+							new {
 								@class = layoutValues.Section == LayoutValues.MainSection.MyProfile ? "active" : ""
 							}
 						)
 					</li>
 					<li>
 						@Html.ActionLink(
-							LayoutStrings.Tips,
+							LayoutStrings.Tips.ToUpper(),
 							"Index",
-							"Entry",
-							null, new {
+							"Tips",
+							null,
+							new {
 								@class = layoutValues.Section == LayoutValues.MainSection.Tips ? "active" : ""
 							}
 						)
 					</li>
 					<li>
 						@Html.ActionLink(
-							LayoutStrings.Rewards,
+							LayoutStrings.Rewards.ToUpper(),
 							"Index",
-							"Entry",
-							null, new {
+							"Rewards",
+							null,
+							new {
 								@class = layoutValues.Section == LayoutValues.MainSection.Rewards ? "active" : ""
 							}
 						)
 					</li>
 					<li>
 						@Html.ActionLink(
-							LayoutStrings.Friends,
+							LayoutStrings.Friends.ToUpper(),
 							"Index",
 							"Entry",
-							null, new {
+							null,
+							new {
 								@class = layoutValues.Section == LayoutValues.MainSection.Friends ? "active" : ""
 							}
 						)
@@ -91,7 +95,7 @@
 	<div id="wrap">
 		@* -- Left Sidebar --- *@
 		<aside id="sidebar">
-			@* - Datos generales del Usuario - *@
+		@* - Datos generales del Usuario - *@
 			<section id="Usuario">
 				<h2>@layoutValues.UserName @layoutValues.UserLastname</h2>
 				<figure>
@@ -124,37 +128,37 @@
 						id = layoutValues.RecentlyUnlockedReward.RewardId
 					})" class="botonDorado">
 						@LayoutStrings.ViewReward.ToUpper()
-					</a>
-				}
-			</section>
+						</a>
+						}
+						</section>
 
-			<section id="tipDelDia">
-				<figure>
-					<img src="@layoutValues.TipOfTheDay.IconUri.AbsoluteUri" alt="@layoutValues.TipOfTheDay.Category">
-				</figure>
-				<h3>@LayoutStrings.TipOfTheDay.ToUpper()</h3>
-				<article>
-					@layoutValues.TipOfTheDay.Text
-				</article>
-			</section>
+						<section id="tipDelDia">
+							<figure>
+								<img src="@layoutValues.TipOfTheDay.IconUri.AbsoluteUri" alt="@layoutValues.TipOfTheDay.Category">
+							</figure>
+							<h3>@LayoutStrings.TipOfTheDay.ToUpper()</h3>
+							<article>
+								@layoutValues.TipOfTheDay.Text
+							</article>
+						</section>
 
-			<section id="redes-sidebar">
-				<ul>
-					<li><a href="#" class="corona"></a></li>
-					<li><a href="#" class="facebook"></a></li>
-					<li><a href="#" class="twitter"></a></li>
-				</ul>
-			</section>
-		</aside>
+						<section id="redes-sidebar">
+							<ul>
+								<li><a href="#" class="corona"></a></li>
+								<li><a href="#" class="facebook"></a></li>
+								<li><a href="#" class="twitter"></a></li>
+							</ul>
+						</section>
+						</aside>
 
-		@* -- Body -- *@
-		<section id="contenidos">
-			@RenderBody()
-			<div class="bottom-abajo"></div>
-		</section>
+						@* -- Body -- *@
+						<section id="contenidos">
+							@RenderBody()
+							<div class="bottom-abajo"></div>
+						</section>
 
-		<div style="clear:both"></div>
-	</div>
+						<div style="clear:both"></div>
+</div>
 
 	<footer>
 		<div class="contenedor">
@@ -205,13 +209,13 @@
 				</li>
 				<li>
 					<a href="https://twitter.com/kmsmex" target="_blank">
-						<img src="@Url.Content("~/Images/Footer/Footer.Twitter.png")" alt="Twitter: &#64kmsmex">
+						<img src="@Url.Content("~/Images/Footer/Footer.Twitter.png")" alt="Twitter: &#64;kmsmex">
 					</a>
 				</li>
 				<li>
 					@* TODO: Establecer {subject} y {body} a texto predefinido *@
 					<a href="mailto:dime@kms.me" target="_blank">
-						<img src="@Url.Content("~/Images/Footer/Footer.Mail.png")" alt="Email: dime&#64kms.me">
+						<img src="@Url.Content("~/Images/Footer/Footer.Mail.png")" alt="Email: dime&#64;kms.me">
 					</a>
 				</li>
 			</ul>

@@ -293,9 +293,9 @@ namespace Kilometros_WebApp.Controllers {
 							= s.CreationDate.ToShortDateString(),
 
 						title
-							= s.Reward.GetGlobalization().Name,
+							= s.Reward.GetGlobalization().Title,
 						text
-							= s.Reward.GetGlobalization().Description
+							= s.Reward.GetGlobalization().Text
 
 					}
 				);

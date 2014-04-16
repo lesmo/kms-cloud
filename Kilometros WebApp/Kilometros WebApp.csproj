@@ -127,10 +127,10 @@
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\RouteTranslationConfig.cs" />
     <Compile Include="App_Start\SupportedCultures.cs" />
     <Compile Include="Bundler\Bundler.cs" />
     <Compile Include="Controllers\BaseController\CurrentUserBase.cs" />
-    <Compile Include="Controllers\BaseController\GlobalizationBase.cs" />
     <Compile Include="Controllers\BaseController\LayoutBase.cs" />
     <Compile Include="Controllers\BaseController\UtilsBase.cs" />
     <Compile Include="Controllers\DynamicResourcesControllers\AjaxController.cs" />
@@ -156,8 +156,14 @@
     <Compile Include="Models\Views\Tips\TipModel.cs" />
     <Compile Include="Models\Views\Tips\TipsValues.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Routing\DictionaryRouteValueTranslationProvider.cs" />
+    <Compile Include="Routing\IRouteValueTranslationProvider.cs" />
+    <Compile Include="Routing\RouteValueTranslation.cs" />
+    <Compile Include="Routing\TranslatedRoute.cs" />
+    <Compile Include="Routing\TranslatedRouteCollectionExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Scripts\Lib\chart.js" />
     <Content Include="Bundler\bundler.js" />
     <Content Include="Bundler\node.exe" />
     <Content Include="Bundler\node_modules\clean-css\index.js" />

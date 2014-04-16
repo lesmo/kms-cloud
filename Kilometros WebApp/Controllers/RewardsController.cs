@@ -61,9 +61,9 @@ namespace Kilometros_WebApp.Controllers {
 							= s.CreationDate,
 
 						Title
-							= s.Reward.GetGlobalization().Name,
+							= s.Reward.GetGlobalization().Title,
 						Text
-							= s.Reward.GetGlobalization().Description
+							= s.Reward.GetGlobalization().Text
 					}
 				).ToArray();
 

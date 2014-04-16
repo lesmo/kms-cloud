@@ -17,8 +17,8 @@ namespace KilometrosDatabase {
     }
 
     public partial class Reward {
-        public new TipCategoryGlobalization GetGlobalization(CultureInfo culture = null) {
-            return this.GetGlobalization<TipCategoryGlobalization>(culture);
+        public new RewardGlobalization GetGlobalization(CultureInfo culture = null) {
+            return this.GetGlobalization<RewardGlobalization>(culture);
         }
     }
 
