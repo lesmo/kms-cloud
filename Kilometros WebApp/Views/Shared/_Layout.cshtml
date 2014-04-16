@@ -98,7 +98,7 @@
 					<img src="@layoutValues.UserPicture.AbsoluteUri">
 				</figure>
 				<span class="distancia">
-					@layoutValues.TotalDistanceString @(layoutValues.RegionInfo.IsMetric ? "kms" : "mi")
+					@layoutValues.TotalDistance @(RegionInfo.CurrentRegion.IsMetric ? "kms" : "mi")
 				</span>
 				<span class="origen">
 					@layoutValues.LocationString
@@ -107,21 +107,21 @@
 
 			@* - Próxima Recompensa (o última recompensa ganada) - *@
 			<section id="recompensaDash">
-				@if ( string.IsNullOrEmpty(layoutValues.RecentlyUnlockedRewardGuid) ) {
+				@if ( layoutValues.RecentlyUnlockedReward == null ) {
 					<span class="proxRecomp">@LayoutStrings.NextRewardIn</span>
 					<span class="bandera">
 						<img src="@Url.Content("~/Images/Sidebar/Sidebar.Medal.gif")" alt="">
 					</span>
 					<span class="kms">
-						@layoutValues.NextRewardsDistanceSpanString @(layoutValues.RegionInfo.IsMetric ? "kms" : "mi")
+						@layoutValues.NextRewardsDistanceRemaining @(RegionInfo.CurrentRegion.IsMetric ? "kms" : "mi")
 					</span>
 					<div id="barra">
 						<div class="progreso" style="width: 80%;"></div>
 					</div>
 				} else {
 					<img src="img/medalla.png" alt="">
-					<a href="@Url.Action("Rewards", "Detail", new {
-						id = layoutValues.RecentlyUnlockedRewardGuid
+					<a href="@Url.Action("Detail", "Rewards", new {
+						id = layoutValues.RecentlyUnlockedReward.RewardId
 					})" class="botonDorado">
 						@LayoutStrings.ViewReward.ToUpper()
 					</a>
