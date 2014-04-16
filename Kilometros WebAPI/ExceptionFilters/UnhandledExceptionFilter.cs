@@ -33,7 +33,7 @@ namespace Kilometros_WebAPI.ExceptionFilters {
                     = new HttpResponseMessage(HttpStatusCode.BadRequest);
                 string responseMessage
                     = string.Format(
-                        ControllerStrings.GenericValidationError,
+                        "{0}",
                         httpContext.Exception.Message
                     );
                 httpContext.Response.Content

@@ -128,7 +128,6 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\SupportedCultures.cs" />
-    <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Bundler\Bundler.cs" />
     <Compile Include="Controllers\BaseController\CurrentUserBase.cs" />
     <Compile Include="Controllers\BaseController\GlobalizationBase.cs" />
