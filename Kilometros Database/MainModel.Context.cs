@@ -32,7 +32,6 @@ namespace KilometrosDatabase
         public DbSet<MotionLevel> MotionLevelSet { get; set; }
         public DbSet<Data> DataSet { get; set; }
         public DbSet<UserBody> UserBodySet { get; set; }
-        public DbSet<Reward> RewardSet { get; set; }
         public DbSet<RewardGift> RewardGiftSet { get; set; }
         public DbSet<RewardRegionalization> RewardRegionalizationSet { get; set; }
         public DbSet<UserMotionLevelHistory> UserMotionLevelHistorySet { get; set; }

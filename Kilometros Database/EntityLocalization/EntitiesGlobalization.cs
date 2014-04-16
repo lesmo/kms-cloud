@@ -20,7 +20,7 @@ namespace KilometrosDatabase {
         /// <param name="culture"></param>
         /// <returns></returns>
         public T GetGlobalization<T>(CultureInfo culture = null) where T : IGlobalization {
-            if ( this is TipCategory )
+            if ( this is TipCategory || this is Reward )
                 return (T)base.GetGlobalization(culture);
             else
                 throw new InvalidOperationException(
@@ -29,7 +29,6 @@ namespace KilometrosDatabase {
         }
     }
 
-    public partial class Reward : IEntityGlobalization<RewardGlobalization> { }
     public partial class RewardGift : IEntityGlobalization<RewardGiftGlobalization> { }
     public partial class MotionLevel : IEntityGlobalization<MotionLevelGlobalization> { }
 }

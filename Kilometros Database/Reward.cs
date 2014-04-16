@@ -12,7 +12,7 @@ namespace KilometrosDatabase
     using System;
     using System.Collections.Generic;
     
-    public partial class Reward
+    public partial class Reward : IPicture
     {
         public Reward()
         {
@@ -21,13 +21,14 @@ namespace KilometrosDatabase
             this.RewardRegionalization = new HashSet<RewardRegionalization>();
         }
     
-        public System.Guid Guid { get; set; }
         public long DistanceTrigger { get; set; }
         public string Source { get; set; }
+        public System.Guid RewardSponsorGuid { get; set; }
     
         public virtual ICollection<RewardGift> RewardGift { get; set; }
         public virtual ICollection<RewardGlobalization> RewardGlobalization { get; set; }
         public virtual ICollection<RewardRegionalization> RewardRegionalization { get; set; }
         public virtual UserEarnedReward UserEarnedReward { get; set; }
+        public virtual RewardSponsor RewardSponsor { get; set; }
     }
 }
