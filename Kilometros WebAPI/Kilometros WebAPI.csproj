@@ -291,29 +291,12 @@
     <Content Include="Areas\Login\Views\Home\OAuthBasicLoginSuccess.cshtml" />
     <Content Include="Areas\Login\Views\Home\OAuthTokenInvalid.cshtml" />
     <None Include="Properties\PublishProfiles\KMS Web API.pubxml" />
-    <None Include="Scripts\jquery-1.8.2.intellisense.js" />
-    <Content Include="Scripts\jquery-1.8.2.js" />
-    <Content Include="Scripts\jquery-1.8.2.min.js" />
-    <Content Include="Scripts\jquery-1.8.2.min.js.map">
-      <DependentUpon>jquery-1.8.2.js</DependentUpon>
-    </Content>
-    <None Include="Scripts\jquery.validate-vsdoc.js" />
-    <Content Include="Scripts\jquery.validate.js" />
-    <Content Include="Scripts\jquery.validate.min.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
-    </Content>
-    <Content Include="Scripts\jquery.validate.min.js.map">
-      <DependentUpon>jquery.validate.js</DependentUpon>
-    </Content>
-    <Content Include="Scripts\jquery.validate.unobtrusive.min.js.map">
-      <DependentUpon>jquery.validate.unobtrusive.js</DependentUpon>
     </Content>
     <None Include="Web.RemoteDebug.config">
       <DependentUpon>Web.config</DependentUpon>
