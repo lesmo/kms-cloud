@@ -44,11 +44,23 @@ namespace KilometrosDatabase.Abstraction.Interfaces {
             Func<IOrderedQueryable<TEntity>, IQueryable<TEntity>> extra = null,
             string[] include = null
         ) {
-            IQueryable<TEntity> query
+            var query
                 = (IQueryable<TEntity>)this._dbSet.AsQueryable();
 
             if ( filter != null)
                 query = query.Where(filter);
+
+            if ( orderBy == null ) {
+                query
+                    = extra == null
+                    ? query
+                    : extra(query.OrderBy(o => 0));
+            } else {
+                query
+                    = extra == null
+                    ? orderBy(query)
+                    : extra(orderBy(query));
+            }
 
             if ( include != null && include.Length > 0 ) {
                 foreach ( string includeItem in include )
@@ -56,19 +68,8 @@ namespace KilometrosDatabase.Abstraction.Interfaces {
                         = query.Include(includeItem);
             }
 
-            List<TEntity>returnValue;
-
-            if ( orderBy ==  null ) {
-                returnValue
-                    = extra == null
-                    ? query.ToList()
-                    : extra(query.OrderBy(o => 0)).ToList();
-            } else {
-                returnValue
-                    = extra == null
-                    ? orderBy(query).ToList()
-                    : extra(orderBy(query)).ToList();
-            }
+            List<TEntity>returnValue
+                = query.ToList();
 
             for ( int i = 0; i < returnValue.Count; i++ ) {
                 returnValue[i]
@@ -93,7 +94,7 @@ namespace KilometrosDatabase.Abstraction.Interfaces {
             return this.GetAll(
                 filter,
                 orderBy,
-                x => extra(x).Take(1),
+                x => extra == null ? x.Take(1) : extra(x).Take(1),
                 include
             ).FirstOrDefault();
         }

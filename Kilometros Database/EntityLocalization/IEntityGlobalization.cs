@@ -15,38 +15,41 @@ namespace KilometrosDatabase.EntityLocalization {
     ///     Tipo de la Entidad que almacena el texto y otros recursos.
     /// </typeparam>
     public abstract class IEntityGlobalization<T> where T : IGlobalization {
-        private Dictionary<int, T> _globalization
-            = new Dictionary<int, T>();
+        private Dictionary<int, object> _globalization
+            = new Dictionary<int, object>();
 
-        public virtual T GetGlobalization(CultureInfo culture = null) {
+        internal virtual GT GetGlobalization<GT>(CultureInfo culture) where GT : IGlobalization {
             // > Determinar si no se tiene ya en memoria la Globalización de ésta Entidad
             if ( culture == null )
                 culture = CultureInfo.CurrentCulture;
 
             int hashCode
-                = culture.GetHashCode();
+                = culture.LCID;
 
             if ( this._globalization.ContainsKey(hashCode) )
-                return this._globalization[hashCode];
+                return (GT)this._globalization[hashCode];
+
+            if ( this._globalization.ContainsKey(hashCode) )
+                return (GT)this._globalization[hashCode];
 
             // > Obtener propiedad que apunta a entidad IGlobalization
             string cultureCode
-                = culture.Name.ToLowerInvariant();
+                = culture.Name.ToLower();
 
             PropertyInfo globalizationProperty = (
-                from thisProperty in this.GetType().GetProperties()
-                where thisProperty.GetType() == typeof(ICollection<IGlobalization>)
-                select thisProperty
+                from PropertyInfo p in this.GetType().GetProperties()
+                where p.PropertyType == typeof(ICollection<GT>)
+                select p
             ).FirstOrDefault();
 
             if ( globalizationProperty == null )
                 throw new ArgumentException("Entity does not support globalization");
 
-            IQueryable<IGlobalization> entityGlobalizationCollection
-                = globalizationProperty.GetValue(this) as IQueryable<IGlobalization>;
+            IQueryable<GT> entityGlobalizationCollection
+                = (globalizationProperty.GetValue(this) as ICollection<GT>).AsQueryable();
 
             // > Obtener Globalización de la BD
-            IGlobalization globalization
+            GT globalization
                 = (
                     from g in entityGlobalizationCollection
                     where
@@ -60,10 +63,14 @@ namespace KilometrosDatabase.EntityLocalization {
             // > Agregar Globalización a memoria y devolverla
             this._globalization.Add(
                 hashCode,
-                globalization == null ? null : (T)globalization
+                globalization == null ? null : globalization
             );
 
-            return (T)globalization;
+            return globalization;
+        }
+
+        public virtual T GetGlobalization(CultureInfo culture = null) {
+            return this.GetGlobalization<T>(culture);
         }
     }
 }
