@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace KilometrosDatabase {
     public partial class User {
-        public long UserDataTotalDistanceSum {
+        public UserDataTotalDistance UserDataTotalDistanceSum {
             get {
-                if ( this._userDataTotalDistanceSum.HasValue )
-                    return this._userDataTotalDistanceSum.Value;
+                if ( this._userDataTotalDistanceSum != null )
+                    return this._userDataTotalDistanceSum;
 
-                var result
+                this._userDataTotalDistanceSum
                     = (
                         from d in this.UserDataTotalDistance
                         where
@@ -21,20 +21,38 @@ namespace KilometrosDatabase {
                             userGuid
                                 = d.User.Guid
                         } into g
-                        select new {
-                            totalDistance
-                                = g.Sum(s => s.TotalDistance)
+                        select new UserDataTotalDistance {
+                            TotalDistance
+                                = g.Sum(s => s.TotalDistance),
+                            TotalSteps
+                                = g.Sum(s => s.TotalSteps),
+                            TotalKcal
+                                = g.Sum(s => s.TotalKcal),
+                            TotalCo2
+                                = g.Sum(s => s.TotalCo2),
+                            TotalCash
+                                = g.Sum(s => s.TotalCash)
                         }
                     ).FirstOrDefault();
-                
-                this._userDataTotalDistanceSum
-                    = result == null
-                    ? 0
-                    : result.totalDistance;
 
-                return this._userDataTotalDistanceSum.Value;
+                if ( this._userDataTotalDistanceSum == null )
+                    this._userDataTotalDistanceSum
+                        = new UserDataTotalDistance() {
+                            TotalDistance
+                                = 0,
+                            TotalSteps
+                                = 0,
+                            TotalKcal
+                                = 0,
+                            TotalCo2
+                                = 0,
+                            TotalCash
+                                = 0
+                        };
+                
+                return this._userDataTotalDistanceSum;
             }
         }
-        private long? _userDataTotalDistanceSum = null;
+        private UserDataTotalDistance _userDataTotalDistanceSum = null;
     }
 }

@@ -18,6 +18,9 @@ namespace KilometrosDatabase
         public System.DateTime Timestamp { get; set; }
         public long TotalSteps { get; set; }
         public long TotalDistance { get; set; }
+        public long TotalKcal { get; set; }
+        public long TotalCo2 { get; set; }
+        public long TotalCash { get; set; }
     
         public virtual User User { get; set; }
     }

@@ -216,7 +216,6 @@
           </Key>
           <Property Name="Guid" Type="uniqueidentifier" Nullable="false" />
           <Property Name="DistanceTrigger" Type="bigint" Nullable="false" />
-          <Property Name="DaysTrigger" Type="bigint" Nullable="false" />
           <Property Name="Source" Type="nvarchar(max)" Nullable="false" />
         </EntityType>
         <EntityType Name="ShippingInformationSet">
@@ -337,7 +336,6 @@
 warning 6002: The table/view 'KilometrosDatabase.dbo.UserDataHourlyDistance' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="UserDataHourlyDistance">
           <Key>
-            <PropertyRef Name="User_Guid" />
             <PropertyRef Name="Activity" />
             <PropertyRef Name="Timestamp" />
           </Key>
@@ -346,12 +344,14 @@ warning 6002: The table/view 'KilometrosDatabase.dbo.UserDataHourlyDistance' doe
           <Property Name="Timestamp" Type="datetime" Nullable="false" />
           <Property Name="Steps" Type="bigint" />
           <Property Name="Distance" Type="bigint" />
+          <Property Name="Kcal" Type="bigint" />
+          <Property Name="Co2" Type="bigint" />
+          <Property Name="Cash" Type="bigint" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'KilometrosDatabase.dbo.UserDataTotalDistance' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="UserDataTotalDistance">
           <Key>
-            <PropertyRef Name="User_Guid" />
             <PropertyRef Name="Activity" />
             <PropertyRef Name="Timestamp" />
           </Key>
@@ -360,6 +360,9 @@ warning 6002: The table/view 'KilometrosDatabase.dbo.UserDataTotalDistance' does
           <Property Name="Timestamp" Type="datetime" Nullable="false" />
           <Property Name="TotalSteps" Type="bigint" />
           <Property Name="TotalDistance" Type="bigint" />
+          <Property Name="TotalKcal" Type="bigint" />
+          <Property Name="TotalCo2" Type="bigint" />
+          <Property Name="TotalCash" Type="bigint" />
         </EntityType>
         <Association Name="FK_ApiKeyHistory">
           <End Role="ApiKeySet" Type="Self.ApiKeySet" Multiplicity="0..1" />
@@ -912,7 +915,10 @@ warning 6002: The table/view 'KilometrosDatabase.dbo.UserDataTotalDistance' does
 [UserDataHourlyDistance].[Activity] AS [Activity], 
 [UserDataHourlyDistance].[Timestamp] AS [Timestamp], 
 [UserDataHourlyDistance].[Steps] AS [Steps], 
-[UserDataHourlyDistance].[Distance] AS [Distance]
+[UserDataHourlyDistance].[Distance] AS [Distance], 
+[UserDataHourlyDistance].[Kcal] AS [Kcal], 
+[UserDataHourlyDistance].[Co2] AS [Co2], 
+[UserDataHourlyDistance].[Cash] AS [Cash]
 FROM [dbo].[UserDataHourlyDistance] AS [UserDataHourlyDistance]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="UserDataTotalDistance" EntityType="Self.UserDataTotalDistance" store:Type="Views" store:Schema="dbo">
@@ -921,7 +927,10 @@ FROM [dbo].[UserDataHourlyDistance] AS [UserDataHourlyDistance]</DefiningQuery>
 [UserDataTotalDistance].[Activity] AS [Activity], 
 [UserDataTotalDistance].[Timestamp] AS [Timestamp], 
 [UserDataTotalDistance].[TotalSteps] AS [TotalSteps], 
-[UserDataTotalDistance].[TotalDistance] AS [TotalDistance]
+[UserDataTotalDistance].[TotalDistance] AS [TotalDistance], 
+[UserDataTotalDistance].[TotalKcal] AS [TotalKcal], 
+[UserDataTotalDistance].[TotalCo2] AS [TotalCo2], 
+[UserDataTotalDistance].[TotalCash] AS [TotalCash]
 FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
           </EntitySet>
           <AssociationSet Name="FK_ApiKeyHistory" Association="Self.FK_ApiKeyHistory">
@@ -1647,7 +1656,6 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
           <NavigationProperty Name="RewardGift" Relationship="MainModel.RewardRewardGift" FromRole="Reward" ToRole="RewardGift" />
           <NavigationProperty Name="RewardGlobalization" Relationship="MainModel.RewardRewardGlobalization" FromRole="Reward" ToRole="RewardGlobalization" />
           <Property Type="Int64" Name="DistanceTrigger" Nullable="false" />
-          <Property Name="DaysTrigger" Nullable="false" Type="Int64" />
           <Property Type="String" Name="Source" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="RewardRegionalization" Relationship="MainModel.RewardRewardRegionalization" FromRole="Reward" ToRole="RewardRegionalization" />
           <NavigationProperty Name="UserEarnedReward" Relationship="MainModel.UserEarnedRewardReward" FromRole="Reward" ToRole="UserEarnedReward" />
@@ -2041,6 +2049,9 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
           <Property Name="Steps" Type="Int64" Nullable="false" />
           <Property Name="Distance" Type="Int64" Nullable="false" />
           <NavigationProperty Name="User" Relationship="MainModel.UserDataHourlyDistanceUser" FromRole="UserDataHourlyDistance" ToRole="User" />
+          <Property Name="Kcal" Type="Int64" Nullable="false" />
+          <Property Name="Co2" Type="Int64" Nullable="false" />
+          <Property Name="Cash" Type="Int64" Nullable="false" />
         </EntityType>
         <EntityType Name="UserDataTotalDistance">
           <Key>
@@ -2052,6 +2063,9 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
           <Property Name="TotalSteps" Type="Int64" Nullable="false" />
           <Property Name="TotalDistance" Type="Int64" Nullable="false" />
           <NavigationProperty Name="User" Relationship="MainModel.UserUserDataTotalDistance" FromRole="UserDataTotalDistance" ToRole="User" />
+          <Property Name="TotalKcal" Type="Int64" Nullable="false" />
+          <Property Name="TotalCo2" Type="Int64" Nullable="false" />
+          <Property Name="TotalCash" Type="Int64" Nullable="false" />
         </EntityType>
         <EntityType Name="UserFriend">
           <Key>
@@ -2198,7 +2212,6 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
         <MappingFragment StoreEntitySet="RewardSet">
           <ScalarProperty Name="Guid" ColumnName="Guid" />
           <ScalarProperty Name="DistanceTrigger" ColumnName="DistanceTrigger" />
-          <ScalarProperty Name="DaysTrigger" ColumnName="DaysTrigger" />
           <ScalarProperty Name="Source" ColumnName="Source" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -2622,6 +2635,9 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
           <EntitySetMapping Name="UserDataHourlyDistance">
             <EntityTypeMapping TypeName="MainModel.UserDataHourlyDistance">
               <MappingFragment StoreEntitySet="UserDataHourlyDistance">
+                <ScalarProperty Name="Cash" ColumnName="Cash" />
+                <ScalarProperty Name="Co2" ColumnName="Co2" />
+                <ScalarProperty Name="Kcal" ColumnName="Kcal" />
                 <ScalarProperty Name="Distance" ColumnName="Distance" />
                 <ScalarProperty Name="Steps" ColumnName="Steps" />
                 <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
@@ -2632,6 +2648,9 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
           <EntitySetMapping Name="UserDataTotalDistance">
             <EntityTypeMapping TypeName="MainModel.UserDataTotalDistance">
               <MappingFragment StoreEntitySet="UserDataTotalDistance">
+                <ScalarProperty Name="TotalCash" ColumnName="TotalCash" />
+                <ScalarProperty Name="TotalCo2" ColumnName="TotalCo2" />
+                <ScalarProperty Name="TotalKcal" ColumnName="TotalKcal" />
                 <ScalarProperty Name="TotalDistance" ColumnName="TotalDistance" />
                 <ScalarProperty Name="TotalSteps" ColumnName="TotalSteps" />
                 <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
