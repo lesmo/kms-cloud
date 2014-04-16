@@ -22,7 +22,7 @@ namespace Kilometros_WebGlobalization.WebApp {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class RewardsStrings {
+    public class RewardsStrings {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace Kilometros_WebGlobalization.WebApp {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Kilometros_WebGlobalization.WebApp.RewardsStrings", typeof(RewardsStrings).Assembly);
@@ -51,7 +51,7 @@ namespace Kilometros_WebGlobalization.WebApp {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace Kilometros_WebGlobalization.WebApp {
         /// <summary>
         ///   Looks up a localized string similar to Future Rewards.
         /// </summary>
-        internal static string FutureRewards {
+        public static string FutureRewards {
             get {
                 return ResourceManager.GetString("FutureRewards", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace Kilometros_WebGlobalization.WebApp {
         /// <summary>
         ///   Looks up a localized string similar to Next Reward.
         /// </summary>
-        internal static string NextReward {
+        public static string NextReward {
             get {
                 return ResourceManager.GetString("NextReward", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace Kilometros_WebGlobalization.WebApp {
         /// <summary>
         ///   Looks up a localized string similar to Unlocked after.
         /// </summary>
-        internal static string UnlockedAfter {
+        public static string UnlockedAfter {
             get {
                 return ResourceManager.GetString("UnlockedAfter", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace Kilometros_WebGlobalization.WebApp {
         /// <summary>
         ///   Looks up a localized string similar to Unlocked on {0}.
         /// </summary>
-        internal static string UnlockedOnDate {
+        public static string UnlockedOnDate {
             get {
                 return ResourceManager.GetString("UnlockedOnDate", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace Kilometros_WebGlobalization.WebApp {
         /// <summary>
         ///   Looks up a localized string similar to Unlocked rewards.
         /// </summary>
-        internal static string UnlockedRewards {
+        public static string UnlockedRewards {
             get {
                 return ResourceManager.GetString("UnlockedRewards", resourceCulture);
             }
@@ -108,7 +108,7 @@ namespace Kilometros_WebGlobalization.WebApp {
         /// <summary>
         ///   Looks up a localized string similar to Your reward will be unlocked once you reach {0} {1}.
         /// </summary>
-        internal static string YourRewardWillBeUnlockedAt {
+        public static string YourRewardWillBeUnlockedAt {
             get {
                 return ResourceManager.GetString("YourRewardWillBeUnlockedAt", resourceCulture);
             }
@@ -117,7 +117,7 @@ namespace Kilometros_WebGlobalization.WebApp {
         /// <summary>
         ///   Looks up a localized string similar to You&apos;ve come along way so your next reward is just this far.
         /// </summary>
-        internal static string YouveComeALongWay {
+        public static string YouveComeALongWay {
             get {
                 return ResourceManager.GetString("YouveComeALongWay", resourceCulture);
             }

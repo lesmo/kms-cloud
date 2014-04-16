@@ -117,7 +117,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+    <comment>"Email" placeholder shown in the Email text box</comment>
+  </data>
   <data name="Login" xml:space="preserve">
     <value>Login</value>
+  </data>
+  <data name="LoginError" xml:space="preserve">
+    <value>Ooops! Looks like either you typed the wrong password, or you're not registered yet! You can register by clicking {0}.</value>
+    <comment>Text shown when User cannot be found in DB. {0} is the &lt;a&gt; link tag, created with the RegisterLink text.</comment>
+  </data>
+  <data name="RegisterLink" xml:space="preserve">
+    <value>here</value>
+    <comment>Text for the LoginError register link.</comment>
   </data>
 </root>

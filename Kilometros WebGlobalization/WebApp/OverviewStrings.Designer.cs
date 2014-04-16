@@ -22,7 +22,7 @@ namespace Kilometros_WebGlobalization.WebApp {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class OverviewStrings {
+    public class OverviewStrings {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace Kilometros_WebGlobalization.WebApp {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Kilometros_WebGlobalization.WebApp.OverviewStrings", typeof(OverviewStrings).Assembly);
@@ -51,7 +51,7 @@ namespace Kilometros_WebGlobalization.WebApp {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace Kilometros_WebGlobalization.WebApp {
         /// <summary>
         ///   Looks up a localized string similar to Activity Graph.
         /// </summary>
-        internal static string ActivityGraph {
+        public static string ActivityGraph {
             get {
                 return ResourceManager.GetString("ActivityGraph", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace Kilometros_WebGlobalization.WebApp {
         /// <summary>
         ///   Looks up a localized string similar to CO2 - Carbon Dioxide.
         /// </summary>
-        internal static string Co2Alt {
+        public static string Co2Alt {
             get {
                 return ResourceManager.GetString("Co2Alt", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace Kilometros_WebGlobalization.WebApp {
         /// <summary>
         ///   Looks up a localized string similar to Dialy Graph.
         /// </summary>
-        internal static string DailyGraph {
+        public static string DailyGraph {
             get {
                 return ResourceManager.GetString("DailyGraph", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace Kilometros_WebGlobalization.WebApp {
         /// <summary>
         ///   Looks up a localized string similar to Kcal - Kilocalories.
         /// </summary>
-        internal static string KcalAlt {
+        public static string KcalAlt {
             get {
                 return ResourceManager.GetString("KcalAlt", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace Kilometros_WebGlobalization.WebApp {
         /// <summary>
         ///   Looks up a localized string similar to Monthly Graph.
         /// </summary>
-        internal static string MonthlyGraph {
+        public static string MonthlyGraph {
             get {
                 return ResourceManager.GetString("MonthlyGraph", resourceCulture);
             }
@@ -108,7 +108,7 @@ namespace Kilometros_WebGlobalization.WebApp {
         /// <summary>
         ///   Looks up a localized string similar to Cash savings.
         /// </summary>
-        internal static string SavingsAlt {
+        public static string SavingsAlt {
             get {
                 return ResourceManager.GetString("SavingsAlt", resourceCulture);
             }
@@ -117,7 +117,7 @@ namespace Kilometros_WebGlobalization.WebApp {
         /// <summary>
         ///   Looks up a localized string similar to Savings.
         /// </summary>
-        internal static string SavingsTag {
+        public static string SavingsTag {
             get {
                 return ResourceManager.GetString("SavingsTag", resourceCulture);
             }
@@ -126,7 +126,7 @@ namespace Kilometros_WebGlobalization.WebApp {
         /// <summary>
         ///   Looks up a localized string similar to Tip of the Day.
         /// </summary>
-        internal static string TipOfTheDay {
+        public static string TipOfTheDay {
             get {
                 return ResourceManager.GetString("TipOfTheDay", resourceCulture);
             }
@@ -135,7 +135,7 @@ namespace Kilometros_WebGlobalization.WebApp {
         /// <summary>
         ///   Looks up a localized string similar to Today sleep time.
         /// </summary>
-        internal static string TodaySleepTime {
+        public static string TodaySleepTime {
             get {
                 return ResourceManager.GetString("TodaySleepTime", resourceCulture);
             }
@@ -144,7 +144,7 @@ namespace Kilometros_WebGlobalization.WebApp {
         /// <summary>
         ///   Looks up a localized string similar to Traveled today.
         /// </summary>
-        internal static string TodayTraveled {
+        public static string TodayTraveled {
             get {
                 return ResourceManager.GetString("TodayTraveled", resourceCulture);
             }

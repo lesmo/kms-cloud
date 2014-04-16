@@ -22,7 +22,7 @@ namespace Kilometros_WebGlobalization.WebApp {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class FriendsStrings {
+    public class FriendsStrings {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace Kilometros_WebGlobalization.WebApp {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Kilometros_WebGlobalization.WebApp.FriendsStrings", typeof(FriendsStrings).Assembly);
@@ -51,7 +51,7 @@ namespace Kilometros_WebGlobalization.WebApp {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace Kilometros_WebGlobalization.WebApp {
         /// <summary>
         ///   Looks up a localized string similar to Accept.
         /// </summary>
-        internal static string AcceptRequest {
+        public static string AcceptRequest {
             get {
                 return ResourceManager.GetString("AcceptRequest", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace Kilometros_WebGlobalization.WebApp {
         /// <summary>
         ///   Looks up a localized string similar to Friend requests.
         /// </summary>
-        internal static string FriendRequests {
+        public static string FriendRequests {
             get {
                 return ResourceManager.GetString("FriendRequests", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace Kilometros_WebGlobalization.WebApp {
         /// <summary>
         ///   Looks up a localized string similar to Reject.
         /// </summary>
-        internal static string RejectRequest {
+        public static string RejectRequest {
             get {
                 return ResourceManager.GetString("RejectRequest", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace Kilometros_WebGlobalization.WebApp {
         /// <summary>
         ///   Looks up a localized string similar to Savings.
         /// </summary>
-        internal static string Savings {
+        public static string Savings {
             get {
                 return ResourceManager.GetString("Savings", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace Kilometros_WebGlobalization.WebApp {
         /// <summary>
         ///   Looks up a localized string similar to See more.
         /// </summary>
-        internal static string SeeMore {
+        public static string SeeMore {
             get {
                 return ResourceManager.GetString("SeeMore", resourceCulture);
             }
@@ -108,7 +108,7 @@ namespace Kilometros_WebGlobalization.WebApp {
         /// <summary>
         ///   Looks up a localized string similar to {0} total friends.
         /// </summary>
-        internal static string TotalFriends {
+        public static string TotalFriends {
             get {
                 return ResourceManager.GetString("TotalFriends", resourceCulture);
             }
@@ -117,7 +117,7 @@ namespace Kilometros_WebGlobalization.WebApp {
         /// <summary>
         ///   Looks up a localized string similar to Your friends.
         /// </summary>
-        internal static string YourFriends {
+        public static string YourFriends {
             get {
                 return ResourceManager.GetString("YourFriends", resourceCulture);
             }
