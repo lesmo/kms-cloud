@@ -106,20 +106,20 @@ namespace Kilometros_WebGlobalization.WebApp {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Savings.
+        /// </summary>
+        public static string Savings {
+            get {
+                return ResourceManager.GetString("Savings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cash savings.
         /// </summary>
         public static string SavingsAlt {
             get {
                 return ResourceManager.GetString("SavingsAlt", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Savings.
-        /// </summary>
-        public static string SavingsTag {
-            get {
-                return ResourceManager.GetString("SavingsTag", resourceCulture);
             }
         }
         

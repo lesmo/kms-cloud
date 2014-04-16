@@ -137,13 +137,13 @@
     <value>Monthly Graph</value>
     <comment>"Monthly Graph" label, showing this month's graph of activity.</comment>
   </data>
+  <data name="Savings" xml:space="preserve">
+    <value>Savings</value>
+    <comment>"Savings" tag, shown next to the little green Pig denoting cash savings.</comment>
+  </data>
   <data name="SavingsAlt" xml:space="preserve">
     <value>Cash savings</value>
     <comment>"Cash savings" text shown when user hovers the Savings icon.</comment>
-  </data>
-  <data name="SavingsTag" xml:space="preserve">
-    <value>Savings</value>
-    <comment>"Savings" tag, shown next to the little green Pig denoting cash savings.</comment>
   </data>
   <data name="TipOfTheDay" xml:space="preserve">
     <value>Tip of the Day</value>
