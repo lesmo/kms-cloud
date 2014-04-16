@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KilometrosDatabase {
+namespace KilometrosDatabase.Helpers {
     public static partial class UnitsConverter {
         private static Func<dynamic, Double> InchesToCentimetersFunction
             = f => (Double)f * 2.54d;

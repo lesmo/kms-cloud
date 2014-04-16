@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KilometrosDatabase {
+namespace KilometrosDatabase.Helpers {
     public static partial class UnitsConverter {
         private static Func<dynamic, Double> CentimetersToMetersFunction
             = f => (Double)f / 100d;
