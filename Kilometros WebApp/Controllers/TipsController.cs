@@ -31,9 +31,7 @@ namespace Kilometros_WebApp.Controllers {
 			// > Obtener las Categorías de Tips
 			IEnumerable<TipCategoryGlobalization> tipCategories
 				= Database.TipCategoryStore.GetAll().Select( s =>
-					s.GetGlobalization<TipCategoryGlobalization>(
-						LayoutValues.CultureInfo
-					)
+					s.GetGlobalization()
 				);
 
 			TipCategory tipCategory;
@@ -79,13 +77,9 @@ namespace Kilometros_WebApp.Controllers {
 
 			foreach ( Tip tip in tipHistoryTemp ) {
 				TipGlobalization tipGlobalization
-					= tip.GetGlobalization(
-						LayoutValues.CultureInfo
-					);
+					= tip.GetGlobalization();
 				TipCategoryGlobalization tipCategoryGlobalization
-					= tip.TipCategory.GetGlobalization<TipCategoryGlobalization>(
-						LayoutValues.CultureInfo
-					);
+					= tip.TipCategory.GetGlobalization();
 				Uri tipCategoryIconUri
 					= GetDynamicResourceUri(
 						method:

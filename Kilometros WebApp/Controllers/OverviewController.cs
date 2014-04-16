@@ -28,30 +28,33 @@ namespace Kilometros_WebApp.Controllers {
 						include:
 							new string[] { "Tip.TipCategory" }
 					).Tip;
-			   
-				this._overviewValues.TipOfTheDay.Text
-					= lastTip.GetGlobalization().Text;
-				this._overviewValues.TipOfTheDay.Category
-					= lastTip.TipCategory.GetGlobalization<KilometrosDatabase.TipCategoryGlobalization>().Name;
-				this._overviewValues.TipOfTheDay.IconUri
-					= new Uri(
-						Url.Content(
-							string.Format(
-								"DynamicResources/Images/{0}.{1}",
+
+				this.OverviewValues.TipOfTheDay
+					= new TipModel() {
+						Category
+							= lastTip.TipCategory.GetGlobalization().Name,
+						IconUri
+							= GetDynamicResourceUri(
+								"Images",
 								lastTip.TipCategory.Guid.ToBase64String(),
 								lastTip.TipCategory.PictureExtension
-							)
-						)
-					);
-
+							),
+						Text
+							= lastTip.GetGlobalization().Text,
+						TipId
+							= lastTip.Guid.ToBase64String()
+					};
+			   
 				// > Obtener registro de actividades de las últimas 24 hrs
 				//   [MUST REVIEW + OPTIMIZE]
+				DateTime lowerBound
+					= DateTime.UtcNow.AddHours(-24);
 				KilometrosDatabase.Data[] lastDayData
 					=  Database.DataStore.GetAll(
 						filter: f =>
 							f.User.Guid == CurrentUser.Guid
 							&& f.Timestamp < DateTime.UtcNow
-							&& f.Timestamp > DateTime.UtcNow.AddHours(-24),
+							&& f.Timestamp > lowerBound,
 						orderBy: o =>
 							o.OrderBy(b => b.Timestamp)
 					).ToArray();

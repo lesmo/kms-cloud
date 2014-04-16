@@ -1,4 +1,5 @@
 ﻿using Kilometros_WebApp.Models.Views;
+using KilometrosDatabase;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -60,9 +61,9 @@ namespace Kilometros_WebApp.Controllers {
 							= s.CreationDate,
 
 						Title
-							= s.Reward.GetGlobalization().Title,
+							= s.Reward.GetGlobalization().Name,
 						Text
-							= s.Reward.GetGlobalization().Text
+							= s.Reward.GetGlobalization().Description
 					}
 				).ToArray();
 
