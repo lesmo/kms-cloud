@@ -107,7 +107,7 @@ namespace Kilometros_WebApp.Models.Views {
         /// Si es nula o vacía, no se ha desbloqueado una recompensa recientemente o ya se marcó como
         /// descartada en alguna ocasión anterior por el API o la misma WebApp.
         /// </summary>
-        public RewardModel RecentlyUnlockedRewardId {
+        public RewardModel RecentlyUnlockedReward {
             get;
             set;
         }
