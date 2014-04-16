@@ -14,9 +14,9 @@ namespace Kilometros_WebApp {
             
             routes.MapRoute(
                 "DynamicResources",
-                "{controller}/{filename}.{ext}"
+                "{controller}/{action}/{filename}.{ext}"
             );
-
+            
             routes.MapTranslatedRoute(
                 "DefaultGlobalization",
                 "{lang}/{controller}/{action}",

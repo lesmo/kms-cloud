@@ -135,7 +135,7 @@
     <Compile Include="Controllers\BaseController\UtilsBase.cs" />
     <Compile Include="Controllers\DynamicResourcesControllers\AjaxController.cs" />
     <Compile Include="Controllers\BaseController\DatabaseBase.cs" />
-    <Compile Include="Controllers\DynamicResourcesControllers\DynamicResourcesController.cs" />
+    <Compile Include="Controllers\DynamicResourcesController.cs" />
     <Compile Include="Controllers\FriendsController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\OverviewController.cs" />
