@@ -275,11 +275,17 @@ namespace Kilometros_WebApp.Controllers {
 				).Select(s =>
 					new {
 						iconUri
-							= "NOT IMPLEMENTED",
+							= Url.Content(
+								string.Format(
+									"~/DynamicResources/Images/{0}.{1}",
+									s.Reward.Guid.ToBase64String(),
+									s.Reward.PictureExtension
+								)
+							),
 						sponsorUri
-							= "NOT IMPLEMENTED",
+							= s.Reward.RewardSponsor.WebsiteUri,
 						sponsorName
-							= "NOT IMPLEMENETED",
+							= s.Reward.RewardSponsor.Name,
 
 						triggerDistance
 							= s.Reward.DistanceTrigger,
@@ -287,9 +293,9 @@ namespace Kilometros_WebApp.Controllers {
 							= s.CreationDate.ToShortDateString(),
 
 						title
-							= s.Reward.GetGlobalization().Title,
+							= s.Reward.GetGlobalization().Name,
 						text
-							= s.Reward.GetGlobalization().Text
+							= s.Reward.GetGlobalization().Description
 
 					}
 				);
