@@ -76,7 +76,7 @@ namespace Kilometros_WebApp.Controllers {
                         this._layoutValues.NextRewardDistanceCentimeters
                             = nextReward.DistanceTrigger - CurrentUser.UserDataTotalDistanceSum;
                 } else {
-                    this._layoutValues.RecentlyUnlockedRewardGuid
+                    this._layoutValues.RecentlyUnlockedRewardId
                         = lastReward.Guid.ToBase64String();
                 }
 

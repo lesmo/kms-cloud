@@ -11,5 +11,13 @@ namespace Kilometros_WebApp.Controllers {
 		public ActionResult Index() {
 			return View();
 		}
+
+		public ActionResult Facebook() {
+			return View();
+		}
+
+		public ActionResult Twitter() {
+			return View();
+		}
 	}
 }

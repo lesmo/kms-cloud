@@ -17,14 +17,7 @@ namespace Kilometros_WebApp.Controllers {
 
 				this._overviewValues
 					= new OverviewValues();
-
-				this._overviewValues.CultureInfo
-					= CultureInfo.CurrentCulture;
-				this._overviewValues.RegionInfo
-					= new RegionInfo(
-						this.CurrentUser.RegionCode
-					);
-
+				
 				// > Obtener Tip del Día (último Tip)
 				KilometrosDatabase.Tip lastTip
 					= Database.UserTipHistoryStore.GetFirst(
@@ -36,15 +29,11 @@ namespace Kilometros_WebApp.Controllers {
 							new string[] { "Tip.TipCategory" }
 					).Tip;
 			   
-				this._overviewValues.TipOfTheDayText
-					= lastTip.GetGlobalization(
-						this._overviewValues.CultureInfo
-					).Text;
-				this._overviewValues.TipOfTheDayCategory
-					= lastTip.TipCategory.GetGlobalization<KilometrosDatabase.TipCategoryGlobalization>(
-						this._overviewValues.CultureInfo
-					).Name;
-				this._overviewValues.TipOfTheDayCategoryIconUri
+				this._overviewValues.TipOfTheDay.Text
+					= lastTip.GetGlobalization().Text;
+				this._overviewValues.TipOfTheDay.Category
+					= lastTip.TipCategory.GetGlobalization<KilometrosDatabase.TipCategoryGlobalization>().Name;
+				this._overviewValues.TipOfTheDay.IconUri
 					= new Uri(
 						Url.Content(
 							string.Format(
@@ -69,14 +58,14 @@ namespace Kilometros_WebApp.Controllers {
 
 				// > Calcular Horas de Sueño
 				//   [MUST REVIEW + OPTIMIZE]
-
 				// Inicialización de variables temporales
 				DateTime? tmpTimestamp
 					= null;
 
 				// Inicialización de variables de propiedades
 				this._overviewValues.TodayDistanceCentimeters
-					= this._overviewValues.EquivalentCo2Grams
+					= 0;
+				this._overviewValues.EquivalentCo2Grams
 					= 0;
 
 				foreach ( KilometrosDatabase.Data data in lastDayData ) {
@@ -106,12 +95,16 @@ namespace Kilometros_WebApp.Controllers {
 
 						this._overviewValues.EquivalentCo2Grams
 							+= data.EqualsCo2;
-						this._overviewValues.EquivalentKcal
+						this._overviewValues.EquivalentKcalRaw
 							+= data.EqualsKcal;
-						this._overviewValues.EquivalentCash
+						this._overviewValues.EquivalentCashRaw
 							+= data.EqualsCash;
 					}
 				}
+
+				// > Establecer Tip del Dïa
+				this._overviewValues.TipOfTheDay
+					= this.LayoutValues.TipOfTheDay;
 
 				// > Devolver valores
 				return this._overviewValues;

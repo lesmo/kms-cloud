@@ -1,227 +1,227 @@
 ﻿@{
-    LayoutValues layoutValues
-        = (LayoutValues)ViewData["LayoutValues"];
+	LayoutValues layoutValues
+		= (LayoutValues)ViewData["LayoutValues"];
 
-    layoutValues
-        = layoutValues ?? new LayoutValues();
+	layoutValues
+		= layoutValues ?? new LayoutValues();
 }
 
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
-    <meta name="description" content="The description of my page" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    @* user-scalable=no << Eliminado de {viewport} cuz' then it's not responsive *@
-    
-    <title>KMS :: @(ViewBag.Title ?? LayoutStrings.DefaultTitle)</title>
+	<meta charset="utf-8" />
+	<meta name="description" content="The description of my page" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	@* user-scalable=no << Eliminado de {viewport} cuz' then it's not responsive *@
+	
+	<title>KMS :: @(ViewBag.Title ?? LayoutStrings.DefaultTitle)</title>
 
-    @* Styles *@
-    @Html.RenderCssBundle("~/Assets/Stylesheets.css.bundle", BundleOptions.Combined)
+	@* Styles *@
+	@Html.RenderCssBundle("~/Assets/Stylesheets.css.bundle", BundleOptions.Combined)
 </head>
-<body>
-    <header>
-        <div class="contenedor">
-            <a href="@Url.Action("Index", "Entry")">
-                <h1>
-                    <span class="ocultar">KMS</span>
-                    <img src="@Url.Content("~/Images/Header/Header.KmsLogo.png")" alt="KMS">
-                </h1>
-            </a>
-            <nav>
-                <ul>
-                    <li>
-                        @Html.ActionLink(
-                            LayoutStrings.MyProfile,
-                            "Index",
-                            "Entry",
-                            null, new {
-                                @class = layoutValues.Section == LayoutValues.MainSection.MyProfile ? "active" : ""
-                            }
-                        )
-                    </li>
-                    <li>
-                        @Html.ActionLink(
-                            LayoutStrings.Tips,
-                            "Index",
-                            "Entry",
-                            null, new {
-                                @class = layoutValues.Section == LayoutValues.MainSection.Tips ? "active" : ""
-                            }
-                        )
-                    </li>
-                    <li>
-                        @Html.ActionLink(
-                            LayoutStrings.Rewards,
-                            "Index",
-                            "Entry",
-                            null, new {
-                                @class = layoutValues.Section == LayoutValues.MainSection.Rewards ? "active" : ""
-                            }
-                        )
-                    </li>
-                    <li>
-                        @Html.ActionLink(
-                            LayoutStrings.Friends,
-                            "Index",
-                            "Entry",
-                            null, new {
-                                @class = layoutValues.Section == LayoutValues.MainSection.Friends ? "active" : ""
-                            }
-                        )
-                    </li>
-                </ul>
-            </nav>
+<body data-distanceUnit="@(RegionInfo.CurrentRegion.IsMetric ? "kms" : "mi")" data-weightUnit="@(RegionInfo.CurrentRegion.IsMetric ? "kg" : "lb")">
+	<header>
+		<div class="contenedor">
+			<a href="@Url.Action("Index", "Entry")">
+				<h1>
+					<span class="ocultar">KMS</span>
+					<img src="@Url.Content("~/Images/Header/Header.KmsLogo.png")" alt="KMS">
+				</h1>
+			</a>
+			<nav>
+				<ul>
+					<li>
+						@Html.ActionLink(
+							LayoutStrings.MyProfile,
+							"Index",
+							"Entry",
+							null, new {
+								@class = layoutValues.Section == LayoutValues.MainSection.MyProfile ? "active" : ""
+							}
+						)
+					</li>
+					<li>
+						@Html.ActionLink(
+							LayoutStrings.Tips,
+							"Index",
+							"Entry",
+							null, new {
+								@class = layoutValues.Section == LayoutValues.MainSection.Tips ? "active" : ""
+							}
+						)
+					</li>
+					<li>
+						@Html.ActionLink(
+							LayoutStrings.Rewards,
+							"Index",
+							"Entry",
+							null, new {
+								@class = layoutValues.Section == LayoutValues.MainSection.Rewards ? "active" : ""
+							}
+						)
+					</li>
+					<li>
+						@Html.ActionLink(
+							LayoutStrings.Friends,
+							"Index",
+							"Entry",
+							null, new {
+								@class = layoutValues.Section == LayoutValues.MainSection.Friends ? "active" : ""
+							}
+						)
+					</li>
+				</ul>
+			</nav>
 
-            <a href="@Url.Action("Entry", "Index")" class="alertas-header">
-                @if ( layoutValues.UnreadMessages > 0 ) {
-                    <span>@layoutValues.UnreadMessages</span>
-                }
-            </a>
-            <a href="@Url.Action("Entry", "Index")" class="configuracion-header"></a>
-            <div class="buscador-header">
-                @using ( Html.BeginForm("Index", "Search", FormMethod.Get) ) {
-                    <input type="search" name="kms-q" placeholder="@LayoutStrings.SearchPlaceholder" />
-                    <input type="submit" class="submit" value="">
-                }
-            </div>
-        </div>
-    </header>
+			<a href="@Url.Action("Entry", "Index")" class="alertas-header">
+				@if ( layoutValues.UnreadMessages > 0 ) {
+					<span>@layoutValues.UnreadMessages</span>
+				}
+			</a>
+			<a href="@Url.Action("Entry", "Index")" class="configuracion-header"></a>
+			<div class="buscador-header">
+				@using ( Html.BeginForm("Index", "Search", FormMethod.Get) ) {
+					<input type="search" name="kms-q" placeholder="@LayoutStrings.SearchPlaceholder" />
+					<input type="submit" class="submit" value="">
+				}
+			</div>
+		</div>
+	</header>
 
-    <div id="wrap">
-        @* -- Left Sidebar --- *@
-        <aside id="sidebar">
-            @* - Datos generales del Usuario - *@
-            <section id="Usuario">
-                <h2>@layoutValues.UserName @layoutValues.UserLastname</h2>
-                <figure>
-                    <img src="@layoutValues.UserPicture.AbsoluteUri">
-                </figure>
-                <span class="distancia">
-                    @layoutValues.TotalDistanceString @(layoutValues.RegionInfo.IsMetric ? "kms" : "mi")
-                </span>
-                <span class="origen">
-                    @layoutValues.LocationString
-                </span>
-            </section>
-
-            @* - Próxima Recompensa (o última recompensa ganada) - *@
-            <section id="recompensaDash">
-                @if ( string.IsNullOrEmpty(layoutValues.RecentlyUnlockedRewardGuid) ) {
-                    <span class="proxRecomp">@LayoutStrings.NextRewardIn</span>
-                    <span class="bandera">
-                        <img src="@Url.Content("~/Images/Sidebar/Sidebar.Medal.gif")" alt="">
-                    </span>
-                    <span class="kms">
-                        @layoutValues.NextRewardsDistanceSpanString @(layoutValues.RegionInfo.IsMetric ? "kms" : "mi")
-                    </span>
-                    <div id="barra">
-                        <div class="progreso" style="width: 80%;"></div>
-                    </div>
-                } else {
-				    <img src="img/medalla.png" alt="">
-				    <a href="@Url.Action("Rewards", "Detail", new {
-                        id = layoutValues.RecentlyUnlockedRewardGuid
-                    })" class="botonDorado">
-					    @LayoutStrings.ViewReward.ToUpper()
-				    </a>
-                }
+	<div id="wrap">
+		@* -- Left Sidebar --- *@
+		<aside id="sidebar">
+			@* - Datos generales del Usuario - *@
+			<section id="Usuario">
+				<h2>@layoutValues.UserName @layoutValues.UserLastname</h2>
+				<figure>
+					<img src="@layoutValues.UserPicture.AbsoluteUri">
+				</figure>
+				<span class="distancia">
+					@layoutValues.TotalDistanceString @(layoutValues.RegionInfo.IsMetric ? "kms" : "mi")
+				</span>
+				<span class="origen">
+					@layoutValues.LocationString
+				</span>
 			</section>
 
-            <section id="tipDelDia">
-                <figure>
-                    <img src="@layoutValues.TipOfTheDay.IconUri.AbsoluteUri" alt="@layoutValues.TipOfTheDay.Category">
-                </figure>
-                <h3>@LayoutStrings.TipOfTheDay.ToUpper()</h3>
-                <article>
-                    @layoutValues.TipOfTheDay.Text
-                </article>
-            </section>
+			@* - Próxima Recompensa (o última recompensa ganada) - *@
+			<section id="recompensaDash">
+				@if ( string.IsNullOrEmpty(layoutValues.RecentlyUnlockedRewardGuid) ) {
+					<span class="proxRecomp">@LayoutStrings.NextRewardIn</span>
+					<span class="bandera">
+						<img src="@Url.Content("~/Images/Sidebar/Sidebar.Medal.gif")" alt="">
+					</span>
+					<span class="kms">
+						@layoutValues.NextRewardsDistanceSpanString @(layoutValues.RegionInfo.IsMetric ? "kms" : "mi")
+					</span>
+					<div id="barra">
+						<div class="progreso" style="width: 80%;"></div>
+					</div>
+				} else {
+					<img src="img/medalla.png" alt="">
+					<a href="@Url.Action("Rewards", "Detail", new {
+						id = layoutValues.RecentlyUnlockedRewardGuid
+					})" class="botonDorado">
+						@LayoutStrings.ViewReward.ToUpper()
+					</a>
+				}
+			</section>
 
-            <section id="redes-sidebar">
-                <ul>
-                    <li><a href="#" class="corona"></a></li>
-                    <li><a href="#" class="facebook"></a></li>
-                    <li><a href="#" class="twitter"></a></li>
-                </ul>
-            </section>
-        </aside>
+			<section id="tipDelDia">
+				<figure>
+					<img src="@layoutValues.TipOfTheDay.IconUri.AbsoluteUri" alt="@layoutValues.TipOfTheDay.Category">
+				</figure>
+				<h3>@LayoutStrings.TipOfTheDay.ToUpper()</h3>
+				<article>
+					@layoutValues.TipOfTheDay.Text
+				</article>
+			</section>
 
-        @* -- Body -- *@
-        <section id="contenidos">
-            @RenderBody()
-            <div class="bottom-abajo"></div>
-        </section>
+			<section id="redes-sidebar">
+				<ul>
+					<li><a href="#" class="corona"></a></li>
+					<li><a href="#" class="facebook"></a></li>
+					<li><a href="#" class="twitter"></a></li>
+				</ul>
+			</section>
+		</aside>
 
-        <div style="clear:both"></div>
-    </div>
+		@* -- Body -- *@
+		<section id="contenidos">
+			@RenderBody()
+			<div class="bottom-abajo"></div>
+		</section>
 
-    <footer>
-        <div class="contenedor">
-            <nav>
-                <ul>
-                    <li>
-                        @Html.ActionLink(
-                            LayoutStrings.FooterProduct,
-                            "Index",
-                            "Entry"
-                        )
-                    </li>
-                    <li>
-                        @Html.ActionLink(
-                            LayoutStrings.FooterServices,
-                            "Index",
-                            "Entry"
-                        )
-                    </li>
-                    <li>
-                        @Html.ActionLink(
-                            LayoutStrings.FooterStores,
-                            "Index",
-                            "Entry"
-                        )
-                    </li>
-                    <li>
-                        @Html.ActionLink(
-                            LayoutStrings.FooterUs,
-                            "Index",
-                            "Entry"
-                        )
-                    </li>
-                    <li>
-                        @Html.ActionLink(
-                            LayoutStrings.FooterKms,
-                            "Index",
-                            "Entry"
-                        )
-                    </li>
-                </ul>
-            </nav>
-            <ul class="redes">
-                <li>
-                    <a href="https://www.facebook.com/Kms.mex" target="_blank">
-                        <img src="@Url.Content("~/Images/Footer/Footer.Facebook.png")" alt="Facebook: KMS.mex">
-                    </a>
-                </li>
-                <li>
-                    <a href="https://twitter.com/kmsmex" target="_blank">
-                        <img src="@Url.Content("~/Images/Footer/Footer.Twitter.png")" alt="Twitter: &#64kmsmex">
-                    </a>
-                </li>
-                <li>
-                    @* TODO: Establecer {subject} y {body} a texto predefinido *@
-                    <a href="mailto:dime@kms.me" target="_blank">
-                        <img src="@Url.Content("~/Images/Footer/Footer.Mail.png")" alt="Email: dime&#64kms.me">
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </footer>
+		<div style="clear:both"></div>
+	</div>
 
-    @* Scripts *@
-    @Html.RenderJsBundle("~/Assets/Javascript.js.bundle", BundleOptions.Combined)
+	<footer>
+		<div class="contenedor">
+			<nav>
+				<ul>
+					<li>
+						@Html.ActionLink(
+							LayoutStrings.FooterProduct,
+							"Index",
+							"Entry"
+						)
+					</li>
+					<li>
+						@Html.ActionLink(
+							LayoutStrings.FooterServices,
+							"Index",
+							"Entry"
+						)
+					</li>
+					<li>
+						@Html.ActionLink(
+							LayoutStrings.FooterStores,
+							"Index",
+							"Entry"
+						)
+					</li>
+					<li>
+						@Html.ActionLink(
+							LayoutStrings.FooterUs,
+							"Index",
+							"Entry"
+						)
+					</li>
+					<li>
+						@Html.ActionLink(
+							LayoutStrings.FooterKms,
+							"Index",
+							"Entry"
+						)
+					</li>
+				</ul>
+			</nav>
+			<ul class="redes">
+				<li>
+					<a href="https://www.facebook.com/Kms.mex" target="_blank">
+						<img src="@Url.Content("~/Images/Footer/Footer.Facebook.png")" alt="Facebook: KMS.mex">
+					</a>
+				</li>
+				<li>
+					<a href="https://twitter.com/kmsmex" target="_blank">
+						<img src="@Url.Content("~/Images/Footer/Footer.Twitter.png")" alt="Twitter: &#64kmsmex">
+					</a>
+				</li>
+				<li>
+					@* TODO: Establecer {subject} y {body} a texto predefinido *@
+					<a href="mailto:dime@kms.me" target="_blank">
+						<img src="@Url.Content("~/Images/Footer/Footer.Mail.png")" alt="Email: dime&#64kms.me">
+					</a>
+				</li>
+			</ul>
+		</div>
+	</footer>
 
-    @* Footer Scripts (Optional) *@
-    @RenderSection("FooterScripts", required: false)
+	@* Scripts *@
+	@Html.RenderJsBundle("~/Assets/Javascript.js.bundle", BundleOptions.Combined)
+
+	@* Footer Scripts (Optional) *@
+	@RenderSection("FooterScripts", required: false)
 </body>
 </html>

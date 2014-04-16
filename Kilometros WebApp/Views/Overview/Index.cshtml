@@ -8,18 +8,18 @@
 <div id="actividad">
 	<div class="recorridoSueno">
 		<aside class="tresCol">
-            <p>
-                @overviewValues.TodaySleepTime.Hours <span class="peque">hrs</span>
-                @overviewValues.TodaySleepTime.Minutes <span class="peque">min</span>
-            </p>
-            <em>@OverviewStrings.TodaySleepTime.ToUpper()</em>
+			<p>
+				@overviewValues.TodaySleepTime.Hours <span class="peque">hrs</span>
+				@overviewValues.TodaySleepTime.Minutes <span class="peque">min</span>
+			</p>
+			<em>@OverviewStrings.TodaySleepTime.ToUpper()</em>
 		</aside>
 		<aside class="tresCol">
-            <p>
-                @overviewValues.TodayDistanceString
-                <span class="peque">@(overviewValues.RegionInfo.IsMetric ? "kms" : "mi")</span>
-            </p>
-            <em>@OverviewStrings.TodayTraveled.ToUpper()</em>
+			<p>
+				@overviewValues.TodayDistance
+				<span class="peque">@(RegionInfo.CurrentRegion.IsMetric ? "kms" : "mi")</span>
+			</p>
+			<em>@OverviewStrings.TodayTraveled.ToUpper()</em>
 		</aside>
 	</div>
 
@@ -31,7 +31,9 @@
 				</figure>
 				<span>
 					<span class="leyenda">CO<sub>2</sub></span>
-					<span class="numero">@overviewValues.EquivalentCo2String</span>
+					<span class="numero">
+						@overviewValues.EquivalentCo2 @(RegionInfo.CurrentRegion.IsMetric ? "kg" : "lb")
+					</span>
 				</span>
 			</li>
 			<li>
@@ -40,7 +42,7 @@
 				</figure>
 				<span>
 					<span class="leyenda">kcal</span>
-					<span class="numero">@overviewValues.EquivalentKcalString</span>
+					<span class="numero">@overviewValues.EquivalentKcal</span>
 				</span>
 			</li>
 			<li>
@@ -49,7 +51,7 @@
 				</figure>
 				<span>
 					<span class="leyenda">@OverviewStrings.SavingsTag</span>
-					<span class="numero">@overviewValues.EquivalentCashString</span>
+					<span class="numero">@overviewValues.EquivalentCash</span>
 				</span>
 			</li>
 		</ul>

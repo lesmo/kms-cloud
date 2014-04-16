@@ -138,6 +138,7 @@
     <Compile Include="Controllers\BaseController\DatabaseBase.cs" />
     <Compile Include="Controllers\DynamicResourcesControllers\DynamicResourcesController.cs" />
     <Compile Include="Controllers\EntryController.cs" />
+    <Compile Include="Controllers\FriendsController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\OverviewController.cs" />
     <Compile Include="Controllers\RewardsController.cs" />
@@ -145,8 +146,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Views\Friends\FriendModel.cs" />
+    <Compile Include="Models\Views\Friends\FriendsValues.cs" />
     <Compile Include="Models\Views\Layout\LayoutFriend.cs" />
-    <Compile Include="Models\Views\Layout\LayoutReward.cs" />
     <Compile Include="Models\Views\Layout\LayoutValues.cs" />
     <Compile Include="Models\Views\Overview\OverviewValues.cs" />
     <Compile Include="Models\Views\Rewards\RewardModel.cs" />
@@ -959,6 +961,7 @@
     <Content Include="Views\Overview\Index.cshtml" />
     <Content Include="Views\Tips\Index.cshtml" />
     <Content Include="Views\Rewards\Index.cshtml" />
+    <Content Include="Views\Friends\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Kilometros Database\Kilometros Database.csproj">

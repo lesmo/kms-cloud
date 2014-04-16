@@ -1,106 +1,108 @@
 ﻿@{
-	RewardsValues rewardsValues
-		= (RewardsValues)ViewData["OverviewValues"];
+    RewardsValues rewardsValues
+        = (RewardsValues)ViewData["OverviewValues"];
 
-	rewardsValues
-		= rewardsValues ?? new RewardsValues();
+    rewardsValues
+        = rewardsValues ?? new RewardsValues();
 }
 <span class="tituloGrafica">
-	<h2>
-		<img src="@Url.Content("~/Images/Gui/Gui.MiniMdeal.jpg")">@RewardsStrings.NextReward.ToUpper()
-	</h2>
-	<hr>
+    <h2>
+        <img src="@Url.Content("~/Images/Gui/Gui.MiniMdeal.jpg")">@RewardsStrings.NextReward.ToUpper()
+    </h2>
+    <hr>
 </span>
 
 <div id="prox-recompensa">
-	<span class="bandera">
-		<img src="@Url.Content("~/Images/Rewards/Gui.BigMdeal.jpg")" alt="">
-	</span>
-	<div class="info-recomp">
-		<span class="proxRecomp">@RewardsStrings.YouveComeALongWay.ToUpper() :</span>
-		<span class="kms">@rewardsValues.NextRewards.First().TriggerDistanceString @(RegionInfo.CurrentRegion.IsMetric ? "kms" : "mi")</span>
-		<div id="barra">
-			<div class="progreso" style="width: 80%;"></div>
-		</div>
-		<p>
-			@string.Format(
-				RewardsStrings.YourRewardWillBeUnlockedAt,
-				rewardsValues.NextRewards.First().TriggerDistanceString,
-				RegionInfo.CurrentRegion.IsMetric
-					? "kms"
-					: "mi"
-			)
-		</p>
-	</div>
+    <span class="bandera">
+        <img src="@Url.Content("~/Images/Rewards/Gui.BigMdeal.jpg")" alt="">
+    </span>
+    <div class="info-recomp">
+        <span class="proxRecomp">@RewardsStrings.YouveComeALongWay.ToUpper() :</span>
+        <span class="kms">
+            @rewardsValues.NextRewards.First().TriggerDistance @(RegionInfo.CurrentRegion.IsMetric ? "kms" : "mi")
+        </span>
+        <div id="barra">
+            <div class="progreso" style="width: 80%;"></div>
+        </div>
+        <p>
+            @string.Format(
+                RewardsStrings.YourRewardWillBeUnlockedAt,
+                rewardsValues.NextRewards.First().TriggerDistance,
+                RegionInfo.CurrentRegion.IsMetric
+                    ? "kms"
+                    : "mi"
+            )
+        </p>
+    </div>
 </div>
 
 <span class="tituloGrafica">
-	<h2>
-		<img src="@Url.Content("~/Images/Gui/Gui.Trophy.jpg")">@RewardsStrings.FutureRewards
-	</h2>
-	<hr>
+    <h2>
+        <img src="@Url.Content("~/Images/Gui/Gui.Trophy.jpg")">@RewardsStrings.FutureRewards
+    </h2>
+    <hr>
 </span>
 
 <div id="recompensasLiberadas">
-	@for ( int i = 1; i < rewardsValues.NextRewards.Length; i++ ) {
-		<article class="recompensa">
-			<img src="@Url.Content("~/Images/Gui/Gui.GenericBadge.jpg")" alt="">
-			<p>@RewardsStrings.UnlockedAfter.ToUpper() :</p>
-			<h3>
-				@rewardsValues.NextRewards[i].TriggerDistanceString @(RegionInfo.CurrentRegion.IsMetric ? "KMS" : "MI")
-			</h3>
-		</article>
-	}
+    @for ( int i = 1; i < rewardsValues.NextRewards.Length; i++ ) {
+        <article class="recompensa">
+            <img src="@Url.Content("~/Images/Gui/Gui.GenericBadge.jpg")" alt="">
+            <p>@RewardsStrings.UnlockedAfter.ToUpper() :</p>
+            <h3>
+                @rewardsValues.NextRewards[i].TriggerDistance @(RegionInfo.CurrentRegion.IsMetric ? "KMS" : "MI")
+            </h3>
+        </article>
+    }
 </div>
 
 <span class="tituloGrafica">
-	<h2>
-		<img src="img/futuras-recompensas.jpg">@RewardsStrings.UnlockedRewards.ToUpper()
-	</h2>
-	<hr>
+    <h2>
+        <img src="img/futuras-recompensas.jpg">@RewardsStrings.UnlockedRewards.ToUpper()
+    </h2>
+    <hr>
 </span>
 
 @if ( rewardsValues.UnlockedRewards.Length > 0 ) {
-	<div id="recompensasLiberadas">
-		@foreach ( RewardModel reward in rewardsValues.UnlockedRewards ) {
-			<article class="itemLiberada">
-				<div class="info">
-					<figure><img src="@reward.IconUri.AbsoluteUri" alt="@reward.Title"></figure>
-					<h3>@reward.TriggerDistanceString @(reward.RegionInfo.IsMetric ? "KMS" : "MI")</h3>
-					<h4>@reward.Title</h4>
-					<p>
-						@string.Format(
-							RewardsStrings.UnlockedOnDate,
-							reward.UnlockDate.ToShortDateString()
-						)
-					</p>
-				</div>
-		
-				@if ( reward.SponsorIcon != null ) {
-					<div class="empresa">
-						<figure><img src="@reward.SponsorIcon.AbsoluteUri" alt="@reward.SponsorName"></figure>
-					</div>
-				}
-			</article>
-		}
-	</div>
+    <div id="recompensasLiberadas">
+        @foreach ( RewardModel reward in rewardsValues.UnlockedRewards ) {
+            <article class="itemLiberada">
+                <div class="info">
+                    <figure><img src="@reward.IconUri.AbsoluteUri" alt="@reward.Title"></figure>
+                    <h3>@reward.TriggerDistance @(RegionInfo.CurrentRegion.IsMetric ? "KMS" : "MI")</h3>
+                    <h4>@reward.Title</h4>
+                    <p>
+                        @string.Format(
+                            RewardsStrings.UnlockedOnDate,
+                            reward.UnlockDate.ToShortDateString()
+                        )
+                    </p>
+                </div>
 
-	<div class="paginacion">
-		<ul>
-			<li>
-				<a href="@Url.Action("Rewards", new { page = 1 })">«</a>
-			</li>
-			<li>
-				<a href="@Url.Action("Rewards", new { page = 1 })">1</a>
-			</li>
-			@for ( int i = 2; i <= rewardsValues.TotalPages; i++ ) {
-				<li>
-					<a href="@Url.Action("Rewards", new {page = i})">@i</a>
-				</li>
-			}
-			<li><a href="@Url.Action("Rewards", new {page = 1})">»</a></li>
-		</ul>
-	</div>
+                @if ( reward.SponsorIcon != null ) {
+                    <div class="empresa">
+                        <figure><img src="@reward.SponsorIcon.AbsoluteUri" alt="@reward.SponsorName"></figure>
+                    </div>
+                }
+            </article>
+        }
+    </div>
+
+    <div class="paginacion">
+        <ul>
+            <li>
+                <a href="@Url.Action("Rewards", new { page = 1 })">«</a>
+            </li>
+            <li>
+                <a href="@Url.Action("Rewards", new { page = 1 })">1</a>
+            </li>
+            @for ( int i = 2; i <= rewardsValues.TotalPages; i++ ) {
+                <li>
+                    <a href="@Url.Action("Rewards", new {page = i})">@i</a>
+                </li>
+            }
+            <li><a href="@Url.Action("Rewards", new {page = 1})">»</a></li>
+        </ul>
+    </div>
 } else {
-	<p>--------- T _ T --------</p>
+    <p>--------- T _ T --------</p>
 }

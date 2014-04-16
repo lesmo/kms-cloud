@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KilometrosDatabase.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -10,22 +11,7 @@ namespace Kilometros_WebApp.Models.Views {
             this.TodaySleepTime
                 = new TimeSpan(0, 0, 0);
         }
-
-        /// <summary>
-        /// Información sobre la Región del Usuario
-        /// </summary>
-        public RegionInfo RegionInfo {
-            get;
-            set;
-        }
-        /// <summary>
-        /// Información sobre la Cultura del Usuario
-        /// </summary>
-        public CultureInfo CultureInfo {
-            get;
-            set;
-        }
-
+        
         /// <summary>
         ///     Horas de Sueño del las últimas 24hrs.
         ///     [MUST REVIEW]
@@ -46,23 +32,14 @@ namespace Kilometros_WebApp.Models.Views {
         /// <summary>
         /// Distancia Recorrida por el Usuario en las unidades de la región del Usuario
         /// </summary>
-        public double TodayDistance {
+        public string TodayDistance {
             get {
-                if ( this.RegionInfo.IsMetric )
-                    return this.TodayDistanceCentimeters / 1000;
-                else
-                    return this.TodayDistanceCentimeters / 160934.4;
-            }
-        }
+                double distance
+                    = RegionInfo.CurrentRegion.IsMetric
+                    ? this.TodayDistanceCentimeters.CentimetersToKilometers()
+                    : this.TodayDistanceCentimeters.CentimetersToMiles();
 
-        /// <summary>
-        /// Distancia Recorrida por el Usuario en las unidades de la región del Usuario, en el formato de la Cultura del Usuario
-        /// </summary>
-        public string TodayDistanceString {
-            get {
-                return this.TodayDistance.ToString(
-                    this.CultureInfo.NumberFormat
-                );
+                return distance.ToLocalizedString();
             }
         }
 
@@ -77,30 +54,21 @@ namespace Kilometros_WebApp.Models.Views {
         /// <summary>
         ///  Equiavalencia de CO2 ahorrada por el Usuario, en las unidades de la región del Usuario.
         /// </summary>
-        public int EquivalentCo2 {
+        public string EquivalentCo2 {
             get {
-                if ( this.RegionInfo.IsMetric )
-                    return this.EquivalentCo2Grams / 1000;
-                else
-                    return (int)(this.EquivalentCo2Grams / 453.59237);
-            }
-        }
-
-        /// <summary>
-        /// Equivalencia de CO2 ahorrada por el Usuario, 
-        /// </summary>
-        public string EquivalentCo2String {
-            get {
-                return this.EquivalentCo2.ToString(
-                    this.CultureInfo.NumberFormat
-                );
+                double co2
+                    = RegionInfo.CurrentRegion.IsMetric
+                    ? this.EquivalentCo2Grams.GramsToKilograms()
+                    : this.EquivalentCo2Grams.GramsToPounds();
+                
+                return co2.ToLocalizedString();
             }
         }
 
         /// <summary>
         /// Equiavalencia de CO2 ahorrada por el Usuario en las últimas 24hrs.
         /// </summary>
-        public int EquivalentKcal {
+        public int EquivalentKcalRaw {
             get;
             set;
         }
@@ -108,18 +76,16 @@ namespace Kilometros_WebApp.Models.Views {
         /// <summary>
         /// Equivalencia de CO2 ahorrada por el Usuario.
         /// </summary>
-        public string EquivalentKcalString {
+        public string EquivalentKcal {
             get {
-                return this.EquivalentKcal.ToString(
-                    this.CultureInfo.NumberFormat
-                );
+                return this.EquivalentKcalRaw.ToLocalizedString();
             }
         }
 
         /// <summary>
         /// Equivalencia de Dinero ahorrado por el Usuario.
         /// </summary>
-        public int EquivalentCash {
+        public int EquivalentCashRaw {
             get;
             set;
         }
@@ -128,12 +94,15 @@ namespace Kilometros_WebApp.Models.Views {
         /// Equivalencia de Dinero ahorrado por el Usuario, en el formato cultural del Usuario y
         /// con el símbolo monetario del País.
         /// </summary>
-        public string EquivalentCashString {
+        public string EquivalentCash {
             get {
-                return this.RegionInfo.CurrencySymbol + this.EquivalentCash.ToString(
-                    this.CultureInfo.NumberFormat
-                );
+                return this.EquivalentCashRaw.ToCurrencyString();
             }
+        }
+
+        public TipModel TipOfTheDay {
+            get;
+            set;
         }
     }
 }

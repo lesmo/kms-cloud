@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KilometrosDatabase.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -13,6 +14,11 @@ namespace Kilometros_WebApp.Models.Views {
             Friends
         }
 
+        public LayoutValues() {
+            this.UserPicture
+                = new Uri("/Images/Header.DefaultUserIcon.png", UriKind.Relative);
+        }
+
         public MainSection Section
             = MainSection.MyProfile;
         public int UnreadMessages
@@ -21,30 +27,23 @@ namespace Kilometros_WebApp.Models.Views {
         /// <summary>
         /// Uri de la ubicación de la fotografía del Usuario
         /// </summary>
-        public Uri UserPicture
-            = new Uri("/Images/Header.DefaultUserIcon.png", UriKind.Relative);
-        /// <summary>
-        /// Nombre del Usuario
-        /// </summary>
-        public string UserName
-            = "";
-        /// <summary>
-        /// Apellido del Usuario
-        /// </summary>
-        public string UserLastname
-            = "";
-
-        /// <summary>
-        /// Información sobre la Región del Usuario
-        /// </summary>
-        public RegionInfo RegionInfo {
+        public Uri UserPicture {
             get;
             set;
         }
+
         /// <summary>
-        /// Información sobre la Cultura del Usuario
+        /// Nombre del Usuario
         /// </summary>
-        public CultureInfo CultureInfo {
+        public string UserName {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Apellido del Usuario
+        /// </summary>
+        public string UserLastname {
             get;
             set;
         }
@@ -52,23 +51,14 @@ namespace Kilometros_WebApp.Models.Views {
         /// <summary>
         /// Distancia Total recorrida por el Usuario en las unidades de la región del Usuario
         /// </summary>
-        public double TotalDistance {
+        public string TotalDistance {
             get {
-                if ( this.RegionInfo.IsMetric )
-                    return this.TotalDistanceCentimeters / 1000;
-                else
-                    return this.TotalDistanceCentimeters / 160934.4;
-            }
-        }
-
-        /// <summary>
-        /// Distancia Total recorrida por el Usuario en las unidades de la región del Usuario, en el formato de la Cultura del Usuario
-        /// </summary>
-        public string TotalDistanceString {
-            get {
-                return this.TotalDistance.ToString(
-                    this.CultureInfo.NumberFormat
-                );
+                double totalDistance
+                    = RegionInfo.CurrentRegion.IsMetric
+                    ? this.TotalDistanceCentimeters.CentimetersToKilometers()
+                    : this.TotalDistanceCentimeters.CentimetersToMiles();
+                
+                return totalDistance.ToLocalizedString();
             }
         }
 
@@ -83,23 +73,16 @@ namespace Kilometros_WebApp.Models.Views {
         /// <summary>
         /// Distancia Restante para liberar la próxima recompensa
         /// </summary>
-        public double NextRewardsDistanceSpan {
+        public string NextRewardsDistanceRemaining {
             get {
-                if ( this.RegionInfo.IsMetric )
-                    return (this.NextRewardDistanceCentimeters - this.TotalDistanceCentimeters) / 1000;
-                else
-                    return (this.NextRewardDistanceCentimeters - this.TotalDistanceCentimeters) / 160934.4;
-            }
-        }
+                double rewardDistanceSpan
+                    = this.NextRewardDistanceCentimeters - this.TotalDistanceCentimeters;
+                rewardDistanceSpan
+                    = RegionInfo.CurrentRegion.IsMetric
+                    ? rewardDistanceSpan.CentimetersToKilometers()
+                    : rewardDistanceSpan.CentimetersToMiles();
 
-        /// <summary>
-        /// Distancia Restante Distancia Restante para liberar la próxima recompensa en las unidades de la región del Usuario, en el formato de la Cultura del Usuario
-        /// </summary>
-        public string NextRewardsDistanceSpanString {
-            get {
-                return this.NextRewardsDistanceSpan.ToString(
-                    this.CultureInfo.NumberFormat
-                );
+                return rewardDistanceSpan.ToLocalizedString();
             }
         }
 
@@ -124,11 +107,14 @@ namespace Kilometros_WebApp.Models.Views {
         /// Si es nula o vacía, no se ha desbloqueado una recompensa recientemente o ya se marcó como
         /// descartada en alguna ocasión anterior por el API o la misma WebApp.
         /// </summary>
-        public string RecentlyUnlockedRewardGuid {
+        public RewardModel RecentlyUnlockedRewardId {
             get;
             set;
         }
 
+        /// <summary>
+        /// Tip del Día
+        /// </summary>
         public TipModel TipOfTheDay {
             get;
             set;

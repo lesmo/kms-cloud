@@ -1,0 +1,103 @@
+﻿@{
+    FriendsValues friendsValues
+        = (FriendsValues)ViewData["OverviewValues"];
+
+    friendsValues
+        = friendsValues ?? new FriendsValues();
+}
+<span class="tituloGrafica">
+    <h2>
+        <img src="@Url.Content("~/Images/Gui/Gui.MiniMedal.jpg")">@FriendsStrings.FriendRequests.ToUpper()
+    </h2>
+    <hr>
+</span>
+<section id="solicitudes">
+    @foreach ( FriendModel friend in friendsValues.FriendRequests ) {
+        <article class="solicitudItem">
+            <figure>
+                <img src="@friend.PictureUri.AbsoluteUri" alt="@friend.Name @friend.LastName">
+            </figure>
+            <div class="info">
+                <h4>@friend.Name @friend.LastName</h4>
+                <span class="kms">
+                    @friend.TotalDistance @(RegionInfo.CurrentRegion.IsMetric ? "KMS" : "MI")
+                </span>
+                <a href="#" class="btn aceptar">@FriendsStrings.AcceptRequest.ToUpper()</a>
+                <a href="#" class="btn rechazar">@FriendsStrings.RejectRequest.ToUpper()</a>
+            </div>
+        </article>
+    }
+</section>
+
+<span class="tituloGrafica">
+    <h2>
+        <img src="@Url.Content("~/Images/Gui/Gui.MiniMedal.jpg")">@FriendsStrings.YourFriends.ToUpper()
+    </h2>
+    <hr>
+</span>
+<span class="amigosCant">
+    @string.Format(FriendsStrings.TotalFriends, friendsValues.TotalFriends)
+</span>
+<section id="amigos">
+    @foreach ( FriendModel friend in friendsValues.Friends ) {
+        <article class="amigosItem"
+                 data-uid="@friend.UserId"
+                 data-totaldistance="@friend.TotalDistance"
+                 data-totalco2="@friend.TotalCo2"
+                 data-totalkcal="@friend.TotalKcal"
+                 data-totalcash="@friend.TotalCash"
+        >
+            <figure>
+                <img src="@friend.PictureUri.AbsoluteUri" alt="">
+            </figure>
+            <div class="info">
+                <h4>@friend.Name @friend.LastName</h4>
+                <span class="kms">
+                    @friend.TotalDistance @(RegionInfo.CurrentRegion.IsMetric ? "KMS" : "MI")
+                </span>
+            </div>
+        </article>
+    }
+    
+    <div class="amigosComparativa" style="display:none">
+        <aside class="tresCol">
+            <p>510 KMS</p>
+            <em>ACUMULADOS</em>
+        </aside>
+        <aside class="equivalencias">
+            <ul>
+                <li>
+                    <figure>
+                        <img src="img/co2.jpg" alt="">
+                    </figure>
+                    <span>
+                        <span class="leyenda">CO<sub>2</sub></span>
+                        <span class="numero">100,384</span>
+                    </span>
+                </li>
+                <li>
+                    <figure>
+                        <img src="img/kcal.jpg" alt="">
+                    </figure>
+                    <span>
+                        <span class="leyenda">kcal</span>
+                        <span class="numero">5500</span>
+                    </span>
+                </li>
+                <li>
+                    <figure>
+                        <img src="img/ahorro.jpg" alt="">
+                    </figure>
+                    <span>
+                        <span class="leyenda">@FriendsStrings.Savings</span>
+                        <span class="numero">$43.5</span>
+                    </span>
+                </li>
+            </ul>
+            <em>Equivalencias</em>
+        </aside>
+    </div>
+</section>
+
+<br />
+<a href="#" class="btn centro">@FriendsStrings.SeeMore</a>

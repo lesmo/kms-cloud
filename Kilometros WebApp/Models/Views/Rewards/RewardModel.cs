@@ -5,6 +5,7 @@ using System.Web;
 
 namespace Kilometros_WebApp.Models.Views {
     public class RewardModel : RewardUnknownModel {
+
         public Uri IconUri {
             get;
             set;

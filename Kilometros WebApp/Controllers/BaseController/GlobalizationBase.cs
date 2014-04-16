@@ -9,6 +9,10 @@ using System.Web.Mvc;
 
 namespace Kilometros_WebApp.Controllers {
     public abstract partial class BaseController : Controller {
+        // > Preparar búsqueda de segmento de Globalización en URL
+        private Regex UrlCultureCodeRegex
+            = new Regex(@"/([a-zA-Z]{2})-([a-zA-Z]{2})/?");
+        
         private CultureInfo GetCultureFromUserAgent() {
             if ( Request.UserLanguages.Length == 0 )
                 return null;
@@ -53,10 +57,6 @@ namespace Kilometros_WebApp.Controllers {
         }
 
         private CultureInfo GetUserCultureInfo() {
-            // > Preparar búsqueda de segmento de Globalización en URL
-            Regex cultureCodeRegex
-                = new Regex(@"/[a-zA-Z]{2}-[a-zA-Z]{2}/?");
-            
             // > Obtener la Cultura de donde sea aplicable
             CultureInfo culture
                 = GetCultureFromUrl()
@@ -80,9 +80,9 @@ namespace Kilometros_WebApp.Controllers {
                 || ((string)RouteData.Values["lang"]).ToLowerInvariant() != culture.Name.ToLowerInvariant()
             ) {
                 Response.Redirect(
-                    cultureCodeRegex.Replace(
+                    UrlCultureCodeRegex.Replace(
                         Request.Url.AbsoluteUri,
-                        culture.Name
+                        "/" + culture.Name
                     ),
                     true
                 );
@@ -97,6 +97,25 @@ namespace Kilometros_WebApp.Controllers {
             return culture;
         }
 
+        private RegionInfo GetRegionFromUrl() {
+            if ( RouteData.Values["lang"] == null )
+                return null;
+
+            Match regexMatch
+                = UrlCultureCodeRegex.Match(
+                    "/" + (string)RouteData.Values["lang"]
+                );
+
+            if ( regexMatch.Success == false )
+                return null;
+
+            try {
+                return new RegionInfo(regexMatch.Groups[2].Value);
+            } catch ( ArgumentException ) {
+                return null;
+            }
+        }
+
         protected override void ExecuteCore() {
             CultureInfo culture
                 = GetUserCultureInfo();
@@ -105,6 +124,11 @@ namespace Kilometros_WebApp.Controllers {
                 = culture;
             Thread.CurrentThread.CurrentUICulture
                 = culture;
+
+            // > Es necesario limpiar caché para que {RegionInfo.CurrentRegion}
+            //   contenga la información regional actualizada, y no la del servidor
+            Thread.CurrentThread.CurrentCulture.ClearCachedData();
+            Thread.CurrentThread.CurrentUICulture.ClearCachedData();
             
             base.ExecuteCore();
         }

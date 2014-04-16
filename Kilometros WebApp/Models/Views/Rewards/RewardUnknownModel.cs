@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KilometrosDatabase.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -6,40 +7,19 @@ using System.Web;
 
 namespace Kilometros_WebApp.Models.Views {
     public class RewardUnknownModel {
-        /// <summary>
-        /// Información sobre la Región del Usuario
-        /// </summary>
-        public RegionInfo RegionInfo {
-            get;
-            set;
-        }
-        /// <summary>
-        /// Información sobre la Cultura del Usuario
-        /// </summary>
-        public CultureInfo CultureInfo {
-            get;
-            set;
-        }
-
         public long TriggerDistanceCentimeters {
             get;
             set;
         }
 
-        public double TriggerDistance {
+        public string TriggerDistance {
             get {
-                if ( this.RegionInfo.IsMetric )
-                    return this.TriggerDistanceCentimeters / 1000;
-                else
-                    return (double)(this.TriggerDistanceCentimeters / 160934.4);
-            }
-        }
-
-        public string TriggerDistanceString {
-            get {
-                return this.TriggerDistance.ToString(
-                    this.CultureInfo.NumberFormat
-                );
+                double triggerDistance
+                    = RegionInfo.CurrentRegion.IsMetric
+                    ? this.TriggerDistanceCentimeters.CentimetersToKilometers()
+                    : this.TriggerDistanceCentimeters.CentimetersToMiles();
+                
+                return triggerDistance.ToLocalizedString();
             }
         }
 
@@ -48,20 +28,14 @@ namespace Kilometros_WebApp.Models.Views {
             set;
         }
 
-        public double RemainingDistance {
+        public string RemainingDistance {
             get {
-                if ( this.RegionInfo.IsMetric )
-                    return this.RemainingDistanceCentimeters / 1000;
-                else
-                    return (double)(this.RemainingDistanceCentimeters / 160934.4);
-            }
-        }
+                double remainingDistance
+                    = RegionInfo.CurrentRegion.IsMetric
+                    ? this.RemainingDistanceCentimeters.CentimetersToKilometers()
+                    : this.RemainingDistanceCentimeters.CentimetersToMiles();
 
-        public string RemainingDistanceString {
-            get {
-                return this.RemainingDistance.ToString(
-                    this.CultureInfo.NumberFormat
-                );
+                return remainingDistance.ToLocalizedString();
             }
         }
     }

@@ -1,4 +1,5 @@
 ﻿using KilometrosDatabase;
+using KilometrosDatabase.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -101,9 +102,9 @@ namespace Kilometros_WebApp.Controllers {
 		}
 
 		[Authorize]
-		public JsonResult Tips(string cat, int page = 1, int tipsPerPage = 10) {
-			// > Validar Tips por Página
-			if ( tipsPerPage > 100 )
+		public JsonResult Tips(string cat, int page = 1, int perPage = 10) {
+			// > Validar items por Página
+			if ( perPage > 40 )
 				throw new HttpException(400, "Tips Per Page is too high");
 
 			// > Validar categoría
@@ -121,7 +122,7 @@ namespace Kilometros_WebApp.Controllers {
 					orderBy: o =>
 						o.OrderByDescending(b => b.CreationDate),
 					extra: x =>
-						x.Skip(page * tipsPerPage).Take(tipsPerPage),
+						x.Skip(page * perPage).Take(perPage),
 					include:
 						new string[] { "Tip" }
 				).Select( s =>
@@ -139,6 +140,162 @@ namespace Kilometros_WebApp.Controllers {
 
 			// > Devolver respuesta en JSON
 			return Json(tips);
+		}
+
+		[Authorize]
+		public JsonResult FriendList(int page = 1, int perPage = 18) {
+			// > Validar items por Página
+			if ( perPage > 40 )
+				throw new HttpException(400, "Friends Per Page is too high");
+
+			IEnumerable<dynamic> friends
+				= Database.UserFriendStore.GetAll(
+					filter: f =>
+						(
+							f.User.Guid == CurrentUser.Guid
+							|| f.Friend.Guid == CurrentUser.Guid
+						) && f.Accepted == true,
+					orderBy: o =>
+						o.OrderByDescending(b => b.CreationDate),
+					extra: x =>
+						x.Skip(page * perPage).Take(perPage),
+					include:
+						new string[] { "User.UserDataTotalDistance" }
+				).Select(s =>
+					// + Obtener sólo el Objeto de Usuario del Amigo, no del Usuario actual
+					s.User.Guid == CurrentUser.Guid
+						? s.Friend.UserDataTotalDistanceSum
+						: s.User.UserDataTotalDistanceSum
+				).Select(s =>
+					new {
+						userId
+							= s.User.Guid.ToBase64String(),
+						name
+							= s.User.Name,
+						lastName
+							= s.User.LastName,
+						pictureUri
+							= s.User.PictureUri,
+						totalDistance
+							= RegionInfo.CurrentRegion.IsMetric
+							? s.TotalDistance.CentimetersToKilometers()
+							: s.TotalDistance.CentimetersToMiles(),
+						totalKcal
+							= s.TotalKcal,
+						totalCo2
+							= s.TotalCo2,
+						totalCash
+							= s.TotalCash
+					}
+				);
+
+			return Json(friends);
+		}
+
+		[Authorize]
+		public JsonResult FriendRequests(int page = 1, int perPage = 10) {
+			// > Validar items por Página
+			if ( perPage > 40 )
+				throw new HttpException(400, "Friend Requests Per Page is too high");
+
+			IEnumerable<dynamic> friendships
+				= Database.UserFriendStore.GetAll(
+					filter: f =>
+						f.Friend.Guid == CurrentUser.Guid
+						&& f.Accepted == false,
+					orderBy: o =>
+						o.OrderByDescending(b => b.CreationDate),
+					extra: x =>
+						x.Skip(page * perPage).Take(perPage),
+					include:
+						new string[] { "User.UserDataTotalDistance" }
+				).Select(s =>
+					new {
+						userId
+							= s.User.Guid.ToBase64String(),
+						name
+							= s.User.Name,
+						lastName 
+							= s.User.LastName,
+						pictureUri
+							= s.User.PictureUri,
+						totalDistance
+							= RegionInfo.CurrentRegion.IsMetric
+							? s.User.UserDataTotalDistanceSum.TotalDistance.CentimetersToKilometers()
+							: s.User.UserDataTotalDistanceSum.TotalDistance.CentimetersToMiles()
+					}
+				);
+
+			return Json(friendships);
+		}
+
+		[Authorize]
+		public JsonResult FriendRequestAccept(string friendId) {
+			// > Buscar la Amistad
+			Guid friendGuid
+				= new Guid().FromBase64String(friendId);
+			UserFriend friendship 
+				= Database.UserFriendStore.GetFirst(
+					filter: f =>
+						f.User.Guid == friendGuid
+						&& f.Friend.Guid == CurrentUser.Guid
+						&& f.Accepted == false
+				);
+
+			if ( friendship == null )
+				throw new HttpException(404, "Friendship not found");
+
+			// > Aceptar la Amistad
+			friendship.Accepted
+				= true;
+
+			Database.UserFriendStore.Update(friendship);
+			Database.SaveChanges();
+
+			// > Devolver respuesta OK
+			return Json(new {
+				ok = true
+			});
+		}
+
+		[Authorize]
+		public JsonResult Rewards(int page = 1, int perPage = 10) {
+			// > Obtener las Recompensas Adquiridas por el Usuario
+			IEnumerable<dynamic> rewards    
+				= Database.UserEarnedRewardStore.GetAll(
+					filter: f =>
+						f.User.Guid == CurrentUser.Guid
+						&& f.Discarded == true,
+					orderBy: o =>
+						o.OrderByDescending(b => b.CreationDate),
+					extra: x =>
+						x.Skip(page * perPage).Take(perPage),
+					include:
+						new string[] { "Reward" }
+				).Select(s =>
+					new {
+						iconUri
+							= "NOT IMPLEMENTED",
+						sponsorUri
+							= "NOT IMPLEMENTED",
+						sponsorName
+							= "NOT IMPLEMENETED",
+
+						triggerDistance
+							= s.Reward.DistanceTrigger,
+						unlockDate
+							= s.CreationDate.ToShortDateString(),
+
+						title
+							= s.Reward.GetGlobalization().Title,
+						text
+							= s.Reward.GetGlobalization().Text
+
+					}
+				);
+
+			// > Devolver respuesta
+			return Json(rewards);
 		}
 	}
 }
