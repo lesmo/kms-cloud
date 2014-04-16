@@ -123,11 +123,11 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\DynamicResources\" />
-    <Folder Include="Views\Login\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\SupportedCultures.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Bundler\Bundler.cs" />
     <Compile Include="Controllers\BaseController\CurrentUserBase.cs" />
@@ -961,6 +961,7 @@
     <Content Include="Views\Tips\Index.cshtml" />
     <Content Include="Views\Rewards\Index.cshtml" />
     <Content Include="Views\Friends\Index.cshtml" />
+    <Content Include="Views\Login\Index.cshtml" />
     <None Include="Web.RemoteDebug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
