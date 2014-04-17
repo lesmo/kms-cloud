@@ -26,7 +26,7 @@ namespace Kilometros_WebAPI.Controllers {
             Token token
                 = new Token() {
                     ApiKey
-                        = Database.ApiKeyStore.Get(Identity.ApiKey.Guid),
+                        = Database.ApiKeyStore[Identity.ApiKey.Guid],
                     Guid
                         = Guid.NewGuid(),
                     Secret
@@ -73,8 +73,7 @@ namespace Kilometros_WebAPI.Controllers {
                     )
             };
         }
-
-
+        
         [HttpPost]
         [Route("oauth/access_token")]
         public HttpResponseMessage OAuthAccessToken([FromBody]OAuthAccessTokenPost oAuthVerifier) {

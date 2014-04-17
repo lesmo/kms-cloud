@@ -27,24 +27,21 @@ namespace Kilometros_WebAPI.Controllers {
         [Route("my/account")]
         public AccountResponse GetAccount() {
             // TODO: Añadir funcionalidad de If-Modified-Since
-            User user
-                = OAuth.Token.User;
-
             return new AccountResponse() {
                 AccountCreationDate
-                    = user.CreationDate,
+                    = CurrentUser.CreationDate,
                 UserId
-                    = user.Guid.ToBase64String(),
+                    = CurrentUser.Guid.ToBase64String(),
                 Name
-                    = user.Name,
+                    = CurrentUser.Name,
                 LastName
-                    = user.LastName,
+                    = CurrentUser.LastName,
                 Email
-                    = user.Email,
+                    = CurrentUser.Email,
                 PreferredCultureCode
-                    = user.PreferredCultureInfo.Name,
+                    = CurrentUser.PreferredCultureInfo.Name,
                 RegionCode
-                    = user.RegionCode
+                    = CurrentUser.RegionCode
             };
         }
 
@@ -58,17 +55,14 @@ namespace Kilometros_WebAPI.Controllers {
         [HttpPost]
         [Route("my/account")]
         public HttpResponseMessage PostAccount([FromBody]AccountPost accountPost) {
-            User user
-                = OAuth.Token.User;
-            
-            user.PreferredCultureCode
+            CurrentUser.PreferredCultureCode
                 = accountPost.PreferredCultureCode.ToLowerInvariant();
-            user.RegionCode
+            CurrentUser.RegionCode
                 = accountPost.RegionCode.ToLowerInvariant();
-            user.Email
+            CurrentUser.Email
                 = accountPost.Email.ToLowerInvariant();
             
-            Database.UserStore.Update(user);
+            Database.UserStore.Update(CurrentUser);
             Database.SaveChanges();
 
             return new HttpResponseMessage(HttpStatusCode.OK);

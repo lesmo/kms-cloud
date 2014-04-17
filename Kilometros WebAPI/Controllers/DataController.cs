@@ -75,15 +75,13 @@ namespace Kilometros_WebAPI.Controllers {
                 throw new ArgumentOutOfRangeException();
 
             // --- Obtener distancias recorridas en el rango especificado ---
-            User user
-                = OAuth.Token.User;
             DataActivity dataActivity
                 = (DataActivity)activityId;
 
             IEnumerable<UserDataHourlyDistance> distanceView
                 = Database.UserDataHourlyDistance.GetAll(
                     f =>
-                        f.User.Guid == user.Guid
+                        f.User.Guid == CurrentUser.Guid
                         && f.Activity == dataActivity
                         && f.Timestamp > from && f.Timestamp < until,
                     o => o.OrderBy(b => b.Timestamp)
@@ -113,13 +111,10 @@ namespace Kilometros_WebAPI.Controllers {
         [HttpGet]
         [Route("data/total")]
         public DataTotalResponse GetDistanceTotal() {
-            User user
-                = OAuth.Token.User;
-
             // --- Obtener Distancia Total ---
             IEnumerable<UserDataTotalDistance> distanceView
                 = Database.UserDataTotalDistance.GetAll(
-                    o => o.User.Guid == user.Guid
+                    o => o.User.Guid == CurrentUser.Guid
                 );
             UserDataTotalDistance distanceRunning
                 = (
@@ -182,15 +177,13 @@ namespace Kilometros_WebAPI.Controllers {
         [Route("data/bulk")]
         public HttpResponseMessage PostDataBulk([FromBody]IEnumerable<DataPost> dataPost) {
             // --- Determinar la última fecha registrada ---
-            User user
-                = OAuth.Token.User;
             UserBody userBody
                 = Database.UserBodyStore.GetFirst(
-                    f => f.User.Guid == user.Guid
+                    f => f.User.Guid == CurrentUser.Guid
                 );
             Data lastData
                 = Database.DataStore.GetFirst(
-                    f => f.User.Guid == user.Guid,
+                    f => f.User.Guid == CurrentUser.Guid,
                     o => o.OrderByDescending(b => b.Timestamp)
                 );
             DateTime lastDataTimestamp
@@ -243,15 +236,13 @@ namespace Kilometros_WebAPI.Controllers {
         /// </returns>
         public HttpResponseMessage PostData([FromBody]DataPost dataPost) {
             // --- Determinar la última fecha registrada ---
-            User user
-                = OAuth.Token.User;
             UserBody userBody
                 = Database.UserBodyStore.GetFirst(
-                    f => f.User.Guid == user.Guid
+                    f => f.User.Guid == CurrentUser.Guid
                 );
             Data lastData
                 = Database.DataStore.GetFirst(
-                    f => f.User.Guid == user.Guid,
+                    f => f.User.Guid == CurrentUser.Guid,
                     o => o.OrderByDescending(b => b.Timestamp)
                 );
             DateTime lastDataTimestamp
@@ -331,7 +322,7 @@ namespace Kilometros_WebAPI.Controllers {
             Data newData
                 = new Data() {
                     User
-                        = userBody.User,
+                        = CurrentUser,
 
                     Timestamp
                         = dataPost.Timestamp,

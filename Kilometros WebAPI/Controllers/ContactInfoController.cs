@@ -30,7 +30,7 @@ namespace Kilometros_WebAPI.Controllers {
         [Route("my/contact-info")]
         public ContactInfoResponse GetContactInfo() {
             ContactInfo contactInfo
-                = OAuth.Token.User.ContactInfo;
+                = CurrentUser.ContactInfo;
 
             // --- Validar si existe Información de Contacto registrada ---
             if ( contactInfo == null )
@@ -71,8 +71,8 @@ namespace Kilometros_WebAPI.Controllers {
         [Route("my/contact-info")]
         public HttpResponseMessage PostAccount([FromBody]ContactInfoPost dataPost) {
             ContactInfo contactInfo
-                = OAuth.Token.User.ContactInfo ?? new ContactInfo() {
-                    User = OAuth.Token.User
+                = CurrentUser.ContactInfo ?? new ContactInfo() {
+                    User = CurrentUser
                 };
 
             contactInfo.HomePhone
@@ -82,7 +82,7 @@ namespace Kilometros_WebAPI.Controllers {
             contactInfo.WorkPhone
                 = dataPost.WorkPhone;
 
-            if ( OAuth.Token.User.ContactInfo == null )
+            if ( CurrentUser.ContactInfo == null )
                 Database.ContactInfoStore.Add(contactInfo);
             else
                 Database.ContactInfoStore.Update(contactInfo);

@@ -18,18 +18,18 @@ namespace Kilometros_WebAPI.Controllers {
         [HttpGet]
         [Route("tips/categories")]
         public IEnumerable<TipCategoryResponse> GetTipsCategories() {
-            // --- Obtener el último Idioma + Cultura añadido ---
-            TipCategoryGlobalization lastTipCategoryGlobalization
-                = Database.TipCategoryGlobalizationStore.GetFirst(
-                    orderBy: tcg => tcg.OrderBy(o => o.CreationDate)
-                );
-
             // --- Verificar si se tiene la cabecera {If-Modified-Since} ---
             DateTimeOffset? ifModifiedSince
                 = Request.Headers.IfModifiedSince;
 
-            if ( ifModifiedSince.HasValue && lastTipCategoryGlobalization != null ) {
-                if ( ifModifiedSince.Value.UtcDateTime > lastTipCategoryGlobalization.CreationDate )
+            if ( ifModifiedSince.HasValue ) {
+                TipCategoryGlobalization lastTipCategoryGlobalization
+                    = Database.TipCategoryGlobalizationStore.GetFirst(
+                        orderBy: o =>
+                            o.OrderBy(b => b.CreationDate)
+                    );
+
+                if ( lastTipCategoryGlobalization != null && ifModifiedSince.Value.UtcDateTime > lastTipCategoryGlobalization.CreationDate )
                     throw new HttpNotModifiedException();
             }
 
@@ -41,37 +41,16 @@ namespace Kilometros_WebAPI.Controllers {
 
             // --- Obtener los textos en el Idioma + Cultura actuales ---
             foreach ( TipCategory tipCategory in tipCategories ) {
-                // Obtener Categoría en el Idioma actual
-                //   - Buscar match exacto de Idioma + Culture
-                //   - Buscar match sólo de Idioma
-                TipCategoryGlobalization tipCategoryLocale
-                    = Database.TipCategoryStore.GetGlobalization(
-                        tipCategory
-                    ) as TipCategoryGlobalization;
-
-                if ( tipCategoryLocale == null ) {
-                    tipCategoriesResponse.Add(
-                        new TipCategoryResponse() {
-                            TipCategoryId
-                                = tipCategory.Guid.ToBase64String(),
-                            Name
-                                = null,
-                            Description
-                                = null
-                        }
-                    );
-                } else {
-                    tipCategoriesResponse.Add(
-                        new TipCategoryResponse() {
-                            TipCategoryId
-                                = tipCategory.Guid.ToBase64String(),
-                            Name
-                                = tipCategoryLocale.Name,
-                            Description 
-                                = tipCategoryLocale.Description
-                        }
-                    );
-                }
+                tipCategoriesResponse.Add(
+                    new TipCategoryResponse() {
+                        TipCategoryId
+                            = tipCategory.Guid.ToBase64String(),
+                        Name
+                            = tipCategory.GetGlobalization().Name,
+                        Description
+                            = tipCategory.GetGlobalization().Description
+                    }
+                );
             }
 
             return tipCategoriesResponse;
@@ -79,33 +58,36 @@ namespace Kilometros_WebAPI.Controllers {
 
         [HttpGet]
         [Route("tips/history")]
-        public IEnumerable<TipResponse> GetTipsHistory(int page = 1) {
-            User user
-                = OAuth.Token.User;
-
-            // --- Obtener el último Tip conseguido ---
-            UserTipHistory lastTipHistory
-                = Database.UserTipHistoryStore.GetFirst(
-                    t => t.User == user,
-                    o => o.OrderBy(by => by.CreationDate)
-                );
-
+        public IEnumerable<TipResponse> GetTipsHistory(int page = 0, int perPage = 20) {
             // --- Verificar si se tiene la cabecera {If-Modified-Since} ---
             DateTimeOffset? ifModifiedSince
                 = Request.Headers.IfModifiedSince;
 
-            if ( ifModifiedSince.HasValue && lastTipHistory != null ) {
-                if ( ifModifiedSince.Value.UtcDateTime > lastTipHistory.CreationDate )
+            if ( ifModifiedSince.HasValue ) {
+                UserTipHistory lastTipHistory
+                = Database.UserTipHistoryStore.GetFirst(
+                    filter: f =>
+                        f.User.Guid == CurrentUser.Guid,
+                    orderBy: o =>
+                        o.OrderBy(b => b.CreationDate)
+                );
+
+                if ( lastTipHistory != null && ifModifiedSince.Value.UtcDateTime > lastTipHistory.CreationDate )
                     throw new HttpNotModifiedException();
             }
 
             // --- Obtener los Tips conseguidos ---
             IEnumerable<UserTipHistory> tipsHistory
-                = (
-                    from tip in user.UserTipHistory
-                    orderby tip.CreationDate
-                    select tip
-                ).Skip(10 * page).Take(10);
+                = Database.UserTipHistoryStore.GetAll(
+                    filter: f =>
+                        f.User.Guid == CurrentUser.Guid,
+                    orderBy: o =>
+                        o.OrderByDescending(b => b.CreationDate),
+                    extra: x =>
+                        x.Skip(page * perPage).Take(perPage),
+                    include:
+                        new string[] { "Tip.TipCategory" }
+                );
 
             // --- Preparar respuesta ---
             List<TipResponse> response
@@ -115,13 +97,11 @@ namespace Kilometros_WebAPI.Controllers {
 
             foreach ( UserTipHistory tipHistory in tipsHistory ) {
                 // Obtener Tip en el Idioma actual
-                TipGlobalization tipLocale
-                    = Database.UserTipHistoryStore.GetGlobalization(
-                        tipHistory
-                    ) as TipGlobalization;
+                TipGlobalization tipGlobalization
+                    = tipHistory.Tip.GetGlobalization();
                 
                 // Añadir el Tip sólo si se tienen textos en idioma solicitado
-                if ( tipLocale == null ) 
+                if ( string.IsNullOrEmpty(tipGlobalization.Text) ) 
                     continue;
 
                 // Obtener Categoría de Tip
@@ -129,42 +109,24 @@ namespace Kilometros_WebAPI.Controllers {
                     = tipHistory.Tip.TipCategory;
 
                 TipCategoryResponse tipCategoryResponse;
-                if ( tipCategoryLocales.ContainsKey(tipCategory.Guid) ) {
-                    tipCategoryResponse = tipCategoryLocales[tipCategory.Guid];
-                } else {
-                    TipCategoryGlobalization tipCategoryLocale
-                        = Database.TipCategoryStore.GetGlobalization(
-                            tipCategory
-                        ) as TipCategoryGlobalization;
-                    
-                    if ( tipCategoryLocale == null ) {
-                        tipCategoryResponse
-                            = new TipCategoryResponse() {
-                                TipCategoryId
-                                    = tipCategory.Guid.ToBase64String(),
-                                Name
-                                    = null,
-                                Description
-                                    = null
-                            };
-                    } else {
-                        tipCategoryResponse
-                            = new TipCategoryResponse() {
-                                TipCategoryId
-                                    = tipCategory.Guid.ToBase64String(),
-                                Name    
-                                    = tipCategoryLocale.Name,
-                                Description 
-                                    = tipCategoryLocale.Description
-                            };
-                    }
 
+                if ( ! tipCategoryLocales.ContainsKey(tipCategory.Guid) ) {
                     tipCategoryLocales.Add(
                         tipCategory.Guid,
-                        tipCategoryResponse
+                        new TipCategoryResponse {
+                            TipCategoryId
+                                = tipCategory.Guid.ToBase64String(),
+                            Name
+                                = tipCategory.GetGlobalization().Name,
+                            Description
+                                = tipCategory.GetGlobalization().Description,
+                        }
                     );
                 }
-
+                
+                tipCategoryResponse
+                    = tipCategoryLocales[tipCategory.Guid];
+                
                 response.Add(new TipResponse() {
                     TipId
                         = tipHistory.Guid.ToBase64String(),
@@ -174,9 +136,9 @@ namespace Kilometros_WebAPI.Controllers {
                     Timestamp
                         = tipHistory.CreationDate,
                     Text
-                        = tipLocale.Text,
+                        = tipGlobalization.Text,
                     Source
-                        = tipLocale.Source
+                        = tipGlobalization.Source
                 });
             }
 
@@ -185,68 +147,41 @@ namespace Kilometros_WebAPI.Controllers {
 
         [HttpGet]
         [Route("tips/{tipGuidBase64}")]
-        public TipResponse GetTip(string tipGuidBase64) {
+        public TipResponse GetTip(string tipId) {
             // --- Obtener Tip Guid e intentar buscarlo ---
-            Guid tipGuid
-                = new Guid().FromBase64String(tipGuidBase64);
             UserTipHistory tip
-                = Database.UserTipHistoryStore.Get(tipGuid);
+                = Database.UserTipHistoryStore.Get(tipId);
 
             if ( tip == null )
                 throw new HttpNotFoundException(
                     ControllerStrings.Warning801_TipNotFound
                 );
-
-            // --- Obtener Tip en el Idioma actual ---
-            TipGlobalization tipLocale
-                = Database.TipStore.GetGlobalization(tip.Tip) as TipGlobalization;
-
+            
             // --- Obtener Categoría de Tip ---
             TipCategory tipCategory
                 = tip.Tip.TipCategory;
-            TipCategoryGlobalization tipCategoryLocale
-                = Database.TipCategoryStore.GetGlobalization(tipCategory) as TipCategoryGlobalization;
-
-            TipCategoryResponse tipCategoryResponse;
-            if ( tipCategoryLocale == null ) {
-                tipCategoryResponse
-                    = new TipCategoryResponse() {
-                        TipCategoryId
-                            = tipCategory.Guid.ToBase64String(),
-                        Name
-                            = null,
-                        Description 
-                            = null
-                    };
-            } else {
-                tipCategoryResponse
-                    = new TipCategoryResponse() {
-                        TipCategoryId
-                            = tipCategory.Guid.ToBase64String(),
-                        Name
-                            = tipCategoryLocale.Name,
-                        Description
-                            = tipCategoryLocale.Description
-                    };
-            }
-
+            
             // --- Preparar y enviar la respuesta ---
-            TipResponse tipResponse
-                = new TipResponse() {
-                    TipId
-                        = tip.Guid.ToBase64String(),
-                    TipCategory
-                        = tipCategoryResponse,
+            return new TipResponse() {
+                TipId
+                    = tip.Guid.ToBase64String(),
+                TipCategory
+                    = new TipCategoryResponse {
+                        TipCategoryId
+                            = tipCategory.Guid.ToBase64String(),
+                        Name
+                            = tipCategory.GetGlobalization().Name,
+                        Description
+                            = tipCategory.GetGlobalization().Description
+                    },
 
-                    Timestamp
-                        = tip.CreationDate,
-                    Text
-                        = tipLocale.Text,
-                    Source
-                        = tipLocale.Source
-                };
-
-            return tipResponse;
+                Timestamp
+                    = tip.CreationDate,
+                Text
+                    = tip.Tip.GetGlobalization().Text,
+                Source
+                    = tip.Tip.GetGlobalization().Source
+            };
         }
     }
 }

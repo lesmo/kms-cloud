@@ -22,7 +22,7 @@ namespace Kilometros_WebAPI.Controllers {
         [Route("my/physique")]
         public PhysiqueResponse GetPhysique() {
             UserBody physique
-                = OAuth.Token.User.UserBody;
+                = CurrentUser.UserBody;
 
             // --- Validar si existe Perfil Físico ---
             if ( physique == null )
@@ -62,7 +62,7 @@ namespace Kilometros_WebAPI.Controllers {
         [Route("my/physique")]
         public HttpResponseMessage PostPhysique([FromBody]PhysiquePost dataPost) {
             UserBody physique
-                = OAuth.Token.User.UserBody ?? new UserBody() {
+                = CurrentUser.UserBody ?? new UserBody() {
                     User
                         = OAuth.Token.User
                 };

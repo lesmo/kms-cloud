@@ -14,11 +14,11 @@ namespace KilometrosDatabase.EntityLocalization {
     /// <typeparam name="T">
     ///     Tipo de la Entidad que almacena el texto y otros recursos.
     /// </typeparam>
-    public abstract class IEntityGlobalization<T> where T : IGlobalization {
+    public abstract class IEntityGlobalization<T> where T : IGlobalization, new() {
         private Dictionary<int, object> _globalization
             = new Dictionary<int, object>();
 
-        internal virtual GT GetGlobalization<GT>(CultureInfo culture) where GT : IGlobalization {
+        internal virtual GT GetGlobalization<GT>(CultureInfo culture) where GT : IGlobalization, new() {
             // > Determinar si no se tiene ya en memoria la Globalización de ésta Entidad
             if ( culture == null )
                 culture = CultureInfo.CurrentCulture;
@@ -59,6 +59,10 @@ namespace KilometrosDatabase.EntityLocalization {
                         )
                     select g
                 ).FirstOrDefault();
+
+            if ( globalization == null )
+                globalization
+                    = new GT();
 
             // > Agregar Globalización a memoria y devolverla
             this._globalization.Add(

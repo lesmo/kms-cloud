@@ -51,5 +51,11 @@ namespace Kilometros_WebAPI.Controllers {
             }
         }
         private HttpOAuthAuthorization _oAuth = null;
+
+        protected KilometrosDatabase.User CurrentUser {
+            get {
+                return this.OAuth.Token.User;
+            }
+        }
     }
 }
