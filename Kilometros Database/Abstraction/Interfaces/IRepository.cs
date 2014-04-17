@@ -222,5 +222,17 @@ namespace KilometrosDatabase.Abstraction.Interfaces {
             this._context.Entry(entity).State
                 = EntityState.Modified;
         }
+
+        public TEntity this[Guid guid] {
+            get {
+                return this.Get(guid);
+            }
+        }
+
+        public TEntity this[string guid] {
+            get {
+                return this.Get(guid);
+            }
+        }
     }
 }

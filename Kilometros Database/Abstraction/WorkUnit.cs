@@ -409,5 +409,18 @@ namespace KilometrosDatabase.Abstraction {
             }
         }
         private GenericRepository<IPicture> _iPicture = null;
+
+        /// <summary>
+        ///     Almacén de Notificaciones
+        /// </summary>
+        public GenericRepository<Notification> NotificationStore {
+            get {
+                if ( this._notification == null )
+                    this._notification = new GenericRepository<Notification>(this._context);
+
+                return this._notification;
+            }
+        }
+        private GenericRepository<Notification> _notification = null;
     }
 }
