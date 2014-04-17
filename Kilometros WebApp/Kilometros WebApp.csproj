@@ -135,7 +135,7 @@
     <Compile Include="Controllers\BaseController\UtilsBase.cs" />
     <Compile Include="Controllers\DynamicResourcesControllers\AjaxController.cs" />
     <Compile Include="Controllers\BaseController\DatabaseBase.cs" />
-    <Compile Include="Controllers\DynamicResourcesController.cs" />
+    <Compile Include="Controllers\DynamicResourcesControllers\DynamicResourcesController.cs" />
     <Compile Include="Controllers\FriendsController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\OverviewController.cs" />
@@ -147,6 +147,7 @@
     <Compile Include="Models\Views\Friends\FriendModel.cs" />
     <Compile Include="Models\Views\Friends\FriendsValues.cs" />
     <Compile Include="Models\Views\Layout\LayoutFriend.cs" />
+    <Compile Include="Models\Views\Layout\LayoutNotification.cs" />
     <Compile Include="Models\Views\Layout\LayoutValues.cs" />
     <Compile Include="Models\Views\Overview\OverviewValues.cs" />
     <Compile Include="Models\Views\Rewards\RewardModel.cs" />
@@ -163,6 +164,7 @@
     <Compile Include="Routing\TranslatedRouteCollectionExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Scripts\Gui.Fix.js" />
     <Content Include="Assets\Scripts\Lib\chart.js" />
     <Content Include="Bundler\bundler.js" />
     <Content Include="Bundler\node.exe" />
@@ -903,6 +905,7 @@
     <Content Include="Bundler\coffee.cmd" />
     <Content Include="Bundler\bundler.cmd" />
     <Content Include="Assets\Javascript.js.bundle" />
+    <Content Include="Assets\Scripts\Gui.Alerts.js" />
     <None Include="Assets\Scripts\Lib\jquery-1.10.2.intellisense.js" />
     <Content Include="Assets\Scripts\Lib\jquery-1.10.2.js" />
     <Content Include="Assets\Scripts\Lib\jquery-1.10.2.min.js" />

@@ -119,5 +119,10 @@ namespace Kilometros_WebApp.Models.Views {
             get;
             set;
         }
+
+        public LayoutNotification[] Notifications {
+            get;
+            set;
+        }
     }
 }
