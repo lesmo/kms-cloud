@@ -3,3 +3,5 @@ Scripts/Lib/modernizr-2.6.2.js
 Scripts/Lib/respond.js
 Scripts/Lib/prefix.js
 Scripts/Lib/chart.js
+Scripts/Gui.Fix.js
+Scripts/Gui.Alerts.js
