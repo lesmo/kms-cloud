@@ -50,5 +50,6 @@ namespace KilometrosDatabase
         public DbSet<UserDataTotalDistance> UserDataTotalDistance { get; set; }
         public DbSet<UserFriend> UserFriendSet { get; set; }
         public DbSet<RegionParticular> RegionParticularSet { get; set; }
+        public DbSet<Notification> NotificationSet { get; set; }
     }
 }

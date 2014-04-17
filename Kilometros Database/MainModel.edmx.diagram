@@ -48,8 +48,8 @@
         <EntityTypeShape EntityType="MainModel.ShippingInformation" Width="2.25" PointX="3.375" PointY="10.75" />
         <AssociationConnector Association="MainModel.UserShippingInformation" />
         <EntityTypeShape EntityType="MainModel.RewardGiftPicture" Width="1.875" PointX="11.5" PointY="20.625" IsExpanded="false" />
-        <EntityTypeShape EntityType="MainModel.Region" Width="1.875" PointX="3.375" PointY="21.5" />
-        <EntityTypeShape EntityType="MainModel.RegionSubdivision" Width="1.875" PointX="3.375" PointY="18.75" />
+        <EntityTypeShape EntityType="MainModel.Region" Width="1.875" PointX="3.375" PointY="24.5" />
+        <EntityTypeShape EntityType="MainModel.RegionSubdivision" Width="1.875" PointX="3.375" PointY="21.75" />
         <AssociationConnector Association="MainModel.RegionRegionSubdivision" />
         <AssociationConnector Association="MainModel.ApiKeyHistory" />
         <AssociationConnector Association="MainModel.UserData" />
@@ -69,10 +69,12 @@
         <AssociationConnector Association="MainModel.FK_UserFriendSet_UserSet_User_Guid" />
         <AssociationConnector Association="MainModel.UserUserDataTotalDistance" />
         <AssociationConnector Association="MainModel.UserDataHourlyDistanceUser" />
-        <EntityTypeShape EntityType="MainModel.RegionParticular" Width="1.875" PointX="3.375" PointY="16.375" />
+        <EntityTypeShape EntityType="MainModel.RegionParticular" Width="1.875" PointX="3.375" PointY="19.375" />
         <AssociationConnector Association="MainModel.FK_RegionRegionSubdivisionRegionParticular" />
         <EntityTypeShape EntityType="MainModel.RewardSponsor" Width="1.5" PointX="8.875" PointY="16" />
         <AssociationConnector Association="MainModel.RewardSponsorReward" />
+        <EntityTypeShape EntityType="MainModel.Notification" Width="1.5" PointX="3.375" PointY="16.375" />
+        <AssociationConnector Association="MainModel.NotificationUser" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

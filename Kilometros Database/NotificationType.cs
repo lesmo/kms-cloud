@@ -10,19 +10,10 @@
 namespace KilometrosDatabase
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class Region
+    public enum NotificationType : int
     {
-        public Region()
-        {
-            this.RegionSubdivision = new HashSet<RegionSubdivision>();
-        }
-    
-        public long Id { get; set; }
-        public string IsoCode { get; set; }
-        public string Name { get; set; }
-    
-        public virtual ICollection<RegionSubdivision> RegionSubdivision { get; set; }
+        Generic = 0,
+        FriendRequest = 1
     }
 }

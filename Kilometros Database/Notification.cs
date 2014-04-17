@@ -12,17 +12,14 @@ namespace KilometrosDatabase
     using System;
     using System.Collections.Generic;
     
-    public partial class Region
+    public partial class Notification
     {
-        public Region()
-        {
-            this.RegionSubdivision = new HashSet<RegionSubdivision>();
-        }
+        public System.Guid Guid { get; set; }
+        public string CreationDate { get; set; }
+        public System.Guid ObjectGuid { get; set; }
+        public NotificationType NotificationType { get; set; }
+        public bool Discarded { get; set; }
     
-        public long Id { get; set; }
-        public string IsoCode { get; set; }
-        public string Name { get; set; }
-    
-        public virtual ICollection<RegionSubdivision> RegionSubdivision { get; set; }
+        public virtual User User { get; set; }
     }
 }

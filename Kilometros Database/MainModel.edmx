@@ -31,6 +31,7 @@
     <EntitySet Name="UserDataTotalDistance" EntityType="MainModel.Store.UserDataTotalDistance" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="UserFriendSet" EntityType="MainModel.Store.UserFriendSet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="RegionParticularSet" EntityType="MainModel.Store.RegionParticularSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="NotificationSet" EntityType="MainModel.Store.NotificationSet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="IPictureSet_TipCategory" EntityType="MainModel.Store.IPictureSet_TipCategory" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="IGlobalizationSet_TipCategoryGlobalization" EntityType="MainModel.Store.IGlobalizationSet_TipCategoryGlobalization" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="IGlobalizationSet_TipGlobalization" EntityType="MainModel.Store.IGlobalizationSet_TipGlobalization" store:Type="Tables" Schema="dbo" />
@@ -176,6 +177,10 @@
     <AssociationSet Name="RewardSponsorReward" Association="MainModel.Store.RewardSponsorReward">
       <End Role="RewardSponsor" EntitySet="IPictureSet_RewardSponsor" />
       <End Role="Reward" EntitySet="IPictureSet_Reward" />
+    </AssociationSet>
+    <AssociationSet Name="NotificationUser" Association="MainModel.Store.NotificationUser">
+      <End Role="Notification" EntitySet="NotificationSet" />
+      <End Role="User" EntitySet="UserSet" />
     </AssociationSet>
     <AssociationSet Name="FK_TipCategory_inherits_IPicture" Association="MainModel.Store.FK_TipCategory_inherits_IPicture">
       <End Role="IPicture" EntitySet="IPictureSet" />
@@ -377,8 +382,7 @@
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="TwoLetterIsoCode" Type="char" Nullable="false" MaxLength="2" />
-    <Property Name="ThreeLetterIsoCode" Type="char" Nullable="false" MaxLength="3" />
+    <Property Name="IsoCode" Type="char" Nullable="false" MaxLength="2" />
     <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="128" />
   </EntityType>
   <EntityType Name="RegionSubdivisionSet">
@@ -494,6 +498,17 @@
     <Property Name="Code" Type="varchar" Nullable="false" MaxLength="24" />
     <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="128" />
     <Property Name="RegionSubdivision_Id" Type="bigint" Nullable="false" />
+  </EntityType>
+  <EntityType Name="NotificationSet">
+    <Key>
+      <PropertyRef Name="Guid" />
+    </Key>
+    <Property Name="Guid" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="CreationDate" Type="nvarchar(max)" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ObjectGuid" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="NotificationType" Type="int" Nullable="false" />
+    <Property Name="Discarded" Type="bit" Nullable="false" />
+    <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
   </EntityType>
   <EntityType Name="IPictureSet_TipCategory">
     <Key>
@@ -1018,6 +1033,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="NotificationUser">
+    <End Role="Notification" Type="MainModel.Store.NotificationSet" Multiplicity="*" />
+    <End Role="User" Type="MainModel.Store.UserSet" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Guid" />
+      </Principal>
+      <Dependent Role="Notification">
+        <PropertyRef Name="User_Guid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_TipCategory_inherits_IPicture">
     <End Role="IPicture" Type="MainModel.Store.IPictureSet" Multiplicity="1">
       <OnDelete Action="Cascade" />
@@ -1324,6 +1351,11 @@
             <End Role="RewardSponsor" EntitySet="IPictureSet" />
             <End Role="Reward" EntitySet="IPictureSet" />
           </AssociationSet>
+          <EntitySet Name="NotificationSet" EntityType="MainModel.Notification" />
+          <AssociationSet Name="NotificationUser" Association="MainModel.NotificationUser">
+            <End Role="Notification" EntitySet="NotificationSet" />
+            <End Role="User" EntitySet="UserSet" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="User">
           <Documentation>
@@ -1410,6 +1442,7 @@
           <NavigationProperty Name="UserDataTotalDistance" Relationship="MainModel.UserUserDataTotalDistance" FromRole="User" ToRole="UserDataTotalDistance" />
           <NavigationProperty Name="UserDataHourlyDistance" Relationship="MainModel.UserDataHourlyDistanceUser" FromRole="User" ToRole="UserDataHourlyDistance" />
           <Property Name="PictureUri" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Notification" Relationship="MainModel.NotificationUser" FromRole="User" ToRole="Notification" />
         </EntityType>
         <EntityType Name="Token">
           <Documentation>
@@ -1976,8 +2009,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Type="Int64" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="String" Name="TwoLetterIsoCode" Nullable="false" MaxLength="2" Unicode="false" FixedLength="true" />
-          <Property Type="String" Name="ThreeLetterIsoCode" Nullable="false" MaxLength="3" Unicode="false" FixedLength="true" />
+          <Property Type="String" Name="IsoCode" Nullable="false" MaxLength="2" Unicode="false" FixedLength="true" />
           <Property Type="String" Name="Name" Nullable="false" Unicode="true" MaxLength="128" FixedLength="false" />
           <NavigationProperty Name="RegionSubdivision" Relationship="MainModel.RegionRegionSubdivision" FromRole="Region" ToRole="RegionSubdivision" />
         </EntityType>
@@ -2192,6 +2224,25 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Notification">
+          <Key>
+            <PropertyRef Name="Guid" />
+          </Key>
+          <Property Name="Guid" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="None" />
+          <Property Name="CreationDate" Type="String" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ObjectGuid" Type="Guid" Nullable="false" />
+          <Property Name="NotificationType" Type="MainModel.NotificationType" Nullable="false" />
+          <NavigationProperty Name="User" Relationship="MainModel.NotificationUser" FromRole="Notification" ToRole="User" />
+          <Property Name="Discarded" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EnumType Name="NotificationType">
+          <Member Name="Generic" Value="0" />
+          <Member Name="FriendRequest" Value="1" />
+        </EnumType>
+        <Association Name="NotificationUser">
+          <End Type="MainModel.Notification" Role="Notification" Multiplicity="*" />
+          <End Type="MainModel.User" Role="User" Multiplicity="1" />
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2354,8 +2405,7 @@
       <EntityTypeMapping TypeName="IsTypeOf(MainModel.Region)">
         <MappingFragment StoreEntitySet="RegionSet">
           <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="TwoLetterIsoCode" ColumnName="TwoLetterIsoCode" />
-          <ScalarProperty Name="ThreeLetterIsoCode" ColumnName="ThreeLetterIsoCode" />
+          <ScalarProperty Name="IsoCode" ColumnName="IsoCode" />
           <ScalarProperty Name="Name" ColumnName="Name" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -2501,7 +2551,7 @@
     <EntitySetMapping Name="UserDataHourlyDistance">
       <EntityTypeMapping TypeName="IsTypeOf(MainModel.UserDataHourlyDistance)">
         <MappingFragment StoreEntitySet="UserDataHourlyDistance">
-                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
+          <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
           <ScalarProperty Name="Activity" ColumnName="Activity" />
           <ScalarProperty Name="Steps" ColumnName="Steps" />
           <ScalarProperty Name="Distance" ColumnName="Distance" />
@@ -2514,7 +2564,7 @@
     <EntitySetMapping Name="UserDataTotalDistance">
       <EntityTypeMapping TypeName="IsTypeOf(MainModel.UserDataTotalDistance)">
         <MappingFragment StoreEntitySet="UserDataTotalDistance">
-                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
+          <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
           <ScalarProperty Name="Activity" ColumnName="Activity" />
           <ScalarProperty Name="TotalSteps" ColumnName="TotalSteps" />
           <ScalarProperty Name="TotalDistance" ColumnName="TotalDistance" />
@@ -2539,6 +2589,17 @@
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Code" ColumnName="Code" />
           <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="NotificationSet">
+      <EntityTypeMapping TypeName="IsTypeOf(MainModel.Notification)">
+        <MappingFragment StoreEntitySet="NotificationSet">
+          <ScalarProperty Name="Guid" ColumnName="Guid" />
+          <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+          <ScalarProperty Name="ObjectGuid" ColumnName="ObjectGuid" />
+          <ScalarProperty Name="NotificationType" ColumnName="NotificationType" />
+          <ScalarProperty Name="Discarded" ColumnName="Discarded" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -2808,6 +2869,14 @@
       </EndProperty>
       <EndProperty Name="RegionParticularSet">
         <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="NotificationUser" TypeName="MainModel.NotificationUser" StoreEntitySet="NotificationSet">
+      <EndProperty Name="User">
+        <ScalarProperty Name="Guid" ColumnName="User_Guid" />
+      </EndProperty>
+      <EndProperty Name="Notification">
+        <ScalarProperty Name="Guid" ColumnName="Guid" />
       </EndProperty>
     </AssociationSetMapping>
   </EntityContainerMapping>

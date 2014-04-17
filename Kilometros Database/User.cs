@@ -27,6 +27,7 @@ namespace KilometrosDatabase
             this.UserFriend = new HashSet<UserFriend>();
             this.UserDataTotalDistance = new HashSet<UserDataTotalDistance>();
             this.UserDataHourlyDistance = new HashSet<UserDataHourlyDistance>();
+            this.Notification = new HashSet<Notification>();
         }
     
         public System.Guid Guid { get; set; }
@@ -55,5 +56,6 @@ namespace KilometrosDatabase
         public virtual ICollection<UserFriend> UserFriend { get; set; }
         public virtual ICollection<UserDataTotalDistance> UserDataTotalDistance { get; set; }
         public virtual ICollection<UserDataHourlyDistance> UserDataHourlyDistance { get; set; }
+        public virtual ICollection<Notification> Notification { get; set; }
     }
 }

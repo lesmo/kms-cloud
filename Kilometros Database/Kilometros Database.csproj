@@ -120,6 +120,12 @@
     <Compile Include="MotionLevelGlobalization.cs">
       <DependentUpon>MainModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Notification.cs">
+      <DependentUpon>MainModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="NotificationType.cs">
+      <DependentUpon>MainModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="OAuthCredential.cs">
       <DependentUpon>MainModel.tt</DependentUpon>
     </Compile>
