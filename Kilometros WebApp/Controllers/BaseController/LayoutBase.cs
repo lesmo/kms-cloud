@@ -1,4 +1,5 @@
 ﻿using Kilometros_WebApp.Models.Views;
+using Kilometros_WebGlobalization.Database;
 using KilometrosDatabase;
 using System;
 using System.Collections.Generic;
@@ -107,6 +108,46 @@ namespace Kilometros_WebApp.Controllers {
                                     tipOfTheDay.TipCategory.PictureExtension
                             )
                     };
+
+                // > Obtener Notificaciones
+                IEnumerable<Notification> notifications
+                    = Database.NotificationStore.GetAll(
+                        filter: f =>
+                            f.User.Guid == CurrentUser.Guid,
+                        orderBy: o =>
+                            o.OrderByDescending(b => b.CreationDate),
+                        extra: x =>
+                            x.Take(7)
+                    );
+
+                List<LayoutNotification> layoutNotifications
+                    = new List<LayoutNotification>();
+
+                foreach ( Notification notification in notifications ) {
+                    if ( notification.NotificationType == NotificationType.FriendRequest ) {
+                        User user
+                            = Database.UserStore[notification.ObjectGuid];
+
+                        if ( user == null )
+                            continue;
+
+                        layoutNotifications.Add(
+                            new LayoutNotification {
+                                IconUri
+                                    = new Uri(user.PictureUri),
+                                Title
+                                    = user.Name,
+                                Description
+                                    = NotificationStrings.SentYouAFriendRequest,
+                                Discarded
+                                    = notification.Discarded
+                            }
+                        );
+                    }
+                }
+
+                this._layoutValues.Notifications
+                    = layoutNotifications.ToArray();
 
                 // > Devolver valores
                 return this._layoutValues;
