@@ -16,15 +16,14 @@ namespace Kilometros_WebAPI.Controllers {
     public class RewardsController : IKMSController {
         [HttpGet]
         [Route("rewards/history")]
-        public IEnumerable<RewardResponse> GetRewardsHistory(int page = 1) {
-            User user
-                = OAuth.Token.User;
-
+        public IEnumerable<RewardResponse> GetRewardsHistory(int page = 1, int perPage = 20) {
             // --- Obtener la última Recompensa conseguida ---
             UserEarnedReward lastReward
                 = Database.UserEarnedRewardStore.GetFirst(
-                    r => r.User == user,
-                    o => o.OrderBy(by => by.CreationDate)
+                    filter: f =>
+                        f.User.Guid == CurrentUser.Guid,
+                    orderBy: o =>
+                        o.OrderBy(by => by.CreationDate)
                 );
 
             // --- Verificar si se tiene la cabecera {If-Modified-Since} ---
@@ -38,11 +37,16 @@ namespace Kilometros_WebAPI.Controllers {
 
             // --- Obtener las Recompensas conseguidas ---
             IEnumerable<UserEarnedReward> rewards
-                = (
-                    from reward in user.UserEarnedReward
-                    orderby reward.CreationDate
-                    select reward
-                ).Skip(10 * page).Take(10);
+                = Database.UserEarnedRewardStore.GetAll(
+                    filter: f =>
+                        f.User.Guid == CurrentUser.Guid,
+                    orderBy: o =>
+                        o.OrderByDescending(b => b.CreationDate),
+                    extra: x =>
+                        x.Skip(page * perPage).Take(perPage),
+                    include:
+                        new string[] { "Reward.RewardGlobalization", "RewardGift.RewardPictures" }
+                );
 
             // --- Preparar respuesta ---
             List<RewardResponse> response
@@ -51,9 +55,7 @@ namespace Kilometros_WebAPI.Controllers {
             foreach ( UserEarnedReward earnedReward in rewards ) {
                 // Obtener Recompensa en el idioma actual
                 RewardGlobalization rewardGlobalization
-                    = Database.RewardStore.GetGlobalization(
-                        earnedReward.Reward
-                    ) as RewardGlobalization;
+                    = earnedReward.Reward.GetGlobalization();
 
                 // Buscar y obtener regalos asociados
                 IEnumerable<RewardGift> rewardGifts
@@ -74,50 +76,27 @@ namespace Kilometros_WebAPI.Controllers {
                     bool userClaimed
                         = (
                             from uc in rewardGift.UserRewardGiftClaimed
-                            where uc.RedeemedByUser == user
+                            where uc.RedeemedByUser.Guid == CurrentUser.Guid
                             select uc
                         ).FirstOrDefault() != null;
 
                     // Obtener Regalo en el Idioma actual
-                    RewardGiftGlobalization rewardGiftGlobalization
-                        = Database.RewardGiftStore.GetGlobalization(
-                            rewardGift
-                        ) as RewardGiftGlobalization;
-                    if ( rewardGiftGlobalization == null ) {
-                        rewardGiftsList.Add(new RewardGiftResponse() {
-                            RewardGiftId
-                                = rewardGift.Guid.ToBase64String(),
+                    rewardGiftsList.Add(new RewardGiftResponse {
+                        RewardGiftId
+                            = rewardGift.Guid.ToBase64String(),
 
-                            Stock
-                                = rewardGift.Stock,
-                            NamePlural
-                                = null,
-                            NameSingular
-                                = null,
-                            Claimed
-                                = userClaimed,
+                        Stock
+                            = rewardGift.Stock,
+                        NamePlural 
+                            = rewardGift.GetGlobalization().NamePlural,
+                        NameSingular
+                            = rewardGift.GetGlobalization().NameSingular,
+                        Claimed
+                            = userClaimed,
 
-                            Pictures
-                                = rewardGiftPictures.ToArray()
-                        });
-                    } else {
-                        rewardGiftsList.Add(new RewardGiftResponse() {
-                            RewardGiftId
-                                = rewardGift.Guid.ToBase64String(),
-
-                            Stock
-                                = rewardGift.Stock,
-                            NamePlural 
-                                = rewardGiftGlobalization.NamePlural,
-                            NameSingular
-                                = rewardGiftGlobalization.NameSingular,
-                            Claimed
-                                = userClaimed,
-
-                            Pictures
-                                = rewardGiftPictures.ToArray()
-                        });
-                    }
+                        Pictures
+                            = rewardGiftPictures.ToArray()
+                    });
                 }
 
                 // Obtener Regiones a las que aplica la Recompensa
@@ -126,7 +105,7 @@ namespace Kilometros_WebAPI.Controllers {
                 foreach ( RewardRegionalization region in earnedReward.Reward.RewardRegionalization )
                     rewardRegions.Add(region.RegionCode);
 
-                response.Add(new RewardResponse() {
+                response.Add(new RewardResponse {
                     RewardId
                         = earnedReward.Guid.ToBase64String(),
                     EarnDate
@@ -152,19 +131,16 @@ namespace Kilometros_WebAPI.Controllers {
         [HttpGet]
         [Route("rewards/{earnedRewardId}")]
         public RewardResponse GetReward(string earnedRewardId) {
-            User user
-                = OAuth.Token.User;
-            Guid rewardGuid
-                = new Guid().FromBase64String(earnedRewardId);
-
             // --- Obtener la Recompensa solicitada ---
             UserEarnedReward reward
-                = Database.UserEarnedRewardStore.Get(rewardGuid);
+                = Database.UserEarnedRewardStore.Get(earnedRewardId);
+
             if ( reward == null )
                 throw new HttpNotFoundException(
                     ControllerStrings.Warning901_RewardNotFound
                 );
-            if ( reward.User.Guid != user.Guid )
+
+            if ( reward.User.Guid != CurrentUser.Guid )
                 throw new HttpNotFoundException(
                     ControllerStrings.Warning901_RewardNotFound
                 );
@@ -181,64 +157,34 @@ namespace Kilometros_WebAPI.Controllers {
                     = new List<string>();
                 foreach ( RewardGiftPicture picture in rewardGift.RewardGiftPictures )
                     rewardGiftPictures.Add(
-                        picture.Guid.ToString("00000000000000000000000000000000")
+                        picture.Guid.ToBase64String()
                         + "." + picture.PictureExtension
                     );
 
                 // Determinar si el Regalo se reclamó por el Usuario
                 bool userClaimed
-                    = (
-                        from uc in rewardGift.UserRewardGiftClaimed
-                        where uc.RedeemedByUser.Guid == user.Guid
-                        select uc
+                    = rewardGift.UserRewardGiftClaimed.Where(w =>
+                        w.RedeemedByUser.Guid == CurrentUser.Guid
                     ).FirstOrDefault() != null;
 
                 // Obtener Regalo en el Idioma actual
-                RewardGiftGlobalization rewardGiftGlobalization
-                    = Database.RewardGiftStore.GetGlobalization(
-                        rewardGift
-                    ) as RewardGiftGlobalization;
+                rewardGiftsList.Add(new RewardGiftResponse {
+                    RewardGiftId
+                        = rewardGift.Guid.ToBase64String(),
 
-                if ( rewardGiftGlobalization == null ) {
-                    rewardGiftsList.Add(new RewardGiftResponse() {
-                        RewardGiftId
-                            = rewardGift.Guid.ToBase64String(),
-
-                        Stock
-                            = rewardGift.Stock,
-                        NamePlural
-                            = null,
-                        NameSingular
-                            = null,
-                        Claimed
+                    Stock
+                        = rewardGift.Stock,
+                    NamePlural
+                        = rewardGift.GetGlobalization().NamePlural,
+                    NameSingular
+                        = rewardGift.GetGlobalization().NameSingular,
+                    Claimed
                             = userClaimed,
 
-                        Pictures
-                            = rewardGiftPictures.ToArray()
-                    });
-                } else {
-                    rewardGiftsList.Add(new RewardGiftResponse() {
-                        RewardGiftId
-                            = rewardGift.Guid.ToBase64String(),
-
-                        Stock
-                            = rewardGift.Stock,
-                        NamePlural
-                            = rewardGiftGlobalization.NamePlural,
-                        NameSingular
-                            = rewardGiftGlobalization.NameSingular,
-                        Claimed
-                                = userClaimed,
-
-                        Pictures
-                            = rewardGiftPictures.ToArray()
-                    });
-                }
+                    Pictures
+                        = rewardGiftPictures.ToArray()
+                });
             }
-
-            // --- Obtener cadenas en el Idioma actual ---
-            RewardGlobalization rewardGlobalization
-                 = Database.RewardStore.GetGlobalization(reward.Reward) as RewardGlobalization;
 
             // --- Obtener Regiones a las que aplica la Recompensa ---
             List<string> rewardRegions
@@ -247,18 +193,18 @@ namespace Kilometros_WebAPI.Controllers {
                 rewardRegions.Add(region.RegionCode);
 
             // --- Preparar y devolver respuesta ---
-            return new RewardResponse() {
+            return new RewardResponse {
                 RewardId
                     = reward.Guid.ToBase64String(),
                 EarnDate
                     = reward.CreationDate,
 
                 Title
-                    = rewardGlobalization.Title,
+                    = reward.Reward.GetGlobalization().Title,
                 Text
-                    = rewardGlobalization.Text,
+                    = reward.Reward.GetGlobalization().Text,
                 Source
-                    = rewardGlobalization.Source,
+                    = reward.Reward.GetGlobalization().Source,
 
                 RewardGifts
                     = rewardGiftsList.ToArray(),

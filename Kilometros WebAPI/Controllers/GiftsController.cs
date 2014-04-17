@@ -33,14 +33,9 @@ namespace Kilometros_WebAPI.Controllers {
         [HttpGet]
         [Route("my/gifts/{giftId}")]
         public GiftResponse GetRewardGift(string giftId) {
-            User user
-                = OAuth.Token.User;
-            Guid giftGuid
-                = new Guid().FromBase64String(giftId);
-
             // --- Buscar Regalo solicitado ---
             RewardGift rewardGift
-                = Database.RewardGiftStore.Get(giftGuid);
+                = Database.RewardGiftStore[giftId];
             if ( rewardGift == null )
                 throw new HttpNotFoundException(
                     ControllerStrings.Warning701_GiftNotFound
@@ -49,8 +44,11 @@ namespace Kilometros_WebAPI.Controllers {
             // --- Verificar que el Regalo haya sido reclamado por el Usuario ---
             UserRewardGiftClaimed userRewardGiftClaim
                 = Database.UserRewardGiftClaimedStore.GetFirst(
-                    r => r.RewardGift.Guid == rewardGift.Guid && r.RedeemedByUser.Guid == user.Guid
+                    filter: f =>
+                        f.RewardGift.Guid == rewardGift.Guid
+                        && f.RedeemedByUser.Guid == CurrentUser.Guid
                 );
+
             if ( userRewardGiftClaim == null )
                 throw new HttpNotFoundException(
                     ControllerStrings.Warning701_GiftNotFound
@@ -60,56 +58,31 @@ namespace Kilometros_WebAPI.Controllers {
             // Obtener fotografías del Regalo
             List<string> rewardGiftPictures
                 = new List<string>();
+
             foreach ( RewardGiftPicture picture in rewardGift.RewardGiftPictures )
                 rewardGiftPictures.Add(
                     picture.Guid.ToString() + "." + picture.PictureExtension
                 );
-
+            
             // --- Obtener Regalo en el Idioma actual ---
-            RewardGiftGlobalization rewardGiftGlobalization
-                = Database.RewardGiftStore.GetGlobalization(
-                    rewardGift
-                ) as RewardGiftGlobalization;
+            return new GiftResponse() {
+                NamePlural
+                    = rewardGift.GetGlobalization().NamePlural,
+                NameSingular
+                    = rewardGift.GetGlobalization().NameSingular,
 
-            if ( rewardGiftGlobalization == null ) {
-                return new GiftResponse() {
-                    NamePlural
-                        = null,
-                    NameSingular
-                        = null,
+                RedeemCode
+                    = userRewardGiftClaim.RedeemCode,
+                RedeemPicture
+                    = string.Format(
+                        "{0}.{1}",
+                        userRewardGiftClaim.Guid.ToBase64String(),
+                        userRewardGiftClaim.PictureExtension
+                    ),
 
-                    RedeemCode
-                        = userRewardGiftClaim.RedeemCode,
-                    RedeemPicture
-                        = string.Format(
-                            "{0}.{1}",
-                            userRewardGiftClaim.Guid.ToBase64String(),
-                            userRewardGiftClaim.PictureExtension
-                        ),
-
-                    Pictures
-                        = rewardGiftPictures.ToArray()
-                };
-            } else {
-                return new GiftResponse() {
-                    NamePlural
-                        = rewardGiftGlobalization.NamePlural,
-                    NameSingular
-                        = rewardGiftGlobalization.NameSingular,
-
-                    RedeemCode
-                        = userRewardGiftClaim.RedeemCode,
-                    RedeemPicture
-                        = string.Format(
-                            "{0}.{1}",
-                            userRewardGiftClaim.Guid.ToBase64String(),
-                            userRewardGiftClaim.PictureExtension
-                        ),
-
-                    Pictures
-                        = rewardGiftPictures.ToArray()
-                };
-            }
+                Pictures
+                    = rewardGiftPictures.ToArray()
+            };
         }
 
         /// <summary>
@@ -122,14 +95,9 @@ namespace Kilometros_WebAPI.Controllers {
         [HttpPost]
         [Route("my/gifts/{giftId}")]
         public GiftClaimResponse ClaimRewardGift(string giftId) {
-            User user
-                = OAuth.Token.User;
-            Guid giftGuid
-                = new Guid().FromBase64String(giftId);
-
             // --- Buscar Regalo solicitado ---
             RewardGift rewardGift
-                = Database.RewardGiftStore.Get(giftGuid);
+                = Database.RewardGiftStore.Get(giftId);
             if ( rewardGift == null )
                 throw new HttpNotFoundException(
                     ControllerStrings.Warning701_GiftNotFound
@@ -138,8 +106,11 @@ namespace Kilometros_WebAPI.Controllers {
             // --- Verificar que el Regalo haya sido obtenido por el Usuario ---
             UserEarnedReward userEarnedReward
                 = Database.UserEarnedRewardStore.GetFirst(
-                    r => r.User == user && r.Reward.RewardGift.Contains(rewardGift)
+                    filter: f =>
+                        f.User.Guid == CurrentUser.Guid 
+                        && f.Reward.RewardGift.Any(r => r.Guid == rewardGift.Guid)
                 );
+
             if ( userEarnedReward == null )
                 throw new HttpNotFoundException(
                     ControllerStrings.Warning701_GiftNotFound
@@ -147,11 +118,11 @@ namespace Kilometros_WebAPI.Controllers {
 
             // --- Verificar que el Regalo no haya sido Reclamado por el Usuario ---
             bool userClaimedGift
-                = (
-                    from r in rewardGift.UserRewardGiftClaimed
-                    where r.RedeemedByUser.Guid == user.Guid && r.RewardGift.Guid == giftGuid.Value
-                    select r
+                = rewardGift.UserRewardGiftClaimed.Where(w =>
+                    w.RedeemedByUser.Guid == CurrentUser.Guid
+                    && w.RewardGift.Guid == rewardGift.Guid
                 ).FirstOrDefault() != null;
+
             if ( userClaimedGift )
                 throw new HttpNotFoundException(
                     ControllerStrings.Warning701_GiftNotFound
@@ -160,7 +131,7 @@ namespace Kilometros_WebAPI.Controllers {
             // --- Verificar que el Usuario tenga Información de Envío si el Regalo se envía ---
             if ( rewardGift.IsShipped ) {
                 ShippingInformation shippingInformation
-                    = user.ShippingInformation;
+                    = CurrentUser.ShippingInformation;
 
                 if ( shippingInformation == null )
                     throw new HttpConflictException(
@@ -171,8 +142,11 @@ namespace Kilometros_WebAPI.Controllers {
             // --- Obtener un objeto de Reclamo ---
             UserRewardGiftClaimed giftClaim
                 = Database.UserRewardGiftClaimedStore.GetFirst(
-                    r => r.RedeemedByUser == null && r.RewardGift == rewardGift
+                    filter: f =>
+                        f.RedeemedByUser == null
+                        && f.RewardGift.Guid == rewardGift.Guid
                 );
+
             if ( giftClaim == null )
                 throw new HttpNoContentException(
                     ControllerStrings.Warning702_GiftOutOfStock
@@ -180,7 +154,7 @@ namespace Kilometros_WebAPI.Controllers {
 
             // --- Asociar al Usuario con el Reclamo (efectivamente reclamando el regalo del usuario) ---
             giftClaim.RedeemedByUser
-                = user;
+                = CurrentUser;
 
             Database.UserRewardGiftClaimedStore.Update(giftClaim);
             Database.SaveChanges();
