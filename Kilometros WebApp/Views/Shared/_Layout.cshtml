@@ -18,10 +18,12 @@
 
 	@* Styles *@
 	@Html.RenderCssBundle("~/Assets/Stylesheets.css.bundle", BundleOptions.Combined)
+	@* Scripts *@
+	@Html.RenderJsBundle("~/Assets/Javascript.js.bundle", BundleOptions.Combined)
 </head>
 <body data-distanceUnit="@(RegionInfo.CurrentRegion.IsMetric ? "kms" : "mi")" data-weightUnit="@(RegionInfo.CurrentRegion.IsMetric ? "kg" : "lb")">
 	<header>
-		<div class="contenedor">
+		<div class="contenedor2">
 			<a href="@Url.Action("Overview", "Index", new { lang = CultureInfo.CurrentCulture.Name })">
 				<h1>
 					<span class="ocultar">KMS</span>
@@ -32,7 +34,7 @@
 				<ul>
 					<li>
 						@Html.ActionLink(
-							LayoutStrings.MyProfile.ToUpper(),
+							LayoutStrings.MyProfile,
 							"Index",
 							"Overview",
 							null,
@@ -43,7 +45,7 @@
 					</li>
 					<li>
 						@Html.ActionLink(
-							LayoutStrings.Tips.ToUpper(),
+							LayoutStrings.Tips,
 							"Index",
 							"Tips",
 							null,
@@ -54,7 +56,7 @@
 					</li>
 					<li>
 						@Html.ActionLink(
-							LayoutStrings.Rewards.ToUpper(),
+							LayoutStrings.Rewards,
 							"Index",
 							"Rewards",
 							null,
@@ -65,9 +67,9 @@
 					</li>
 					<li>
 						@Html.ActionLink(
-							LayoutStrings.Friends.ToUpper(),
+							LayoutStrings.Friends,
 							"Index",
-							"Entry",
+							"Friends",
 							null,
 							new {
 								@class = layoutValues.Section == LayoutValues.MainSection.Friends ? "active" : ""
@@ -77,12 +79,27 @@
 				</ul>
 			</nav>
 
-			<a href="@Url.Action("Entry", "Index")" class="alertas-header">
-				@if ( layoutValues.UnreadMessages > 0 ) {
+			<div class="alertas-header">
+				@if ( layoutValues.Notifications.Where(w => w.Discarded == false).Count() > 0 ) {
 					<span>@layoutValues.UnreadMessages</span>
 				}
-			</a>
+				
+				<ul class="notificacionesPop ocultar">
+					@foreach ( LayoutNotification notification in layoutValues.Notifications ) {
+						<li>
+							<figure>
+								<img src="@notification.IconUri.AbsoluteUri" alt="@notification.Title">
+							</figure>
+							<div class="info">
+								<h4>@notification.Title</h4>
+								<p>@notification.Description</p>
+							</div>
+						</li>
+					}
+				</ul>
+			</div>
 			<a href="@Url.Action("Entry", "Index")" class="configuracion-header"></a>
+
 			<div class="buscador-header">
 				@using ( Html.BeginForm("Index", "Search", FormMethod.Get) ) {
 					<input type="search" name="kms-q" placeholder="@LayoutStrings.SearchPlaceholder" />
@@ -105,7 +122,7 @@
 					@layoutValues.TotalDistance @(RegionInfo.CurrentRegion.IsMetric ? "kms" : "mi")
 				</span>
 				<span class="origen">
-					@layoutValues.LocationString
+					@layoutValues.LocationString.ToUpper()
 				</span>
 			</section>
 
@@ -124,41 +141,39 @@
 					</div>
 				} else {
 					<img src="img/medalla.png" alt="">
-					<a href="@Url.Action("Detail", "Rewards", new {
-						id = layoutValues.RecentlyUnlockedReward.RewardId
-					})" class="botonDorado">
+					<a href="@Url.Action("Detail", "Rewards", new { id = layoutValues.RecentlyUnlockedReward.RewardId })" class="boton class="botonDorado">
 						@LayoutStrings.ViewReward.ToUpper()
-						</a>
-						}
-						</section>
+					</a>
+				}
+			</section>
 
-						<section id="tipDelDia">
-							<figure>
-								<img src="@layoutValues.TipOfTheDay.IconUri.AbsoluteUri" alt="@layoutValues.TipOfTheDay.Category">
-							</figure>
-							<h3>@LayoutStrings.TipOfTheDay.ToUpper()</h3>
-							<article>
-								@layoutValues.TipOfTheDay.Text
-							</article>
-						</section>
+			<section id="tipDelDia">
+				<figure>
+					<img src="@layoutValues.TipOfTheDay.IconUri.AbsoluteUri" alt="@layoutValues.TipOfTheDay.Category">
+				</figure>
+				<h3>@LayoutStrings.TipOfTheDay.ToUpper()</h3>
+				<article>
+					@layoutValues.TipOfTheDay.Text
+				</article>
+			</section>
 
-						<section id="redes-sidebar">
-							<ul>
-								<li><a href="#" class="corona"></a></li>
-								<li><a href="#" class="facebook"></a></li>
-								<li><a href="#" class="twitter"></a></li>
-							</ul>
-						</section>
-						</aside>
+			<section id="redes-sidebar">
+				<ul>
+					<li><a href="#" class="corona"></a></li>
+					<li><a href="#" class="facebook"></a></li>
+					<li><a href="#" class="twitter"></a></li>
+				</ul>
+			</section>
+		</aside>
 
-						@* -- Body -- *@
-						<section id="contenidos">
-							@RenderBody()
-							<div class="bottom-abajo"></div>
-						</section>
+		@* -- Body -- *@
+		<section id="contenidos">
+			@RenderBody()
+			<div class="bottom-abajo"></div>
+		</section>
 
-						<div style="clear:both"></div>
-</div>
+		<div style="clear:both"></div>
+	</div>
 
 	<footer>
 		<div class="contenedor">
@@ -221,9 +236,6 @@
 			</ul>
 		</div>
 	</footer>
-
-	@* Scripts *@
-	@Html.RenderJsBundle("~/Assets/Javascript.js.bundle", BundleOptions.Combined)
 
 	@* Footer Scripts (Optional) *@
 	@RenderSection("FooterScripts", required: false)
