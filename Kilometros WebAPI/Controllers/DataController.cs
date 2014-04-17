@@ -176,15 +176,19 @@ namespace Kilometros_WebAPI.Controllers {
         [HttpPost]
         [Route("data/bulk")]
         public HttpResponseMessage PostDataBulk([FromBody]IEnumerable<DataPost> dataPost) {
-            // --- Determinar la última fecha registrada ---
-            UserBody userBody
-                = Database.UserBodyStore.GetFirst(
-                    f => f.User.Guid == CurrentUser.Guid
+            // --- Validar que Usuario actual tenga capturado Perfil Físico ---
+            if ( CurrentUser.UserBody == null )
+                throw new HttpConflictException(
+                    "204 " + ControllerStrings.Warning204_PhysicalInfoNotSet
                 );
+
+            // --- Determinar la última fecha registrada ---
             Data lastData
                 = Database.DataStore.GetFirst(
-                    f => f.User.Guid == CurrentUser.Guid,
-                    o => o.OrderByDescending(b => b.Timestamp)
+                    filter: f =>
+                        f.User.Guid == CurrentUser.Guid,
+                    orderBy: o =>
+                        o.OrderByDescending(b => b.Timestamp)
                 );
             DateTime lastDataTimestamp
                 = lastData == null
@@ -212,7 +216,7 @@ namespace Kilometros_WebAPI.Controllers {
 
             // --- Almacenar los nuevos Datos ---
             foreach ( DataPost i in dataPost )
-                this.PrepareDataInsert(i, userBody);
+                this.PrepareDataInsert(i);
 
             Database.SaveChanges();
             
@@ -235,11 +239,13 @@ namespace Kilometros_WebAPI.Controllers {
         ///     
         /// </returns>
         public HttpResponseMessage PostData([FromBody]DataPost dataPost) {
-            // --- Determinar la última fecha registrada ---
-            UserBody userBody
-                = Database.UserBodyStore.GetFirst(
-                    f => f.User.Guid == CurrentUser.Guid
+            // --- Validar que Usuario actual tenga capturado Perfil Físico ---
+            if ( CurrentUser.UserBody == null )
+                throw new HttpConflictException(
+                    "204 " + ControllerStrings.Warning204_PhysicalInfoNotSet
                 );
+
+            // --- Determinar la última fecha registrada ---
             Data lastData
                 = Database.DataStore.GetFirst(
                     f => f.User.Guid == CurrentUser.Guid,
@@ -263,7 +269,7 @@ namespace Kilometros_WebAPI.Controllers {
                     ControllerStrings.Warning302_DataTimestampTooOld
                 );
 
-            this.PrepareDataInsert(dataPost, userBody);
+            this.PrepareDataInsert(dataPost);
             Database.SaveChanges();
 
             return new HttpResponseMessage() {
@@ -281,7 +287,7 @@ namespace Kilometros_WebAPI.Controllers {
         /// </summary>
         /// <param name="dataPost"></param>
         /// <param name="userBody"></param>
-        private void PrepareDataInsert(DataPost dataPost, UserBody userBody) {
+        private void PrepareDataInsert(DataPost dataPost) {
             // --- Validar que Activity esté soportado ---
             string activity
                 = dataPost.Activity.ToLowerInvariant();
@@ -296,7 +302,7 @@ namespace Kilometros_WebAPI.Controllers {
             }
 
             if ( activityId == 0 )
-                throw new HttpNotFoundException(
+                throw new HttpBadRequestException(
                     "301" + ControllerStrings.Warning301_ActivityInvalid
                 );
 
@@ -305,13 +311,12 @@ namespace Kilometros_WebAPI.Controllers {
             switch ( (DataActivity)activityId ) {
                 case DataActivity.Running:
                     strideLength
-                        = userBody.StrideLengthRunning;
+                        = CurrentUser.UserBody.StrideLengthRunning;
                     break;
                 case DataActivity.Walking:
                     strideLength
-                        = userBody.StrideLengthWalking;
+                        = CurrentUser.UserBody.StrideLengthWalking;
                     break;
-
                 default:
                     strideLength
                         = 0;
@@ -331,7 +336,31 @@ namespace Kilometros_WebAPI.Controllers {
                     Steps
                         = dataPost.Steps,
                     StrideLength
-                        = strideLength
+                        = strideLength,
+                    EqualsKcal
+                        = (int)CurrentUser.UserBody.CalculateCaloriesBurned(
+                            dataPost.Steps,
+                            (DataActivity)activityId
+                        ),
+                    EqualsCo2
+                        = (int)(
+                            // Distancia en la lectura
+                            (strideLength * dataPost.Steps).CentimetersToKilometers()
+                            // [x] Litros de Gasolina por Kilómetro
+                            * 1.25d
+                            // [x] Gramos de CO2 por Litro de Gasolina
+                            * 2303
+                        ),
+                    EqualsCash
+                        = (int)(
+                            (
+                                // Distancia en la lectura
+                                (strideLength * dataPost.Steps).CentimetersToKilometers()
+                                // [/] Kilómetros por Litro de Gasoilna
+                                / 10d
+                            // [x] Precio por Litro de Gasolina en Dólares
+                            ) * 1.0d
+                        )
                 };
 
             Database.DataStore.Add(newData);
