@@ -39,7 +39,9 @@ namespace Kilometros_WebApp.Controllers {
 						hour
 							= g.Key.hour,
 						distance
-							= g.Sum(s => s.Distance),
+							= RegionInfo.CurrentRegion.IsMetric
+							? g.Sum(s => s.Distance).CentimetersToKilometers()
+							: g.Sum(s => s.Distance).CentimetersToMiles(),
 						steps
 							= g.Sum(s => s.Steps)
 					}
@@ -56,9 +58,11 @@ namespace Kilometros_WebApp.Controllers {
 					} into g
 					select new {
 						month
-							= g.Key.month,
+							= CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(g.Key.month),
 						totalDistance
-							= g.Sum(s => s.Distance),
+							= RegionInfo.CurrentRegion.IsMetric
+							? g.Sum(s => s.Distance).CentimetersToKilometers()
+							: g.Sum(s => s.Distance).CentimetersToMiles(),
 						totalSteps
 							= g.Sum(s => s.Steps)
 					}
@@ -83,22 +87,16 @@ namespace Kilometros_WebApp.Controllers {
 				);
 
 			// > Preparar respuesta en JSON
-			var json = new {
-				daily = new {
-					labels = new List<string>(),
-					values = new List<int>()
-				},
-				monthly = new {
-					labels = new List<string>(),
-					values = new List<int>()
-				},
-				activity = new {
-					vabels = new List<string>(),
-					values = new List<int>()
-				},
-			};
-
-			return Json(json);
+			return Json(
+				new {
+					daily
+						= lastDayActivity,
+					monthly
+						= monthlyActivity,
+					activity
+						= activityDistribution,
+				}
+			);
 		}
 
 		[Authorize]
@@ -109,7 +107,7 @@ namespace Kilometros_WebApp.Controllers {
 
 			// > Validar categoría
 			TipCategory tipCategory
-				= Database.TipCategoryStore.Get(cat);
+				= Database.TipCategoryStore[cat];
 
 			if ( tipCategory == null )
 				throw new HttpException(404, "Category not found");
