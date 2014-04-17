@@ -96,7 +96,13 @@ namespace Kilometros_WebApp.Models.Views {
         /// </summary>
         public string EquivalentCash {
             get {
-                return this.EquivalentCashRaw.ToCurrencyString();
+                Double? regionCurrency
+                    = this.EquivalentCashRaw.DollarsToRegionCurrency();
+
+                if ( regionCurrency.HasValue )
+                    return regionCurrency.Value.ToCurrencyString();
+                else
+                    return this.EquivalentCashRaw.ToCurrencyString(new CultureInfo("en-US")) + " USD";
             }
         }
 

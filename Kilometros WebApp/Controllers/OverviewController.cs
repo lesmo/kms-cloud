@@ -1,4 +1,5 @@
-﻿using Kilometros_WebApp.Models.Views;
+﻿using KilometrosDatabase.Helpers;
+using Kilometros_WebApp.Models.Views;
 using KilometrosDatabase;
 using System;
 using System.Collections.Generic;

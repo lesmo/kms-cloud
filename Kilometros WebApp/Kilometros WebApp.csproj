@@ -164,8 +164,26 @@
     <Compile Include="Routing\TranslatedRouteCollectionExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\Scripts\Gui.Fix.js" />
-    <Content Include="Assets\Scripts\Lib\chart.js" />
+    <Content Include="Assets\Scripts\Overview\Dummy.js" />
+    <Content Include="Assets\Scripts\Overview\PopulateGraphs.js" />
+    <Content Include="Assets\Scripts\Shared\Lib\chart.js" />
+    <Content Include="Assets\Scripts\Shared\Lib\chart.min.js" />
+    <Content Include="Assets\Scripts\Shared\Gui.Fix.js" />
+    <None Include="Assets\Overview.js.bundle" />
+    <None Include="Assets\Scripts\Shared\Lib\jquery-1.10.2.intellisense.js" />
+    <Content Include="Assets\Scripts\Shared\Lib\jquery-1.10.2.js" />
+    <Content Include="Assets\Scripts\Shared\Lib\jquery-1.10.2.min.js" />
+    <Content Include="Assets\Scripts\Shared\Lib\modernizr-2.6.2.js" />
+    <Content Include="Assets\Scripts\Shared\Lib\modernizr-2.6.2.min.js" />
+    <Content Include="Assets\Scripts\Shared\Lib\prefix.js" />
+    <Content Include="Assets\Scripts\Shared\Lib\prefix.min.js" />
+    <Content Include="Assets\Scripts\Shared\Lib\respond.js" />
+    <Content Include="Assets\Scripts\Shared\Lib\respond.min.js" />
+    <None Include="Assets\Scripts\Shared\Lib\_lib.js" />
+    <Content Include="Assets\Scripts\Shared\Lib\sprintf.js" />
+    <Content Include="Assets\Scripts\Shared\Lib\sprintf.min.js" />
+    <Content Include="Assets\Scripts\Shared\Utils.Misc.js" />
+    <Content Include="Assets\Scripts\Shared\_shared.js" />
     <Content Include="Bundler\bundler.js" />
     <Content Include="Bundler\node.exe" />
     <Content Include="Bundler\node_modules\clean-css\index.js" />
@@ -754,7 +772,6 @@
     <Content Include="Bundler\node_modules\stylus\node_modules\sax\test\xmlns-xml-default-redefine.js" />
     <Content Include="Bundler\node_modules\uglify-js.js" />
     <Content Include="favicon.ico" />
-    <Content Include="Assets\Scripts\Lib\prefix.js" />
     <Content Include="Assets\Styles\Lib\normalize.css" />
     <Content Include="Global.asax" />
     <Content Include="Bundler\uglifyjs" />
@@ -905,13 +922,7 @@
     <Content Include="Bundler\coffee.cmd" />
     <Content Include="Bundler\bundler.cmd" />
     <Content Include="Assets\Javascript.js.bundle" />
-    <Content Include="Assets\Scripts\Gui.Alerts.js" />
-    <None Include="Assets\Scripts\Lib\jquery-1.10.2.intellisense.js" />
-    <Content Include="Assets\Scripts\Lib\jquery-1.10.2.js" />
-    <Content Include="Assets\Scripts\Lib\jquery-1.10.2.min.js" />
-    <Content Include="Assets\Scripts\Lib\modernizr-2.6.2.js" />
-    <Content Include="Assets\Scripts\Lib\respond.js" />
-    <Content Include="Assets\Scripts\Lib\_references.js" />
+    <Content Include="Assets\Scripts\Shared\Gui.Alerts.js" />
     <Content Include="Images\Background\Background.Landscape.gif" />
     <Content Include="Images\Background\Background.Girl.gif" />
     <Content Include="Images\Background\Background.Clouds.jpg" />
@@ -959,10 +970,6 @@
     <Content Include="Views\Entry\About.cshtml" />
     <Content Include="Views\Entry\Contact.cshtml" />
     <Content Include="Views\Entry\Index.cshtml" />
-    <Content Include="Assets\Scripts\Lib\jquery-1.10.2.min.map" />
-    <Content Include="Assets\Scripts\Lib\jquery-1.10.2.min.js.map">
-      <DependentUpon>jquery-1.10.2.js</DependentUpon>
-    </Content>
     <Content Include="Assets\Stylesheets.css.bundle" />
     <Content Include="Assets\Styles\style.styl" />
     <Content Include="Views\Overview\Index.cshtml" />
@@ -971,6 +978,8 @@
     <Content Include="Views\Friends\Index.cshtml" />
     <Content Include="Views\Login\Index.cshtml" />
     <Content Include="Assets\Styles\grid.styl" />
+    <Content Include="Assets\Scripts\Shared\Lib\jquery-1.10.2.min.js.map" />
+    <Content Include="Assets\Scripts\Shared\Lib\jquery-1.10.2.min.map" />
     <None Include="Web.RemoteDebug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

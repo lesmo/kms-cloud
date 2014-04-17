@@ -31,7 +31,7 @@ namespace Kilometros_WebApp {
             );
 
             routes.MapTranslatedRoute(
-                "AjaxGlobalization",
+                "Ajax",
                 "DynamicResources/Ajax/{action}.json",
                 new {
                     controller = "Ajax"

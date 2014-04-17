@@ -78,7 +78,7 @@ namespace Kilometros_WebApp.Controllers {
 					} into g
 					select new {
 						activity
-							= g.Key.activity,
+							= g.Key.activity.ToString().ToLower(),
 						totalDistance
 							= g.Sum(s => s.TotalDistance),
 						totalSteps
