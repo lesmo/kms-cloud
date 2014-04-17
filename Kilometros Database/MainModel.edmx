@@ -2053,7 +2053,7 @@
           <End Type="MainModel.UserTipHistory" Role="UserTipHistory" Multiplicity="1" />
           <End Type="MainModel.Tip" Role="Tip" Multiplicity="1" />
         </Association>
-        <EntityType Name="IGlobalization" Abstract="true">
+        <EntityType Name="IGlobalization" Abstract="false">
           <Key>
             <PropertyRef Name="Id" />
           </Key>

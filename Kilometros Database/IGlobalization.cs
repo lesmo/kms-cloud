@@ -12,7 +12,7 @@ namespace KilometrosDatabase
     using System;
     using System.Collections.Generic;
     
-    public abstract partial class IGlobalization
+    public partial class IGlobalization
     {
         public long Id { get; set; }
         public string CultureCode { get; set; }

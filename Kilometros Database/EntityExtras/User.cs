@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 namespace KilometrosDatabase {
     public partial class User {
         /// <summary>
-        /// Devuelve la Edad del Usuario a partir de la Fecha de Nacimiento almacenada
-        /// en la Base de Datos.
+        ///     Devuelve la Edad del Usuario a partir de la Fecha de Nacimiento almacenada
+        ///     en la Base de Datos.
         /// </summary>
         public short Age {
             get {
