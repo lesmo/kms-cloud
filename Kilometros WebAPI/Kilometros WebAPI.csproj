@@ -27,7 +27,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>App_Data\XmlDocument.xml</DocumentationFile>
@@ -246,6 +246,7 @@
     </Compile>
     <Compile Include="Helpers\HttpRequestMessageHeadersHelper.cs" />
     <Compile Include="Helpers\MiscHelper.cs" />
+    <Compile Include="MagicTriggers\AsyncRewardTipTrigger.cs" />
     <Compile Include="MagicTriggers\RewardsPushTrigger.cs" />
     <Compile Include="MagicTriggers\TipsPushTrigger.cs" />
     <Compile Include="MessageHandlers\RequestArrayHandler.cs" />
@@ -390,7 +391,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'RemoteDebug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <DocumentationFile>App_Data\XmlDocument.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
     <DebugType>full</DebugType>

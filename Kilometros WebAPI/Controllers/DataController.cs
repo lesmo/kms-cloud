@@ -14,6 +14,7 @@ using System.Web.Http.Results;
 using System.Data.Entity.Validation;
 using Kilometros_WebGlobalization.API;
 using Kilometros_WebAPI.Exceptions;
+using System.Threading;
 
 namespace Kilometros_WebAPI.Controllers {
     /// <summary>
@@ -219,6 +220,9 @@ namespace Kilometros_WebAPI.Controllers {
                 this.PrepareDataInsert(i);
 
             Database.SaveChanges();
+
+            // --- Ejecutar magia --
+            this.MagicTriggers();
             
             return new HttpResponseMessage() {
                 RequestMessage
@@ -268,9 +272,12 @@ namespace Kilometros_WebAPI.Controllers {
                 throw new HttpConflictException(
                     ControllerStrings.Warning302_DataTimestampTooOld
                 );
-
+            
             this.PrepareDataInsert(dataPost);
             Database.SaveChanges();
+
+            // --- Ejecutar magia --
+            this.MagicTriggers();
 
             return new HttpResponseMessage() {
                 RequestMessage
@@ -364,6 +371,14 @@ namespace Kilometros_WebAPI.Controllers {
                 };
 
             Database.DataStore.Add(newData);
+        }
+
+        private void MagicTriggers() {
+            new Thread(
+                new ParameterizedThreadStart((object userGuid) => {
+                    new MagicTriggers.AsyncRewardTipTrigger().ForUserGuid((Guid)userGuid);
+                })
+            ).Start(CurrentUser.Guid);
         }
     }
 

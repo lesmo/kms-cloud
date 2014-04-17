@@ -19,6 +19,7 @@ namespace KilometrosDatabase
             this.RewardGift = new HashSet<RewardGift>();
             this.RewardGlobalization = new HashSet<RewardGlobalization>();
             this.RewardRegionalization = new HashSet<RewardRegionalization>();
+            this.UserEarnedReward = new HashSet<UserEarnedReward>();
         }
     
         public long DistanceTrigger { get; set; }
@@ -28,7 +29,7 @@ namespace KilometrosDatabase
         public virtual ICollection<RewardGift> RewardGift { get; set; }
         public virtual ICollection<RewardGlobalization> RewardGlobalization { get; set; }
         public virtual ICollection<RewardRegionalization> RewardRegionalization { get; set; }
-        public virtual UserEarnedReward UserEarnedReward { get; set; }
+        public virtual ICollection<UserEarnedReward> UserEarnedReward { get; set; }
         public virtual RewardSponsor RewardSponsor { get; set; }
     }
 }

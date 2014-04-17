@@ -1931,7 +1931,7 @@
           <End Type="MainModel.UserEarnedReward" Role="UserEarnedReward" Multiplicity="*" />
         </Association>
         <Association Name="UserEarnedRewardReward">
-          <End Type="MainModel.UserEarnedReward" Role="UserEarnedReward" Multiplicity="1" />
+          <End Type="MainModel.UserEarnedReward" Role="UserEarnedReward" Multiplicity="*" />
           <End Type="MainModel.Reward" Role="Reward" Multiplicity="1" >
             <OnDelete Action="Cascade" />
           </End>
@@ -2050,7 +2050,7 @@
           <End Type="MainModel.User" Role="User" Multiplicity="1" />
         </Association>
         <Association Name="UserTipHistoryTip">
-          <End Type="MainModel.UserTipHistory" Role="UserTipHistory" Multiplicity="1" />
+          <End Type="MainModel.UserTipHistory" Role="UserTipHistory" Multiplicity="*" />
           <End Type="MainModel.Tip" Role="Tip" Multiplicity="1" />
         </Association>
         <EntityType Name="IGlobalization" Abstract="false">

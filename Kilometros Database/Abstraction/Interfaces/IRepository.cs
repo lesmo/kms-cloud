@@ -167,6 +167,11 @@ namespace KilometrosDatabase.Abstraction.Interfaces {
             this._dbSet.Add(entity);
         }
 
+        public virtual void AddAndSave(TEntity entity) {
+            this.Add(entity);
+            this._context.SaveChanges();
+        }
+
         /// <summary>
         /// Elimina la Entidad con el ID especificado.
         /// </summary>

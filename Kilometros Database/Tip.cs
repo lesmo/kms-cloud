@@ -18,6 +18,7 @@ namespace KilometrosDatabase
         {
             this.TipGlobalization = new HashSet<TipGlobalization>();
             this.TipMotionLevel = new HashSet<MotionLevel>();
+            this.UserTipHistory = new HashSet<UserTipHistory>();
         }
     
         public System.Guid Guid { get; set; }
@@ -29,6 +30,6 @@ namespace KilometrosDatabase
         public virtual TipCategory TipCategory { get; set; }
         public virtual ICollection<TipGlobalization> TipGlobalization { get; set; }
         public virtual ICollection<MotionLevel> TipMotionLevel { get; set; }
-        public virtual UserTipHistory UserTipHistory { get; set; }
+        public virtual ICollection<UserTipHistory> UserTipHistory { get; set; }
     }
 }
