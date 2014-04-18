@@ -350,6 +350,13 @@ footer nav ul li a {
   overflow: hidden;
   text-align: center;
   min-height: 920px;
+  height: auto;
+}
+.contenedor2 {
+  width: 980px;
+  margin: 0 auto;
+  display: block;
+  clear: both;
 }
 .contenedor {
   width: 980px;
@@ -465,21 +472,22 @@ footer nav ul li a {
 #tipsGodines #Navegacion-Tips #contenidosAjax article strong {
   color: #00c5db;
 }
+#recorridoSueno {
+  text-align: center;
+}
 #actividad .tresCol {
   display: inline;
   float: left;
-  width: 20.089285714285715%;
+  width: 29.464285714285715%;
   margin: 0 0.8928571428571428%;
-  *width: 20.078822544642858%;
+  *width: 29.448939732142858%;
   *margin: 0 0.892392113095238%;
   font-size: 2.25em;
   letter-spacing: 0;
   color: #ff6168;
   margin-top: 1em;
-  line-height: 0;
-  float: none;
   display: inline-block;
-  padding-left: 1em;
+  float: none;
 }
 #actividad .tresCol p {
   margin: 0;
@@ -496,13 +504,12 @@ footer nav ul li a {
 #actividad .equivalencias {
   display: inline;
   float: left;
-  width: 54.46428571428571%;
+  width: 66.96428571428571%;
   margin: 0 0.8928571428571428%;
-  *width: 54.43591889880952%;
+  *width: 66.92940848214285%;
   *margin: 0 0.892392113095238%;
+  margin-left: 13.392857142857142%;
   color: #ff6168;
-  margin: 1em auto;
-  float: none;
   display: inline-block;
 }
 #actividad .equivalencias li {
@@ -934,6 +941,7 @@ footer nav ul li a {
 }
 #recompensasLiberadas .itemLiberada .info h4 {
   margin: 0;
+  color: #00ccc3;
 }
 #recompensasLiberadas .itemLiberada .info p {
   margin: 0;
@@ -951,4 +959,440 @@ footer nav ul li a {
   display: block;
   width: 100%;
   padding: 0.25em 2em;
+}
+#solicitudes,
+#amigos {
+  width: 80%;
+  margin: 0 auto;
+  overflow: hidden;
+  clear: both;
+}
+#solicitudes .amigosItem,
+#amigos .amigosItem {
+  border-bottom: 1px solid #ccc;
+  padding: 0.5em 0;
+}
+#solicitudes .solicitudItem,
+#amigos .solicitudItem,
+#solicitudes .amigosItem,
+#amigos .amigosItem {
+  display: inline;
+  float: left;
+  width: 31.339285714285715%;
+  margin: 0 0.8928571428571428%;
+  *width: 31.322963169642858%;
+  *margin: 0 0.892392113095238%;
+  display: inline-block;
+}
+#solicitudes .solicitudItem figure,
+#amigos .solicitudItem figure,
+#solicitudes .amigosItem figure,
+#amigos .amigosItem figure {
+  display: inline;
+  float: left;
+  width: 23.214285714285715%;
+  margin: 0 0.8928571428571428%;
+  *width: 23.20219494047619%;
+  *margin: 0 0.892392113095238%;
+}
+#solicitudes .solicitudItem .info,
+#amigos .solicitudItem .info,
+#solicitudes .amigosItem .info,
+#amigos .amigosItem .info {
+  display: inline;
+  float: left;
+  width: 73.21428571428571%;
+  margin: 0 0.8928571428571428%;
+  *width: 73.17615327380952%;
+  *margin: 0 0.892392113095238%;
+  text-align: left;
+  font-size: 0.9em;
+}
+#solicitudes .solicitudItem .info h4,
+#amigos .solicitudItem .info h4,
+#solicitudes .amigosItem .info h4,
+#amigos .amigosItem .info h4 {
+  margin: 0;
+  font-size: 1em;
+}
+#solicitudes .kms,
+#amigos .kms {
+  font-size: 1em;
+  color: #71cac2;
+}
+.btn {
+  display: block;
+  background: #dfdfdf;
+  color: #666;
+  text-decoration: none;
+  padding: 0.25em 0;
+  margin: 0.5em 0;
+  text-align: center;
+  transition: all 0.5s ease;
+  overflow: hidden;
+  clear: both;
+  max-width: 200px;
+}
+.btn:hover {
+  background: #c9c9c9;
+}
+.btn.centro {
+  margin: 0 auto;
+}
+.btn.aceptar {
+  background-color: #54e094;
+  color: #fff;
+}
+.btn.aceptar:hover {
+  background-color: #23c46d;
+}
+.btn.rechazar {
+  background-color: #00ccc3;
+  color: #fff;
+}
+.btn.rechazar:hover {
+  background-color: #00b8af;
+}
+.amigosCant {
+  display: block;
+  margin: 0;
+  text-align: left;
+  font-size: 0.8em;
+  margin: -1em 0 0 2em;
+}
+.amigosComparativa {
+  display: block;
+  overflow: hidden;
+  clear: both;
+}
+.amigosComparativa .tresCol {
+  display: inline;
+  float: left;
+  width: 29.464285714285715%;
+  margin: 0 0.8928571428571428%;
+  *width: 29.448939732142858%;
+  *margin: 0 0.892392113095238%;
+  font-size: 2.25em;
+  letter-spacing: 0;
+  color: #ff6168;
+  margin-top: 1em;
+  line-heigt: 0;
+  display: inline-block;
+}
+.amigosComparativa .tresCol p {
+  margin: 0;
+  display: block;
+}
+.amigosComparativa .tresCol em {
+  font-size: 0.75rem;
+  margin: 0;
+  display: block;
+}
+.amigosComparativa .tresCol .peque {
+  font-size: 1.5rem;
+}
+.amigosComparativa .equivalencias {
+  display: inline;
+  float: left;
+  width: 66.96428571428571%;
+  margin: 0 0.8928571428571428%;
+  *width: 66.92940848214285%;
+  *margin: 0 0.892392113095238%;
+  color: #ff6168;
+  margin: 1em auto;
+  display: inline-block;
+}
+.amigosComparativa .equivalencias li {
+  display: inline;
+  float: left;
+  width: 29.464285714285715%;
+  margin: 0 0.8928571428571428%;
+  *width: 29.448939732142858%;
+  *margin: 0 0.892392113095238%;
+}
+.amigosComparativa .equivalencias li figure {
+  display: inline;
+  float: left;
+  width: 35.714285714285715%;
+  margin: 0 0.8928571428571428%;
+  *width: 35.695684523809526%;
+  *margin: 0 0.892392113095238%;
+  margin: 0;
+  padding: 0;
+}
+.amigosComparativa .equivalencias li >span {
+  display: inline;
+  float: left;
+  width: 60.71428571428571%;
+  margin: 0 0.8928571428571428%;
+  *width: 60.68266369047618%;
+  *margin: 0 0.892392113095238%;
+  color: #808080;
+}
+.amigosComparativa .equivalencias li >span span {
+  display: block;
+}
+.usuarioDatos {
+  display: block;
+  overflow: hidden;
+  clear: both;
+}
+.usuarioDatos .tresCol {
+  display: inline;
+  float: left;
+  width: 73.21428571428571%;
+  margin: 0 0.8928571428571428%;
+  *width: 73.17615327380952%;
+  *margin: 0 0.892392113095238%;
+  margin-left: 13.392857142857142%;
+  font-size: 2.25em;
+  letter-spacing: 0;
+  color: #ff6168;
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+  padding-bottom: 0.5em;
+  line-heigt: 0;
+  display: inline-block;
+  border-bottom: 1px solid #dfdfdf;
+}
+.usuarioDatos .tresCol p {
+  margin: 0;
+  display: block;
+}
+.usuarioDatos .tresCol em {
+  font-size: 0.75rem;
+  margin: 0;
+  display: block;
+}
+.usuarioDatos .tresCol .peque {
+  font-size: 1.5rem;
+}
+.usuarioDatos .equivalencias {
+  display: inline;
+  float: left;
+  width: 73.21428571428571%;
+  margin: 0 0.8928571428571428%;
+  *width: 73.17615327380952%;
+  *margin: 0 0.892392113095238%;
+  margin-left: 13.392857142857142%;
+  color: #ff6168;
+  display: inline-block;
+}
+.usuarioDatos .equivalencias li {
+  display: inline;
+  float: left;
+  width: 29.464285714285715%;
+  margin: 0 0.8928571428571428%;
+  *width: 29.448939732142858%;
+  *margin: 0 0.892392113095238%;
+}
+.usuarioDatos .equivalencias li figure {
+  display: inline;
+  float: left;
+  width: 35.714285714285715%;
+  margin: 0 0.8928571428571428%;
+  *width: 35.695684523809526%;
+  *margin: 0 0.892392113095238%;
+  margin: 0;
+  padding: 0;
+}
+.usuarioDatos .equivalencias li >span {
+  display: inline;
+  float: left;
+  width: 60.71428571428571%;
+  margin: 0 0.8928571428571428%;
+  *width: 60.68266369047618%;
+  *margin: 0 0.892392113095238%;
+  color: #808080;
+}
+.usuarioDatos .equivalencias li >span span {
+  display: block;
+}
+#perfilEditar {
+  width: 80%;
+  margin: 5em auto 0 auto;
+}
+#perfilEditar .informacion {
+  display: inline;
+  float: left;
+  width: 48.214285714285715%;
+  margin: 0 0.8928571428571428%;
+  *width: 48.18917410714286%;
+  *margin: 0 0.892392113095238%;
+}
+#perfilEditar .informacion dl {
+  text-align: left;
+  font-weight: bold;
+}
+#perfilEditar .informacion dl dt {
+  float: left;
+  clear: left;
+  width: 70px;
+  color: #00ccc3;
+}
+#perfilEditar .informacion dl dd {
+  float: left;
+  clear: right;
+}
+#perfilEditar .Usuario {
+  display: inline;
+  float: left;
+  width: 23.214285714285715%;
+  margin: 0 0.8928571428571428%;
+  *width: 23.20219494047619%;
+  *margin: 0 0.892392113095238%;
+  text-align: center;
+  padding: 0 1em;
+  margin-right: 1em;
+}
+#perfilEditar .Usuario figure {
+  border-radius: 100px;
+  border: 1px solid #00c5db;
+  padding: 1em;
+  overflow: hidden;
+  width: 120px;
+  height: 120px;
+  margin: 1em auto;
+  position: relative;
+}
+#perfilEditar .Usuario figure img {
+  width: 120px;
+  height: 120px;
+  border-radius: 100%;
+}
+#perfilEditar .Usuario .cambiarFoto {
+  display: block;
+  width: 121px;
+  height: 121px;
+  margin: 1em;
+  border-radius: 100%;
+  background-color: transparent;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+}
+#perfilEditar .Usuario .cambiarFoto:hover {
+  opacity: 1;
+}
+.notificacionesPop {
+  width: 300px;
+  text-align: left;
+  padding: 0;
+  margin-top: 3em;
+}
+.notificacionesPop:before {
+  content: "";
+  display: block;
+  width: 0px;
+  height: 20px;
+  border: 20px solid transparent;
+  border-bottom: 20px solid #eee;
+  margin-top: -3em;
+}
+.notificacionesPop li {
+  display: block;
+  clear: both;
+  padding: 0.5em;
+  background: #eee;
+  border: 1px solid #dfdfdf;
+  overflow: hidden;
+}
+.notificacionesPop li:hover {
+  background: #f5f5f5;
+}
+.notificacionesPop li figure {
+  display: inline;
+  float: left;
+  width: 16.964285714285715%;
+  margin: 0 0.8928571428571428%;
+  *width: 16.955450148809526%;
+  *margin: 0 0.892392113095238%;
+}
+.notificacionesPop li h4 {
+  margin: 0;
+}
+.notificacionesPop li p {
+  margin: 0;
+}
+.notificacionesPop li .info {
+  display: inline;
+  float: left;
+  width: 73.21428571428571%;
+  margin: 0 0.8928571428571428%;
+  *width: 73.17615327380952%;
+  *margin: 0 0.892392113095238%;
+}
+.notificacionesPop li .info:after {
+  content: ">";
+  display: block;
+  float: right;
+  margin-top: -1.5em;
+  margin-right: -1em;
+  color: #00ccc3;
+  font-weight: bold;
+}
+.resultados {
+  display: inline;
+  float: left;
+  width: 73.21428571428571%;
+  margin: 0 0.8928571428571428%;
+  *width: 73.17615327380952%;
+  *margin: 0 0.892392113095238%;
+  margin-left: 13.392857142857142%;
+  text-align: left;
+}
+.resultados p {
+  margin: 1em 0 0.25em;
+}
+.resultados h3 {
+  color: #00ccc3;
+  margin: 0.25em 0;
+}
+.busquedaResultados {
+  display: inline;
+  float: left;
+  width: 73.21428571428571%;
+  margin: 0 0.8928571428571428%;
+  *width: 73.17615327380952%;
+  *margin: 0 0.892392113095238%;
+  margin-left: 13.392857142857142%;
+  padding: 0;
+  text-align: left;
+}
+.busquedaResultados li {
+  display: inline;
+  float: left;
+  width: 98.21428571428571%;
+  margin: 0 0.8928571428571428%;
+  *width: 98.16313244047619%;
+  *margin: 0 0.892392113095238%;
+  display: inline-block;
+  padding-bottom: 0.5em;
+  margin-top: 0.5em;
+  border-bottom: 1px solid #dfdfdf;
+}
+.busquedaResultados li a {
+  text-decoration: none;
+  display: block;
+}
+.busquedaResultados li a figure {
+  display: inline-block;
+  float: left;
+  margin: 0;
+  padding: 0;
+  width: 50px;
+  height: 50px;
+}
+.busquedaResultados li a .info {
+  display: block;
+  margin-left: 1em;
+  float: left;
+}
+.busquedaResultados li a .info h4 {
+  margin: 0;
+}
+.busquedaResultados li a .info p {
+  color: #00ccc3;
+  margin: 0.25em 0;
 }

@@ -291,6 +291,12 @@ footer
 	overflow hidden
 	text-align center
 	min-height 920px
+	height auto
+.contenedor2
+	width $Ancho
+	margin 0 auto
+	display block
+	clear both
 .contenedor
 	width $Ancho
 	margin 0 auto
@@ -318,7 +324,6 @@ footer
 	text-align center
 	margin 0
 	padding 0
-
 #recompensasLiberadas
 	text-align center
 	.recompensa
@@ -351,7 +356,6 @@ footer
 				li
 					display inline-block
 					margin 0 1em
-					
 		#contenidosAjax
 			padding-top 1em
 			height 800px
@@ -371,17 +375,17 @@ footer
 					color $Rosa-KMS
 				strong
 					color $Azul-KMS
+#recorridoSueno
+	text-align center
 #actividad
 	.tresCol
-		column(3.5)
+		column(5)
 		font-size 2.25em
 		letter-spacing 0
 		color $Rosa-KMS
 		margin-top 1em
-		line-height 0
-		float none
 		display inline-block
-		padding-left 1em
+		float none
 		p
 			margin 0
 			display block
@@ -392,10 +396,9 @@ footer
 		.peque
 			font-size 1.5rem
 	.equivalencias
-		column (9)
+		column (11)
+		push(2)
 		color $Rosa-KMS
-		margin 1em auto
-		float none
 		display inline-block
 		li
 			column(5)
@@ -684,6 +687,7 @@ footer
 				font-size 2em
 			h4
 				margin 0
+				color #00CCC3
 			p
 				margin 0
 		.empresa
@@ -693,3 +697,260 @@ footer
 				display block
 				width 100%
 				padding .25em 2em
+#solicitudes, #amigos
+	width 80%
+	margin 0 auto
+	overflow hidden
+	clear both
+	.amigosItem
+		border-bottom 1px solid #ccc
+		padding .5em 0
+	.solicitudItem, .amigosItem
+		column(5.3)
+		display inline-block
+		figure
+			column(4)
+		.info
+			column(12)
+			text-align left
+			font-size .9em
+			h4
+				margin 0
+				font-size 1em
+	.kms
+		font-size 1em
+		color #71CAC2
+.btn
+	display block
+	background $Gris-Claro-KMS
+	color $Gris-MuyOscuro-KMS
+	text-decoration none
+	padding .25em 0
+	margin .5em 0
+	text-align center
+	transition all .5s ease
+	overflow hidden
+	clear both
+	max-width 200px
+	&:hover
+		background darken($Gris-Claro-KMS, 10%)
+	&.centro
+		margin 0 auto
+	&.aceptar
+		background-color #54E094
+		color white
+		&:hover
+			background-color darken(#54E094 , 25%)
+	&.rechazar
+		background-color #00CCC3
+		color white
+		&:hover
+			background-color darken(#00CCC3 , 10%)
+.amigosCant
+	display block
+	margin 0
+	text-align left
+	font-size .8em
+	margin -1em 0 0 2em
+.amigosComparativa
+	display block
+	overflow hidden
+	clear both
+	.tresCol
+		column(5)
+		font-size 2.25em
+		letter-spacing 0
+		color $Rosa-KMS
+		margin-top 1em
+		line-heigt 0
+		display inline-block
+		p
+			margin 0
+			display block
+		em
+			font-size .75rem
+			margin 0
+			display block
+		.peque
+			font-size 1.5rem
+	.equivalencias
+		column (11)
+		color $Rosa-KMS
+		margin 1em auto
+		display inline-block
+		li
+			column(5)
+			figure
+				column(6)
+				margin 0
+				padding 0
+			>span
+				column(10)
+				color $Gris-Oscuro-KMS
+				span
+					display block
+.usuarioDatos
+	display block
+	overflow hidden
+	clear both
+	.tresCol
+		column(12)
+		push(2)
+		font-size 2.25em
+		letter-spacing 0
+		color $Rosa-KMS
+		margin-top 1em
+		margin-bottom .5em
+		padding-bottom .5em
+		line-heigt 0
+		display inline-block
+		border-bottom 1px solid $Gris-Claro-KMS
+		p
+			margin 0
+			display block
+		em
+			font-size .75rem
+			margin 0
+			display block
+		.peque
+			font-size 1.5rem
+	.equivalencias
+		column (12)
+		push(2)
+		color $Rosa-KMS
+		display inline-block
+		li
+			column(5)
+			figure
+				column(6)
+				margin 0
+				padding 0
+			>span
+				column(10)
+				color $Gris-Oscuro-KMS
+				span
+					display block
+#perfilEditar
+	width 80%
+	margin 5em auto 0 auto
+	.informacion
+		column(8)
+		dl
+			text-align left
+			font-weight bold
+			dt
+				float left
+				clear left
+				width 70px
+				color #00CCC3
+			dd
+				float left
+				clear right
+	.Usuario
+		column(4)
+		text-align center
+		padding 0 1em
+		margin-right 1em
+		figure
+			border-radius 100px
+			border 1px solid $Azul-KMS
+			padding 1em
+			overflow hidden
+			width 120px
+			height 120px
+			margin 1em auto
+			position relative
+			img
+				width 120px
+				height 120px
+				border-radius 100%
+		.cambiarFoto
+			display block
+			width 121px
+			height 121px
+			margin 1em
+			border-radius 100%
+			background-color transparent
+			position absolute
+			top 0
+			left 0
+			opacity 0
+			&:hover
+				opacity 1
+.notificacionesPop
+	width 300px
+	text-align left
+	padding 0
+	margin-top 3em
+	&:before
+		content ""
+		display block
+		width 0px
+		height 20px
+		border 20px solid transparent
+		border-bottom 20px solid #eee
+		margin-top -3em
+	li
+		display block
+		clear both
+		padding .5em
+		background #eee
+		border 1px solid $Gris-Claro-KMS
+		overflow hidden
+		&:hover
+			background lighten($Gris-Claro-KMS, 70%)
+		figure
+			column(3)
+		h4
+			margin 0
+		p
+			margin 0
+		.info
+			column(12)
+			&:after
+				content ">"
+				display block
+				float right
+				margin-top -1.5em
+				margin-right -1em
+				color #00CCC3
+				font-weight bold
+.resultados
+	column(12)
+	push(2)
+	text-align left
+	p
+		margin 1em 0 .25em
+	h3
+		color #00CCC3
+		margin .25em 0
+.busquedaResultados
+	column(12)
+	push(2)
+	padding 0
+	text-align left
+	li
+		column(16)
+		display inline-block
+		padding-bottom .5em
+		margin-top .5em
+		border-bottom 1px solid $Gris-Claro-KMS
+		a
+			text-decoration none
+			display block
+			figure
+				display inline-block
+				float left
+				margin 0
+				padding 0
+				width 50px
+				height 50px
+			.info
+				display block
+				margin-left 1em
+				float left
+				h4
+					margin 0
+				p
+					color #00CCC3
+					margin .25em 0

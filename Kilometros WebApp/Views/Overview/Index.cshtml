@@ -30,10 +30,10 @@
 					<img src="@Url.Content("~/Images/Gui/Overview/Gui.Co2.jpg")" alt="@OverviewStrings.Co2Alt">
 				</figure>
 				<span>
-					<span class="leyenda">CO<sub>2</sub></span>
 					<span class="numero">
 						@overviewValues.EquivalentCo2 @(RegionInfo.CurrentRegion.IsMetric ? "kg" : "lb")
 					</span>
+					<span class="leyenda">CO<sub>2</sub></span>
 				</span>
 			</li>
 			<li>
@@ -41,8 +41,8 @@
 					<img src="@Url.Content("~/Images/Gui/Overview/Gui.Kcal.jpg")" alt="@OverviewStrings.KcalAlt">
 				</figure>
 				<span>
-					<span class="leyenda">kcal</span>
 					<span class="numero">@overviewValues.EquivalentKcal</span>
+					<span class="leyenda">kcal</span>
 				</span>
 			</li>
 			<li>
@@ -50,8 +50,8 @@
 					<img src="@Url.Content("~/Images/Gui/Overview/Gui.Savings.jpg")" alt="@OverviewStrings.Savings">
 				</figure>
 				<span>
-					<span class="leyenda">@OverviewStrings.Savings</span>
 					<span class="numero">@overviewValues.EquivalentCash</span>
+					<span class="leyenda">@OverviewStrings.Savings</span>
 				</span>
 			</li>
 		</ul>
