@@ -19,7 +19,13 @@ namespace KilometrosDatabase.Helpers {
                 throw new ArgumentException("Object does not implement IFormattable");
 
             if ( (@this is Double) || (@this is Decimal) || (@this is float) ) {
-                if ( @this.ToDouble() - Math.Truncate(@this.ToDouble()) != 0 ) {
+                Double truncateResult
+                    = @this.ToDouble() - Math.Truncate(@this.ToDouble());
+
+                if (
+                    truncateResult > 0.00001d
+                    || truncateResult < -0.00001d
+                ) {
                     return (@this as IFormattable).ToString(
                         "N",
                         (culture ?? CultureInfo.CurrentCulture).NumberFormat
