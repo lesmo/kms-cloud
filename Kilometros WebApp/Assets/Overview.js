@@ -10,9 +10,8 @@ function doKMS_populateGraph() {
         }).done(function (data) {
             // --- Grafica del día de hoy ---
             // Inicializar variables
-            var graphLabels, graphDataDistance, graphDataSteps;
-            graphLabels = graphDataDistance = graphDataSteps = [];
-
+            var graphLabels = [], graphDataDistance = [], graphDataSteps = [];
+            
             // Obtener datos
             $.each(data.daily, function (i, item) {
                 graphLabels.push(item.hour);
@@ -40,7 +39,9 @@ function doKMS_populateGraph() {
 
             // --- Gráfica por mes ---
             // Inicializar variables
-            graphLabels = graphDataDistance = graphDataSteps = [];
+            graphLabels = [];
+            graphDataDistance = [];
+            graphDataSteps = [];
 
             // Obtener datos
             $.each(data.monthly, function (i, item) {
