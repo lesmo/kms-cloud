@@ -19,7 +19,7 @@ namespace Kilometros_WebApp.Models.Views {
                     ? this.TriggerDistanceCentimeters.CentimetersToKilometers()
                     : this.TriggerDistanceCentimeters.CentimetersToMiles();
                 
-                return triggerDistance.ToLocalizedString();
+                return triggerDistance.ToLocalizedString(true);
             }
         }
 
