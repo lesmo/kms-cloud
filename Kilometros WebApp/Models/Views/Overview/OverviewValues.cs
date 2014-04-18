@@ -97,7 +97,7 @@ namespace Kilometros_WebApp.Models.Views {
         public string EquivalentCash {
             get {
                 Double? regionCurrency
-                    = this.EquivalentCashRaw.DollarsToRegionCurrency();
+                    = this.EquivalentCashRaw.DollarCentsToRegionCurrency();
 
                 if ( regionCurrency.HasValue )
                     return regionCurrency.Value.ToCurrencyString();
