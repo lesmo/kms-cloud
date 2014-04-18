@@ -1,25 +1,27 @@
 ﻿@{
+    LayoutValues layoutValues
+        = (LayoutValues)ViewData["LayoutValues"];
     RewardsValues rewardsValues
-        = (RewardsValues)ViewData["OverviewValues"];
+        = (RewardsValues)ViewData["RewardsValues"];
 
     rewardsValues
         = rewardsValues ?? new RewardsValues();
 }
 <span class="tituloGrafica">
     <h2>
-        <img src="@Url.Content("~/Images/Gui/Gui.MiniMdeal.jpg")">@RewardsStrings.NextReward.ToUpper()
+        <img src="@Url.Content("~/Images/Gui/Gui.MiniMedal.jpg")">@RewardsStrings.NextReward.ToUpper()
     </h2>
     <hr>
 </span>
 
 <div id="prox-recompensa">
     <span class="bandera">
-        <img src="@Url.Content("~/Images/Rewards/Gui.BigMdeal.jpg")" alt="">
+        <img src="@Url.Content("~/Images/Gui/Rewards/Gui.BigMedal.jpg")" alt="">
     </span>
     <div class="info-recomp">
         <span class="proxRecomp">@RewardsStrings.YouveComeALongWay.ToUpper() :</span>
         <span class="kms">
-            @rewardsValues.NextRewards.First().TriggerDistance @(RegionInfo.CurrentRegion.IsMetric ? "kms" : "mi")
+            @rewardsValues.NextRewards.First().RemainingDistance @(RegionInfo.CurrentRegion.IsMetric ? "kms" : "mi")
         </span>
         <div id="barra">
             <div class="progreso" style="width: 80%;"></div>
@@ -46,10 +48,10 @@
 <div id="recompensasLiberadas">
     @for ( int i = 1; i < rewardsValues.NextRewards.Length; i++ ) {
         <article class="recompensa">
-            <img src="@Url.Content("~/Images/Gui/Gui.GenericBadge.jpg")" alt="">
-            <p>@RewardsStrings.UnlockedAfter.ToUpper() :</p>
+            <img src="@Url.Content("~/Images/Gui/Rewards/Gui.GenericBadge.jpg")" alt="">
+            <p>@RewardsStrings.UnlockedAfter.ToUpper():</p>
             <h3>
-                @rewardsValues.NextRewards[i].TriggerDistance @(RegionInfo.CurrentRegion.IsMetric ? "KMS" : "MI")
+                @(rewardsValues.NextRewards[i].RemainingDistance) @(RegionInfo.CurrentRegion.IsMetric ? "KMS" : "MI")
             </h3>
         </article>
     }
@@ -69,12 +71,15 @@
                 <div class="info">
                     <figure><img src="@reward.IconUri.AbsoluteUri" alt="@reward.Title"></figure>
                     <h3>@reward.TriggerDistance @(RegionInfo.CurrentRegion.IsMetric ? "KMS" : "MI")</h3>
-                    <h4>@reward.Title</h4>
+                    <h4>@reward.Title.ToUpper()</h4>
                     <p>
-                        @string.Format(
-                            RewardsStrings.UnlockedOnDate,
-                            reward.UnlockDate.ToShortDateString()
-                        )
+                        <small>
+                            @string.Format(
+                                RewardsStrings.UnlockedOnDate,
+                                reward.UnlockDate.ToShortDateString()
+                            )
+                        </small><br/>
+                        @reward.Text
                     </p>
                 </div>
 
