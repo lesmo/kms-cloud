@@ -32,7 +32,7 @@ namespace Kilometros_WebApp.Controllers {
                         = new Uri(CurrentUser.PictureUri),
 
                     LocationString
-                        = "{Not Implemented}",
+                        = RegionInfo.CurrentRegion.NativeName,
 
                     TotalDistanceCentimeters
                         = CurrentUser.UserDataTotalDistanceSum.TotalDistance,
@@ -52,14 +52,14 @@ namespace Kilometros_WebApp.Controllers {
                     Reward nextReward
                         = Database.RewardStore.GetFirstForRegion(
                             regionCode:
-                        // + Obtener la Recompensa para el Código de Región del Usuario
+                                // + Obtener la Recompensa para el Código de Región del Usuario
                                 CurrentUser.RegionCode,
                             filter: f =>
                                 // + Obtener la Recompensa inmediata siguiente según la Distancia del Usuario
                                 f.DistanceTrigger > CurrentUser.UserDataTotalDistanceSum.TotalDistance,
                             orderBy: o =>
-                                // + Ordenar las Recompensas según su Distancia de Debloqueo (Descendiente)
-                                o.OrderByDescending(b => b.DistanceTrigger)
+                                // + Ordenar las Recompensas según su Distancia de Desbloqueo (Descendiente)
+                                o.OrderBy(b => b.DistanceTrigger)
                         );
 
                     if ( nextReward == null )
