@@ -10,6 +10,9 @@ namespace KilometrosDatabase.Abstraction {
     public sealed class WorkUnit : IDisposable {
         private MainModelContainer _context = new MainModelContainer();
 
+        // FUCKING HACK
+        private static Type type = typeof(System.Data.Entity.SqlServer.SqlProviderServices);
+
         /// <summary>
         /// Sólo aquí... implementando IDisposable
         /// </summary>
