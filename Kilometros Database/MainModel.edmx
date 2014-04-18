@@ -1953,7 +1953,7 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
               <Summary>Teléfono del Trabajo del Usuario (en formato &lt;Número&gt; x &lt;Extensión&gt;)</Summary>
             </Documentation>
           </Property>
-          <Property Type="DateTime" Name="LastEditDate" annotation:StoreGeneratedPattern="Computed" Precision="3" >
+          <Property Type="DateTime" Name="LastEditDate" annotation:StoreGeneratedPattern="Computed" Precision="3" Nullable="false" >
             <Documentation>
               <Summary>Última fecha de modificación de la Información de Contacto.</Summary>
             </Documentation>
