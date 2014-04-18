@@ -12,11 +12,11 @@ namespace KilometrosDatabase.Helpers {
             = 16;
 
         public static Double GramsToPounds(this IConvertible @this) {
-            return (Double)@this / GramsPerPound;
+            return @this.ToDouble() / GramsPerPound;
         }
 
         public static Double PoundsToGrams(this IConvertible @this) {
-            return (Double)@this * GramsPerPound;
+            return @this.ToDouble() * GramsPerPound;
         }
     }
 }

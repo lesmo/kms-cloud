@@ -18,11 +18,11 @@ namespace KilometrosDatabase.Helpers {
             = 160934.4d;
 
         public static Double CentimetersToInches(this IConvertible @this) {
-            return (Double)@this / CentimetersPerInch;
+            return @this.ToDouble() / CentimetersPerInch;
         }
 
         public static Double InchesToCentimeters(this IConvertible @this) {
-            return (Double)@this * CentimetersPerInch;
+            return @this.ToDouble() * CentimetersPerInch;
         }
 
         public static Double CentimetersToMiles(this IConvertible @this) {

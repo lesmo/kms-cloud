@@ -7,21 +7,27 @@ using System.Threading.Tasks;
 
 namespace KilometrosDatabase.Helpers {
     public static partial class UnitsConverter {
-        public static string ToLocalizedString(this IFormattable @this, bool forceDecimals, CultureInfo culture = null) {
-            return ((Double)@this).ToLocalizedString(culture);
+        public static string ToLocalizedString(this IConvertible @this, bool forceDecimals, CultureInfo culture = null) {
+            if ( forceDecimals )
+                return @this.ToDouble().ToLocalizedString(culture);
+            else
+                return @this.ToLocalizedString(culture);
         }
 
-        public static string ToLocalizedString(this IFormattable @this, CultureInfo culture = null) {
+        public static string ToLocalizedString(this IConvertible @this, CultureInfo culture = null) {
+            if ( !(@this is IFormattable) )
+                throw new ArgumentException("Object does not implement IFormattable");
+
             if ( (@this is Double) || (@this is Decimal) || (@this is float) ) {
-                if ( (Double)@this - Math.Truncate((Double)@this) != 0 ) {
-                    return @this.ToString(
+                if ( @this.ToDouble() - Math.Truncate(@this.ToDouble()) != 0 ) {
+                    return (@this as IFormattable).ToString(
                         "N",
                         (culture ?? CultureInfo.CurrentCulture).NumberFormat
                     );
                 }
             }
 
-            return @this.ToString(
+            return (@this as IFormattable).ToString(
                 "N0",
                 (culture ?? CultureInfo.CurrentCulture).NumberFormat
             );

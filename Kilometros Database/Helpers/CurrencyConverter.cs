@@ -15,21 +15,21 @@ namespace KilometrosDatabase.Helpers {
                 {"GBP", 0.6d}
             };
 
-        private static Double DollarCentsToDollars(this IConvertible @this) {
-            return (Double)@this / 100d;
+        public static Double DollarCentsToDollars(this IConvertible @this) {
+            return @this.ToDouble() / 100d;
         }
 
-        private static Int32 DollarsToDollarCents(this IConvertible @this) {
-            return (Int32)((Double)@this * 100d);
+        public static Int32 DollarsToDollarCents(this IConvertible @this) {
+            return (Int32)(@this.ToDouble() * 100d);
         }
 
-        private static Double? DollarsToRegionCurrency(this IConvertible @this, RegionInfo region = null) {
+        public static Double? DollarsToRegionCurrency(this IConvertible @this, RegionInfo region = null) {
             if ( region == null )
                 region
                     = RegionInfo.CurrentRegion;
 
             if ( DollarEquivalence.ContainsKey(region.ISOCurrencySymbol.ToUpper()) )
-                return DollarEquivalence[region.ISOCurrencySymbol.ToUpper()] * (Double)@this;
+                return DollarEquivalence[region.ISOCurrencySymbol.ToUpper()] * @this.ToDouble();
             else
                 return null;
         }

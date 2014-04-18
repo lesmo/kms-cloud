@@ -101,6 +101,7 @@
     <Compile Include="Helpers\UnitsConverter\MetricDistanceConverter.cs" />
     <Compile Include="Helpers\UnitsConverter\MetricWeightConverter.cs" />
     <Compile Include="Helpers\UnitsConverter\NumericLocalizedStringify.cs" />
+    <Compile Include="Helpers\UnitsConverter\UnitsConverter.cs" />
     <Compile Include="IGlobalization.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>

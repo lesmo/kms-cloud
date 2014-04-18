@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace KilometrosDatabase.Helpers {
     public static partial class UnitsConverter {
         public static Double CentimetersToMeters(this IConvertible @this) {
-            return (Double)@this / 100d;
+            return @this.ToDouble() / 100d;
         }
 
         public static Double CentimetersToKilometers(this IConvertible @this) {
@@ -15,7 +15,7 @@ namespace KilometrosDatabase.Helpers {
         }
 
         public static Double MetersToKilometers(this IConvertible @this) {
-            return (Double)@this / 1000d;
+            return @this.ToDouble() / 1000d;
         }
     }
 }

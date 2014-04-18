@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 namespace KilometrosDatabase.Helpers {
     public static partial class UnitsConverter {
         public static Double GramsToKilograms(this IConvertible @this) {
-            return (Double)@this / 1000d;
+            return @this.ToDouble() / 1000d;
         }
 
         public static Double KilogramsToGrams(this IConvertible @this) {
-            return (Double)@this * 1000d;
+            return @this.ToDouble() * 1000d;
         }
     }
 }
