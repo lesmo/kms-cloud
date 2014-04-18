@@ -948,7 +948,7 @@
     <Content Include="Images\Gui\Rewards\Gui.GenericBadge.jpg" />
     <Content Include="Images\Gui\Rewards\Gui.BigMedal.jpg" />
     <Content Include="Images\Header\Header.KmsLogo.png" />
-    <Content Include="Images\Header\Header.Notifications.jpg" />
+    <Content Include="Images\Header\Header.Notifications.jpg.jpg" />
     <Content Include="Images\Gui\Gui.Graph.jpg" />
     <Content Include="Images\Gui\Gui.Monthly.jpg" />
     <Content Include="Images\Sidebar\Sidebar.Bar.gif" />
