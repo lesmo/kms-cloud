@@ -152,7 +152,9 @@ namespace Kilometros_WebApp.Controllers {
 			TipsValues.CurrentCategoryTipsTotalPages
 				= (int)Math.Ceiling(
 					(float)tipCategory.Tip.Where( w =>
-						w.UserTipHistory.User.Guid == CurrentUser.Guid
+						w.UserTipHistory.Any(t =>
+							t.User.Guid == CurrentUser.Guid
+						)
 					).Count() / TipsPerPage
 				);
 
