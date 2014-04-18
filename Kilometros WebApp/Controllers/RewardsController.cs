@@ -49,11 +49,21 @@ namespace Kilometros_WebApp.Controllers {
 				).Select(s =>
 					new RewardModel() {
 						IconUri
-							= null,
+							= GetDynamicResourceUri(
+								"Images",
+								s.Reward.Guid.ToBase64String(),
+								s.Reward.PictureExtension
+							),
 						SponsorIcon
-							= null,
+							= s.Reward.RewardSponsor == null ? null
+							: GetDynamicResourceUri(
+								"Images",
+								s.Reward.RewardSponsor.Guid.ToBase64String(),
+								s.Reward.RewardSponsor.PictureExtension
+							),
 						SponsorName
-							= "NOT IMPLEMENETED",
+							= s.Reward.RewardSponsor == null ? null
+							: s.Reward.RewardSponsor.Name,
 						
 						TriggerDistanceCentimeters
 							= s.Reward.DistanceTrigger,
