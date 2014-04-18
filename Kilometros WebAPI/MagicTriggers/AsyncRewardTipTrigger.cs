@@ -79,11 +79,15 @@ namespace Kilometros_WebAPI.MagicTriggers {
             IEnumerable<Tip> tips
                 = Database.TipStore.GetAll(
                     filter: f =>
-                        // + Obtener Tips que tengan la condicional de Distancia, que esa Distancia
-                        //   sea menor a la Distancia Total recorrida por el Usuario y que el Tip no
-                        //   se haya liberado anteriormente por el Usuario.
+                        // + Obtener Tips que tengan la condicional de Distancia
                         f.DistanceTrigger.HasValue
+                        // + ... que esa Distancia sea menor a la Distancia Total recorrida por el Usuario
                         && f.DistanceTrigger.Value < CurrentUser.UserDataTotalDistanceSum.TotalDistance
+                        // + ... que correspnda a su Nivel de Actividad
+                        && f.MotionLevel.Any(t =>
+                            t.Guid == CurrentUser.CurrentMotionLevel.Guid
+                        )
+                        // + ... y que no se haya liberado anteriormente por el Usuario
                         && ! f.UserTipHistory.Any(t =>
                             t.User.Guid == CurrentUser.Guid
                         ),
