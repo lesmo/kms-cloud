@@ -1,5 +1,6 @@
 ﻿using KilometrosDatabase.Abstraction.Interfaces;
 using KilometrosDatabase.Helpers;
+using LinqKit;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -48,7 +49,7 @@ namespace KilometrosDatabase.Abstraction.Functional {
             string regionCode,
             Expression<Func<Reward, bool>> filter = null,
             Func<IQueryable<Reward>, IOrderedQueryable<Reward>> orderBy = null,
-            Func<IOrderedQueryable<Reward>, IQueryable<Reward>> extra = null,
+            Func<IQueryable<Reward>, IQueryable<Reward>> extra = null,
             string[] include = null
         ) {
             // > No ponernos elegantes si se solicitaron Entidades de todas las Regiones
@@ -67,7 +68,7 @@ namespace KilometrosDatabase.Abstraction.Functional {
                     @"^([a-z]{2})(\-[a-z]{3}(\-[a-z]*)?)?$"
                 ).IsMatch(regionCode);
 
-            if ( validRegionCode )
+            if ( ! validRegionCode )
                 throw new ArgumentException(
                     "Region Code filter contains an invalid format.",
                     "regionCode"
@@ -110,12 +111,27 @@ namespace KilometrosDatabase.Abstraction.Functional {
                 );
             }
 
+            Func<IQueryable<Reward>, IQueryable<Reward>> extraAndRegionFilter;
+            if ( extra == null ) {
+                extraAndRegionFilter
+                    = x => x.Where(r =>
+                        r.RewardRegionalization.Any(regionFilter)
+                    );
+            } else {
+                extraAndRegionFilter
+                    = x => extra(
+                        x.Where(r =>
+                            r.RewardRegionalization.Any(regionFilter)
+                        )
+                    );
+            }
+
             // > Devolver respuesta, aplicando el Filtro de Región correspondiente
             return base.GetAll(
                 (
                     filter ?? PredicateBuilder.True<Reward>()
-                ).And( r =>
-                    r.RewardRegionalization.Any(regionFilter)
+                ).And(f =>
+                    f.RewardRegionalization.Any(regionFilter)
                 ),
                 orderBy,
                 extra,
@@ -134,14 +150,14 @@ namespace KilometrosDatabase.Abstraction.Functional {
             string regionCode,
             Expression<Func<Reward, bool>> filter = null,
             Func<IQueryable<Reward>, IOrderedQueryable<Reward>> orderBy = null,
-            Func<IOrderedQueryable<Reward>, IQueryable<Reward>> extra = null,
+            Func<IQueryable<Reward>, IQueryable<Reward>> extra = null,
             string[] include = null
         ) {
             return this.GetAllForRegion(
                 regionCode,
                 filter,
                 orderBy,
-                x => extra(x).Take(1),
+                x => extra == null ? x.Take(1) : extra(x).Take(1),
                 include
             ).FirstOrDefault();
         }

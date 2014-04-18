@@ -149,5 +149,27 @@ namespace KilometrosDatabase {
 
             return passwordHash.SequenceEqual(this.Password);
         }
+
+        public MotionLevel CurrentMotionLevel {
+            get {
+                if (  this._currentMotionLevel != null )
+                    return this._currentMotionLevel;
+
+                UserMotionLevelHistory motionHistory
+                    = this.UserMotionLevelHistory
+                        .OrderByDescending(b => b.CreationDate)
+                        .Take(1)
+                        .FirstOrDefault();
+
+                if ( motionHistory == null )
+                    return null;
+
+                this._currentMotionLevel
+                    = motionHistory.MotionLevel;
+
+                return this._currentMotionLevel;
+            }
+        }
+        private MotionLevel _currentMotionLevel;
     }
 }

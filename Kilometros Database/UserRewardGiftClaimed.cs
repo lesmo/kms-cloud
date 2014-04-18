@@ -16,7 +16,7 @@ namespace KilometrosDatabase
     {
         public Nullable<System.DateTime> ExpirationDate { get; set; }
         public string RedeemCode { get; set; }
-        public System.Data.Spatial.DbGeography ClaimLocation { get; set; }
+        public System.Data.Entity.Spatial.DbGeography ClaimLocation { get; set; }
     
         public virtual RewardGift RewardGift { get; set; }
         public virtual User RedeemedByUser { get; set; }

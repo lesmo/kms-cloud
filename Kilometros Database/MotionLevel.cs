@@ -17,6 +17,8 @@ namespace KilometrosDatabase
         public MotionLevel()
         {
             this.MotionLevelGlobalization = new HashSet<MotionLevelGlobalization>();
+            this.UserMotionLevelHistory = new HashSet<UserMotionLevelHistory>();
+            this.Tip = new HashSet<Tip>();
         }
     
         public System.Guid Guid { get; set; }
@@ -25,8 +27,8 @@ namespace KilometrosDatabase
         public short DaysThresholdStart { get; set; }
         public short DaysThresholdEnd { get; set; }
     
-        public virtual Tip Tip { get; set; }
         public virtual ICollection<MotionLevelGlobalization> MotionLevelGlobalization { get; set; }
-        public virtual UserMotionLevelHistory UserMotionLevelHistory { get; set; }
+        public virtual ICollection<UserMotionLevelHistory> UserMotionLevelHistory { get; set; }
+        public virtual ICollection<Tip> Tip { get; set; }
     }
 }

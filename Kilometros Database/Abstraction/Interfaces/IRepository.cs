@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LinqKit;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Data;
@@ -41,7 +42,7 @@ namespace KilometrosDatabase.Abstraction.Interfaces {
         public virtual IEnumerable<TEntity> GetAll(
             Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-            Func<IOrderedQueryable<TEntity>, IQueryable<TEntity>> extra = null,
+            Func<IQueryable<TEntity>, IQueryable<TEntity>> extra = null,
             string[] include = null
         ) {
             var query
@@ -54,12 +55,12 @@ namespace KilometrosDatabase.Abstraction.Interfaces {
                 query
                     = extra == null
                     ? query
-                    : extra(query.OrderBy(o => 0));
+                    : extra(query);
             } else {
                 query
                     = extra == null
                     ? orderBy(query)
-                    : extra(orderBy(query));
+                    : orderBy(extra(query));
             }
 
             if ( include != null && include.Length > 0 ) {
@@ -69,7 +70,7 @@ namespace KilometrosDatabase.Abstraction.Interfaces {
             }
 
             List<TEntity>returnValue
-                = query.ToList();
+                = query.AsExpandable().ToList();
 
             for ( int i = 0; i < returnValue.Count; i++ ) {
                 returnValue[i]
@@ -88,7 +89,7 @@ namespace KilometrosDatabase.Abstraction.Interfaces {
         public virtual TEntity GetFirst(
             Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-            Func<IOrderedQueryable<TEntity>, IQueryable<TEntity>> extra = null,
+            Func<IQueryable<TEntity>, IQueryable<TEntity>> extra = null,
             string[] include = null
         ) {
             return this.GetAll(

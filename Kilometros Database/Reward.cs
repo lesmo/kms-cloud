@@ -23,8 +23,6 @@ namespace KilometrosDatabase
         }
     
         public long DistanceTrigger { get; set; }
-        public string Source { get; set; }
-        public System.Guid RewardSponsorGuid { get; set; }
     
         public virtual ICollection<RewardGift> RewardGift { get; set; }
         public virtual ICollection<RewardGlobalization> RewardGlobalization { get; set; }
