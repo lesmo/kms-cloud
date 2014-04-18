@@ -81,7 +81,7 @@ namespace System.Web.Routing {
             }
 
             // > Verificar que la cultura esté catalogada como soportada
-            if ( ! SupportedCultures.Cultures.Any(a => a.ToLower() == culture.Name) )
+            if ( ! SupportedCultures.Cultures.Any(a => a.ToLower() == culture.Name.ToLower()) )
                 culture
                     = new CultureInfo(SupportedCultures.Cultures.First());
 
@@ -90,7 +90,7 @@ namespace System.Web.Routing {
                 httpContext.Response.Redirect(
                     new Uri(
                         httpContext.Request.Url,
-                        "/" + culture.Name.ToLower() + httpContext.Request.Url.PathAndQuery
+                        "/" + culture.Name + httpContext.Request.Url.PathAndQuery
                     ).AbsoluteUri,
                     true
                 );
@@ -104,7 +104,7 @@ namespace System.Web.Routing {
                 string tmp
                     = new Regex(@"/([a-zA-Z]{2})-([a-zA-Z]{2})").Replace(
                         httpContext.Request.Url.AbsoluteUri,
-                        "/" + culture.Name.ToLower()
+                        "/" + culture.Name
                     );
                 httpContext.Response.Redirect(
                     tmp,
@@ -160,9 +160,9 @@ namespace System.Web.Routing {
 
             // > Establecer {lang}
             if ( ! values.ContainsKey("lang") )
-                values.Add("lang", CultureInfo.CurrentCulture.Name.ToLower());
-            else if ( (string)values["lang"] != CultureInfo.CurrentCulture.Name.ToLower() )
-                values["lang"] = CultureInfo.CurrentCulture.Name.ToLower();
+                values.Add("lang", CultureInfo.CurrentCulture.Name);
+            else if ( (string)values["lang"] != CultureInfo.CurrentCulture.Name )
+                values["lang"] = CultureInfo.CurrentCulture.Name;
 
             // > Traducir valores de la Ruta
             foreach (KeyValuePair<string, object> pair in this.RouteValueTranslationProviders) {
