@@ -6,92 +6,31 @@ using System.Threading.Tasks;
 
 namespace KilometrosDatabase.Helpers {
     public static partial class UnitsConverter {
-        private static Func<dynamic, Double> InchesToCentimetersFunction
-            = f => (Double)f * 2.54d;
-        private static Func<dynamic, Double> CentimitersToInchesFunction
-            = f => (Double)f / 2.54d;
+        private const Double CentimetersPerInch
+            = 2.54d;
+        private const Int16 InchesPerFoot
+            = 12;
+        private const Int16 FeetPerYeard
+            = 3;
+        private const Int16 YardsPerMile
+            = 1760;
+        private const Double CentimetersPerMile
+            = 160934.4d;
 
-        private static Func<dynamic, Double> FeetToInchesFunction
-            = f => (Double)f * 12d;
-        private static Func<dynamic, Double> InchesToFeetFunction
-            = f => (Double)f / 12d;
-
-        private static Func<dynamic, Double> YardsToFeetFunction
-            = f => (Double)f * 3d;
-        private static Func<dynamic, Double> FeetToYardsFunction
-            = f => (Double)f / 3d;
-
-        private static Func<dynamic, Double> MilesToYardsFunction
-            = f => (Double)f * 1760d;
-        private static Func<dynamic, Double> YardsToMilesFunction
-            = f => (Double)f / 1760d;
-
-        public static Func<dynamic, Double> MilesToCentimetersFunction
-            = f => (Double)f * 160934.4d;
-        public static Func<dynamic, Double> CentimetersToMilesFunction
-            = f => (Double)f / 160934.4d;
-
-        public static Double CentimetersToInches(this Double @this) {
-            return CentimitersToInchesFunction(@this);
+        public static Double CentimetersToInches(this IConvertible @this) {
+            return (Double)@this / CentimetersPerInch;
         }
 
-        public static Double CentimetersToInches(this Int64 @this) {
-            return CentimitersToInchesFunction(@this);
+        public static Double InchesToCentimeters(this IConvertible @this) {
+            return (Double)@this * CentimetersPerInch;
         }
 
-        public static Double CentimetersToInches(this Int32 @this) {
-            return CentimitersToInchesFunction(@this);
-        }
-        public static Double CentimetersToInches(this Int16 @this) {
-            return CentimitersToInchesFunction(@this);
+        public static Double CentimetersToMiles(this IConvertible @this) {
+            return (Double)@this / CentimetersPerMile;
         }
 
-        public static Double InchesToCentimeters(this Double @this) {
-            return InchesToCentimetersFunction(@this);
-        }
-
-        public static Double InchesToCentimeters(this Int64 @this) {
-            return InchesToCentimetersFunction(@this);
-        }
-
-        public static Double InchesToCentimeters(this Int32 @this) {
-            return InchesToCentimetersFunction(@this);
-        }
-
-        public static Double InchesToCentimeters(this Int16 @this) {
-            return InchesToCentimetersFunction(@this);
-        }
-
-        public static Double CentimetersToMiles(this Double @this) {
-            return CentimetersToMilesFunction(@this);
-        }
-
-        public static Double CentimetersToMiles(this Int64 @this) {
-            return CentimetersToMilesFunction(@this);
-        }
-
-        public static Double CentimetersToMiles(this Int32 @this) {
-            return CentimetersToMilesFunction(@this);
-        }
-
-        public static Double CentimetersToMiles(this Int16 @this) {
-            return CentimetersToMilesFunction(@this);
-        }
-
-        public static Double MilesToCentimeters(this Double @this) {
-            return MilesToCentimetersFunction(@this);
-        }
-
-        public static Double MilesToCentimeters(this Int64 @this) {
-            return MilesToCentimetersFunction(@this);
-        }
-
-        public static Double MilesToCentimeters(this Int32 @this) {
-            return MilesToCentimetersFunction(@this);
-        }
-
-        public static Double MilesToCentimeters(this Int16 @this) {
-            return MilesToCentimetersFunction(@this);
+        public static Double MilesToCentimeters(this IConvertible @this) {
+            return (Double)@this * CentimetersPerMile;
         }
     }
 }

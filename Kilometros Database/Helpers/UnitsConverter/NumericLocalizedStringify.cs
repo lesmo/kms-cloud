@@ -7,41 +7,38 @@ using System.Threading.Tasks;
 
 namespace KilometrosDatabase.Helpers {
     public static partial class UnitsConverter {
-        private static Func<dynamic, CultureInfo, string> NumberToStringFunction
-            = (f, c) => ((Double)f).ToString(
-                "N",
-                (c ?? CultureInfo.CurrentCulture).NumberFormat
-            );
-        private static Func<dynamic, CultureInfo, string> CurrencyToStringFunction
-            = (f, c) => ((Double)f).ToString(
-                "C1",
-                (c ?? CultureInfo.CurrentCulture).NumberFormat
-            );
-
-        public static string ToLocalizedString(this Double @this, CultureInfo culture = null) {
-            return NumberToStringFunction(@this, culture);
-        }
-        public static string ToLocalizedString(this Int64 @this, CultureInfo culture = null) {
-            return NumberToStringFunction(@this, culture);
-        }
-        public static string ToLocalizedString(this Int32 @this, CultureInfo culture = null) {
-            return NumberToStringFunction(@this, culture);
-        }
-        public static string ToLocalizedString(this Int16 @this, CultureInfo culture = null) {
-            return NumberToStringFunction(@this, culture);
+        public static string ToLocalizedString(this IFormattable @this, bool forceDecimals, CultureInfo culture = null) {
+            return ((Double)@this).ToLocalizedString(culture);
         }
 
-        public static string ToCurrencyString(this Double @this, CultureInfo culture = null) {
-            return CurrencyToStringFunction(@this, culture);
+        public static string ToLocalizedString(this IFormattable @this, CultureInfo culture = null) {
+            if ( (@this is Double) || (@this is Decimal) || (@this is float) ) {
+                if ( (Double)@this - Math.Truncate((Double)@this) != 0 ) {
+                    return @this.ToString(
+                        "N",
+                        (culture ?? CultureInfo.CurrentCulture).NumberFormat
+                    );
+                }
+            }
+
+            return @this.ToString(
+                "N0",
+                (culture ?? CultureInfo.CurrentCulture).NumberFormat
+            );
         }
-        public static string ToCurrencyString(this Int64 @this, CultureInfo culture = null) {
-            return CurrencyToStringFunction(@this, culture);
+
+        public static string ToCurrencyString(this IFormattable @this, bool skipDecimals, CultureInfo culture = null) {
+            return @this.ToString(
+                "C0",
+                (culture ?? CultureInfo.CurrentCulture).NumberFormat
+            );
         }
-        public static string ToCurrencyString(this Int32 @this, CultureInfo culture = null) {
-            return CurrencyToStringFunction(@this, culture);
-        }
-        public static string ToCurrencyString(this Int16 @this, CultureInfo culture = null) {
-            return CurrencyToStringFunction(@this, culture);
+
+        public static string ToCurrencyString(this IFormattable @this, CultureInfo culture = null) {
+            return @this.ToString(
+                "C",
+                (culture ?? CultureInfo.CurrentCulture).NumberFormat
+            );
         }
     }
 }
