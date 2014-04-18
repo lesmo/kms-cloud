@@ -574,7 +574,7 @@
                 
             </returns>
         </member>
-        <member name="M:Kilometros_WebAPI.Controllers.DataController.PrepareDataInsert(Kilometros_WebAPI.Models.RequestModels.DataPost,KilometrosDatabase.UserBody)">
+        <member name="M:Kilometros_WebAPI.Controllers.DataController.PrepareDataInsert(Kilometros_WebAPI.Models.RequestModels.DataPost)">
             <summary>
             Prepara la inserción de Datos, sin consultar detalles del
             Perfil Físico del Usuario aún.
