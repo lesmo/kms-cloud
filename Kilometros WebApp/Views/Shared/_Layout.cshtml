@@ -137,7 +137,7 @@
 						@layoutValues.NextRewardsDistanceRemaining @(RegionInfo.CurrentRegion.IsMetric ? "kms" : "mi")
 					</span>
 					<div id="barra">
-						<div class="progreso" style="width: 80%;"></div>
+						<div class="progreso" style="width: @((layoutValues.TotalDistanceCentimeters / layoutValues.NextRewardDistanceCentimeters) * 100)%;"></div>
 					</div>
 				} else {
 					<img src="img/medalla.png" alt="">
