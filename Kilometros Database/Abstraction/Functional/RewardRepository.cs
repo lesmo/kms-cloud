@@ -82,48 +82,41 @@ namespace KilometrosDatabase.Abstraction.Functional {
 
             // > Determinar la condicional a utilizar para obtener sólo resultados
             //   que aplican a la Región especificada
-            Func<RewardRegionalization, bool> regionFilter;
+            Expression<Func<RewardRegionalization, bool>> regionFilter;
+            string regionCodePart1, regionCodePart2, regionCodePart3;
 
-            if ( regionCodeParts[1] == null ) { // - Si se tiene {país}
+            regionCodePart1
+                = regionCodeParts[0];
+            regionCodePart2
+                = regionCodeParts[1];
+            regionCodePart3
+                = regionCodeParts[2];
+
+            if ( regionCodePart2 == null ) { // - Si se tiene {país}
                 regionFilter = f => !(
                     (
-                        f.RegionCode == regionCodeParts[0]
-                        || f.RegionCode == regionCodeParts[0] + "-*"
+                        f.RegionCode == regionCodePart1
+                        || f.RegionCode == regionCodePart1 + "-*"
                     ) && f.Exclude == true
                 );
-            } else if ( regionCodeParts[2] == null ) { // - Si se tiene {país-subdivisión}
+            } else if ( regionCodePart3 == null ) { // - Si se tiene {país-subdivisión}
                 regionFilter = f => !(
                     (
-                        f.RegionCode == regionCodeParts[0]
-                        || f.RegionCode == regionCodeParts[0] + "-*"
-                        || f.RegionCode == regionCodeParts[0] + "-" + regionCodeParts[1]
+                        f.RegionCode == regionCodePart1
+                        || f.RegionCode == regionCodePart1 + "-*"
+                        || f.RegionCode == regionCodePart1 + "-" + regionCodePart2
                     ) && f.Exclude == true
                 );
             } else { // - Si se tiene {país-subdivisión-particular}
                 regionFilter = f => !(
                     (
-                        f.RegionCode == regionCodeParts[0]
-                        || f.RegionCode == regionCodeParts[0] + "-*"
-                        || f.RegionCode == regionCodeParts[0] + "-" + regionCodeParts[1]
-                        || f.RegionCode == regionCodeParts[0] + "-" + regionCodeParts[1] + "-*"
-                        || f.RegionCode == regionCodeParts[0] + "-" + regionCodeParts[1] + "-" + regionCodeParts[1]
+                        f.RegionCode == regionCodePart1
+                        || f.RegionCode == regionCodePart1 + "-*"
+                        || f.RegionCode == regionCodePart1 + "-" + regionCodePart2
+                        || f.RegionCode == regionCodePart1 + "-" + regionCodePart2 + "-*"
+                        || f.RegionCode == regionCodePart1 + "-" + regionCodePart2 + "-" + regionCodePart2
                     ) && f.Exclude == true
                 );
-            }
-
-            Func<IQueryable<Reward>, IQueryable<Reward>> extraAndRegionFilter;
-            if ( extra == null ) {
-                extraAndRegionFilter
-                    = x => x.Where(r =>
-                        r.RewardRegionalization.Any(regionFilter)
-                    );
-            } else {
-                extraAndRegionFilter
-                    = x => extra(
-                        x.Where(r =>
-                            r.RewardRegionalization.Any(regionFilter)
-                        )
-                    );
             }
 
             // > Devolver respuesta, aplicando el Filtro de Región correspondiente
@@ -131,8 +124,8 @@ namespace KilometrosDatabase.Abstraction.Functional {
                 (
                     filter ?? PredicateBuilder.True<Reward>()
                 ).And(f =>
-                    f.RewardRegionalization.Any(regionFilter)
-                ),
+                    f.RewardRegionalization.Any(regionFilter.Compile())
+                ).Expand(),
                 orderBy,
                 extra,
                 include
