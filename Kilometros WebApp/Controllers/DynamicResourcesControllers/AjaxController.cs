@@ -58,7 +58,9 @@ namespace Kilometros_WebApp.Controllers {
 					} into g
 					select new {
 						month
-							= CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(g.Key.month),
+							= CultureInfo.CurrentCulture.TextInfo.ToTitleCase(
+								CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(g.Key.month)
+							),
 						totalDistance
 							= RegionInfo.CurrentRegion.IsMetric
 							? g.Sum(s => s.Distance).CentimetersToKilometers()
@@ -95,7 +97,8 @@ namespace Kilometros_WebApp.Controllers {
 						= monthlyActivity,
 					activity
 						= activityDistribution,
-				}
+				},
+				JsonRequestBehavior.AllowGet
 			);
 		}
 
@@ -137,7 +140,7 @@ namespace Kilometros_WebApp.Controllers {
 				);
 
 			// > Devolver respuesta en JSON
-			return Json(tips);
+			return Json(tips, JsonRequestBehavior.AllowGet);
 		}
 
 		[Authorize]
@@ -187,7 +190,7 @@ namespace Kilometros_WebApp.Controllers {
 					}
 				);
 
-			return Json(friends);
+			return Json(friends, JsonRequestBehavior.AllowGet);
 		}
 
 		[Authorize]
@@ -224,7 +227,7 @@ namespace Kilometros_WebApp.Controllers {
 					}
 				);
 
-			return Json(friendships);
+			return Json(friendships, JsonRequestBehavior.AllowGet);
 		}
 
 		[Authorize]
@@ -299,7 +302,7 @@ namespace Kilometros_WebApp.Controllers {
 				);
 
 			// > Devolver respuesta
-			return Json(rewards);
+			return Json(rewards, JsonRequestBehavior.AllowGet);
 		}
 	}
 }
