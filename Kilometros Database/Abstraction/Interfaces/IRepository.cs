@@ -47,6 +47,8 @@ namespace KilometrosDatabase.Abstraction.Interfaces {
         ) {
             var query
                 = (IQueryable<TEntity>)this._dbSet.AsQueryable();
+            query
+                = query.AsExpandable();
 
             if ( filter != null)
                 query = query.Where(filter);
@@ -60,7 +62,7 @@ namespace KilometrosDatabase.Abstraction.Interfaces {
                 query
                     = extra == null
                     ? orderBy(query)
-                    : orderBy(extra(query));
+                    : extra(orderBy(query));
             }
 
             if ( include != null && include.Length > 0 ) {
@@ -70,7 +72,7 @@ namespace KilometrosDatabase.Abstraction.Interfaces {
             }
 
             List<TEntity>returnValue
-                = query.AsExpandable().ToList();
+                = query.ToList();
 
             for ( int i = 0; i < returnValue.Count; i++ ) {
                 returnValue[i]
