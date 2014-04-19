@@ -25,6 +25,21 @@ namespace Kilometros_WebAPI.MessageHandlers {
             = new KilometrosDatabase.Abstraction.WorkUnit();
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken) {
+            #if !DEBUG
+            // --- Validar que la peitición venga de HTTPS
+            if ( request.RequestUri.Scheme != Uri.UriSchemeHttps ) {
+                HttpResponseMessage response
+                    = new HttpResponseMessage(HttpStatusCode.Forbidden);
+
+                response.Headers.TryAddWithoutValidation(
+                    "Warning",
+                    "000 " + MessageHandlerStrings.Warning000_HttpsRequired
+                );
+
+                return await MiscHelper.ReturnHttpResponseAndHalt(response);
+            }
+            #endif
+
             HttpRequestMessageHeadersHelper reqHeadersHelper
                 = new HttpRequestMessageHeadersHelper(request);
 

@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Warning000_HttpsRequired" xml:space="preserve">
+    <value>HTTPS is required for this request</value>
+  </data>
   <data name="Warning100_OAuthAuthorizationInvalid" xml:space="preserve">
     <value>OAuth Authorization parameters contain one or more invalid values, or is missing one or more values</value>
   </data>
