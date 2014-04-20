@@ -89,7 +89,7 @@ namespace Kms.Cloud.Api.Controllers {
                 Secret           = Guid.NewGuid(),
                 VerificationCode = null,
 
-                User             = user ?? OAuth3rdCredential.User,
+                User             = user ?? CurrentUser ?? OAuth3rdCredential.User,
 
                 ExpirationDate   = DateTime.UtcNow.AddMonths(3),
                 LoginAttempts    = OAuth.Token.LoginAttempts
