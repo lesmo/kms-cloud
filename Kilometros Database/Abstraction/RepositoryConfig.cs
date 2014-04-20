@@ -18,5 +18,11 @@ namespace KilometrosDatabase.Abstraction {
                 "LastEditDate"
             };
         }
+
+        public static class GuidPropertiesConfig {
+            public static string[] AutosetOnInsert = {
+                "Guid"
+            };
+        }
     }
 }

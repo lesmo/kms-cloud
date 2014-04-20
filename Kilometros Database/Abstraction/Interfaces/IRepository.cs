@@ -156,17 +156,23 @@ namespace KilometrosDatabase.Abstraction.Interfaces {
                 where
                     RepositoryConfig.DateTimeEntityPropertiesConfig.AutosetOnInsert.Contains(thisProperty.Name)
                 select thisProperty;
+            PropertyInfo setGuidProperty = (
+                from thisProperty in this._type.GetProperties()
+                where
+                    RepositoryConfig.GuidPropertiesConfig.AutosetOnInsert.Contains(thisProperty.Name)
+                select thisProperty).FirstOrDefault();
 
             // Establecer el valor de las propiedades
-            Type dateTimeType = typeof(DateTime);
+            if ( setGuidProperty != null )
+                setGuidProperty.SetValue(entity, Guid.NewGuid());
 
             foreach ( PropertyInfo property in setDateProperties ) {
                 dynamic value = property.GetValue(entity);
 
-                if ( typeof(DateTime) == value.GetType() )
+                if ( typeof(DateTime) == value.GetType() || typeof(DateTime?) == value.GetType() )
                     property.SetValue(entity, DateTime.UtcNow);
             }
-                
+
             this._dbSet.Add(entity);
         }
 

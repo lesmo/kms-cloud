@@ -9,7 +9,7 @@
           <Key>
             <PropertyRef Name="Guid" />
           </Key>
-          <Property Name="CreationDate" Type="datetime" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="CreationDate" Type="datetime" Nullable="false" StoreGeneratedPattern="None" />
           <Property Name="Platform" Type="nvarchar" MaxLength="64" Nullable="false" />
           <Property Name="Description" Type="nvarchar" MaxLength="64" />
           <Property Name="Guid" Type="uniqueidentifier" Nullable="false" StoreGeneratedPattern="Identity" />
@@ -28,7 +28,7 @@
           <Property Name="HomePhone" Type="nvarchar" MaxLength="24" />
           <Property Name="MobilePhone" Type="nvarchar" MaxLength="24" />
           <Property Name="WorkPhone" Type="nvarchar" MaxLength="24" />
-          <Property Name="LastEditDate" Type="datetime" StoreGeneratedPattern="Computed" />
+          <Property Name="LastEditDate" Type="datetime" StoreGeneratedPattern="None" />
           <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
         </EntityType>
         <EntityType Name="DataSet">
@@ -259,7 +259,7 @@
             <PropertyRef Name="Guid" />
           </Key>
           <Property Name="Guid" Type="uniqueidentifier" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="CreationDate" Type="datetime" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="CreationDate" Type="datetime" Nullable="false" StoreGeneratedPattern="None" />
           <Property Name="DistanceTrigger" Type="bigint" />
           <Property Name="DaysTrigger" Type="bigint" Nullable="false" />
           <Property Name="Source" Type="nvarchar(max)" />
@@ -269,11 +269,11 @@
           <Key>
             <PropertyRef Name="Guid" />
           </Key>
-          <Property Name="CreationDate" Type="datetime" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="ExpirationDate" Type="datetime" StoreGeneratedPattern="Identity" />
+          <Property Name="CreationDate" Type="datetime" Nullable="false" StoreGeneratedPattern="None" />
+          <Property Name="ExpirationDate" Type="datetime" StoreGeneratedPattern="None" />
           <Property Name="Guid" Type="uniqueidentifier" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="Secret" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="LastUseDate" Type="datetime" />
+          <Property Name="LastUseDate" Type="datetime" StoreGeneratedPattern="None" />
           <Property Name="LoginAttempts" Type="tinyint" Nullable="false" />
           <Property Name="CallbackUri" Type="varchar" MaxLength="255" />
           <Property Name="VerificationCode" Type="uniqueidentifier" />
@@ -327,7 +327,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="CreationDate" Type="datetime" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="CreationDate" Type="datetime" Nullable="false" StoreGeneratedPattern="None" />
           <Property Name="TrackingCode" Type="varchar(max)" Nullable="false" />
           <Property Name="TrackingLink" Type="varchar(max)" Nullable="false" />
           <Property Name="UserRewardGiftClaimed_Guid" Type="uniqueidentifier" Nullable="false" />
@@ -337,7 +337,7 @@
             <PropertyRef Name="Guid" />
           </Key>
           <Property Name="Guid" Type="uniqueidentifier" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="CreationDate" Type="datetime" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="CreationDate" Type="datetime" Nullable="false" StoreGeneratedPattern="None" />
           <Property Name="Email" Type="varchar" MaxLength="255" Nullable="false" />
           <Property Name="Password" Type="varbinary" MaxLength="40" />
           <Property Name="RegionCode" Type="varchar" MaxLength="32" />
@@ -353,7 +353,7 @@
             <PropertyRef Name="Guid" />
           </Key>
           <Property Name="Guid" Type="uniqueidentifier" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="CreationDate" Type="datetime" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="CreationDate" Type="datetime" Nullable="false" StoreGeneratedPattern="None" />
           <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Tip_Guid" Type="uniqueidentifier" Nullable="false" />
         </EntityType>
@@ -1368,7 +1368,7 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
               <Summary>Guid que representa al Usuario.</Summary>
             </Documentation>
           </Property>
-          <Property Type="DateTime" Name="CreationDate" Nullable="false" cg:SetterAccess="Public" annotation:StoreGeneratedPattern="Computed" Precision="3" >
+          <Property Type="DateTime" Name="CreationDate" Nullable="false" cg:SetterAccess="Public" annotation:StoreGeneratedPattern="None" Precision="3" >
             <Documentation>
               <Summary>Fecha de Creación del Usuario</Summary>
             </Documentation>
@@ -1450,7 +1450,7 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
           <Key>
             <PropertyRef Name="Guid" />
           </Key>
-          <Property Type="DateTime" Name="CreationDate" Nullable="false" annotation:StoreGeneratedPattern="Identity" Precision="3" >
+          <Property Type="DateTime" Name="CreationDate" Nullable="false" annotation:StoreGeneratedPattern="None" Precision="3" >
             <Documentation>
               <Summary>Fecha y Hora de Inicio de Sesión del Usuario.</Summary>
             </Documentation>
@@ -1465,7 +1465,7 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
               <Summary>Usuario que generó éste Token.</Summary>
             </Documentation>
           </NavigationProperty>
-          <Property Type="DateTime" Name="ExpirationDate" Nullable="true" annotation:StoreGeneratedPattern="Identity" Precision="3" >
+          <Property Type="DateTime" Name="ExpirationDate" Nullable="true" annotation:StoreGeneratedPattern="None" Precision="3" >
             <Documentation>
               <Summary>Fecha de expiración de la Sesión.</Summary>
             </Documentation>
@@ -1476,7 +1476,7 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
             </Documentation>
           </Property>
           <Property Name="Secret" Type="Guid" Nullable="false" />
-          <Property Type="DateTime" Name="LastUseDate" Nullable="true" Precision="3" />
+          <Property Type="DateTime" Name="LastUseDate" Precision="3" annotation:StoreGeneratedPattern="None" />
           <Property Name="LoginAttempts" Type="Byte" Nullable="false" />
           <Property Name="CallbackUri" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="VerificationCode" Type="Guid" />
@@ -1489,7 +1489,7 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
           <Key>
             <PropertyRef Name="Guid" />
           </Key>
-          <Property Type="DateTime" Name="CreationDate" Nullable="false" annotation:StoreGeneratedPattern="Identity" Precision="3" >
+          <Property Type="DateTime" Name="CreationDate" Nullable="false" annotation:StoreGeneratedPattern="None" Precision="3" >
             <Documentation>
               <Summary>Fecha de Creación del Api-Key</Summary>
             </Documentation>
@@ -1546,7 +1546,7 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
               <Summary>Guid del Tip.</Summary>
             </Documentation>
           </Property>
-          <Property Type="DateTime" Name="CreationDate" Nullable="false" annotation:StoreGeneratedPattern="Identity" Precision="3" >
+          <Property Type="DateTime" Name="CreationDate" Nullable="false" annotation:StoreGeneratedPattern="None" Precision="3" >
             <Documentation>
               <Summary>Fecha de Creación del Tip.</Summary>
             </Documentation>
@@ -1953,7 +1953,7 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
               <Summary>Teléfono del Trabajo del Usuario (en formato &lt;Número&gt; x &lt;Extensión&gt;)</Summary>
             </Documentation>
           </Property>
-          <Property Type="DateTime" Name="LastEditDate" annotation:StoreGeneratedPattern="Computed" Precision="3" Nullable="false" >
+          <Property Type="DateTime" Name="LastEditDate" annotation:StoreGeneratedPattern="None" Precision="3" Nullable="false" >
             <Documentation>
               <Summary>Última fecha de modificación de la Información de Contacto.</Summary>
             </Documentation>
@@ -2032,7 +2032,7 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
           <Property Name="Guid" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="User" Relationship="MainModel.UserTipHistoryUser" FromRole="UserTipHistory" ToRole="User" />
           <NavigationProperty Name="Tip" Relationship="MainModel.UserTipHistoryTip" FromRole="UserTipHistory" ToRole="Tip" />
-          <Property Name="CreationDate" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Identity" Precision="3" />
+          <Property Name="CreationDate" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="None" Precision="3" />
         </EntityType>
         <Association Name="UserTipHistoryUser">
           <End Type="MainModel.UserTipHistory" Role="UserTipHistory" Multiplicity="*" />
@@ -2069,7 +2069,7 @@ FROM [dbo].[UserDataTotalDistance] AS [UserDataTotalDistance]</DefiningQuery>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CreationDate" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Identity" Precision="3" />
+          <Property Name="CreationDate" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="None" Precision="3" />
           <Property Name="TrackingCode" Type="String" Nullable="false" MaxLength="Max" Unicode="false" FixedLength="false" />
           <Property Name="TrackingLink" Type="String" Nullable="false" MaxLength="Max" Unicode="false" FixedLength="false" />
           <NavigationProperty Name="UserRewardGiftClaimed" Relationship="MainModel.FK_UserRewardGiftShippingStatusUserRewardGiftClaimed" FromRole="UserRewardGiftShippingStatus" ToRole="UserRewardGiftClaimed" />
