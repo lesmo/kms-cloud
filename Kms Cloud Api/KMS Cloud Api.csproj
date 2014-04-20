@@ -296,6 +296,7 @@
     <Content Include="Global.asax" />
     <Content Include="Areas\Login\Views\Home\OAuthBasicLoginSuccess.cshtml" />
     <Content Include="Areas\Login\Views\Home\OAuthTokenInvalid.cshtml" />
+    <Content Include="KMS Cloud API SNK.pfx" />
     <None Include="Properties\PublishProfiles\KMS Web API.pubxml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -403,6 +404,12 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>KMS Cloud API SNK.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />

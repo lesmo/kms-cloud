@@ -980,6 +980,7 @@
     <Content Include="Assets\Styles\grid.styl" />
     <Content Include="Assets\Scripts\Shared\Lib\jquery-1.10.2.min.js.map" />
     <Content Include="Assets\Scripts\Shared\Lib\jquery-1.10.2.min.map" />
+    <Content Include="KMS Cloud Web App SNK.pfx" />
     <None Include="Web.RemoteDebug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1013,6 +1014,12 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>KMS Cloud Web App SNK.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" />

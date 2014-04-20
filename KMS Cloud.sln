@@ -17,6 +17,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KMS Cloud Globalization", "Kms Cloud Globalization\KMS Cloud Globalization.csproj", "{9AAF5681-CF18-414D-9853-A20FFFA64EBA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Certificates", "Certificates", "{AC30F1A3-5125-403E-B692-286815A94F0F}"
+	ProjectSection(SolutionItems) = preProject
+		Kms Cloud Certificates\api.kms.me.ssl.pfx = Kms Cloud Certificates\api.kms.me.ssl.pfx
+		Kms Cloud Certificates\app.kms.me.ssl.pfx = Kms Cloud Certificates\app.kms.me.ssl.pfx
+		Kms Cloud Certificates\get.kms.me.ssl.pfx = Kms Cloud Certificates\get.kms.me.ssl.pfx
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,5 +58,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{AC30F1A3-5125-403E-B692-286815A94F0F} = {635342BD-9D34-4324-8F62-A5C112648965}
 	EndGlobalSection
 EndGlobal
