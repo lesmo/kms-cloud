@@ -30,6 +30,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>..\KMS Cloud Code Analysis.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -144,6 +145,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Models\Views\Friends\FriendModel.cs" />
     <Compile Include="Models\Views\Friends\FriendsValues.cs" />
     <Compile Include="Models\Views\Layout\LayoutFriend.cs" />
@@ -169,6 +171,9 @@
     <Content Include="Assets\Scripts\Shared\Lib\chart.js" />
     <Content Include="Assets\Scripts\Shared\Lib\chart.min.js" />
     <Content Include="Assets\Scripts\Shared\Gui.Fix.js" />
+    <CodeAnalysisDictionary Include="..\KMS Cloud Code Analysis.ruleset">
+      <Link>KMS Cloud Code Analysis.ruleset</Link>
+    </CodeAnalysisDictionary>
     <None Include="Assets\Overview.js.bundle" />
     <None Include="Assets\Scripts\Shared\Lib\jquery-1.10.2.intellisense.js" />
     <Content Include="Assets\Scripts\Shared\Lib\jquery-1.10.2.js" />
