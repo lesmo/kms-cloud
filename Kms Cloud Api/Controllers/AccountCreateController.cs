@@ -7,6 +7,8 @@ using System;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Globalization;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Kms.Cloud.Api.Controllers {
     /// <summary>
@@ -14,7 +16,7 @@ namespace Kms.Cloud.Api.Controllers {
     ///     que permitirá login con Facebook, Twitter, Fitbit o Nike+, será necesario crear
     ///     una cuenta en éste recurso y posteriormente utilizar el apropiado en OAuth3rdPartyAdd.
     /// </summary>
-    public class AccountCreateController : IKMSController {
+    public class AccountCreateController : BaseController {
         /// <summary>
         ///     Crea una nueva Cuenta en la Nube KMS.
         /// </summary>
@@ -24,8 +26,8 @@ namespace Kms.Cloud.Api.Controllers {
         /// <returns>
         ///
         /// </returns>
-        [HttpPost]
-        [Route("account")]
+        [SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase")]
+        [HttpPost, Route("account")]
         public HttpResponseMessage CreateKmsAccount([FromBody]CreateKmsAccountPost dataPost) {
             // --- Validar que API-Key tenga autorización de crear cuentas --
             if ( ! OAuth.ConsumerKey.AccuntCreateEnabled )
@@ -61,7 +63,7 @@ namespace Kms.Cloud.Api.Controllers {
                         = dataPost.Birthdate,
 
                     Email
-                        = dataPost.Email.ToLower(),
+                        = dataPost.Email.ToLower(CultureInfo.InvariantCulture),
                     PasswordString
                         = dataPost.Password,
 
@@ -140,6 +142,7 @@ namespace Kms.Cloud.Api.Controllers {
                     Content
                         = new StringContent(
                             string.Format(
+                                CultureInfo.CurrentCulture,
                                 "oauth_token={0}&oauth_token_secret={1}&x_expiration_date={2}",
                                 token.Guid.ToString("N"),
                                 token.Secret.ToString("N"),

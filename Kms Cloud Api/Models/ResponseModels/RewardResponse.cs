@@ -12,7 +12,7 @@ namespace Kms.Cloud.Api.Models.ResponseModels {
         public string Text { get; set; }
         public string Source { get; set; }
 
-        public RewardGiftResponse[] RewardGifts { get; set; }
-        public string[] RegionCodes { get; set; }
+        public IEnumerable<RewardGiftResponse> RewardGifts { get; set; }
+        public IEnumerable<String> RegionCodes { get; set; }
     }
 }

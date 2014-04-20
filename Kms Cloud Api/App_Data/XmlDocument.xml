@@ -481,7 +481,7 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
-        <member name="M:Kms.Cloud.Api.Areas.Login.Controllers.HomeController.LoginGui(System.String)">
+        <member name="M:Kms.Cloud.Api.Areas.Login.Controllers.HomeController.LogInUI(System.String)">
             <summary>
             Permite al usuario KMS iniciar sesión con KMS utilizando una interfaz Web
             </summary>
@@ -494,13 +494,13 @@
                 una cuenta en éste recurso y posteriormente utilizar el apropiado en OAuth3rdPartyAdd.
             </summary>
         </member>
-        <member name="F:Kms.Cloud.Api.Controllers.IKMSController.Identity">
+        <member name="F:Kms.Cloud.Api.Controllers.BaseController.Identity">
             <summary>
                 Contiene la Identidad del Contexto de Seguridad actual de
                 la petición, permitiéndo acceder a información 
             </summary>
         </member>
-        <member name="P:Kms.Cloud.Api.Controllers.IKMSController.Database">
+        <member name="P:Kms.Cloud.Api.Controllers.BaseController.Database">
             <summary>
                 Provee acceso a un Contexto de Base de Datos para el
                 controlador actual. Los objetos expuestos por Identity
@@ -685,24 +685,24 @@
                 el Historial de Recompensas (rewards/history).
             </param>
         </member>
-        <member name="M:Kms.Cloud.Api.WebApiApplication.GetAssemblyVersion">
+        <member name="P:Kms.Cloud.Api.WebApiApplication.AssemblyVersion">
             <summary>
                 Devuelve la Versión del Ensamblado del API de KMS.
             </summary>
         </member>
-        <member name="P:Kms.Cloud.Api.Models.RequestModels.OAuth3rdLoginPost.Token">
+        <member name="P:Kms.Cloud.Api.Models.RequestModels.OAuth3rdLogInPost.Token">
             <summary>
                 Token de Sesión generado por el servicio OAuth de Terceros.
             </summary>
         </member>
-        <member name="P:Kms.Cloud.Api.Models.RequestModels.OAuth3rdLoginPost.TokenSecret">
+        <member name="P:Kms.Cloud.Api.Models.RequestModels.OAuth3rdLogInPost.TokenSecret">
             <summary>
                 Token Secret de Sesión generado por el servicio OAuth de Terceros.
                 Los servicios que utilicen OAuth 2.0 no utilizan un Token Secret,
                 y en esos casos debe omitirse.
             </summary>
         </member>
-        <member name="P:Kms.Cloud.Api.Models.RequestModels.OAuth3rdLoginPost.SocialId">
+        <member name="P:Kms.Cloud.Api.Models.RequestModels.OAuth3rdLogInPost.SocialId">
             <summary>
                 ID del Usuario en el servicio OAuth de Terceros.
             </summary>
@@ -772,42 +772,42 @@
                 Contexto de Base de Datos a utilizar para identificar el Consumer y Token.
             </param>
         </member>
-        <member name="F:Kms.Cloud.Api.Security.HttpOAuthAuthorization.ConsumerKey">
+        <member name="P:Kms.Cloud.Api.Security.HttpOAuthAuthorization.ConsumerKey">
             <summary>
             {oauth_consumer_key}
             </summary>
         </member>
-        <member name="F:Kms.Cloud.Api.Security.HttpOAuthAuthorization.Token">
+        <member name="P:Kms.Cloud.Api.Security.HttpOAuthAuthorization.Token">
             <summary>
             {oauth_token}
             </summary>
         </member>
-        <member name="F:Kms.Cloud.Api.Security.HttpOAuthAuthorization.Signature">
+        <member name="P:Kms.Cloud.Api.Security.HttpOAuthAuthorization.Signature">
             <summary>
             {oauth_signature}
             </summary>
         </member>
-        <member name="F:Kms.Cloud.Api.Security.HttpOAuthAuthorization.Timestamp">
+        <member name="P:Kms.Cloud.Api.Security.HttpOAuthAuthorization.Timestamp">
             <summary>
             {oauth_timestamp}
             </summary>
         </member>
-        <member name="F:Kms.Cloud.Api.Security.HttpOAuthAuthorization.Version">
+        <member name="P:Kms.Cloud.Api.Security.HttpOAuthAuthorization.Version">
             <summary>
             {oauth_version}
             </summary>
         </member>
-        <member name="F:Kms.Cloud.Api.Security.HttpOAuthAuthorization.Nonce">
+        <member name="P:Kms.Cloud.Api.Security.HttpOAuthAuthorization.Nonce">
             <summary>
             {oauth_nonce}
             </summary>
         </member>
-        <member name="F:Kms.Cloud.Api.Security.HttpOAuthAuthorization.CallbackUri">
+        <member name="P:Kms.Cloud.Api.Security.HttpOAuthAuthorization.CallbackUri">
             <summary>
             {oauth_callback}
             </summary>
         </member>
-        <member name="F:Kms.Cloud.Api.Security.HttpOAuthAuthorization.VerifierCode">
+        <member name="P:Kms.Cloud.Api.Security.HttpOAuthAuthorization.VerifierCode">
             <summary>
             {oauth_verifier}
             </summary>
@@ -817,7 +817,7 @@
             Devuelve si ésta petición se realizó con un Request Token.
             </summary>
         </member>
-        <member name="M:Kms.Cloud.Api.Security.KMSIdentity.GetCurrentPrincipalIdentity">
+        <member name="M:Kms.Cloud.Api.Security.KmsIdentity.GetCurrentPrincipalIdentity">
             <summary>
                 Devuelve el objeto de Identidad que ostenta el Principal del Thread actual.
             </summary>

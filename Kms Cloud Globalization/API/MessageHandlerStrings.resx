@@ -138,11 +138,20 @@
   <data name="Warning104_OAuthTokenInvalid" xml:space="preserve">
     <value>OAuth Token not found, is expired or invalid</value>
   </data>
-  <data name="Warning105_OAuthTimestampInvalid" xml:space="preserve">
+  <data name="Warning105_OAuthTimestampNotSynced" xml:space="preserve">
     <value>OAuth Timestamp is way too out of sync with server time</value>
   </data>
   <data name="Warning106_OAuthSignatureInvalid" xml:space="preserve">
     <value>OAuth Signature is invalid</value>
+  </data>
+  <data name="Warning107_OAuthVerifierInvalid" xml:space="preserve">
+    <value>OAuth Verifier Code not found, is expired or invalid</value>
+  </data>
+  <data name="Warning108_OAuthCallbackInvalid" xml:space="preserve">
+    <value>OAuth Callback is invalid</value>
+  </data>
+  <data name="Warning109_OAuthTimestampInvalid" xml:space="preserve">
+    <value>OAuth Timestamp is invalid</value>
   </data>
   <data name="Warning110_EncodingInvalid" xml:space="preserve">
     <value>Encoding {0} is not supported</value>

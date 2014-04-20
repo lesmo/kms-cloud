@@ -9,18 +9,19 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Kms.Cloud.Api.Controllers {
     /// <summary>
     ///     Permite interactuar con la lista de Amigos del Usuario.
     /// </summary>
     [Authorize]
-    public class FriendsController : IKMSController {
+    public class FriendsController : BaseController {
         /// <summary>
         ///     Devuelve la lista de Amigos.
         /// </summary>
-        [HttpGet]
-        [Route("friends")]
+        [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
+        [HttpGet, Route("friends")]
         public IEnumerable<FriendResponse> GetFriendsList() {
             return Database.UserFriendStore.GetAll(
                 filter:  f =>
@@ -56,8 +57,8 @@ namespace Kms.Cloud.Api.Controllers {
         ///      Devuelve la lista de marcadores de los Amigos. La lista incluye al Usuario, y está
         ///      ordenada del más alto al más bajo.
         /// </summary>
-        [HttpGet]
-        [Route("friends/highscores")]
+        [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
+        [HttpGet, Route("friends/highscores")]
         public IEnumerable<FriendScoreResponse> GetFriendsHighScores() {
             // > Obtener 
             List<User> userFriends
@@ -223,8 +224,8 @@ namespace Kms.Cloud.Api.Controllers {
         /// <summary>
         ///     Devuelve las Solicitudes de Amistad recibidas por el Usuario.
         /// </summary>
-        [HttpGet]
-        [Route("friends/requests/received")]
+        [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
+        [HttpGet, Route("friends/requests/received")]
         public IEnumerable<FriendResponse> GetReceivedFriendRequests() {
             return Database.UserFriendStore.GetAll(
                 filter: f =>
@@ -258,8 +259,8 @@ namespace Kms.Cloud.Api.Controllers {
         /// <summary>
         ///     Devuelve las Solicitudes de Amistad enviadas por el Usuario.
         /// </summary>
-        [HttpGet]
-        [Route("friends/requests/sent")]
+        [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
+        [HttpGet, Route("friends/requests/sent")]
         public IEnumerable<FriendResponse> GetSentFriendRequests() {
             return Database.UserFriendStore.GetAll(
                 filter: f =>

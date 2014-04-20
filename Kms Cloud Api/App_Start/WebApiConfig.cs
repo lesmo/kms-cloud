@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Web.Http;
 using System.Web.Mvc;
 
 namespace Kms.Cloud.Api {
     public static class WebApiConfig {
-        public static class KmsOAuthConfig {
-            public static readonly string[] RequiredParams = {
+        internal static class KmsOAuthConfig {
+            [SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
+            public static readonly HashSet<string> RequiredParams = new HashSet<string> {
                 "oauth_consumer_key",
                 "oauth_nonce", 
                 "oauth_signature",
@@ -18,17 +20,14 @@ namespace Kms.Cloud.Api {
             };
 
             public const string ApiRealm = "api.kms.me";
-            public const string GuiRealm = "gui.api.kms.me";
 
-            public static readonly string[] BypassOAuthAbsoluteUris = {
-                //"/account"
-            };
+            public static readonly HashSet<string> BypassOAuthAbsoluteUris = new HashSet<string>();
         }
         
         public static void Register(HttpConfiguration config) {
             // --- Configurar ExceptionFilters ---
-            config.Filters.Add(new ExceptionFilters.UnhandledExceptionFilter());
-            config.Filters.Add(new ExceptionFilters.HttpStatusExceptionFilter());
+            config.Filters.Add(new ExceptionFilters.UnhandledExceptionFilterAttributeFilter());
+            config.Filters.Add(new ExceptionFilters.HttpStatusExceptionFilterAttribute());
             config.Filters.Add(new ExceptionFilters.DbValidationExceptionFilter());
 
             // --- Configurar MessageHandlers ---

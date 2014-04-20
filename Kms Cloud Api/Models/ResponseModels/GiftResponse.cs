@@ -11,6 +11,6 @@ namespace Kms.Cloud.Api.Models.ResponseModels {
         public string RedeemCode { get; set; }
         public string RedeemPicture { get; set; }
 
-        public ICollection<string> Pictures { get; set; }
+        public IEnumerable<string> Pictures { get; set; }
     }
 }

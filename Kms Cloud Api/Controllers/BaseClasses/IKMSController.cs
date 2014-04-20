@@ -1,13 +1,14 @@
 ﻿using Kms.Cloud.Api.Security;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 
 namespace Kms.Cloud.Api.Controllers {
-    public abstract class IKMSController : ApiController {
+    public abstract class BaseController : ApiController {
         /// <summary>
         ///     Provee acceso a un Contexto de Base de Datos para el
         ///     controlador actual. Los objetos expuestos por Identity
@@ -29,7 +30,7 @@ namespace Kms.Cloud.Api.Controllers {
         ///     Contiene la Identidad del Contexto de Seguridad actual de
         ///     la petición, permitiéndo acceder a información 
         /// </summary>
-        private KMSIdentity Identity = KMSIdentity.GetCurrentPrincipalIdentity();
+        private KmsIdentity Identity = KmsIdentity.GetCurrentPrincipalIdentity();
 
         protected HttpOAuthAuthorization OAuth {
             get {

@@ -9,12 +9,13 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Kms.Cloud.Api.Controllers {
     [Authorize]
-    public class RewardsController : IKMSController {
-        [HttpGet]
-        [Route("rewards/history")]
+    public class RewardsController : BaseController {
+        [SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
+        [HttpGet, Route("rewards/history")]
         public IEnumerable<RewardResponse> GetRewardsHistory(int page = 1, int perPage = 20) {
             // --- Obtener la última Recompensa conseguida ---
             UserEarnedReward lastReward

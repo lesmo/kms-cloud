@@ -12,6 +12,6 @@ namespace Kms.Cloud.Api.Models.ResponseModels {
         public string NamePlural { get; set; }
         public bool Claimed { get; set; }
 
-        public string[] Pictures { get; set; }
+        public IEnumerable<string> Pictures { get; set; }
     }
 }

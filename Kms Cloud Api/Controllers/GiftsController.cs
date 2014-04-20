@@ -9,15 +9,17 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Globalization;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Kms.Cloud.Api.Controllers {
     [Authorize]
-    public class GiftsController : IKMSController {
+    public class GiftsController : BaseController {
         /// <summary>
         ///     Devuelve el historial de los Regalos conseguidos por el Usuario.
         /// </summary>
-        [HttpGet]
-        [Route("my/gifts/history")]
+        [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
+        [HttpGet, Route("my/gifts/history")]
         public IEnumerable<GiftResponse> GetRewards() {
             throw new NotImplementedException();
         }
@@ -74,6 +76,7 @@ namespace Kms.Cloud.Api.Controllers {
                     = userRewardGiftClaim.RedeemCode,
                 RedeemPicture
                     = string.Format(
+                        CultureInfo.InvariantCulture,
                         "{0}.{1}",
                         userRewardGiftClaim.Guid.ToBase64String(),
                         userRewardGiftClaim.PictureExtension
@@ -168,6 +171,7 @@ namespace Kms.Cloud.Api.Controllers {
                     = giftClaim.RedeemCode,
                 RedeemPicture
                     = string.Format(
+                        CultureInfo.InvariantCulture,
                         "{0}.{1}",
                         giftClaim.Guid.ToBase64String(),
                         giftClaim.PictureExtension

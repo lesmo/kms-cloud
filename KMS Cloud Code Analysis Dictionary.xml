@@ -3,9 +3,23 @@
         <Recognized>
             <Word>Kms</Word>
             <Word>Api</Word>
+            <Word>Auth</Word>
+            <Word>o</Word>
+            <Word>src</Word>
+            <Word>Params</Word>
+            <Word>Fitbit</Word>
+            <Word>3rd</Word>
         </Recognized>
         <Deprecated>
-            <Term PreferredAlternate="LogIn">login</Term>
+            <Term PreferredAlternate="Login">login</Term>
         </Deprecated>
+        <Compound>
+            <Term CompoundAlternate="Login">login</Term>
+        </Compound>
+        <Acronyms>
+            <CasingExceptions>
+                <Acronym>rd</Acronym>   <!-- North East South West -->
+            </CasingExceptions>
+        </Acronyms>
     </Words>
 </Dictionary>

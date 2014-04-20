@@ -10,13 +10,15 @@ using Kms.Cloud.Api.Security;
 using Kms.Cloud.Api.Exceptions;
 using Kilometros_WebGlobalization.API;
 using Kms.Cloud.Api.Models.RequestModels;
+using System.Globalization;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Kms.Cloud.Api.Controllers {
-    public class OAuthController : IKMSController {
+    public class OAuthController : BaseController {
         [HttpPost]
         [Route("oauth/request_token")]
         public HttpResponseMessage OAuthRequestToken() {
-            var identity = KMSIdentity.GetCurrentPrincipalIdentity();
+            var identity = KmsIdentity.GetCurrentPrincipalIdentity();
 
             // --- Evitar doble Login ---
             if ( identity.IsAuthenticated )
@@ -56,6 +58,8 @@ namespace Kms.Cloud.Api.Controllers {
                 Content
                     = new StringContent(
                         string.Format(
+                            CultureInfo.InvariantCulture,
+
                             "oauth_token={0}"
                             + "&oauth_token_secret={1}"
                             + "&oauth_callback_confirmed={2}"
@@ -128,6 +132,7 @@ namespace Kms.Cloud.Api.Controllers {
                 Content
                     = new StringContent(
                         string.Format(
+                            CultureInfo.InvariantCulture,
                             "oauth_token={0}&oauth_token_secret={1}",
                             newToken.Guid.ToString("N"),
                             newToken.Secret.ToString("N")
@@ -136,9 +141,8 @@ namespace Kms.Cloud.Api.Controllers {
             };
         }
 
-        [Authorize]
-        [HttpGet]
-        [Route("oauth/session")]
+        [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
+        [Authorize, HttpGet, Route("oauth/session")]
         public HttpResponseMessage GetToken() {
             Token token
                 = OAuth.Token;
@@ -161,7 +165,7 @@ namespace Kms.Cloud.Api.Controllers {
         [HttpDelete]
         [Route("oauth/session")]
         public HttpResponseMessage DeleteToken() {
-            var identity = KMSIdentity.GetCurrentPrincipalIdentity();
+            var identity = KmsIdentity.GetCurrentPrincipalIdentity();
             var token    = identity.OAuth.Token;
 
             Database.TokenStore.Delete(token.Guid);

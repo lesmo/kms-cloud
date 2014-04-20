@@ -13,20 +13,21 @@ using Kms.Cloud.Database;
 using System.Globalization;
 using Kms.Cloud.Api.Exceptions;
 using Kilometros_WebGlobalization.API;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Kms.Cloud.Api.Controllers {
     /// <summary>
     ///     Devuelve y modifica la Ínformación de la Contacto del Usuario en la Nube KMS.
     /// </summary>
     [Authorize]
-    public class ContactInfoController : IKMSController {
+    public class ContactInfoController : BaseController {
         /// <summary>
         ///     Devuelve la Información de Contacto del Usuario en la Nube KMS.
         /// </summary>
         /// <returns>
         /// </returns>
-        [HttpGet]
-        [Route("my/contact-info")]
+        [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
+        [HttpGet, Route("my/contact-info")]
         public ContactInfoResponse GetContactInfo() {
             ContactInfo contactInfo
                 = CurrentUser.ContactInfo;

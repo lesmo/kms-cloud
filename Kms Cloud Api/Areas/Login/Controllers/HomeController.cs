@@ -6,10 +6,12 @@ using System.Web.Mvc;
 using Kms.Cloud.Database;
 using System.Security.Cryptography;
 using System.Text;
+using System.Globalization;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Kms.Cloud.Api.Areas.Login.Controllers {
     public class HomeController : Controller {
-        public Kms.Cloud.Database.Abstraction.WorkUnit Database
+        private Kms.Cloud.Database.Abstraction.WorkUnit Database
             = new Kms.Cloud.Database.Abstraction.WorkUnit();
 
         private void BasicAuthChallengeResponse() {
@@ -19,7 +21,7 @@ namespace Kms.Cloud.Api.Areas.Login.Controllers {
                 = "Unauthorized";
             Response.AddHeader(
                 "WWW-Authenticate",
-                "Basic realm=\"" + WebApiConfig.KmsOAuthConfig.GuiRealm + "\""
+                "Basic realm=\"" + WebApiConfig.KmsOAuthConfig.ApiRealm + "\""
             );
 
             Response.End();
@@ -29,19 +31,24 @@ namespace Kms.Cloud.Api.Areas.Login.Controllers {
         /// Permite al usuario KMS iniciar sesión con KMS utilizando una interfaz Web
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
-        [HttpPost]
-        public ActionResult LoginGui(string oauth_token) {
+        [SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores")]
+        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "oauth")]
+        [SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "token")]
+        [HttpGet, HttpPost]
+        public ActionResult LogInUI(string oauth_token) {
             // TODO: Buscar cookie de sesión para
             return View();
         }
-        
-        public ActionResult LoginBasic(string oauth_token = null) {
+
+        [SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores")]
+        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "oauth")]
+        [SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "token")]
+        public ActionResult BasicLogin(string oauth_token) {
             // --- Validar cabecera Authorization ---
             Guid oAuthTokenGuid
                 = new Guid();
 
-            if ( oauth_token == null || ! Guid.TryParse(oauth_token, out oAuthTokenGuid) ) {
+            if ( string.IsNullOrEmpty(oauth_token) || ! Guid.TryParse(oauth_token, out oAuthTokenGuid) ) {
                 BasicAuthChallengeResponse();
                 return View("OAuthTokenInvalid");
             }
@@ -49,7 +56,7 @@ namespace Kms.Cloud.Api.Areas.Login.Controllers {
             if (
                 ! Request.Headers.AllKeys.Contains("Authorization")
                 || string.IsNullOrEmpty(Request.Headers["Authorization"])
-                || ! Request.Headers["Authorization"].StartsWith("Basic")
+                || ! Request.Headers["Authorization"].StartsWith("Basic", StringComparison.OrdinalIgnoreCase)
             ) {
                 BasicAuthChallengeResponse();
                 return View("OAuthTokenInvalid");
@@ -57,7 +64,7 @@ namespace Kms.Cloud.Api.Areas.Login.Controllers {
 
             string credentialsEmail, credentialsPassword;
 
-            if ( Request.Headers["Authorization"].StartsWith("Basic") ) {
+            if ( Request.Headers["Authorization"].StartsWith("Basic", StringComparison.OrdinalIgnoreCase) ) {
                 try {
                     string authorizationLine
                         = Request.Headers["Authorization"].Split(
@@ -79,9 +86,16 @@ namespace Kms.Cloud.Api.Areas.Login.Controllers {
                         = authorizationValues[0];
                     credentialsPassword
                         = authorizationValues[1];
-                } catch {
-                    BasicAuthChallengeResponse();
-                    return View();
+                } catch ( Exception ex ) {
+                    if ( ex is ArgumentException || ex is IndexOutOfRangeException ) {
+                        BasicAuthChallengeResponse();
+                        return View();
+                    } else {
+                        throw new InvalidOperationException(
+                            "Uncaught exception occurred during Basic Authentication parsing",
+                            ex
+                        );
+                    }
                 }
             } else {
                 BasicAuthChallengeResponse();
@@ -162,11 +176,12 @@ namespace Kms.Cloud.Api.Areas.Login.Controllers {
                 );
                 return View("OAuthBasicLoginSuccess");
             } else {
-                if ( !callbackUri.EndsWith("?") && !callbackUri.EndsWith("#") )
+                if ( !callbackUri.EndsWith("?", StringComparison.OrdinalIgnoreCase) && !callbackUri.EndsWith("#", StringComparison.OrdinalIgnoreCase) )
                     callbackUri += "?";
 
                 return Redirect(
                     string.Format(
+                        CultureInfo.InvariantCulture,
                         "{0}oauth_token={1}&oauth_verifier={2}",
                         token.CallbackUri,
                         token.Guid.ToString("N"),

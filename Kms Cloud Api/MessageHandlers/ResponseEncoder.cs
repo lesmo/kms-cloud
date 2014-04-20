@@ -1,6 +1,8 @@
 ﻿using Kilometros_WebGlobalization.API;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -31,7 +33,7 @@ namespace Kms.Cloud.Api.MessageHandlers {
                             response.StatusCode = HttpStatusCode.NotAcceptable;
                             response.Headers.TryAddWithoutValidation(
                                 "Warning",
-                                "110 " + string.Format(MessageHandlerStrings.Warning110_EncodingInvalid, encodingType)
+                                "110 " + string.Format(CultureInfo.InvariantCulture, MessageHandlerStrings.Warning110_EncodingInvalid, encodingType)
                             );
 
                             return response;
@@ -46,10 +48,11 @@ namespace Kms.Cloud.Api.MessageHandlers {
             );
         }
 
-        public class CompressedContent : HttpContent {
+        protected class CompressedContent : HttpContent {
             private string encodingType;
             private HttpContent originalContent;
 
+            [SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase")]
             public CompressedContent(HttpContent content, string encodingType) {
                 if (content == null)
                     throw new ArgumentNullException("content");
@@ -58,7 +61,7 @@ namespace Kms.Cloud.Api.MessageHandlers {
                     throw new ArgumentNullException("encodingType");
 
                 originalContent = content;
-                this.encodingType = encodingType.ToLowerInvariant();
+                this.encodingType = encodingType.ToLower(CultureInfo.InvariantCulture);
 
                 // copy the headers from the original content
                 foreach (KeyValuePair<string, IEnumerable<string>> header in originalContent.Headers)

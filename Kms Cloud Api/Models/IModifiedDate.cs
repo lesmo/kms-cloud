@@ -6,13 +6,8 @@ using System.Web;
 namespace Kms.Cloud.Api.Models {
     public abstract class IModifiedDate {
         public virtual DateTime LastModified {
-            get {
-                return this._lastModified;
-            }
-            set {
-                this._lastModified = value;
-            }
+            get;
+            set;
         }
-        private DateTime _lastModified;
     }
 }

@@ -15,6 +15,9 @@ using System.Data.Entity.Validation;
 using Kilometros_WebGlobalization.API;
 using Kms.Cloud.Api.Exceptions;
 using System.Threading;
+using Kms.Cloud.Api.MagicTriggers;
+using System.Globalization;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Kms.Cloud.Api.Controllers {
     /// <summary>
@@ -22,7 +25,7 @@ namespace Kms.Cloud.Api.Controllers {
     ///     soportados por la Nube KMS.
     /// </summary>
     [Authorize]
-    public class DataController : IKMSController {
+    public class DataController : BaseController {
         /// <summary>
         ///     Devuelve los pasos dados y la distancia recorrida por el Usuario divididos por hora,
         ///     únicamente en el rango temporal establecido.
@@ -45,14 +48,14 @@ namespace Kms.Cloud.Api.Controllers {
         public IEnumerable<DataDistanceResponse> SearchDistance(string activity, DateTime from, DateTime until) {
             // --- Validar que activity esté soportado ---
             activity
-                = activity.ToUpper();
+                = activity.ToUpper(CultureInfo.InvariantCulture);
             string[] activityEnum
                 = Enum.GetNames(typeof(DataActivity));
             short activityId
                 = 0;
 
             for ( short i = 1; i < activityEnum.Length; i++ ) {
-                if ( activityEnum[0].ToUpper() == activity )
+                if ( activityEnum[0].ToUpper(CultureInfo.InvariantCulture) == activity )
                     activityId = i;
             }
 
@@ -71,9 +74,9 @@ namespace Kms.Cloud.Api.Controllers {
             TimeSpan timeSpan = until - from;
 
             if ( timeSpan.Days < 0 ) // orden correcto
-                throw new ArgumentOutOfRangeException("timeSpan", "You're joking, right?");
+                throw new ArgumentOutOfRangeException("from", "You're joking, right?");
             if ( timeSpan.Days > 365 ) // menor a 1 año de rango (8000~ registros)
-                throw new ArgumentOutOfRangeException("timeSpan", "Time range is so fucking long.");
+                throw new ArgumentOutOfRangeException("until", "Time range is so fucking long.");
 
             // --- Obtener distancias recorridas en el rango especificado ---
             DataActivity dataActivity
@@ -109,8 +112,8 @@ namespace Kms.Cloud.Api.Controllers {
         /// <returns>
         ///     Los pasos totales dados y las distancias totales recorridas por el Usuario.
         /// </returns>
-        [HttpGet]
-        [Route("data/total")]
+        [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
+        [HttpGet, Route("data/total")]
         public DataTotalResponse GetDistanceTotal() {
             // --- Obtener Distancia Total ---
             IEnumerable<UserDataTotalDistance> distanceView
@@ -207,8 +210,8 @@ namespace Kms.Cloud.Api.Controllers {
 
             // TODO: Incluir un algoritmo que mejore la solución al problema
             //       de datos replicados y sincronía.
-            HashSet<DataPost> finalDataPost
-                = new HashSet<DataPost>();
+            List<DataPost> finalDataPost
+                = new List<DataPost>();
 
             foreach ( DataPost i in dataPost ) {
                 if ( i.Timestamp > lastDataTimestamp )
@@ -297,14 +300,14 @@ namespace Kms.Cloud.Api.Controllers {
         private void PrepareDataInsert(DataPost dataPost) {
             // --- Validar que Activity esté soportado ---
             string activity
-                = dataPost.Activity.ToUpper();
+                = dataPost.Activity.ToUpper(CultureInfo.InvariantCulture);
             string[] activityEnum
                 = Enum.GetNames(typeof(DataActivity));
             short activityId
                 = 0;
 
             for ( short i = 1; i < activityEnum.Length; i++ ) {
-                if ( activityEnum[0].ToUpper() == activity )
+                if ( activityEnum[0].ToUpper(CultureInfo.InvariantCulture) == activity )
                     activityId = i;
             }
 
@@ -375,10 +378,10 @@ namespace Kms.Cloud.Api.Controllers {
 
         private void MagicTriggers() {
             new Thread(
-                new ParameterizedThreadStart((object userGuid) => {
-                    new MagicTriggers.AsyncRewardTipTrigger().ForUserGuid((Guid)userGuid);
+                new ParameterizedThreadStart((object user) => {
+                    new AsyncRewardTipTrigger(user as User);
                 })
-            ).Start(CurrentUser.Guid);
+            ).Start(CurrentUser);
         }
     }
 

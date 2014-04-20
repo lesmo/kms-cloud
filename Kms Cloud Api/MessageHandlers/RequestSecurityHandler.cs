@@ -46,7 +46,7 @@ namespace Kms.Cloud.Api.MessageHandlers {
                 )
             ) {
                 // Crear Principal Anónimo y continuar ejecución
-                new KmsPrincipal(new KMSIdentity()).SetAsCurrent();
+                new KmsPrincipal(new KmsIdentity()).SetAsCurrent();
 
                 return await base.SendAsync(
                     request,
@@ -106,7 +106,7 @@ namespace Kms.Cloud.Api.MessageHandlers {
             }
 
             // --- Establecer contexto de seguridad ---
-            var identity = new KMSIdentity(httpOAuth);
+            var identity = new KmsIdentity(httpOAuth);
             new KmsPrincipal(identity).SetAsCurrent();
             
             // --- Continuar con la ejecución ---

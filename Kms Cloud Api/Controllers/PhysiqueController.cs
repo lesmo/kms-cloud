@@ -13,12 +13,13 @@ using Kms.Cloud.Database;
 using System.Globalization;
 using Kms.Cloud.Api.Exceptions;
 using Kilometros_WebGlobalization.API;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Kms.Cloud.Api.Controllers {
     [Authorize]
-    public class PhysiqueController : IKMSController {
-        [HttpGet]
-        [Route("my/physique")]
+    public class PhysiqueController : BaseController {
+        [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
+        [HttpGet, Route("my/physique")]
         public PhysiqueResponse GetPhysique() {
             UserBody physique
                 = CurrentUser.UserBody;

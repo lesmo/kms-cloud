@@ -6,12 +6,12 @@ using System.Security.Principal;
 using System.Web;
 
 namespace Kms.Cloud.Api.Security {
-    public class KMSIdentity : IIdentity {
+    public class KmsIdentity : IIdentity {
         /// <summary>
         ///     Devuelve el objeto de Identidad que ostenta el Principal del Thread actual.
         /// </summary>
-        public static KMSIdentity GetCurrentPrincipalIdentity() {
-            return KmsPrincipal.CurrentPrincipal().Identity as KMSIdentity;
+        public static KmsIdentity GetCurrentPrincipalIdentity() {
+            return KmsPrincipal.CurrentPrincipal().Identity as KmsIdentity;
         }
 
         public string AuthenticationType {
@@ -45,7 +45,7 @@ namespace Kms.Cloud.Api.Security {
         }
         private HttpOAuthAuthorization _oAuth;
 
-        public KMSIdentity(HttpOAuthAuthorization httpOAuth = null, string authenticationType = "KmsToken") {
+        public KmsIdentity(HttpOAuthAuthorization httpOAuth = null, string authenticationType = "KmsToken") {
             if ( httpOAuth == null )
                 return;
 

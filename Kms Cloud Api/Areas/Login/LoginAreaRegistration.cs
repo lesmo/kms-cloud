@@ -14,7 +14,7 @@ namespace Kms.Cloud.Api.Areas.Login {
                 "oauth/authorize-basic",
                 new {
                     controller = "Home",
-                    action = "LoginBasic"
+                    action = "BasicLogIn"
                 }
             );
         }

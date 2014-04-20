@@ -9,6 +9,7 @@ using Kms.Cloud.Database;
 using System.Net;
 using System.Globalization;
 using Kilometros_WebGlobalization.API;
+using System.Diagnostics.CodeAnalysis;
 using System.Web;
 
 namespace Kms.Cloud.Api.Controllers {
@@ -16,12 +17,13 @@ namespace Kms.Cloud.Api.Controllers {
     ///     Devuelve y modifica la Ínformación de la Cuenta de Usuario en la Nube KMS.
     /// </summary>
     [Authorize]
-    public class AccountController : IKMSController {
+    public class AccountController : BaseController {
         /// <summary>
         ///     Devuelve la Información de Cuenta de Usuario en la Nube KMS.
         /// </summary>
         /// <returns>
         /// </returns>
+        [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
         [HttpGet]
         [Route("my/account")]
         public AccountResponse GetAccount() {
@@ -51,15 +53,15 @@ namespace Kms.Cloud.Api.Controllers {
         ///     Nueva Información de Cuenta de Usuario en la Nube KMS.
         /// </param>
         /// <returns>HTTP 200 OK</returns>
-        [HttpPost]
-        [Route("my/account")]
+        [SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase")]
+        [HttpPost, Route("my/account")]
         public HttpResponseMessage PostAccount([FromBody]AccountPost accountPost) {
             CurrentUser.PreferredCultureCode
-                = accountPost.PreferredCultureCode.ToLowerInvariant();
+                = accountPost.PreferredCultureCode.ToUpper(CultureInfo.InvariantCulture);
             CurrentUser.RegionCode
-                = accountPost.RegionCode.ToLowerInvariant();
+                = accountPost.RegionCode.ToUpper(CultureInfo.InvariantCulture);
             CurrentUser.Email
-                = accountPost.Email.ToLowerInvariant();
+                = accountPost.Email.ToLower(CultureInfo.InvariantCulture);
             
             Database.UserStore.Update(CurrentUser);
             Database.SaveChanges();

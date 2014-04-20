@@ -15,7 +15,7 @@ using Kms.Cloud.Api.Exceptions;
 using System.Text;
 
 namespace Kms.Cloud.Api.Controllers {
-    public class OAuth3rdPartyLoginController : IKMSController {
+    public class OAuth3rdPartyLoginController : BaseController {
         [HttpPost]
         [Route("oauth/3rd/facebook/login")]
         public void FacebookLogin([FromBody]OAuth3rdLoginPost postData) {

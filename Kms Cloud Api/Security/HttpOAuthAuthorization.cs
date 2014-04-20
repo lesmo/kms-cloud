@@ -1,8 +1,11 @@
-﻿using Kms.Cloud.Database;
+﻿using Kilometros_WebGlobalization.API;
+using Kms.Cloud.Api.Exceptions;
+using Kms.Cloud.Database;
 using Kms.Cloud.Database.Abstraction;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -96,38 +99,20 @@ namespace Kms.Cloud.Api.Security {
             }
 
             // --- Capturar parámetros de OAuth ---
-            if ( oAuthParameters.ContainsKey("oauth_consumer_key") ) {
-                this.ConsumerKey
-                    = database.ApiKeyStore.Get(
-                        new Guid(oAuthParameters["oauth_consumer_key"])
-                    );
-            } else {
-                this.ConsumerKey
-                    = null;
+            this.ConsumerKey
+                = database.ApiKeyStore.Get(oAuthParameters["oauth_consumer_key"]);            
+            this.Token
+                = database.TokenStore.Get(oAuthParameters["oauth_token"]);
+
+            if (
+                this.Token != null
+                && this.Token.ExpirationDate.HasValue
+                && this.Token.ExpirationDate.Value < DateTime.UtcNow
+            ) {
+                database.TokenStore.Delete(this.Token.Guid);
+                database.SaveChanges();
             }
-
-            if ( oAuthParameters.ContainsKey("oauth_token") ) {
-                this.Token
-                    = database.TokenStore.Get(
-                        new Guid(oAuthParameters["oauth_token"])
-                    );
-
-                if (
-                    this.Token != null
-                    && this.Token.ExpirationDate.HasValue
-                    && this.Token.ExpirationDate.Value < DateTime.UtcNow
-                ) {
-                    database.TokenStore.Delete(this.Token.Guid);
-                    database.SaveChanges();
-
-                    this.Token
-                        = null;
-                }
-            } else {
-                this.Token
-                    = null;
-            }
-
+            
             if ( 
                 oAuthParameters.ContainsKey("oauth_signature")
                 && oAuthParameters.ContainsKey("oauth_signature_method")
@@ -142,15 +127,11 @@ namespace Kms.Cloud.Api.Security {
                     = null;
             }
 
-            if ( oAuthParameters.ContainsKey("oauth_timestamp") ) {
+            try {
                 string oAuthTimestampString
                     = oAuthParameters["oauth_timestamp"];
                 long oAuthTimestampSeconds
-                    = long.Parse(
-                        oAuthTimestampString
-                    );
-                
-                // Crear objeto de fecha
+                    = long.Parse(oAuthTimestampString, CultureInfo.InvariantCulture);
                 DateTime timestampBase
                     = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
                 timestampBase
@@ -162,12 +143,11 @@ namespace Kms.Cloud.Api.Security {
                 if ( timestampSpan.Seconds < 181 && timestampSpan.Seconds > -179 )
                     this.Timestamp
                         = timestampBase;
-                else
-                    this.Timestamp
-                        = null;
-            } else {
-                this.Timestamp
-                    = null;
+            } catch ( Exception ex ) {
+                throw new HttpBadRequestException(
+                    "109 " + MessageHandlerStrings.Warning109_OAuthTimestampInvalid,
+                    ex
+                );
             }
             
             if ( oAuthParameters.ContainsKey("oauth_version") ) {
@@ -177,13 +157,7 @@ namespace Kms.Cloud.Api.Security {
                 ) {
                     this.Version
                         = new Version(1, 0);
-                } else {
-                    this.Version
-                        = null;
                 }
-            } else {
-                this.Version
-                    = null;
             }
 
             if ( oAuthParameters.ContainsKey("oauth_nonce") ) {
@@ -204,39 +178,29 @@ namespace Kms.Cloud.Api.Security {
                         
                     database.OAuthNonceStore.Add(this.Nonce);
                     database.SaveChanges();
-                } else {
-                    this.Nonce
-                        = null;
                 }
-            } else {
-                this.Nonce
-                    = null;
             }
 
-            if ( oAuthParameters.ContainsKey("oauth_callback") ) {
-                try {
-                    this.CallbackUri
-                        = new Uri(oAuthParameters["oauth_callback"]);
-                } catch {
-                    this.CallbackUri
-                        = null;
-                }
-            } else {
+            try {
                 this.CallbackUri
-                    = null;
+                    = new Uri(oAuthParameters["oauth_callback"]);
+            } catch ( ArgumentNullException ) {
+            } catch ( UriFormatException ex ) {
+                throw new HttpBadRequestException(
+                    "108 " + MessageHandlerStrings.Warning108_OAuthCallbackInvalid,
+                    ex
+                );
             }
 
-            if ( oAuthParameters.ContainsKey("oauth_verifier") ) {
-                try {
-                    this.VerifierCode
-                        = new Guid(oAuthParameters["oauth_verifier"]);
-                } catch {
-                    this.VerifierCode
-                        = null;
-                }
-            } else {
+            try {
                 this.VerifierCode
-                    = null;
+                    = Guid.Parse(oAuthParameters["oauth_verifier"]);
+            } catch ( ArgumentNullException ) {
+            } catch ( FormatException ex ) {
+                throw new HttpBadRequestException(
+                    "107 " + MessageHandlerStrings.Warning107_OAuthVerifierInvalid,
+                    ex
+                );
             }
         }
 
@@ -246,36 +210,60 @@ namespace Kms.Cloud.Api.Security {
         /// <summary>
         /// {oauth_consumer_key}
         /// </summary>
-        public readonly ApiKey ConsumerKey;
+        public ApiKey ConsumerKey {
+            get;
+            private set;
+        }
         /// <summary>
         /// {oauth_token}
         /// </summary>
-        public readonly Token Token;
+        public Token Token {
+            get;
+            private set;
+        }
         /// <summary>
         /// {oauth_signature}
         /// </summary>
-        public readonly string Signature;
+        public string Signature {
+            get;
+            private set;
+        }
         /// <summary>
         /// {oauth_timestamp}
         /// </summary>
-        public readonly DateTime? Timestamp;
+        public DateTime? Timestamp {
+            get;
+            private set;
+        }
         /// <summary>
         /// {oauth_version}
         /// </summary>
-        public readonly Version Version;
+        public Version Version {
+            get;
+            private set;
+        }
         /// <summary>
         /// {oauth_nonce}
         /// </summary>
-        public readonly OAuthNonce Nonce;
+        public OAuthNonce Nonce {
+            get;
+            private set;
+        }
         
         /// <summary>
         /// {oauth_callback}
         /// </summary>
-        public readonly Uri CallbackUri;
+        public Uri CallbackUri {
+            get;
+            set;
+        }
         /// <summary>
         /// {oauth_verifier}
         /// </summary>
-        public readonly Guid? VerifierCode;
+        public Guid? VerifierCode {
+            get;
+            set;
+        }
 
         /// <summary>
         /// Devuelve si ésta petición se realizó con un Request Token.

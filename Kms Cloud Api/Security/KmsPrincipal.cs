@@ -5,10 +5,11 @@ using System.Security.Principal;
 using System.Threading;
 using System.Web;
 using Kms.Cloud.Api;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Kms.Cloud.Api.Security {
     public class KmsPrincipal : IPrincipal {
-        public KmsPrincipal(KMSIdentity identity) {
+        public KmsPrincipal(KmsIdentity identity) {
             this.Identity = identity;
         }
 
@@ -19,7 +20,7 @@ namespace Kms.Cloud.Api.Security {
 
         public bool IsInRole(string role) {
             throw new NotImplementedException(
-                "KMS uses no Roles for Users as of v" + WebApiApplication.GetAssemblyVersion().ToString()
+                "KMS uses no Roles for Users as of v" + WebApiApplication.AssemblyVersion.ToString()
             );
         }
 
@@ -33,10 +34,11 @@ namespace Kms.Cloud.Api.Security {
             else if ( HttpContext.Current.User != null )
                 return HttpContext.Current.User as KmsPrincipal;
             
-            new KmsPrincipal(new KMSIdentity()).SetAsCurrent();
+            new KmsPrincipal(new KmsIdentity()).SetAsCurrent();
             return CurrentPrincipal();
         }
 
+        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public static void SetCurrentPrincipal(KmsPrincipal principal) {
             Thread.CurrentPrincipal = principal;
 

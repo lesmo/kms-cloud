@@ -8,7 +8,7 @@ using System.Web.Http;
 
 namespace Kms.Cloud.Api.Controllers {
     [Authorize]
-    public class OAuth3rdPartyAddController : IKMSController {
+    public class OAuth3rdPartyAddController : BaseController {
         [HttpPost]
         [Route("oauth/3rd/facebook/add")]
         public void FacebookAdd([FromBody]OAuth3rdLoginPost postData) {

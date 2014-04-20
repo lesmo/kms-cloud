@@ -2,13 +2,14 @@
 using Kms.Cloud.Api.Models.ResponseModels;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Web;
 using System.Web.Http;
 
 namespace Kms.Cloud.Api.Areas.HelpPage.CustomSamples {
-    public class MyContactInfoControllerSamples {
+    public static class MyContactInfoControllerSamples {
         public static void Register(Dictionary<Type, object> typeSamples, HttpConfiguration config) {
             // --- Petición ---
             typeSamples.Add(
@@ -27,6 +28,8 @@ namespace Kms.Cloud.Api.Areas.HelpPage.CustomSamples {
 
             config.SetSampleRequest(
                 string.Format(
+                    CultureInfo.InvariantCulture,
+
                     "Email={0}\n"
                     + "&PreferredCultureCode={1}\n"
                     + "&RegionCode={2}\n"
@@ -63,6 +66,7 @@ namespace Kms.Cloud.Api.Areas.HelpPage.CustomSamples {
                     PictureUri
                         = new Uri(
                             string.Format(
+                                CultureInfo.InvariantCulture,
                                 "http://api.kms.me/media/img/{0}.{1}",
                                 DefaultValues.GuidBase642,
                                 "png"

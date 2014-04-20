@@ -10,12 +10,13 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Kms.Cloud.Api.Controllers {
     [Authorize]
-    public class TipsController : IKMSController {
-        [HttpGet]
-        [Route("tips/categories")]
+    public class TipsController : BaseController {
+        [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
+        [HttpGet, Route("tips/categories")]
         public IEnumerable<TipCategoryResponse> GetTipsCategories() {
             // --- Verificar si se tiene la cabecera {If-Modified-Since} ---
             DateTimeOffset? ifModifiedSince

@@ -126,9 +126,9 @@ namespace Kilometros_WebGlobalization.API {
         /// <summary>
         ///   Looks up a localized string similar to OAuth Timestamp is way too out of sync with server time.
         /// </summary>
-        public static string Warning105_OAuthTimestampInvalid {
+        public static string Warning105_OAuthTimestampNotSynced {
             get {
-                return ResourceManager.GetString("Warning105_OAuthTimestampInvalid", resourceCulture);
+                return ResourceManager.GetString("Warning105_OAuthTimestampNotSynced", resourceCulture);
             }
         }
         
@@ -138,6 +138,33 @@ namespace Kilometros_WebGlobalization.API {
         public static string Warning106_OAuthSignatureInvalid {
             get {
                 return ResourceManager.GetString("Warning106_OAuthSignatureInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OAuth Verifier Code not found, is expired or invalid.
+        /// </summary>
+        public static string Warning107_OAuthVerifierInvalid {
+            get {
+                return ResourceManager.GetString("Warning107_OAuthVerifierInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OAuth Callback is invalid.
+        /// </summary>
+        public static string Warning108_OAuthCallbackInvalid {
+            get {
+                return ResourceManager.GetString("Warning108_OAuthCallbackInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OAuth Timestamp is invalid.
+        /// </summary>
+        public static string Warning109_OAuthTimestampInvalid {
+            get {
+                return ResourceManager.GetString("Warning109_OAuthTimestampInvalid", resourceCulture);
             }
         }
         

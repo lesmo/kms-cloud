@@ -1,18 +1,24 @@
 ﻿using Kms.Cloud.Database;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Web;
 
 namespace Kms.Cloud.Api.MagicTriggers {
-    public class AsyncRewardTipTrigger {
+    [SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly")]
+    public sealed class AsyncRewardTipTrigger : IDisposable {
         private Kms.Cloud.Database.Abstraction.WorkUnit Database
             = new Kms.Cloud.Database.Abstraction.WorkUnit();
         private User CurrentUser;
 
-        public void ForUserGuid(Guid userGuid) {
+        public void Dispose() {
+            Database.Dispose();
+        }
+
+        public AsyncRewardTipTrigger(User currentUser) {
             // --- Obtener objeto de Usuario ---
-            CurrentUser = Database.UserStore[userGuid];
+            CurrentUser = Database.UserStore[currentUser.Guid];
 
             if ( CurrentUser == null)
                 return;

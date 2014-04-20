@@ -9,32 +9,32 @@ using System.Web;
 using System.Web.Http.Filters;
 
 namespace Kms.Cloud.Api.ExceptionFilters {
-    public class HttpStatusExceptionFilter : ExceptionFilterAttribute {
-        public override void OnException(HttpActionExecutedContext httpContext) {
-            if ( httpContext.Exception is HttpNotModifiedException ) {
-                httpContext.Response
+    public sealed class HttpStatusExceptionFilterAttribute : ExceptionFilterAttribute {
+        public override void OnException(HttpActionExecutedContext actionExecutedContext) {
+            if ( actionExecutedContext.Exception is HttpNotModifiedException ) {
+                actionExecutedContext.Response
                     = new HttpResponseMessage(HttpStatusCode.NotModified);
-            } else if ( httpContext.Exception is HttpNoContentException ) {
-                httpContext.Response
+            } else if ( actionExecutedContext.Exception is HttpNoContentException ) {
+                actionExecutedContext.Response
                     = new HttpResponseMessage(HttpStatusCode.NoContent);
-            } else if ( httpContext.Exception is HttpAlreadyLoggedInException ) {
-                httpContext.Response
+            } else if ( actionExecutedContext.Exception is HttpAlreadyLoggedInException ) {
+                actionExecutedContext.Response
                     = new HttpResponseMessage(HttpStatusCode.Forbidden);
-            } else if ( httpContext.Exception is HttpUnauthorizedException ) {
-                httpContext.Response
+            } else if ( actionExecutedContext.Exception is HttpUnauthorizedException ) {
+                actionExecutedContext.Response
                     = new HttpResponseMessage(HttpStatusCode.Unauthorized);
-            } else if ( httpContext.Exception is HttpConflictException ) {
-                httpContext.Response
+            } else if ( actionExecutedContext.Exception is HttpConflictException ) {
+                actionExecutedContext.Response
                     = new HttpResponseMessage(HttpStatusCode.Conflict);
             }
 
             if (
-                httpContext.Exception.Message != null
-                && (httpContext.Exception is HttpProcessException)
-                && !(httpContext.Exception is HttpNoContentException)
+                actionExecutedContext.Exception.Message != null
+                && (actionExecutedContext.Exception is HttpProcessException)
+                && !(actionExecutedContext.Exception is HttpNoContentException)
             ) {
-                httpContext.Response.Content
-                    = new StringContent(httpContext.Exception.Message);
+                actionExecutedContext.Response.Content
+                    = new StringContent(actionExecutedContext.Exception.Message);
             }
         }
     }

@@ -9,39 +9,43 @@ using System.Net;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http.Filters;
+using System.Globalization;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Kms.Cloud.Api.ExceptionFilters {
-    public class UnhandledExceptionFilter : ExceptionFilterAttribute {
-        public override void OnException(HttpActionExecutedContext httpContext) {
+    [SuppressMessage("Microsoft.Design", "CA1018:MarkAttributesWithAttributeUsage")]
+    public sealed class UnhandledExceptionFilterAttributeFilter : ExceptionFilterAttribute {
+        public override void OnException(HttpActionExecutedContext actionExecutedContext) {
             if (
-                httpContext.Exception is HttpProcessException
-                || httpContext.Exception is DbEntityValidationException
+                actionExecutedContext.Exception is HttpProcessException
+                || actionExecutedContext.Exception is DbEntityValidationException
             ) {
                 return;
-            } else if ( httpContext.Exception is NotImplementedException ) {
-                httpContext.Response
+            } else if ( actionExecutedContext.Exception is NotImplementedException ) {
+                actionExecutedContext.Response
                     = new HttpResponseMessage(HttpStatusCode.NotImplemented);
-                httpContext.Response.Content
+                actionExecutedContext.Response.Content
                     = new StringContent(
                         ControllerStrings.GenericNotImplemented
                     );
             } else if (
-                httpContext.Exception is ArgumentException
-                || httpContext.Exception is ArgumentOutOfRangeException
+                actionExecutedContext.Exception is ArgumentException
+                || actionExecutedContext.Exception is ArgumentOutOfRangeException
             ) {
-                httpContext.Response
+                actionExecutedContext.Response
                     = new HttpResponseMessage(HttpStatusCode.BadRequest);
                 string responseMessage
                     = string.Format(
+                        CultureInfo.CurrentCulture,
                         "{0}",
-                        httpContext.Exception.Message
+                        actionExecutedContext.Exception.Message
                     );
-                httpContext.Response.Content
+                actionExecutedContext.Response.Content
                     = new StringContent(responseMessage);
             } else if ( ! Debugger.IsAttached ) {
                 // Throw in ELMAH call
             } else {
-                throw new Exception("Ahoy! An exception!", httpContext.Exception);
+                throw new OperationCanceledException("Ahoy! An exception!", actionExecutedContext.Exception);
             }
         }
     }
