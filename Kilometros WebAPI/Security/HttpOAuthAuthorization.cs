@@ -328,8 +328,8 @@ namespace Kilometros_WebAPI.Security {
                     continue;
 
                 contentItems.Add(
-                    param.Key,
-                    param.Value
+                    Uri.UnescapeDataString(param.Key),
+                    Uri.UnescapeDataString(param.Value)
                 );
             }
 
@@ -414,20 +414,22 @@ namespace Kilometros_WebAPI.Security {
 
             // Generar llave de HMAC-SHA1
             string hmacSha1Key
-                = this.ConsumerKey.Secret.ToString("N") + "&";
+                = string.Format(
+                    "{0}&{1}",
+                    this.ConsumerKey.Secret.ToString("N"),
+                    this.Token == null
+                        ? ""
+                        : this.Token.Secret.ToString("N")
+                );
             
-            if ( this.Token != null )
-                hmacSha1Key
-                    += this.Token.Secret.ToString("N");
-
             // - [4] Calcular HMAC-SHA1 de BaseString -
             // Obtener HMAC-SHA1
             HMACSHA1 hmacSha1 = new HMACSHA1(
-                Encoding.ASCII.GetBytes(hmacSha1Key)
+                Encoding.UTF8.GetBytes(hmacSha1Key)
             );
             byte[] hmacSha1Bytes
                 = hmacSha1.ComputeHash(
-                    Encoding.ASCII.GetBytes(baseString.ToString())
+                    Encoding.UTF8.GetBytes(baseString.ToString())
                 );
 
             // Generar hash como Base64
