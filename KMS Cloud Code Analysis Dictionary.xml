@@ -1,0 +1,11 @@
+﻿<Dictionary>
+    <Words>
+        <Recognized>
+            <Word>Kms</Word>
+            <Word>Api</Word>
+        </Recognized>
+        <Deprecated>
+            <Term PreferredAlternate="LogIn">login</Term>
+        </Deprecated>
+    </Words>
+</Dictionary>

@@ -1,0 +1,43 @@
+@using System.Web.Http
+@using System.Web.Http.Controllers
+@using System.Web.Http.Description
+@using System.Collections.ObjectModel
+@using Kms.Cloud.Api.Areas.HelpPage.Models
+@using System.Reflection;
+@model Collection<ApiDescription>
+
+@{
+    ViewBag.Title = "ASP.NET Web API Help Page";
+
+    // Group APIs by controller
+    ILookup<HttpControllerDescriptor, ApiDescription> apiGroups = Model.ToLookup(api => api.ActionDescriptor.ControllerDescriptor);
+    Version apiVersion = Kms.Cloud.Api.WebApiApplication.GetAssemblyVersion();
+}
+
+    <link type="text/css" href="~/Areas/HelpPage/HelpPage.css" rel="stylesheet" />
+    <div id="body" class="help-page">
+        <section class="featured">
+            <div class="content-wrapper">
+                <h1>@(apiName.Name) v@(apiVersion.ToString(2))</h1>
+                <p>
+                    El <strong>API REST de KMS</strong> utiliza el protocolo <a href="http://www.oauth.net">OAuth 1.0a</a>
+                    para controlar el acceso a los <strong>Recursos HTTP</strong>, tanto para escribir como para leer información de la
+                    <strong>Nube de KMS</strong>, de forma que en un futuro nuestra Nube podría ser utilizada por aplicaciones
+                    o servicios desarrollados por terceros.
+                </p>
+                <p>
+                    La <strong>Nube KMS</strong> tiene la capacidad de responder a las peticiones utilizando <strong>JSON</strong>
+                    o <strong>XML</strong>, según defina la petición <strong>HTTP</strong>. Este comportamiento que puede definirse a través de las
+                    <a href="#">Cabeceras HTTP</a>.
+                </p>
+                <p>
+                    La documentación de cada uno de los <i>Recursos HTTP</i> está siempre actualizada con los últimos cambios y modificaciones añadidos al API
+                </p>
+            </div>
+        </section>
+        <section class="content-wrapper main-content clear-fix">
+            @foreach ( var group in apiGroups.OrderBy(o => o.Key.ControllerName) ) {
+                @Html.DisplayFor(m => group, "ApiGroup")
+            }
+        </section>
+    </div>
