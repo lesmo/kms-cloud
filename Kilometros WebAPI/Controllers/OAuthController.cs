@@ -26,7 +26,7 @@ namespace Kilometros_WebAPI.Controllers {
             Token token
                 = new Token() {
                     ApiKey
-                        = Database.ApiKeyStore[Identity.ApiKey.Guid],
+                        = OAuth.ConsumerKey,
                     Guid
                         = Guid.NewGuid(),
                     Secret
@@ -37,10 +37,6 @@ namespace Kilometros_WebAPI.Controllers {
                         ? "oob"
                         : OAuth.CallbackUri.AbsoluteUri,
 
-                    CreationDate
-                        = DateTime.UtcNow,
-                    LastUseDate
-                        = DateTime.UtcNow,
                     ExpirationDate
                         = DateTime.UtcNow.AddMinutes(10)
                 };
@@ -108,14 +104,10 @@ namespace Kilometros_WebAPI.Controllers {
                         = null,
 
                     User
-                        = OAuth.Token.User,
+                        = CurrentUser,
 
-                    CreationDate
-                        = DateTime.UtcNow,
                     ExpirationDate
                         = DateTime.UtcNow.AddMonths(3),
-                    LastUseDate
-                        = DateTime.UtcNow,
                     LoginAttempts
                         = OAuth.Token.LoginAttempts,
                 };
