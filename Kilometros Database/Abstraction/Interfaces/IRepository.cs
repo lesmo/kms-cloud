@@ -16,8 +16,33 @@ namespace KilometrosDatabase.Abstraction.Interfaces {
         /// </summary>
         protected DbSet _dbSet;
         protected MainModelContainer _context;
+        
+        private IEnumerable<PropertyInfo> _autosetInsertDateProperties;
+        private IEnumerable<PropertyInfo> _autosetUpdateDateProperties;
+        private PropertyInfo _autosetGuidProperty;
+        private bool _autosetInitialized = false;
 
-        private Type _type = typeof(TEntity);
+        private void InitializePropertyInfo() {
+            if ( this._autosetInitialized )
+                return;
+
+            this._autosetInsertDateProperties
+                = typeof(TEntity)
+                    .GetProperties()
+                    .Where(w => RepositoryConfig.DateTimeEntityPropertiesConfig.AutosetOnInsert.Contains(w.Name));
+            this._autosetUpdateDateProperties
+                = typeof(TEntity)
+                    .GetProperties()
+                    .Where(w => RepositoryConfig.DateTimeEntityPropertiesConfig.AutosetOnUpdate.Contains(w.Name));
+            this._autosetGuidProperty
+                = typeof(TEntity)
+                    .GetProperties()
+                    .Where(w => RepositoryConfig.GuidPropertiesConfig.AutosetOnInsert.Contains(w.Name))
+                    .Take(1)
+                    .FirstOrDefault();
+            this._autosetInitialized
+                = true;
+        }
 
         /// <summary>
         /// Inicializar el Contexto de Base de Datos utilizado por éste Repositorio.
@@ -150,29 +175,23 @@ namespace KilometrosDatabase.Abstraction.Interfaces {
         /// </summary>
         /// <param name="entity">Entidad a añadir</param>
         public virtual void Add(TEntity entity) {
-            // Obtener sólo las propiedades configuradas a establecerse con fecha y hora actuales
-            IEnumerable<PropertyInfo> setDateProperties =
-                from thisProperty in this._type.GetProperties()
-                where
-                    RepositoryConfig.DateTimeEntityPropertiesConfig.AutosetOnInsert.Contains(thisProperty.Name)
-                select thisProperty;
-            PropertyInfo setGuidProperty = (
-                from thisProperty in this._type.GetProperties()
-                where
-                    RepositoryConfig.GuidPropertiesConfig.AutosetOnInsert.Contains(thisProperty.Name)
-                select thisProperty).FirstOrDefault();
+            InitializePropertyInfo();
 
-            // Establecer el valor de las propiedades
-            if ( setGuidProperty != null )
-                setGuidProperty.SetValue(entity, Guid.NewGuid());
-
-            foreach ( PropertyInfo property in setDateProperties ) {
-                dynamic value = property.GetValue(entity);
-
-                if ( typeof(DateTime) == value.GetType() || typeof(DateTime?) == value.GetType() )
-                    property.SetValue(entity, DateTime.UtcNow);
+            if ( this._autosetGuidProperty != null ) {
+                if ( (Guid)this._autosetGuidProperty.GetValue(entity) == default(Guid) )
+                    this._autosetGuidProperty.GetValue(entity);
             }
 
+            this._autosetInsertDateProperties.ForEach((p) => {
+                if ( p.PropertyType == typeof(DateTime) ) {
+                    if ( (DateTime)p.GetValue(entity) == DateTime.MinValue )
+                        p.SetValue(entity, DateTime.UtcNow);
+                } else {
+                    if ( ! ((DateTime?)p.GetValue(entity)).HasValue )
+                        p.SetValue(entity, (DateTime?)DateTime.UtcNow);
+                }
+            });
+            
             this._dbSet.Add(entity);
         }
 
@@ -217,20 +236,15 @@ namespace KilometrosDatabase.Abstraction.Interfaces {
         /// </summary>
         /// <param name="entity">Entidad con la información modificada</param>
         public virtual void Update(TEntity entity) {
-            // Obtener sólo las propiedades configuradas a establecerse con fecha y hora actuales
-            IEnumerable<PropertyInfo> setDateProperties =
-                from thisProperty in this._type.GetProperties()
-                where
-                    RepositoryConfig.DateTimeEntityPropertiesConfig.AutosetOnUpdate.Contains(thisProperty.Name)
-                select thisProperty;
-
-            // Establecer el valor de las propiedades
-            foreach ( PropertyInfo property in setDateProperties ) {
-                dynamic value = property.GetValue(entity);
-
-                if ( value.GetType() == typeof(DateTime) )
-                    property.SetValue(entity, DateTime.UtcNow);
-            }
+            this._autosetUpdateDateProperties.ForEach((p) => {
+                if ( p.PropertyType == typeof(DateTime) ) {
+                    if ( (DateTime)p.GetValue(entity) == DateTime.MinValue )
+                        p.SetValue(entity, DateTime.UtcNow);
+                } else {
+                    if ( !((DateTime?)p.GetValue(entity)).HasValue )
+                        p.SetValue(entity, (DateTime?)DateTime.UtcNow);
+                }
+            });
 
             this._dbSet.Attach(entity);
             this._context.Entry(entity).State

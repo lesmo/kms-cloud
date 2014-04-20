@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 04/17/2014 20:15:21
+-- Date Created: 04/19/2014 22:22:59
 -- Generated from EDMX file: F:\Sharp Dynamics\Kilometros\Kilometros Database\MainModel.edmx
 -- --------------------------------------------------
 
@@ -28,6 +28,12 @@ IF OBJECT_ID(N'[dbo].[FK_ContactInfoUser]', 'F') IS NOT NULL
 GO
 IF OBJECT_ID(N'[dbo].[FK_MotionLevelGlobalization_inherits_IGlobalization]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[IGlobalizationSet_MotionLevelGlobalization] DROP CONSTRAINT [FK_MotionLevelGlobalization_inherits_IGlobalization];
+GO
+IF OBJECT_ID(N'[dbo].[FK_MotionLevelTip_MotionLevel]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[MotionLevelTip] DROP CONSTRAINT [FK_MotionLevelTip_MotionLevel];
+GO
+IF OBJECT_ID(N'[dbo].[FK_MotionLevelTip_Tip]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[MotionLevelTip] DROP CONSTRAINT [FK_MotionLevelTip_Tip];
 GO
 IF OBJECT_ID(N'[dbo].[FK_NotificationUser]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[NotificationSet] DROP CONSTRAINT [FK_NotificationUser];
@@ -97,9 +103,6 @@ IF OBJECT_ID(N'[dbo].[FK_TipMotionLevelTipMotionLevelGlobalization]', 'F') IS NO
 GO
 IF OBJECT_ID(N'[dbo].[FK_TipTipGlobalization]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[IGlobalizationSet_TipGlobalization] DROP CONSTRAINT [FK_TipTipGlobalization];
-GO
-IF OBJECT_ID(N'[dbo].[FK_TipTipMotionLevel]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[MotionLevelSet] DROP CONSTRAINT [FK_TipTipMotionLevel];
 GO
 IF OBJECT_ID(N'[dbo].[FK_UserData]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[DataSet] DROP CONSTRAINT [FK_UserData];
@@ -195,6 +198,9 @@ IF OBJECT_ID(N'[dbo].[IPictureSet_UserRewardGiftClaimed]', 'U') IS NOT NULL
 GO
 IF OBJECT_ID(N'[dbo].[MotionLevelSet]', 'U') IS NOT NULL
     DROP TABLE [dbo].[MotionLevelSet];
+GO
+IF OBJECT_ID(N'[dbo].[MotionLevelTip]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[MotionLevelTip];
 GO
 IF OBJECT_ID(N'[dbo].[NotificationSet]', 'U') IS NOT NULL
     DROP TABLE [dbo].[NotificationSet];
@@ -398,7 +404,7 @@ CREATE TABLE [dbo].[ContactInfoSet] (
     [HomePhone] nvarchar(24)  NULL,
     [MobilePhone] nvarchar(24)  NULL,
     [WorkPhone] nvarchar(24)  NULL,
-    [LastEditDate] datetime  NULL,
+    [LastEditDate] datetime  NOT NULL,
     [User_Guid] uniqueidentifier  NOT NULL
 );
 GO
@@ -498,7 +504,6 @@ CREATE TABLE [dbo].[UserDataHourlyDistance] (
     [Kcal] bigint  NOT NULL,
     [Co2] bigint  NOT NULL,
     [Cash] bigint  NOT NULL,
-    [UserGud] uniqueidentifier  NOT NULL,
     [User_Guid] uniqueidentifier  NOT NULL
 );
 GO
@@ -512,7 +517,6 @@ CREATE TABLE [dbo].[UserDataTotalDistance] (
     [TotalKcal] bigint  NOT NULL,
     [TotalCo2] bigint  NOT NULL,
     [TotalCash] bigint  NOT NULL,
-    [UserGuid] uniqueidentifier  NOT NULL,
     [User_Guid] uniqueidentifier  NOT NULL
 );
 GO
@@ -582,7 +586,6 @@ GO
 -- Creating table 'IPictureSet_Reward'
 CREATE TABLE [dbo].[IPictureSet_Reward] (
     [DistanceTrigger] bigint  NOT NULL,
-    [RewardSponsorGuid] uniqueidentifier  NULL,
     [Guid] uniqueidentifier  NOT NULL,
     [RewardSponsor_Guid] uniqueidentifier  NULL
 );
