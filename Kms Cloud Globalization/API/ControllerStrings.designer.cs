@@ -142,6 +142,15 @@ namespace Kilometros_WebGlobalization.API {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to One account in this Social Network cannot have multiple accounts associated in KMS.
+        /// </summary>
+        public static string Warning109_SocialTokenAlreadyInUse {
+            get {
+                return ResourceManager.GetString("Warning109_SocialTokenAlreadyInUse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to User is logged in and cannot register a new account.
         /// </summary>
         public static string Warning201_CannotCreateUserWithSessionOpen {

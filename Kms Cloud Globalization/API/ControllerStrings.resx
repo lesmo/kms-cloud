@@ -144,6 +144,9 @@
   <data name="Warning108_RequestTokenExchanged" xml:space="preserve">
     <value>OAuth Request Token is no longer valid, use provided credentials as Access Token</value>
   </data>
+  <data name="Warning109_SocialTokenAlreadyInUse" xml:space="preserve">
+    <value>One account in this Social Network cannot have multiple accounts associated in KMS</value>
+  </data>
   <data name="Warning201_CannotCreateUserWithSessionOpen" xml:space="preserve">
     <value>User is logged in and cannot register a new account</value>
   </data>

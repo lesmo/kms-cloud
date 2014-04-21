@@ -36,13 +36,8 @@ namespace Kms.Cloud.Api.Controllers {
         [AllowAnonymous]
         [HttpPost, Route("oauth/3rd/facebook/login")]
         public HttpResponseMessage FacebookLogin([FromBody]OAuthFacebookLoginPost dataPost) {
-            var facebookClient = OAuth3rdClient<FacebookClient>(
-                dataPost,
-                new OAuthCryptoSet(
-                    Settings.Default.FacebookClientConsumerKey,
-                    Settings.Default.FacebookClientConsumerSecret
-                )
-            );
+            ValidateOAuth3rdLoginRequest(OAuthService.Facebook, dataPost);
+            var facebookClient = OAuth3rdClient<FacebookClient>(dataPost);
 
             string facebookUserID;
             try {
@@ -68,13 +63,8 @@ namespace Kms.Cloud.Api.Controllers {
         [AllowAnonymous]
         [HttpPost, Route("oauth/3rd/twitter/login")]
         public HttpResponseMessage TwitterLogin([FromBody]OAuth3rdLoginPost dataPost) {
-            var twitterClient = OAuth3rdClient<TwitterClient>(
-                dataPost,
-                new OAuthCryptoSet(
-                    Settings.Default.TwitterClientConsumerKey,
-                    Settings.Default.TwitterClientConsumerSecret
-                )
-            );
+            ValidateOAuth3rdLoginRequest(OAuthService.Twitter, dataPost);
+            var twitterClient = OAuth3rdClient<TwitterClient>(dataPost);
 
             string twitterUserID;
             try {

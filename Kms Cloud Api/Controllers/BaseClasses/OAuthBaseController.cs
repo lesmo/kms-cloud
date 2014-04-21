@@ -1,6 +1,7 @@
 ﻿using Kilometros_WebGlobalization.API;
 using Kms.Cloud.Api.Exceptions;
 using Kms.Cloud.Api.Models;
+using Kms.Cloud.Api.Properties;
 using Kms.Cloud.Database;
 using Kms.Interop.OAuth;
 using Kms.Interop.OAuth.SocialClients;
@@ -11,6 +12,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web;
+using System.Web.Http;
 
 namespace Kms.Cloud.Api.Controllers {
     public abstract class OAuthBaseController : BaseController {
@@ -20,10 +22,13 @@ namespace Kms.Cloud.Api.Controllers {
         }
 
         protected T OAuth3rdClient<T>(
-            IOAuthTokenPost dataPost,
-            OAuthCryptoSet oAuthConsumer
+            IOAuthTokenPost dataPost
         ) where T : FacebookClient {
-            ValidateOAuthLoginRequest(OAuthService.Facebook, dataPost);
+            OAuthCryptoSet oAuthConsumer =
+                new OAuthCryptoSet(
+                    Settings.Default.FacebookClientConsumerKey,
+                    Settings.Default.FacebookClientConsumerSecret
+                );
 
             return Activator.CreateInstance(
                 typeof(T),
@@ -34,24 +39,30 @@ namespace Kms.Cloud.Api.Controllers {
         }
 
         protected T OAuth3rdClient<T>(
-            IOAuthTokenSecretPost dataPost,
-            OAuthCryptoSet oAuthConsumer
+            IOAuthTokenSecretPost dataPost
         ) where T : OAuthClient {
-            if ( typeof(T) == typeof(TwitterClient) )
-                ValidateOAuthLoginRequest(OAuthService.Twitter, dataPost);
-            else
+            OAuthCryptoSet oAuthConsumer, oAuthToken =
+                new OAuthCryptoSet(dataPost.Token, dataPost.TokenSecret);
+
+            if ( typeof(T) == typeof(TwitterClient) ) {
+                oAuthConsumer = new OAuthCryptoSet(
+                    Settings.Default.TwitterClientConsumerKey,
+                    Settings.Default.TwitterClientConsumerSecret
+                );
+            } else {
                 throw new InvalidOperationException("Third Party OAuth Provider not supported");
+            }
 
             return Activator.CreateInstance(
                 typeof(T),
                 new object[] {
                     oAuthConsumer, 
-                    new OAuthCryptoSet(dataPost.Token, dataPost.TokenSecret)
+                    oAuthToken
                 }
             ) as T;
         }
 
-        protected void ValidateOAuthLoginRequest(OAuthService provider, IOAuthTokenPost dataPost) {
+        protected void ValidateOAuth3rdLoginRequest(OAuthService provider, IOAuthTokenPost dataPost) {
             if ( !OAuth.IsRequestToken )
                 throw new HttpBadRequestException(
                     "106 " + ControllerStrings.Warning106_RequestTokenRequired
@@ -73,6 +84,26 @@ namespace Kms.Cloud.Api.Controllers {
 
                 throw new HttpBadRequestException(
                     "105 " + ControllerStrings.Warning105_SocialTokenNotFound
+                );
+            }
+        }
+        
+        protected void ValidateOAuth3rdAddRequest(OAuthService provider, IOAuthTokenPost dataPost) {
+            if ( CurrentUser == null )
+                throw new InvalidOperationException(
+                    "For some fucked up reason, there's no User in the current context. What else am I supposed to do?"
+                );
+
+            this.OAuth3rdCredential =
+                Database.OAuthCredentialStore.GetFirst(
+                    filter: f =>
+                        f.OAuthProvider == provider
+                        && f.Uid == dataPost.ID
+                );
+
+            if ( this.OAuth3rdCredential != null && this.OAuth3rdCredential.User.Guid != CurrentUser.Guid ) {
+                throw new HttpNotFoundException(
+                    "109 " + ControllerStrings.Warning109_SocialTokenAlreadyInUse
                 );
             }
         }
