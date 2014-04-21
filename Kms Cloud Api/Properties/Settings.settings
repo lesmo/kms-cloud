@@ -1,0 +1,18 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Kms.Cloud.Api.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="FacebookClientConsumerKey" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">671595709566936</Value>
+    </Setting>
+    <Setting Name="FacebookClientConsumerSecret" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">cc0acb4c78a2d25f110a03d56d5cd074</Value>
+    </Setting>
+    <Setting Name="TwitterClientConsumerKey" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">rxYNTbTkssfQHC5lgag</Value>
+    </Setting>
+    <Setting Name="TwitterClientConsumerSecret" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">085mxc60cNcrozw2Hh0P6UdIhqIvVE87qMJYXd2TIc</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
