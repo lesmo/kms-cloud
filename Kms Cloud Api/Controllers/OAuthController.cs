@@ -14,7 +14,7 @@ using System.Globalization;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Kms.Cloud.Api.Controllers {
-    public class OAuthController : BaseController {
+    public class OAuthController : OAuthBaseController {
         [HttpPost]
         [Route("oauth/request_token")]
         public HttpResponseMessage OAuthRequestToken() {
@@ -97,48 +97,8 @@ namespace Kms.Cloud.Api.Controllers {
                 );
             }
 
-            // --- Generar nuevo Token con capacidad de Acceso ---
-            Token newToken
-                = new Token() {
-                    ApiKey
-                        = OAuth.ConsumerKey,
-                    Guid
-                        = Guid.NewGuid(),
-                    Secret
-                        = Guid.NewGuid(),
-                    VerificationCode
-                        = null,
-
-                    User
-                        = CurrentUser,
-
-                    ExpirationDate
-                        = DateTime.UtcNow.AddMonths(3),
-                    LoginAttempts
-                        = OAuth.Token.LoginAttempts,
-                };
-
-            Database.TokenStore.Add(newToken);
-            Database.TokenStore.Delete(OAuth.Token.Guid);
-            Database.SaveChanges();
-
-            // --- Preparar y devolver respuesta ---
-            return new HttpResponseMessage() {
-                RequestMessage
-                    = Request,
-
-                StatusCode
-                    = HttpStatusCode.OK,
-                Content
-                    = new StringContent(
-                        string.Format(
-                            CultureInfo.InvariantCulture,
-                            "oauth_token={0}&oauth_token_secret={1}",
-                            newToken.Guid.ToString("N"),
-                            newToken.Secret.ToString("N")
-                        )
-                    )
-            };
+            // --- Generar nuevo Access Token ---
+            return ExchangeOAuthAccessToken();
         }
 
         [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
