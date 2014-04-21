@@ -75,11 +75,9 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="RestSharp">
-      <HintPath>..\packages\RestSharp.103.4\lib\net4\RestSharp.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -219,11 +217,12 @@
     <Compile Include="Areas\Login\Controllers\HomeController.cs" />
     <Compile Include="Areas\Login\LoginAreaRegistration.cs" />
     <Compile Include="Controllers\AccountCreateController.cs" />
+    <Compile Include="Controllers\BaseClasses\OAuthBaseController.cs" />
     <Compile Include="Controllers\DataController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ContactInfoController.cs" />
     <Compile Include="Controllers\FriendsController.cs" />
-    <Compile Include="Controllers\BaseClasses\IKMSController.cs" />
+    <Compile Include="Controllers\BaseClasses\BaseController.cs" />
     <Compile Include="Controllers\PhysiqueController.cs" />
     <Compile Include="Controllers\OAuth3rdPartyAddController.cs" />
     <Compile Include="Controllers\OAuthController.cs" />
@@ -252,6 +251,9 @@
     <Compile Include="MagicTriggers\TipsPushTrigger.cs" />
     <Compile Include="MessageHandlers\RequestArrayHandler.cs" />
     <Compile Include="MessageHandlers\ResponseLastModifiedHandler.cs" />
+    <Compile Include="Models\IOAuthTokenPost.cs" />
+    <Compile Include="Models\IOAuthTokenSecretPost.cs" />
+    <Compile Include="Models\RequestModels\OAuthFacebookLoginPost.cs" />
     <Compile Include="Models\RequestModels\OAuth3rdLoginPost.cs" />
     <Compile Include="Models\RequestModels\OAuthAccessTokenPost.cs" />
     <Compile Include="Models\ResponseModels\DataDistanceResponse.cs" />
@@ -279,9 +281,15 @@
     <Compile Include="MessageHandlers\ResponseEncoder.cs" />
     <Compile Include="Models\RequestModels\AccountPost.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="Security\HttpOAuthAuthorization.cs" />
     <Compile Include="Security\KmsIdentity.cs" />
     <Compile Include="Security\KmsPrincipal.cs" />
+    <Compile Include="Settings.cs" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\KMS Cloud Code Analysis Dictionary.xml">
@@ -305,6 +313,10 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <None Include="Web.RemoteDebug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -315,6 +327,10 @@
     <Folder Include="Areas\Login\Views\Shared\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\KMS Interop\Kms Interop\Kms Interop.csproj">
+      <Project>{599494b1-8d7f-44df-9d70-f0e2b8d118f0}</Project>
+      <Name>Kms Interop</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Kms Cloud Database\KMS Cloud Database.csproj">
       <Project>{af2a5b08-71b1-410a-9dfb-31a037851d33}</Project>
       <Name>KMS Cloud Database</Name>

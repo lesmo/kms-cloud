@@ -685,24 +685,40 @@
                 el Historial de Recompensas (rewards/history).
             </param>
         </member>
+        <member name="M:Kms.Cloud.Api.Controllers.OAuth3rdPartyLoginController.FacebookLogin(Kms.Cloud.Api.Models.RequestModels.OAuthFacebookLoginPost)">
+            <summary>
+                Intercambia un Request Token de OAuth para la Nube de KMS por un Access Token,
+                utilizando un Código de Facebook.
+            </summary>
+            <remarks>
+                El Código de Facebook NO ES el Token, es un código generado por el proceso de Login
+                y es diferente del Token. Facebook utiliza este proceso para poder compartir la
+                Sesión del Usuario entre Apps y Servidor Web, y mantener así Tokens independientes
+                y seguros.
+            </remarks>
+            <param name="dataPost">
+                Aparte de la cabecera propia de OAuth, en el cuerpo de POST deben incluirse el Código
+                de Facebook y el ID de Usuario en Faceboook.
+            </param>
+        </member>
         <member name="P:Kms.Cloud.Api.WebApiApplication.AssemblyVersion">
             <summary>
                 Devuelve la Versión del Ensamblado del API de KMS.
             </summary>
         </member>
-        <member name="P:Kms.Cloud.Api.Models.RequestModels.OAuth3rdLogInPost.Token">
+        <member name="P:Kms.Cloud.Api.Models.RequestModels.OAuth3rdLoginPost.Token">
             <summary>
                 Token de Sesión generado por el servicio OAuth de Terceros.
             </summary>
         </member>
-        <member name="P:Kms.Cloud.Api.Models.RequestModels.OAuth3rdLogInPost.TokenSecret">
+        <member name="P:Kms.Cloud.Api.Models.RequestModels.OAuth3rdLoginPost.TokenSecret">
             <summary>
                 Token Secret de Sesión generado por el servicio OAuth de Terceros.
                 Los servicios que utilicen OAuth 2.0 no utilizan un Token Secret,
                 y en esos casos debe omitirse.
             </summary>
         </member>
-        <member name="P:Kms.Cloud.Api.Models.RequestModels.OAuth3rdLogInPost.SocialId">
+        <member name="P:Kms.Cloud.Api.Models.RequestModels.OAuth3rdLoginPost.ID">
             <summary>
                 ID del Usuario en el servicio OAuth de Terceros.
             </summary>
