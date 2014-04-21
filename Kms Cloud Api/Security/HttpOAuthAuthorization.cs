@@ -106,8 +106,12 @@ namespace Kms.Cloud.Api.Security {
 
             if (
                 this.Token != null
-                && this.Token.ExpirationDate.HasValue
-                && this.Token.ExpirationDate.Value < DateTime.UtcNow
+                && (
+                    (
+                        this.Token.ExpirationDate.HasValue
+                        && this.Token.ExpirationDate.Value < DateTime.UtcNow
+                    ) || this.Token.LoginAttempts > 5
+                )
             ) {
                 database.TokenStore.Delete(this.Token.Guid);
                 database.SaveChanges();
