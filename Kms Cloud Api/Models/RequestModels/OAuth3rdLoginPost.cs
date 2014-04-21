@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 
 namespace Kms.Cloud.Api.Models.RequestModels {
-    public class OAuth3rdLoginPost {
+    public class OAuth3rdLoginPost : IOAuthTokenSecretPost {
         /// <summary>
         ///     Token de Sesión generado por el servicio OAuth de Terceros.
         /// </summary>
@@ -18,6 +18,6 @@ namespace Kms.Cloud.Api.Models.RequestModels {
         /// <summary>
         ///     ID del Usuario en el servicio OAuth de Terceros.
         /// </summary>
-        public string SocialId { get; set; }
+        public string ID { get; set; }
     }
 }
