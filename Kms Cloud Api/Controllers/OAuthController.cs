@@ -15,35 +15,30 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Kms.Cloud.Api.Controllers {
     public class OAuthController : OAuthBaseController {
-        [HttpPost]
-        [Route("oauth/request_token")]
+        [AllowAnonymous]
+        [HttpPost, Route("oauth/request_token")]
         public HttpResponseMessage OAuthRequestToken() {
             var identity = KmsIdentity.GetCurrentPrincipalIdentity();
 
             // --- Evitar doble Login ---
             if ( identity.IsAuthenticated )
                 throw new HttpAlreadyLoggedInException(
-                    ControllerStrings.Warning100_CannotLoginAgain
+                    "100" + ControllerStrings.Warning100_CannotLoginAgain
                 );
 
             // --- Generar nuevo Token OAuth ---
-            Token token
-                = new Token {
-                    ApiKey
-                        = OAuth.ConsumerKey,
-                    Guid
-                        = Guid.NewGuid(),
-                    Secret
-                        = Guid.NewGuid(),
+            Token token = new Token {
+                ApiKey = OAuth.ConsumerKey,
+                Guid   = Guid.NewGuid(),
+                Secret = Guid.NewGuid(),
 
-                    CallbackUri
-                        = OAuth.CallbackUri == null
-                        ? "oob"
-                        : OAuth.CallbackUri.AbsoluteUri,
+                CallbackUri
+                    = OAuth.CallbackUri == null
+                    ? "oob"
+                    : OAuth.CallbackUri.AbsoluteUri,
 
-                    ExpirationDate
-                        = DateTime.UtcNow.AddMinutes(10)
-                };
+                ExpirationDate = DateTime.UtcNow.AddMinutes(10)
+            };
 
             Database.TokenStore.Add(token);
             Database.SaveChanges();
@@ -75,16 +70,20 @@ namespace Kms.Cloud.Api.Controllers {
                     )
             };
         }
-        
-        [HttpPost]
-        [Route("oauth/access_token")]
+
+        [AllowAnonymous]
+        [HttpPost, Route("oauth/access_token")]
         public HttpResponseMessage OAuthAccessToken([FromBody]OAuthAccessTokenPost oAuthVerifier) {
             // --- Obtener información de OAuth y buscar Token ---
             Guid verifierCode;
 
+            if ( OAuth.Token == null )
+                throw new HttpBadRequestException(
+                    "106" + ControllerStrings.Warning106_RequestTokenRequired
+                );
+
             if ( string.IsNullOrEmpty(oAuthVerifier.oauth_verifier) && OAuth.VerifierCode.HasValue ) {
-                verifierCode
-                    = OAuth.VerifierCode.Value;
+                verifierCode = OAuth.VerifierCode.Value;
             } else if ( !Guid.TryParse(oAuthVerifier.oauth_verifier, out verifierCode) ) {
                 throw new HttpUnauthorizedException(
                     "120 " + ControllerStrings.Warning104_RequestTokenInvalid
@@ -102,7 +101,7 @@ namespace Kms.Cloud.Api.Controllers {
         }
 
         [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
-        [Authorize, HttpGet, Route("oauth/session")]
+        [HttpGet, Route("oauth/session")]
         public HttpResponseMessage GetToken() {
             Token token
                 = OAuth.Token;
@@ -120,8 +119,7 @@ namespace Kms.Cloud.Api.Controllers {
                 return new HttpResponseMessage(HttpStatusCode.OK);
             }
         }
-
-        [Authorize]
+        
         [HttpDelete]
         [Route("oauth/session")]
         public HttpResponseMessage DeleteToken() {

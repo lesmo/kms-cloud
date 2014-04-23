@@ -26,6 +26,7 @@ namespace Kms.Cloud.Api.Controllers {
         /// <returns>
         ///
         /// </returns>
+        [AllowAnonymous]
         [SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase")]
         [HttpPost, Route("account")]
         public HttpResponseMessage CreateKmsAccount([FromBody]CreateKmsAccountPost dataPost) {
@@ -104,22 +105,12 @@ namespace Kms.Cloud.Api.Controllers {
             // --- Crear Token OAuth ---
             Token token
                 = new Token() {
-                    ApiKey
-                        = OAuth.ConsumerKey,
-                    Guid
-                        = Guid.NewGuid(),
-                    Secret
-                        = Guid.NewGuid(),
+                    ApiKey = OAuth.ConsumerKey,
+                    Guid   = Guid.NewGuid(),
+                    Secret = Guid.NewGuid(),
+                    User   = user,
 
-                    User
-                        = OAuth.Token.User,
-
-                    CreationDate
-                        = DateTime.UtcNow,
-                    ExpirationDate
-                        = DateTime.UtcNow.AddMonths(3),
-                    LastUseDate
-                        = DateTime.UtcNow
+                    ExpirationDate = DateTime.UtcNow.AddMonths(3)
                 };
 
             // --- Integrar cambios a BD ---
