@@ -82,7 +82,7 @@ namespace Kms.Cloud.WebApp.Models.Views {
                     ? rewardDistanceSpan.CentimetersToKilometers()
                     : rewardDistanceSpan.CentimetersToMiles();
 
-                return rewardDistanceSpan.ToLocalizedString();
+                return ((long)rewardDistanceSpan).ToLocalizedString();
             }
         }
 

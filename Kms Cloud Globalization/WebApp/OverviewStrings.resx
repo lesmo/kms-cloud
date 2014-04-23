@@ -125,13 +125,17 @@
     <value>CO2 - Carbon Dioxide</value>
     <comment>"CO2 - Carbon Dioxide" text shown when user hovers the CO2 icon.</comment>
   </data>
-  <data name="DailyGraph" xml:space="preserve">
-    <value>Dialy Graph</value>
-    <comment>"Dialy Graph" label, showing today's graph of activity.</comment>
+  <data name="Equivalence" xml:space="preserve">
+    <value>Equivalence</value>
+    <comment>"Equivalence" label, showing what amount of stuff the user has saved and burned</comment>
   </data>
   <data name="KcalAlt" xml:space="preserve">
     <value>Kcal - Kilocalories</value>
     <comment>"Kcal - Kilocalories" text shown when user hovers the Kcal icon.</comment>
+  </data>
+  <data name="Last24hrsGraph" xml:space="preserve">
+    <value>Last 24hrs</value>
+    <comment>"Dialy Graph" label, showing today's graph of activity.</comment>
   </data>
   <data name="MonthlyGraph" xml:space="preserve">
     <value>Monthly Graph</value>

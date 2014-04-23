@@ -79,11 +79,11 @@ namespace Kilometros_WebGlobalization.WebApp {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dialy Graph.
+        ///   Looks up a localized string similar to Equivalence.
         /// </summary>
-        public static string DailyGraph {
+        public static string Equivalence {
             get {
-                return ResourceManager.GetString("DailyGraph", resourceCulture);
+                return ResourceManager.GetString("Equivalence", resourceCulture);
             }
         }
         
@@ -93,6 +93,15 @@ namespace Kilometros_WebGlobalization.WebApp {
         public static string KcalAlt {
             get {
                 return ResourceManager.GetString("KcalAlt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last 24hrs.
+        /// </summary>
+        public static string Last24hrsGraph {
+            get {
+                return ResourceManager.GetString("Last24hrsGraph", resourceCulture);
             }
         }
         

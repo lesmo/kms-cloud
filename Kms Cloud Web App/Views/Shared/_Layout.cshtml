@@ -1,9 +1,5 @@
 ﻿@{
-	LayoutValues layoutValues
-		= (LayoutValues)ViewData["LayoutValues"];
-
-	layoutValues
-		= layoutValues ?? new LayoutValues();
+	LayoutValues layoutValues = ViewData["LayoutValues"] as LayoutValues;
 }
 
 <!DOCTYPE html>
@@ -27,7 +23,7 @@
 			<a href="@Url.Action("Overview", "Index", new { lang = CultureInfo.CurrentCulture.Name })">
 				<h1>
 					<span class="ocultar">KMS</span>
-					<img src="@Url.Content("~/Images/Header/Header.KmsLogo.png")" alt="KMS">
+					<img src="~/Images/Header/Header.KmsLogo.png" alt="KMS">
 				</h1>
 			</a>
 			<nav>
@@ -129,9 +125,9 @@
 			@* - Próxima Recompensa (o última recompensa ganada) - *@
 			<section id="recompensaDash">
 				@if ( layoutValues.RecentlyUnlockedReward == null ) {
-					<span class="proxRecomp">@LayoutStrings.NextRewardIn</span>
+					<span class="proxRecomp">@LayoutStrings.NextRewardIn.ToUpper(CultureInfo.CurrentCulture)</span>
 					<span class="bandera">
-						<img src="@Url.Content("~/Images/Sidebar/Sidebar.Medal.gif")" alt="">
+						<img src="~/Images/Sidebar/Sidebar.Medal.gif" alt="">
 					</span>
 					<span class="kms">
 						@layoutValues.NextRewardsDistanceRemaining @(RegionInfo.CurrentRegion.IsMetric ? "kms" : "mi")
@@ -219,18 +215,18 @@
 			<ul class="redes">
 				<li>
 					<a href="https://www.facebook.com/Kms.mex" target="_blank">
-						<img src="@Url.Content("~/Images/Footer/Footer.Facebook.png")" alt="Facebook: KMS.mex">
+						<img src="~/Images/Footer/Footer.Facebook.png" alt="Facebook: KMS.mex">
 					</a>
 				</li>
 				<li>
 					<a href="https://twitter.com/kmsmex" target="_blank">
-						<img src="@Url.Content("~/Images/Footer/Footer.Twitter.png")" alt="Twitter: &#64;kmsmex">
+						<img src="~/Images/Footer/Footer.Twitter.png" alt="Twitter: &#64;kmsmex">
 					</a>
 				</li>
 				<li>
 					@* TODO: Establecer {subject} y {body} a texto predefinido *@
 					<a href="mailto:dime@kms.me" target="_blank">
-						<img src="@Url.Content("~/Images/Footer/Footer.Mail.png")" alt="Email: dime&#64;kms.me">
+						<img src="~/Images/Footer/Footer.Mail.png" alt="Email: dime&#64;kms.me">
 					</a>
 				</li>
 			</ul>

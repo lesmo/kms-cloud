@@ -23,7 +23,7 @@
 		<ul>
 			<li>
 				<figure>
-					<img src="@Url.Content("~/Images/Gui/Overview/Gui.Co2.jpg")" alt="@OverviewStrings.Co2Alt">
+					<img src="~/Images/Gui/Overview/Gui.Co2.jpg" alt="@OverviewStrings.Co2Alt">
 				</figure>
 				<span>
 					<span class="numero">
@@ -34,7 +34,7 @@
 			</li>
 			<li>
 				<figure>
-					<img src="@Url.Content("~/Images/Gui/Overview/Gui.Kcal.jpg")" alt="@OverviewStrings.KcalAlt">
+					<img src="~/Images/Gui/Overview/Gui.Kcal.jpg" alt="@OverviewStrings.KcalAlt">
 				</figure>
 				<span>
 					<span class="numero">@overviewValues.EquivalentKcal</span>
@@ -43,7 +43,7 @@
 			</li>
 			<li>
 				<figure>
-					<img src="@Url.Content("~/Images/Gui/Overview/Gui.Savings.jpg")" alt="@OverviewStrings.Savings">
+					<img src="~/Images/Gui/Overview/Gui.Savings.jpg" alt="@OverviewStrings.Savings">
 				</figure>
 				<span>
 					<span class="numero">@overviewValues.EquivalentCash</span>
@@ -51,12 +51,12 @@
 				</span>
 			</li>
 		</ul>
-		<em>Equivalencias</em>
+		<em>@OverviewStrings.Equivalence.ToUpper()</em>
 	</aside>
 	<section id="graficas">
 		<article id="graficaDiaria">
 			<span class="tituloGrafica">
-				<h2>@OverviewStrings.DailyGraph.ToUpper()</h2>
+				<h2>@OverviewStrings.Last24hrsGraph.ToUpper()</h2>
 				<hr />
 			</span>
 			<canvas id="chartDiario" width="700" height="300"></canvas>

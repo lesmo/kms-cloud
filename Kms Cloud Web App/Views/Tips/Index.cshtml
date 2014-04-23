@@ -1,13 +1,6 @@
 ﻿@{
-    LayoutValues layoutValues
-        = (LayoutValues)ViewData["LayoutValues"];
-    layoutValues
-        = layoutValues ?? new LayoutValues();
-
-    TipsValues tipsValues
-        = (TipsValues)ViewData["TipsValues"];
-    tipsValues
-        = tipsValues ?? new TipsValues();
+    LayoutValues layoutValues = ViewData["LayoutValues"] as LayoutValues;
+    TipsValues tipsValues     = ViewData["TipsValues"] as TipsValues;
 }
 
 <div id="tipsGodines">
