@@ -26,10 +26,14 @@ namespace Kms.Cloud.Api.ExceptionFilters {
             } else if ( actionExecutedContext.Exception is HttpConflictException ) {
                 actionExecutedContext.Response
                     = new HttpResponseMessage(HttpStatusCode.Conflict);
+            } else if ( actionExecutedContext.Exception is HttpBadRequestException ) {
+                actionExecutedContext.Response
+                    = new HttpResponseMessage(HttpStatusCode.BadRequest);
             }
 
             if (
-                actionExecutedContext.Exception.Message != null
+                actionExecutedContext.Exception != null
+                && actionExecutedContext.Exception.Message != null
                 && (actionExecutedContext.Exception is HttpProcessException)
                 && !(actionExecutedContext.Exception is HttpNoContentException)
             ) {
