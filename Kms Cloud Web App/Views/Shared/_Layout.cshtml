@@ -21,7 +21,7 @@
 	@* Scripts *@
 	@Html.RenderJsBundle("~/Assets/Javascript.js.bundle", BundleOptions.Combined)
 </head>
-<body data-distanceUnit="@(RegionInfo.CurrentRegion.IsMetric ? "kms" : "mi")" data-weightUnit="@(RegionInfo.CurrentRegion.IsMetric ? "kg" : "lb")">
+<body data-distance-unit="@(RegionInfo.CurrentRegion.IsMetric ? "kms" : "mi")" data-weight-unit="@(RegionInfo.CurrentRegion.IsMetric ? "kg" : "lb")">
 	<header>
 		<div class="contenedor2">
 			<a href="@Url.Action("Overview", "Index", new { lang = CultureInfo.CurrentCulture.Name })">

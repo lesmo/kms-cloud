@@ -35,6 +35,8 @@ function doKMS_populateGraph() {
                         data: graphDataDistance
                     }
                 ]
+            }, {
+                scaleLabel: "<%=value%> " + $('body').data('distance-unit')
             });
 
             // --- Gráfica por mes ---
@@ -62,6 +64,8 @@ function doKMS_populateGraph() {
                         data: graphDataDistance
                     }
                 ]
+            }, {
+                scaleLabel: "<%=value%> " + $('body').data('distance-unit')
             });
 
             // --- Distribución de actividad --

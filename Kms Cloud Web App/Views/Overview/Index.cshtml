@@ -1,9 +1,5 @@
 ﻿@{
-	OverviewValues overviewValues
-		= (OverviewValues)ViewData["OverviewValues"];
-
-	overviewValues
-		= overviewValues ?? new OverviewValues();
+	OverviewValues overviewValues = ViewData["OverviewValues"] as OverviewValues;
 }
 <div id="actividad">
 	<div class="recorridoSueno">
@@ -60,21 +56,21 @@
 	<section id="graficas">
 		<article id="graficaDiaria">
 			<span class="tituloGrafica">
-				<h2>@OverviewStrings.DailyGraph</h2>
+				<h2>@OverviewStrings.DailyGraph.ToUpper()</h2>
 				<hr />
 			</span>
 			<canvas id="chartDiario" width="700" height="300"></canvas>
 		</article>
 		<article id="graficaMensual">
 			<span class="tituloGrafica">
-				<h2>@OverviewStrings.MonthlyGraph</h2>
+				<h2>@OverviewStrings.MonthlyGraph.ToUpper()</h2>
 				<hr />
 			</span>
 			<canvas id="chartMensual" width="350" height="300"></canvas>
 		</article>
 		<article id="graficaActividad">
 			<span class="tituloGrafica">
-				<h2>@OverviewStrings.ActivityGraph</h2>
+				<h2>@OverviewStrings.ActivityGraph.ToUpper()</h2>
 				<hr />
 			</span>
 			<canvas id="chartActividad" width="250" height="200"></canvas>

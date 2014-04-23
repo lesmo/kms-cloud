@@ -166,7 +166,6 @@
     <Compile Include="Routing\TranslatedRouteCollectionExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\Scripts\Overview\Dummy.js" />
     <Content Include="Assets\Scripts\Overview\PopulateGraphs.js" />
     <Content Include="Assets\Scripts\Shared\Lib\chart.js" />
     <Content Include="Assets\Scripts\Shared\Lib\chart.min.js" />
