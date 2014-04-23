@@ -37,25 +37,19 @@ namespace Kms.Cloud.Api.Security {
         ///     Contexto de Base de Datos a utilizar para asociar el Consumer y Token.
         /// </param>
         public HttpOAuthAuthorization(HttpOAuthAuthorization oAuthObject, WorkUnit database) {
-            this.CallbackUri
-                = oAuthObject.CallbackUri;
-            this.ConsumerKey
-                = database.ApiKeyStore.Get(oAuthObject.ConsumerKey.Guid);
-            this.Nonce
-                = oAuthObject.Nonce;
-            this.oAuthParameters
-                = oAuthObject.oAuthParameters;
-            this.Signature
-                = oAuthObject.Signature;
-            this.Timestamp
-                = oAuthObject.Timestamp;
+            this.CallbackUri     = oAuthObject.CallbackUri;
+            this.ConsumerKey     = database.ApiKeyStore.Get(oAuthObject.ConsumerKey.Guid);
+            this.Nonce           = oAuthObject.Nonce;
+            this.oAuthParameters = oAuthObject.oAuthParameters;
+            this.Signature       = oAuthObject.Signature;
+            this.Timestamp       = oAuthObject.Timestamp;
+
             if ( oAuthObject.Token != null )
-                this.Token
-                    = database.TokenStore.Get(oAuthObject.Token.Guid);
-            this.VerifierCode
-                = oAuthObject.VerifierCode;
-            this.Version
-                = oAuthObject.Version;
+                this.Token = database.TokenStore.Get(oAuthObject.Token.Guid);
+
+            this.VerifierCode    = oAuthObject.VerifierCode;
+            this.Version         = oAuthObject.Version;
+            this._validSignature = oAuthObject.IsValid;
         }
 
         /// <summary>
@@ -70,24 +64,15 @@ namespace Kms.Cloud.Api.Security {
         /// </param>
         public HttpOAuthAuthorization(string oAuthParametersLine, WorkUnit database) {
             // --- Obtener parámetros de OAuth ---
-            string[] oAuthParametersStrings
-                = oAuthParametersLine.Trim().Split(new char[] { ',' });
+            var oAuthParametersStrings = oAuthParametersLine.Trim().Split(new char[] { ',' });
 
             foreach ( string param in oAuthParametersStrings ) {
-                string[] paramKeyValue
-                    = param.Trim().Split(
-                        new char[] { '=' },
-                        2
-                    );
+                var paramKeyValue = param.Trim().Split(new char[] { '=' }, 2);
 
                 if ( paramKeyValue.Length != 2 )
                     continue;
 
-                Match match
-                    = Regex.Match(
-                        paramKeyValue[1],
-                        "\"([^\"]*)"
-                    );
+                var match = Regex.Match(paramKeyValue[1], "\"([^\"]*)");
 
                 if ( ! match.Success )
                     continue;
@@ -99,95 +84,78 @@ namespace Kms.Cloud.Api.Security {
             }
 
             // --- Capturar parámetros de OAuth ---
-            this.ConsumerKey
-                = database.ApiKeyStore.Get(oAuthParameters["oauth_consumer_key"]);            
-            this.Token
-                = database.TokenStore.Get(oAuthParameters["oauth_token"]);
+            if ( oAuthParameters.AllKeys.Contains("oauth_consumer_key") )
+                this.ConsumerKey = database.ApiKeyStore.Get(oAuthParameters["oauth_consumer_key"]);
 
-            if (
-                this.Token != null
-                && (
-                    (
-                        this.Token.ExpirationDate.HasValue
-                        && this.Token.ExpirationDate.Value < DateTime.UtcNow
-                    ) || this.Token.LoginAttempts > 5
-                )
-            ) {
-                database.TokenStore.Delete(this.Token.Guid);
-                database.SaveChanges();
+            if ( oAuthParameters.AllKeys.Contains("oauth_token") )
+                this.Token = database.TokenStore.Get(oAuthParameters["oauth_token"]);
+            
+            if ( this.Token != null ) {
+                bool killToken = false;
+
+                if ( this.Token.ExpirationDate.HasValue )
+                    killToken = this.Token.ExpirationDate.Value < DateTime.UtcNow;
+                    
+                if ( this.Token.LoginAttempts > 5 )
+                    killToken = true;
+
+                if ( killToken ) {
+                    database.TokenStore.Delete(this.Token.Guid);
+                    database.SaveChanges();
+                }
             }
             
-            if ( 
-                oAuthParameters.ContainsKey("oauth_signature")
-                && oAuthParameters.ContainsKey("oauth_signature_method")
-                && oAuthParameters["oauth_signature_method"] == "HMAC-SHA1"
-            ) {
-                this.Signature
-                    = HttpUtility.UrlDecode(
-                        oAuthParameters["oauth_signature"]
-                    );
-            } else {
-                this.Signature
-                    = null;
-            }
-
             try {
-                string oAuthTimestampString
-                    = oAuthParameters["oauth_timestamp"];
-                long oAuthTimestampSeconds
-                    = long.Parse(oAuthTimestampString, CultureInfo.InvariantCulture);
-                DateTime timestampBase
-                    = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-                timestampBase
-                    = timestampBase.AddSeconds(oAuthTimestampSeconds);
+                if ( oAuthParameters["oauth_signature_method"] == "HMAC-SHA1" )
+                    this.Signature = HttpUtility.UrlDecode(oAuthParameters["oauth_signature"]);
+            } catch ( KeyNotFoundException ) {
+            }
+            
+            try {
+                var oAuthTimestampString  = oAuthParameters["oauth_timestamp"];
+                var oAuthTimestampSeconds = long.Parse(oAuthTimestampString, CultureInfo.InvariantCulture);
+
+                var timestampBase =
+                    new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
+                        .AddSeconds(oAuthTimestampSeconds);
 
                 // Comparar tiempos (no debe estar más atrás ni delante de 3 minutos)
-                TimeSpan timestampSpan
-                    = DateTime.UtcNow - timestampBase;
+                var timestampSpan  = DateTime.UtcNow - timestampBase;
                 if ( timestampSpan.Seconds < 181 && timestampSpan.Seconds > -179 )
-                    this.Timestamp
-                        = timestampBase;
+                    this.Timestamp = timestampBase;
             } catch ( Exception ex ) {
                 throw new HttpBadRequestException(
-                    "109 " + MessageHandlerStrings.Warning109_OAuthTimestampInvalid,
-                    ex
+                    "109 " + MessageHandlerStrings.Warning109_OAuthTimestampInvalid, ex
                 );
             }
             
-            if ( oAuthParameters.ContainsKey("oauth_version") ) {
-                if (
-                    oAuthParameters["oauth_version"] == "1.0"
-                    || oAuthParameters["oauth_version"] == "1.0a"
-                ) {
-                    this.Version
-                        = new Version(1, 0);
-                }
+            try {
+                if ( oAuthParameters["oauth_version"] == "1.0" || oAuthParameters["oauth_version"] == "1.0a" )
+                    this.Version = new Version(1, 0);
+            } catch ( KeyNotFoundException ) {
             }
 
-            if ( oAuthParameters.ContainsKey("oauth_nonce") ) {
-                string oAuthNonce
-                    = oAuthParameters["oauth_nonce"];
-
-                OAuthNonce nonce
-                    = database.OAuthNonceStore.GetFirst(
-                        f => f.Nonce == oAuthNonce
-                    );
+            try {
+                var oAuthNonce = oAuthParameters["oauth_nonce"];
+                var nonce      = database.OAuthNonceStore.GetFirst(
+                    f => f.Nonce == oAuthNonce
+                );
 
                 if ( nonce == null ) {
-                    this.Nonce
-                        = new OAuthNonce() {
-                            Nonce
-                                = oAuthParameters["oauth_nonce"]
-                        };
+                    this.Nonce = new OAuthNonce {
+                        Nonce = oAuthNonce
+                    };
                         
                     database.OAuthNonceStore.Add(this.Nonce);
                     database.SaveChanges();
                 }
+            } catch ( KeyNotFoundException ) {
             }
 
             try {
-                this.CallbackUri
-                    = new Uri(oAuthParameters["oauth_callback"]);
+                if ( oAuthParameters["oauth_callback"] != "oob" )
+                    this.CallbackUri = new Uri(oAuthParameters["oauth_callback"]);
+            } catch ( KeyNotFoundException  ) {
             } catch ( ArgumentNullException ) {
             } catch ( UriFormatException ex ) {
                 throw new HttpBadRequestException(
@@ -197,8 +165,8 @@ namespace Kms.Cloud.Api.Security {
             }
 
             try {
-                this.VerifierCode
-                    = Guid.Parse(oAuthParameters["oauth_verifier"]);
+                this.VerifierCode = new Guid(oAuthParameters["oauth_verifier"]);
+            } catch ( KeyNotFoundException ) {
             } catch ( ArgumentNullException ) {
             } catch ( FormatException ex ) {
                 throw new HttpBadRequestException(
@@ -208,8 +176,8 @@ namespace Kms.Cloud.Api.Security {
             }
         }
 
-        private Dictionary<string, string> oAuthParameters
-            = new Dictionary<string, string>();
+        private NameValueCollection oAuthParameters
+            = new NameValueCollection();
 
         /// <summary>
         /// {oauth_consumer_key}
@@ -266,7 +234,7 @@ namespace Kms.Cloud.Api.Security {
         /// </summary>
         public Guid? VerifierCode {
             get;
-            set;
+            private set;
         }
 
         /// <summary>
@@ -274,13 +242,13 @@ namespace Kms.Cloud.Api.Security {
         /// </summary>
         public bool IsRequestToken {
             get {
-                return this.IsValid && this.Token != null && this.Token.User == null;
+                return this.IsValid && this.Token != null && (this.Token.User == null ^ this.VerifierCode.HasValue);
             }
         }
 
         public bool IsValid {
             get {
-                return this._isValid && this.IsInternalyValid;
+                return this._validSignature && this.IsInternalyValid;
             }
         }
         private bool IsInternalyValid {
@@ -296,7 +264,7 @@ namespace Kms.Cloud.Api.Security {
                 return true;
             }
         }
-        private bool _isValid = false;
+        private bool _validSignature = false;
 
         public async Task<bool> ValidateRequestAsync(HttpRequestMessage request) {
             // --- Validar requisitos mínimos para validar ---
@@ -315,14 +283,16 @@ namespace Kms.Cloud.Api.Security {
                 = new StringBuilder();
             NameValueCollection contentItems
                 = new NameValueCollection();
-            foreach ( KeyValuePair<string, string> param in this.oAuthParameters ) {
-                if ( param.Key == "oauth_signature" ) // esto afecta hash generado
+            foreach ( var key in this.oAuthParameters.AllKeys ) {
+                if ( key == "oauth_signature" ) // esto afecta hash generado
                     continue;
 
-                contentItems.Add(
-                    Uri.UnescapeDataString(param.Key),
-                    Uri.UnescapeDataString(param.Value)
-                );
+                foreach ( var value in this.oAuthParameters.GetValues(key) ) {
+                    contentItems.Add(
+                        Uri.UnescapeDataString(key),
+                        Uri.UnescapeDataString(value)
+                    );
+                }
             }
 
             // - [1] Agregar método HTTP -
@@ -331,9 +301,7 @@ namespace Kms.Cloud.Api.Security {
 
             // - [2] Agregar URL de petición -
             baseString.Append(
-                Uri.EscapeDataString(
-                    request.RequestUri.ToString()
-                )
+                Uri.EscapeDataString(request.RequestUri.ToString())
             );
             baseString.Append('&');
 
@@ -351,20 +319,14 @@ namespace Kms.Cloud.Api.Security {
             }
 
             if ( request.Content.IsFormData() )  {
-                NameValueCollection formData
-                    = await request.Content.ReadAsFormDataAsync();
-                List<KeyValuePair<string, string>> formDataList
-                    = new List<KeyValuePair<string, string>>();
+                var formData     = await request.Content.ReadAsFormDataAsync();
+                var formDataList = new List<KeyValuePair<string, string>>();
 
                 foreach ( string key in formData.AllKeys ) {
-                    string[] values
-                        = formData.GetValues(key);
+                    var values = formData.GetValues(key);
 
                     foreach ( string value in values ) {
-                        contentItems.Add(
-                            key,
-                            value
-                        );
+                        contentItems.Add(key,value);
 
                         formDataList.Add(
                             new KeyValuePair<string, string>(
@@ -375,15 +337,11 @@ namespace Kms.Cloud.Api.Security {
                     }
                 }
 
-                request.Content
-                    = new FormUrlEncodedContent(
-                        formDataList
-                    );
+                request.Content = new FormUrlEncodedContent(formDataList);
             }
 
             foreach ( string key in contentItems.AllKeys.OrderBy(b => b).ToArray() ) {
-                string[] values
-                    = contentItems.GetValues(key);
+                var values = contentItems.GetValues(key);
 
                 foreach ( string value in values.OrderBy(b => b).ToArray() ) {
                     contentString.Append(
@@ -398,9 +356,7 @@ namespace Kms.Cloud.Api.Security {
 
             baseString.Append(
                 Uri.EscapeDataString(
-                    contentString.ToString().Remove(
-                        contentString.Length - 1
-                    )
+                    contentString.ToString().Remove(contentString.Length - 1)
                 )
             );
 
@@ -416,25 +372,17 @@ namespace Kms.Cloud.Api.Security {
             
             // - [4] Calcular HMAC-SHA1 de BaseString -
             // Obtener HMAC-SHA1
-            HMACSHA1 hmacSha1 = new HMACSHA1(
-                Encoding.UTF8.GetBytes(hmacSha1Key)
+            var hmacSha1      = new HMACSHA1(Encoding.UTF8.GetBytes(hmacSha1Key));
+            var hmacSha1Bytes = hmacSha1.ComputeHash(
+                Encoding.UTF8.GetBytes(baseString.ToString())
             );
-            byte[] hmacSha1Bytes
-                = hmacSha1.ComputeHash(
-                    Encoding.UTF8.GetBytes(baseString.ToString())
-                );
 
             // Generar hash como Base64
-            string hmacSha1Base64
-                = Convert.ToBase64String(hmacSha1Bytes);
+            var hmacSha1Base64 = Convert.ToBase64String(hmacSha1Bytes);
 
             // Comparar con hash recibido
-            if ( this.Signature == hmacSha1Base64 ) {
-                this._isValid = true;
-            } else {
-                this._isValid = false;
-            }
-
+            this._validSignature = this.Signature == hmacSha1Base64;
+            
             return this.IsValid;
         }
     }
