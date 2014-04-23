@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Web.Http;
 
 namespace Kms.Cloud.Api.Controllers {
+    [Authorize]
     public abstract class BaseController : ApiController {
         /// <summary>
         ///     Provee acceso a un Contexto de Base de Datos para el
