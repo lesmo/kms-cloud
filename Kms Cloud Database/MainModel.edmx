@@ -232,7 +232,7 @@
     <Key>
       <PropertyRef Name="Guid" />
     </Key>
-    <Property Name="Guid" Type="uniqueidentifier" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Guid" Type="uniqueidentifier" StoreGeneratedPattern="None" Nullable="false" />
     <Property Name="CreationDate" Type="datetime" Nullable="false" />
     <Property Name="Email" Type="varchar" Nullable="false" MaxLength="255" />
     <Property Name="Password" Type="varbinary" Nullable="true" MaxLength="40" />
@@ -250,12 +250,12 @@
     </Key>
     <Property Name="CreationDate" Type="datetime" Nullable="false" />
     <Property Name="ExpirationDate" Type="datetime" Nullable="true" />
-    <Property Name="Guid" Type="uniqueidentifier" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Guid" Type="uniqueidentifier" StoreGeneratedPattern="None" Nullable="false" />
     <Property Name="Secret" Type="uniqueidentifier" Nullable="false" />
     <Property Name="LastUseDate" Type="datetime" Nullable="true" />
     <Property Name="LoginAttempts" Type="tinyint" Nullable="false" />
     <Property Name="CallbackUri" Type="varchar" Nullable="true" MaxLength="255" />
-    <Property Name="VerificationCode" Type="uniqueidentifier" Nullable="true" />
+    <Property Name="VerificationCode" Type="uniqueidentifier" Nullable="true" StoreGeneratedPattern="None" />
     <Property Name="ApiKey_Guid" Type="uniqueidentifier" Nullable="false" />
     <Property Name="User_Guid" Type="uniqueidentifier" Nullable="true" />
   </EntityType>
@@ -266,7 +266,7 @@
     <Property Name="CreationDate" Type="datetime" Nullable="false" />
     <Property Name="Platform" Type="nvarchar" Nullable="false" MaxLength="64" />
     <Property Name="Description" Type="nvarchar" Nullable="true" MaxLength="64" />
-    <Property Name="Guid" Type="uniqueidentifier" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Guid" Type="uniqueidentifier" StoreGeneratedPattern="None" Nullable="false" />
     <Property Name="Secret" Type="uniqueidentifier" Nullable="false" />
     <Property Name="TokenUpgradeRequired" Type="bit" Nullable="false" DefaultValue="false" />
     <Property Name="DebugEnabled" Type="bit" Nullable="false" DefaultValue="false" />
@@ -278,7 +278,7 @@
     <Key>
       <PropertyRef Name="Guid" />
     </Key>
-    <Property Name="Guid" Type="uniqueidentifier" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Guid" Type="uniqueidentifier" StoreGeneratedPattern="None" Nullable="false" />
     <Property Name="CreationDate" Type="datetime" Nullable="false" />
     <Property Name="DistanceTrigger" Type="bigint" Nullable="true" />
     <Property Name="DaysTrigger" Type="bigint" Nullable="false" />
@@ -289,7 +289,7 @@
     <Key>
       <PropertyRef Name="Guid" />
     </Key>
-    <Property Name="Guid" Type="uniqueidentifier" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Guid" Type="uniqueidentifier" StoreGeneratedPattern="None" Nullable="false" />
     <Property Name="DistanceThresholdStart" Type="int" Nullable="false" />
     <Property Name="DistanceThresholdEnd" Type="int" Nullable="false" />
     <Property Name="DaysThresholdStart" Type="smallint" Nullable="false" />
@@ -326,7 +326,7 @@
     <Key>
       <PropertyRef Name="Guid" />
     </Key>
-    <Property Name="Guid" Type="uniqueidentifier" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Guid" Type="uniqueidentifier" StoreGeneratedPattern="None" Nullable="false" />
     <Property Name="CreationDate" Type="datetime" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="IsShipped" Type="bit" Nullable="false" DefaultValue="false" />
     <Property Name="Reward_Guid" Type="uniqueidentifier" Nullable="false" />
@@ -403,7 +403,7 @@
     <Key>
       <PropertyRef Name="Guid" />
     </Key>
-    <Property Name="Guid" Type="uniqueidentifier" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Guid" Type="uniqueidentifier" StoreGeneratedPattern="None" Nullable="false" />
     <Property Name="CreationDate" Type="datetime" Nullable="false" />
     <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
     <Property Name="Tip_Guid" Type="uniqueidentifier" Nullable="false" />
@@ -1387,7 +1387,7 @@
           <Key>
             <PropertyRef Name="Guid" />
           </Key>
-          <Property Type="Guid" Name="Guid" Nullable="false" annotation:StoreGeneratedPattern="Identity" cg:SetterAccess="Public" >
+          <Property Type="Guid" Name="Guid" Nullable="false" annotation:StoreGeneratedPattern="None" cg:SetterAccess="Public" >
             <Documentation>
               <Summary>Guid que representa al Usuario.</Summary>
             </Documentation>
@@ -1494,16 +1494,16 @@
               <Summary>Fecha de expiración de la Sesión.</Summary>
             </Documentation>
           </Property>
-          <Property Type="Guid" Name="Guid" Nullable="false" annotation:StoreGeneratedPattern="Identity" >
+          <Property Type="Guid" Name="Guid" Nullable="false" annotation:StoreGeneratedPattern="None" >
             <Documentation>
               <Summary>Ésto se utiliza para identificar la Sesión actual en todas las peticiones al Api.</Summary>
             </Documentation>
           </Property>
           <Property Name="Secret" Type="Guid" Nullable="false" />
-          <Property Type="DateTime" Name="LastUseDate" Precision="3" annotation:StoreGeneratedPattern="None" />
+          <Property Type="DateTime" Name="LastUseDate" Precision="3" annotation:StoreGeneratedPattern="None" Nullable="false" />
           <Property Name="LoginAttempts" Type="Byte" Nullable="false" />
-          <Property Name="CallbackUri" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="VerificationCode" Type="Guid" />
+          <Property Name="CallbackUri" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="true" />
+          <Property Name="VerificationCode" Type="Guid" annotation:StoreGeneratedPattern="None" Nullable="true" />
         </EntityType>
         <EntityType Name="ApiKey">
           <Documentation>
@@ -1530,7 +1530,7 @@
               <LongDescription>Esto almacena detalles como "sólo para testing" o similares.</LongDescription>
             </Documentation>
           </Property>
-          <Property Type="Guid" Name="Guid" Nullable="false" annotation:StoreGeneratedPattern="Identity" cg:GetterAccess="Public" >
+          <Property Type="Guid" Name="Guid" Nullable="false" annotation:StoreGeneratedPattern="None" cg:GetterAccess="Public" >
             <Documentation>
               <Summary>Llave (GUID) utilizada para identificar el Cliente de la App.</Summary>
             </Documentation>
@@ -1565,7 +1565,7 @@
           <Key>
             <PropertyRef Name="Guid" />
           </Key>
-          <Property Type="Guid" Name="Guid" Nullable="false" annotation:StoreGeneratedPattern="Identity" >
+          <Property Type="Guid" Name="Guid" Nullable="false" annotation:StoreGeneratedPattern="None" >
             <Documentation>
               <Summary>Guid del Tip.</Summary>
             </Documentation>
@@ -1612,7 +1612,7 @@
           <Key>
             <PropertyRef Name="Guid" />
           </Key>
-          <Property Type="Guid" Name="Guid" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Guid" Name="Guid" Nullable="false" annotation:StoreGeneratedPattern="None" />
           <Property Type="Int32" Name="DistanceThresholdStart" Nullable="false" />
           <Property Name="DistanceThresholdEnd" Nullable="false" Type="Int32" />
           <Property Type="Int16" Name="DaysThresholdStart" Nullable="false" />
@@ -1779,7 +1779,7 @@
           <Key>
             <PropertyRef Name="Guid" />
           </Key>
-          <Property Type="Guid" Name="Guid" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Guid" Name="Guid" Nullable="false" annotation:StoreGeneratedPattern="None" />
           <NavigationProperty Name="Reward" Relationship="MainModel.RewardRewardGift" FromRole="RewardGift" ToRole="Reward" >
             <Documentation>
               <Summary>Recompensa para la que se dará éste Regalo.</Summary>
@@ -2053,7 +2053,7 @@
           <Key>
             <PropertyRef Name="Guid" />
           </Key>
-          <Property Name="Guid" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Guid" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="None" />
           <NavigationProperty Name="User" Relationship="MainModel.UserTipHistoryUser" FromRole="UserTipHistory" ToRole="User" />
           <NavigationProperty Name="Tip" Relationship="MainModel.UserTipHistoryTip" FromRole="UserTipHistory" ToRole="Tip" />
           <Property Name="CreationDate" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="None" Precision="3" />

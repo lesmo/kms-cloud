@@ -26,20 +26,19 @@ namespace Kms.Cloud.Database.Abstraction.Interfaces {
             if ( this._autosetInitialized )
                 return;
 
-            this._autosetInsertDateProperties
-                = typeof(TEntity)
-                    .GetProperties()
+            var entityProperties = typeof(TEntity).GetProperties();
+
+            this._autosetInsertDateProperties =
+                entityProperties
                     .Where(w => RepositoryConfig.DateTimeEntityPropertiesConfig.AutosetOnInsert.Contains(w.Name));
-            this._autosetUpdateDateProperties
-                = typeof(TEntity)
-                    .GetProperties()
+            this._autosetUpdateDateProperties = 
+                entityProperties
                     .Where(w => RepositoryConfig.DateTimeEntityPropertiesConfig.AutosetOnUpdate.Contains(w.Name));
-            this._autosetGuidProperty
-                = typeof(TEntity)
-                    .GetProperties()
+            this._autosetGuidProperty =
+                entityProperties
                     .Where(w => RepositoryConfig.GuidPropertiesConfig.AutosetOnInsert.Contains(w.Name))
-                    .Take(1)
                     .FirstOrDefault();
+
             this._autosetInitialized
                 = true;
         }
@@ -150,24 +149,25 @@ namespace Kms.Cloud.Database.Abstraction.Interfaces {
         }
 
         /// <summary>
-        /// Devuelve la Entidad asignada éste GUID , en representación de cadena compacta, o ID.
+        ///     Devuelve la Entidad asignada éste GUID , en representación de cadena compacta, o ID.
         /// </summary>
-        /// <param name="compactBase64">Cadena de Representación Compacta del GUID, o ID.</param>
+        /// <param name="guidString">
+        ///     Cadena de Representación Compacta del GUID, o ID.</param>
         /// <returns>Entidad</returns>
-        public virtual TEntity Get(string compactBase64) {
-            Guid guid
-                = new Guid().FromBase64String(compactBase64);
+        public virtual TEntity Get(string guidString) {
+            var guid = new Guid().FromBase64String(guidString);
 
-            if ( guid == default(Guid) ) {
-                Int64 id;
-
-                if ( Int64.TryParse(compactBase64, out id) )
-                    return this.Get(id);
-                else
-                    return null;
-            } else {
+            if ( guid != default(Guid) )
                 return this.Get(guid);
-            }
+
+            if ( Guid.TryParse(guidString, out guid) )
+                return this.Get(guid);
+
+            Int64 idLong;
+            if ( Int64.TryParse(guidString, out idLong) )
+                return this.Get(idLong);
+
+            return null;
         }
 
         /// <summary>
@@ -175,11 +175,10 @@ namespace Kms.Cloud.Database.Abstraction.Interfaces {
         /// </summary>
         /// <param name="entity">Entidad a añadir</param>
         public virtual void Add(TEntity entity) {
-            InitializePropertyInfo();
+            this.InitializePropertyInfo();
 
             if ( this._autosetGuidProperty != null ) {
-                if ( (Guid)this._autosetGuidProperty.GetValue(entity) == default(Guid) )
-                    this._autosetGuidProperty.GetValue(entity);
+                this._autosetGuidProperty.SetValue(entity, Guid.NewGuid());
             }
 
             this._autosetInsertDateProperties.ForEach((p) => {
@@ -236,19 +235,20 @@ namespace Kms.Cloud.Database.Abstraction.Interfaces {
         /// </summary>
         /// <param name="entity">Entidad con la información modificada</param>
         public virtual void Update(TEntity entity) {
+            this.InitializePropertyInfo();
+
             this._autosetUpdateDateProperties.ForEach((p) => {
                 if ( p.PropertyType == typeof(DateTime) ) {
                     if ( (DateTime)p.GetValue(entity) == DateTime.MinValue )
                         p.SetValue(entity, DateTime.UtcNow);
-                } else {
+                } else if ( p.PropertyType == typeof(DateTime?) ) {
                     if ( !((DateTime?)p.GetValue(entity)).HasValue )
                         p.SetValue(entity, (DateTime?)DateTime.UtcNow);
                 }
             });
 
             this._dbSet.Attach(entity);
-            this._context.Entry(entity).State
-                = EntityState.Modified;
+            this._context.Entry(entity).State = EntityState.Modified;
         }
 
         public TEntity this[Guid guid] {
