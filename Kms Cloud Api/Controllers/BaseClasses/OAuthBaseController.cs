@@ -33,7 +33,9 @@ namespace Kms.Cloud.Api.Controllers {
             return Activator.CreateInstance(
                 typeof(T),
                 new object[] {
-                    oAuthConsumer
+                    oAuthConsumer,
+                    null,
+                    null
                 }
             ) as T;
         }
@@ -57,7 +59,8 @@ namespace Kms.Cloud.Api.Controllers {
                 typeof(T),
                 new object[] {
                     oAuthConsumer, 
-                    oAuthToken
+                    oAuthToken,
+                    null
                 }
             ) as T;
         }
@@ -109,11 +112,6 @@ namespace Kms.Cloud.Api.Controllers {
         }
 
         protected HttpResponseMessage ExchangeOAuthAccessToken(User user = null) {
-            if ( ! OAuth.IsRequestToken )    
-                throw new InvalidOperationException(
-                    "Can't return new Access Token when current Request is being served to an Access Token."
-                );
-
             Token newToken = new Token {
                 ApiKey           = OAuth.ConsumerKey,
                 Guid             = Guid.NewGuid(),
