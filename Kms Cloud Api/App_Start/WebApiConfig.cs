@@ -26,13 +26,14 @@ namespace Kms.Cloud.Api {
         
         public static void Register(HttpConfiguration config) {
             // --- Configurar ExceptionFilters ---
-            config.Filters.Add(new ExceptionFilters.UnhandledExceptionFilterAttributeFilter());
             config.Filters.Add(new ExceptionFilters.HttpStatusExceptionFilterAttribute());
             config.Filters.Add(new ExceptionFilters.DbValidationExceptionFilter());
+            config.Filters.Add(new ExceptionFilters.UnhandledExceptionFilterAttributeFilter());
 
             // --- Configurar MessageHandlers ---
             config.MessageHandlers.Add(new MessageHandlers.ResponseEncoder());
             config.MessageHandlers.Add(new MessageHandlers.ResponseLastModifiedHandler());
+
             config.MessageHandlers.Add(new MessageHandlers.RequestSecurityHandler());
             config.MessageHandlers.Add(new MessageHandlers.RequestArrayHandler());
 
