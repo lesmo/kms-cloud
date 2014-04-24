@@ -21,83 +21,59 @@ namespace Kms.Cloud.WebApp.Controllers {
 				page--;
 
 			// > Inicializar valores de Vista
-			RewardsValues rewardsValues
-				= new RewardsValues();
+			var modelValues = new RewardsValues();
 
 			// > Obtener las próximas 5 + 1 recompensas (+1 para sección inicial)
-			rewardsValues.NextRewards
-				= Database.RewardStore.GetAllForRegion(
-					regionCode:
-						CurrentUser.RegionCode,
-					filter: f =>
-						f.DistanceTrigger > CurrentUser.UserDataTotalDistanceSum.TotalDistance,
-					orderBy: o =>
-						o.OrderBy(b => b.DistanceTrigger),
-					extra: x =>
-						x.Take(6)
-				).Select(s =>
-					new RewardUnknownModel() {
-						RemainingDistanceCentimeters
-							= s.DistanceTrigger - CurrentUser.UserDataTotalDistanceSum.TotalDistance,
-						TriggerDistanceCentimeters
-							= s.DistanceTrigger
-					}
-				).ToArray();
+			modelValues.NextRewards = Database.RewardStore.GetAllForRegion(
+				regionCode:
+					CurrentUser.RegionCode,
+				filter: f =>
+					f.DistanceTrigger > CurrentUser.UserDataTotalDistanceSum.TotalDistance,
+				orderBy: o =>
+					o.OrderBy(b => b.DistanceTrigger),
+				extra: x =>
+					x.Take(6)
+			).Select(s => new RewardUnknownModel {
+				RemainingDistanceCentimeters =
+					s.DistanceTrigger - CurrentUser.UserDataTotalDistanceSum.TotalDistance,
+				TriggerDistanceCentimeters =
+					s.DistanceTrigger
+			}).ToArray();
 
 			// > Obtener las últimas recompensas
-			rewardsValues.UnlockedRewards
-				= Database.UserEarnedRewardStore.GetAll(
-					filter: f =>
-						f.User.Guid == CurrentUser.Guid
-						&& f.Discarded == true,
-					orderBy: o =>
-						o.OrderByDescending(b => b.CreationDate),
-					extra: x =>
-						x.Skip(page * RewardsPerPage).Take(RewardsPerPage),
-					include:
-						new string[] { "Reward" }
-				).Select(s =>
-					new RewardModel() {
-						IconUri = GetDynamicResourceUri(
-							"Images",
-							s.Reward.Guid.ToBase64String(),
-							s.Reward.PictureExtension
-						),
-						SponsorIcon = s.Reward.RewardSponsor == null
-							? null
-							: GetDynamicResourceUri(
-								"Images",
-								s.Reward.RewardSponsor.Guid.ToBase64String(),
-								s.Reward.RewardSponsor.PictureExtension
-							),
-						SponsorName = s.Reward.RewardSponsor == null
-							? null
-							: s.Reward.RewardSponsor.Name,
-						
-						TriggerDistanceCentimeters = s.Reward.DistanceTrigger,
-						UnlockDate                 = s.CreationDate,
+			modelValues.UnlockedRewards = Database.UserEarnedRewardStore.GetAll(
+				filter: f =>
+					f.User.Guid == CurrentUser.Guid
+					&& f.Discarded == true,
+				orderBy: o =>
+					o.OrderByDescending(b => b.CreationDate),
+				extra: x =>
+					x.Skip(page * RewardsPerPage).Take(RewardsPerPage),
+				include:
+					new string[] { "Reward" }
+			).Select(s => new RewardModel {
+				IconUri     = GetDynamicResourceUri(s.Reward),
+				SponsorIcon = s.Reward.RewardSponsor == null
+					? null
+					: GetDynamicResourceUri(s.Reward.RewardSponsor),
+				SponsorName = s.Reward.RewardSponsor == null
+					? null
+					: s.Reward.RewardSponsor.Name,
+					
+				TriggerDistanceCentimeters = s.Reward.DistanceTrigger,
+				UnlockDate                 = s.CreationDate,
 
-						Title                      = s.Reward.GetGlobalization().Title,
-						Text                       = s.Reward.GetGlobalization().Text
-					}
-				).ToArray();
+				Title = s.Reward.GetGlobalization().Title,
+				Text  = s.Reward.GetGlobalization().Text
+			}).ToArray();
 
 			// > Calcular páginas totales disponibles
-			rewardsValues.TotalPages = (int)Math.Ceiling(
+			modelValues.TotalPages = (int)Math.Ceiling(
 				(double)CurrentUser.UserEarnedReward.Count() / RewardsPerPage
 			);
 
-			// > Preparar valores para la vista
-			ViewData.Add(
-				"LayoutValues",
-				this.LayoutValues
-			);
-			ViewData.Add(
-				"RewardsValues",
-				rewardsValues
-			);
-
-			return View();
+			// > Devolver la vista
+			return View(modelValues);
 		}
 	}
 }

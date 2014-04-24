@@ -9,6 +9,11 @@ using System.Web;
 
 namespace Kms.Cloud.WebApp.Controllers {
     public abstract partial class BaseController {
+        protected override void OnActionExecuted(System.Web.Mvc.ActionExecutedContext filterContext) {
+            filterContext.Controller.ViewBag.Layout = this.LayoutValues;
+            base.OnActionExecuted(filterContext);
+        }
+
         /// <summary>
         ///     Devuelve los Valores que deben utilizarse en el Layout
         ///     que se comparte por todos los Controladores y Vistas, principalmente

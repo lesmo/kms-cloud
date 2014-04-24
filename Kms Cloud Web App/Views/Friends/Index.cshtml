@@ -1,10 +1,5 @@
-﻿@{
-    FriendsValues friendsValues
-        = (FriendsValues)ViewData["FriendsValues"];
+﻿@model FriendsValues
 
-    friendsValues
-        = friendsValues ?? new FriendsValues();
-}
 <span class="tituloGrafica">
     <h2>
         <img src="~/Images/Gui/Gui.MiniMedal.jpg">@FriendsStrings.FriendRequests.ToUpper()
@@ -12,7 +7,7 @@
     <hr>
 </span>
 <section id="solicitudes">
-    @foreach ( FriendModel friend in friendsValues.FriendRequests ) {
+    @foreach ( var friend in Model.FriendRequests ) {
         <article class="solicitudItem">
             <figure>
                 <img src="@friend.PictureUri.AbsoluteUri" alt="@friend.Name @friend.LastName">
@@ -36,17 +31,16 @@
     <hr>
 </span>
 <span class="amigosCant">
-    @string.Format(FriendsStrings.TotalFriends, friendsValues.TotalFriends)
+    @string.Format(FriendsStrings.TotalFriends, Model.TotalFriends)
 </span>
-<section id="amigos">
-    @foreach ( FriendModel friend in friendsValues.Friends ) {
+<section id="amigos" data-total-count="@Model.TotalFriends">
+    @foreach ( var friend in Model.Friends ) {
         <article class="amigosItem"
                  data-uid="@friend.UserId"
-                 data-totaldistance="@friend.TotalDistance"
-                 data-totalco2="@friend.TotalCo2"
-                 data-totalkcal="@friend.TotalKcal"
-                 data-totalcash="@friend.TotalCash"
-        >
+                 data-total-distance="@friend.TotalDistance"
+                 data-total-co2="@friend.TotalCo2"
+                 data-total-kcal="@friend.TotalKcal"
+                 data-total-cash="@friend.TotalCash">
             <figure>
                 <img src="@friend.PictureUri.AbsoluteUri" alt="">
             </figure>

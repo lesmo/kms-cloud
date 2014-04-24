@@ -1,7 +1,6 @@
-﻿@{
-    LayoutValues layoutValues = ViewData["LayoutValues"] as LayoutValues;
-    RewardsValues rewardsValues = ViewData["RewardsValues"] as RewardsValues;
-}
+﻿@model RewardsValues
+@{ LayoutValues layoutValues = ViewBag.Layout as LayoutValues; }
+
 <span class="tituloGrafica">
     <h2>
         <img src="~/Images/Gui/Gui.MiniMedal.jpg">@RewardsStrings.NextReward.ToUpper()
@@ -16,15 +15,15 @@
     <div class="info-recomp">
         <span class="proxRecomp">@RewardsStrings.YouveComeALongWay.ToUpper() :</span>
         <span class="kms">
-            @rewardsValues.NextRewards.First().RemainingDistance @(RegionInfo.CurrentRegion.IsMetric ? "kms" : "mi")
+            @Model.NextRewards.First().RemainingDistance @(RegionInfo.CurrentRegion.IsMetric ? "kms" : "mi")
         </span>
         <div id="barra">
-            <div class="progreso" style="width: @((layoutValues.TotalDistanceCentimeters / rewardsValues.NextRewards.First().TriggerDistanceCentimeters) * 100)%;"></div>
+            <div class="progreso" style="width: @((layoutValues.TotalDistanceCentimeters / Model.NextRewards.First().TriggerDistanceCentimeters) * 100)%;"></div>
         </div>
         <p>
             @string.Format(
                 RewardsStrings.YourRewardWillBeUnlockedAt,
-                rewardsValues.NextRewards.First().TriggerDistance,
+                Model.NextRewards.First().TriggerDistance,
                 RegionInfo.CurrentRegion.IsMetric
                     ? "kms"
                     : "mi"
@@ -41,12 +40,12 @@
 </span>
 
 <div id="recompensasLiberadas">
-    @for ( int i = 1; i < rewardsValues.NextRewards.Length; i++ ) {
+    @for ( int i = 1; i < Model.NextRewards.Length; i++ ) {
         <article class="recompensa">
             <img src="~/Images/Gui/Rewards/Gui.GenericBadge.jpg" alt="">
             <p>@RewardsStrings.UnlockedAfter.ToUpper():</p>
             <h3>
-                @(rewardsValues.NextRewards[i].RemainingDistance) @(RegionInfo.CurrentRegion.IsMetric ? "KMS" : "MI")
+                @(Model.NextRewards[i].RemainingDistance) @(RegionInfo.CurrentRegion.IsMetric ? "KMS" : "MI")
             </h3>
         </article>
     }
@@ -60,7 +59,7 @@
 </span>
 
 <div id="recompensasLiberadas">
-    @foreach ( RewardModel reward in rewardsValues.UnlockedRewards ) {
+    @foreach ( var reward in Model.UnlockedRewards ) {
         <article class="itemLiberada">
             <div class="info">
                 <figure><img src="@reward.IconUri.AbsoluteUri" alt="@reward.Title"></figure>
@@ -94,11 +93,11 @@
         <li>
             <a href="@Url.Action("Index", new { page = 1 })">1</a>
         </li>
-        @for ( int i = 2; i <= rewardsValues.TotalPages; i++ ) {
+        @for ( int i = 2; i <= Model.TotalPages; i++ ) {
             <li>
                 <a href="@Url.Action("Index", new {page = i})">@i</a>
             </li>
         }
-        <li><a href="@Url.Action("Index", new {page = rewardsValues.TotalPages})">»</a></li>
+        <li><a href="@Url.Action("Index", new {page = Model.TotalPages})">»</a></li>
     </ul>
 </div>

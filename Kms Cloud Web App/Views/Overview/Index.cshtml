@@ -1,18 +1,17 @@
-﻿@{
-	OverviewValues overviewValues = ViewData["OverviewValues"] as OverviewValues;
-}
+﻿@model OverviewValues
+
 <div id="actividad">
 	<div class="recorridoSueno">
 		<aside class="tresCol">
 			<p>
-				@overviewValues.TodaySleepTime.Hours <span class="peque">hrs</span>
-				@overviewValues.TodaySleepTime.Minutes <span class="peque">min</span>
+				@Model.TodaySleepTime.Hours <span class="peque">hrs</span>
+				@Model.TodaySleepTime.Minutes <span class="peque">min</span>
 			</p>
 			<em>@OverviewStrings.TodaySleepTime.ToUpper()</em>
 		</aside>
 		<aside class="tresCol">
 			<p>
-				@overviewValues.TodayDistance
+				@Model.TodayDistance
 				<span class="peque">@(RegionInfo.CurrentRegion.IsMetric ? "kms" : "mi")</span>
 			</p>
 			<em>@OverviewStrings.TodayTraveled.ToUpper()</em>
@@ -27,7 +26,7 @@
 				</figure>
 				<span>
 					<span class="numero">
-						@overviewValues.EquivalentCo2 @(RegionInfo.CurrentRegion.IsMetric ? "kg" : "lb")
+						@Model.EquivalentCo2 @(RegionInfo.CurrentRegion.IsMetric ? "kg" : "lb")
 					</span>
 					<span class="leyenda">CO<sub>2</sub></span>
 				</span>
@@ -37,7 +36,7 @@
 					<img src="~/Images/Gui/Overview/Gui.Kcal.jpg" alt="@OverviewStrings.KcalAlt">
 				</figure>
 				<span>
-					<span class="numero">@overviewValues.EquivalentKcal</span>
+					<span class="numero">@Model.EquivalentKcal</span>
 					<span class="leyenda">kcal</span>
 				</span>
 			</li>
@@ -46,7 +45,7 @@
 					<img src="~/Images/Gui/Overview/Gui.Savings.jpg" alt="@OverviewStrings.Savings">
 				</figure>
 				<span>
-					<span class="numero">@overviewValues.EquivalentCash</span>
+					<span class="numero">@Model.EquivalentCash</span>
 					<span class="leyenda">@OverviewStrings.Savings</span>
 				</span>
 			</li>

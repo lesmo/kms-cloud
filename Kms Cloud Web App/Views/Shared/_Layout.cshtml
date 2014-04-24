@@ -1,6 +1,4 @@
-﻿@{
-	LayoutValues layoutValues = ViewData["LayoutValues"] as LayoutValues;
-}
+﻿@{ LayoutValues layoutValues = ViewBag.Layout as LayoutValues; }
 
 <!DOCTYPE html>
 <html lang="@CultureInfo.CurrentCulture.Name.ToLower()">
@@ -20,7 +18,7 @@
 <body data-distance-unit="@(RegionInfo.CurrentRegion.IsMetric ? "kms" : "mi")" data-weight-unit="@(RegionInfo.CurrentRegion.IsMetric ? "kg" : "lb")">
 	<header>
 		<div class="contenedor2">
-			<a href="@Url.Action("Overview", "Index", new { lang = CultureInfo.CurrentCulture.Name })">
+			<a href="@Url.Action("Index", "Overview", new { lang = CultureInfo.CurrentCulture.Name })">
 				<h1>
 					<span class="ocultar">KMS</span>
 					<img src="~/Images/Header/Header.KmsLogo.png" alt="KMS">
