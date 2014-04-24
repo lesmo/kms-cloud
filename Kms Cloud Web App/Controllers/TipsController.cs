@@ -35,29 +35,26 @@ namespace Kms.Cloud.WebApp.Controllers {
 				page--;
 
 			// > Obtener las Categorías de Tips
-			IEnumerable<TipCategoryGlobalization> tipCategories
-				= Database.TipCategoryStore.GetAll().Select( s =>
-					s.GetGlobalization()
-				);
+			var tipCategories = Database.TipCategoryStore.GetAll().Select(s =>
+				s.GetGlobalization()
+			);
 
 			TipCategory tipCategory;
-
+			
 			if ( cat == null ) {
-				tipCategory
-					= tipCategories.FirstOrDefault().TipCategory;
+				tipCategory = tipCategories.FirstOrDefault().TipCategory;
 				
 				if ( tipCategory == null)
 					throw new HttpException(591, "No tip categories are defined!");
 			} else {
-				tipCategory
-					= tipCategories.Select(s =>
-						s.TipCategory
-					).Where(w =>
-						w.Guid == new Guid().FromBase64String(cat)
-					).FirstOrDefault();
+				tipCategory = tipCategories.Select(s =>
+					s.TipCategory
+				).Where(w =>
+					w.Guid == new Guid().FromBase64String(cat)
+				).FirstOrDefault();
 				
 				if ( tipCategory == null )
-					return RedirectToAction("Tips", "Index");
+					return RedirectToAction("Index", new{ page = page });
 			}
 			
 			// > Obtener los Tips desbloqueados por el Usuario en la Categoría

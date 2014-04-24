@@ -41,7 +41,7 @@
                         </li>
                     } else {
                         <li>
-                            <a href="@Url.Action("Tips", "Index", new { cat = category.CategoryId })">
+                            <a href="@Url.Action("Index", new { cat = category.CategoryId })">
                                 <img src="@category.IconUri.AbsoluteUri" alt="@category.Name" />
                             </a>
                         </li>
@@ -70,27 +70,27 @@
             <div class="paginacion">
                 <ul>
                     <li>
-                        <a href="@Url.Action("Tips", "Index", new {
+                        <a href="@Url.Action("Index", new {
                             cat = tipsValues.CurrentCategory.CategoryId,
                             page = 1
                         })">«</a>
                     </li>
                     <li>
-                        <a href="@Url.Action("Tips", "Index", new {
+                        <a href="@Url.Action("Index", new {
                             cat = tipsValues.CurrentCategory.CategoryId,
                             page = 1
                         })">1</a>
                     </li>
                     @for ( int i = 2; i <= tipsValues.CurrentCategoryTipsTotalPages; i++ ) {
                         <li>
-                            <a href="@Url.Action("Tips", "Index", new {
+                            <a href="@Url.Action("Index", new {
                                 cat = tipsValues.CurrentCategory.CategoryId,
                                 page = i
                             })">@i</a>
                         </li>
                     }
                     <li>
-                        <a href="@Url.Action("Tips", "Index", new {
+                        <a href="@Url.Action("Index", new {
                             cat = tipsValues.CurrentCategory.CategoryId,
                             page = tipsValues.CurrentCategoryTipsTotalPages
                         })">»</a>
