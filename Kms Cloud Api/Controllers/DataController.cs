@@ -24,7 +24,6 @@ namespace Kms.Cloud.Api.Controllers {
     ///     Permite subir y descargar Datos generados por los Dispositivos KMS, o los Servicios de Terceros
     ///     soportados por la Nube KMS.
     /// </summary>
-    [Authorize]
     public class DataController : BaseController {
         /// <summary>
         ///     Devuelve los pasos dados y la distancia recorrida por el Usuario divididos por hora,
@@ -187,31 +186,28 @@ namespace Kms.Cloud.Api.Controllers {
                 );
 
             // --- Determinar la última fecha registrada ---
-            Data lastData
-                = Database.DataStore.GetFirst(
-                    filter: f =>
-                        f.User.Guid == CurrentUser.Guid,
-                    orderBy: o =>
-                        o.OrderByDescending(b => b.Timestamp)
-                );
-            DateTime lastDataTimestamp
-                = lastData == null
-                ? DateTime.MinValue
-                : lastData.Timestamp;
+            var lastData = Database.DataStore.GetFirst(
+                filter: f =>
+                    f.User.Guid == CurrentUser.Guid,
+                orderBy: o =>
+                    o.OrderByDescending(b => b.Timestamp)
+            );
+            var lastDataTimestamp =
+                lastData == null
+                    ? DateTime.MinValue
+                    : lastData.Timestamp;
 
-            // --- Determinar los registros si se almacenarán en BD ---
+            // --- Determinar los registros que si se almacenarán en BD ---
             // Especificar que fechas son UTC
             foreach ( DataPost i in dataPost )
-                i.Timestamp
-                    = DateTime.SpecifyKind(
-                        i.Timestamp,
-                        DateTimeKind.Utc
-                    );
+                i.Timestamp = DateTime.SpecifyKind(
+                    i.Timestamp,
+                    DateTimeKind.Utc
+                );
 
             // TODO: Incluir un algoritmo que mejore la solución al problema
             //       de datos replicados y sincronía.
-            List<DataPost> finalDataPost
-                = new List<DataPost>();
+            var finalDataPost = new List<DataPost>();
 
             foreach ( DataPost i in dataPost ) {
                 if ( i.Timestamp > lastDataTimestamp )
@@ -306,9 +302,11 @@ namespace Kms.Cloud.Api.Controllers {
             short activityId
                 = 0;
 
-            for ( short i = 1; i < activityEnum.Length; i++ ) {
-                if ( activityEnum[0].ToUpper(CultureInfo.InvariantCulture) == activity )
-                    activityId = i;
+            for ( short i = 0; i < activityEnum.Length; i++ ) {
+                if ( activityEnum[i].ToUpper(CultureInfo.InvariantCulture) == activity ) {
+                    activityId = (short)(i + 1);
+                    break;
+                }
             }
 
             if ( activityId == 0 )

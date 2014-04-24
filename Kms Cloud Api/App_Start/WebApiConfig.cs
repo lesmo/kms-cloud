@@ -35,7 +35,6 @@ namespace Kms.Cloud.Api {
             config.MessageHandlers.Add(new MessageHandlers.ResponseLastModifiedHandler());
 
             config.MessageHandlers.Add(new MessageHandlers.RequestSecurityHandler());
-            config.MessageHandlers.Add(new MessageHandlers.RequestArrayHandler());
 
             // --- Configurar rutas ---
             // Todas las rutas se establecen con el tag [Route(--)]

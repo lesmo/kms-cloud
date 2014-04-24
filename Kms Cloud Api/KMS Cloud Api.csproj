@@ -249,7 +249,6 @@
     <Compile Include="MagicTriggers\AsyncRewardTipTrigger.cs" />
     <Compile Include="MagicTriggers\RewardsPushTrigger.cs" />
     <Compile Include="MagicTriggers\TipsPushTrigger.cs" />
-    <Compile Include="MessageHandlers\RequestArrayHandler.cs" />
     <Compile Include="MessageHandlers\ResponseLastModifiedHandler.cs" />
     <Compile Include="Models\IOAuthTokenPost.cs" />
     <Compile Include="Models\IOAuthTokenSecretPost.cs" />
