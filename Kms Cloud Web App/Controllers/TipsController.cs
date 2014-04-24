@@ -28,6 +28,12 @@ namespace Kms.Cloud.WebApp.Controllers {
 
 		// GET: /Tips/
 		public ActionResult Index(string cat = null, int page = 1) {
+			// Validar el número de Página
+			if ( page < 1 )
+				return RedirectToAction("Index", new {page = 1});
+			else
+				page--;
+
 			// > Obtener las Categorías de Tips
 			IEnumerable<TipCategoryGlobalization> tipCategories
 				= Database.TipCategoryStore.GetAll().Select( s =>

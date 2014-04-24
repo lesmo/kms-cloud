@@ -6,7 +6,7 @@
 <div id="tipsGodines">
     <span class="tituloGrafica">
         <h2>
-            <img src="@Url.Content("~/Images/Gui/Gui.Day.jpg")"> @LayoutStrings.TipOfTheDay.ToUpper()
+            <img src="~/Images/Gui/Gui.Day.jpg"> @LayoutStrings.TipOfTheDay.ToUpper()
         </h2>
         <hr />
     </span>
@@ -27,7 +27,7 @@
 
     <span class="tituloGrafica">
         <h2>
-            <img src="@Url.Content("~/Images/Gui/Gui.Day.jpg")">@TipsStrings.Categories
+            <img src="~/Images/Gui/Gui.Day.jpg">@TipsStrings.Categories.ToUpper()
         </h2>
         <hr>
     </span>
@@ -71,12 +71,14 @@
                 <ul>
                     <li>
                         <a href="@Url.Action("Tips", "Index", new {
-                            cat = tipsValues.CurrentCategory.CategoryId
+                            cat = tipsValues.CurrentCategory.CategoryId,
+                            page = 1
                         })">«</a>
                     </li>
                     <li>
                         <a href="@Url.Action("Tips", "Index", new {
-                            cat = tipsValues.CurrentCategory.CategoryId
+                            cat = tipsValues.CurrentCategory.CategoryId,
+                            page = 1
                         })">1</a>
                     </li>
                     @for ( int i = 2; i <= tipsValues.CurrentCategoryTipsTotalPages; i++ ) {
@@ -89,8 +91,9 @@
                     }
                     <li>
                         <a href="@Url.Action("Tips", "Index", new {
-                            cat = tipsValues.CurrentCategoryTipsTotalPages
-                        })">@tipsValues.CurrentCategoryTipsTotalPages</a>
+                            cat = tipsValues.CurrentCategory.CategoryId,
+                            page = tipsValues.CurrentCategoryTipsTotalPages
+                        })">»</a>
                     </li>
                 </ul>
             </div>

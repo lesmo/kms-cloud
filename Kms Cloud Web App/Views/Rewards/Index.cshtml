@@ -19,7 +19,7 @@
             @rewardsValues.NextRewards.First().RemainingDistance @(RegionInfo.CurrentRegion.IsMetric ? "kms" : "mi")
         </span>
         <div id="barra">
-            <div class="progreso" style="width: 80%;"></div>
+            <div class="progreso" style="width: @((layoutValues.TotalDistanceCentimeters / rewardsValues.NextRewards.First().TriggerDistanceCentimeters) * 100)%;"></div>
         </div>
         <p>
             @string.Format(
@@ -35,7 +35,7 @@
 
 <span class="tituloGrafica">
     <h2>
-        <img src="~/Images/Gui/Gui.Trophy.jpg">@RewardsStrings.FutureRewards
+        <img src="~/Images/Gui/Gui.Trophy.jpg">@RewardsStrings.FutureRewards.ToUpper()
     </h2>
     <hr>
 </span>
@@ -89,16 +89,16 @@
 <div class="paginacion">
     <ul>
         <li>
-            <a href="@Url.Action("Rewards", new { page = 1 })">«</a>
+            <a href="@Url.Action("Index", new { page = 1 })">«</a>
         </li>
         <li>
-            <a href="@Url.Action("Rewards", new { page = 1 })">1</a>
+            <a href="@Url.Action("Index", new { page = 1 })">1</a>
         </li>
         @for ( int i = 2; i <= rewardsValues.TotalPages; i++ ) {
             <li>
-                <a href="@Url.Action("Rewards", new {page = i})">@i</a>
+                <a href="@Url.Action("Index", new {page = i})">@i</a>
             </li>
         }
-        <li><a href="@Url.Action("Rewards", new {page = 1})">»</a></li>
+        <li><a href="@Url.Action("Index", new {page = rewardsValues.TotalPages})">»</a></li>
     </ul>
 </div>

@@ -8,8 +8,18 @@ using System.Web.Mvc;
 
 namespace Kms.Cloud.WebApp.Controllers {
 	public class RewardsController : BaseController {
+		private const int RewardsPerPage = 10;
+
 		// GET: /Rewards/
-		public ActionResult Index() {
+		public ActionResult Index(int page = 1) {
+			// Validar el número de Página
+			if ( page < 1 )
+				return RedirectToAction("Index", new {
+					page = 1
+				});
+			else
+				page--;
+
 			// > Inicializar valores de Vista
 			RewardsValues rewardsValues
 				= new RewardsValues();
@@ -24,7 +34,7 @@ namespace Kms.Cloud.WebApp.Controllers {
 					orderBy: o =>
 						o.OrderBy(b => b.DistanceTrigger),
 					extra: x =>
-						x.Take(6)
+						x.Skip(page * RewardsPerPage).Take(RewardsPerPage)
 				).Select(s =>
 					new RewardUnknownModel() {
 						RemainingDistanceCentimeters
