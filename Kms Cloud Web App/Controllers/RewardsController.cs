@@ -34,7 +34,7 @@ namespace Kms.Cloud.WebApp.Controllers {
 					orderBy: o =>
 						o.OrderBy(b => b.DistanceTrigger),
 					extra: x =>
-						x.Skip(page * RewardsPerPage).Take(RewardsPerPage)
+						x.Take(6)
 				).Select(s =>
 					new RewardUnknownModel() {
 						RemainingDistanceCentimeters
@@ -44,7 +44,7 @@ namespace Kms.Cloud.WebApp.Controllers {
 					}
 				).ToArray();
 
-			// > Obtener las últimas 5 recompensas desbloqueadas
+			// > Obtener las últimas recompensas
 			rewardsValues.UnlockedRewards
 				= Database.UserEarnedRewardStore.GetAll(
 					filter: f =>
@@ -53,44 +53,39 @@ namespace Kms.Cloud.WebApp.Controllers {
 					orderBy: o =>
 						o.OrderByDescending(b => b.CreationDate),
 					extra: x =>
-						x.Take(10),
+						x.Skip(page * RewardsPerPage).Take(RewardsPerPage),
 					include:
 						new string[] { "Reward" }
 				).Select(s =>
 					new RewardModel() {
-						IconUri
-							= GetDynamicResourceUri(
-								"Images",
-								s.Reward.Guid.ToBase64String(),
-								s.Reward.PictureExtension
-							),
-						SponsorIcon
-							= s.Reward.RewardSponsor == null ? null
+						IconUri = GetDynamicResourceUri(
+							"Images",
+							s.Reward.Guid.ToBase64String(),
+							s.Reward.PictureExtension
+						),
+						SponsorIcon = s.Reward.RewardSponsor == null
+							? null
 							: GetDynamicResourceUri(
 								"Images",
 								s.Reward.RewardSponsor.Guid.ToBase64String(),
 								s.Reward.RewardSponsor.PictureExtension
 							),
-						SponsorName
-							= s.Reward.RewardSponsor == null ? null
+						SponsorName = s.Reward.RewardSponsor == null
+							? null
 							: s.Reward.RewardSponsor.Name,
 						
-						TriggerDistanceCentimeters
-							= s.Reward.DistanceTrigger,
-						UnlockDate
-							= s.CreationDate,
+						TriggerDistanceCentimeters = s.Reward.DistanceTrigger,
+						UnlockDate                 = s.CreationDate,
 
-						Title
-							= s.Reward.GetGlobalization().Title,
-						Text
-							= s.Reward.GetGlobalization().Text
+						Title                      = s.Reward.GetGlobalization().Title,
+						Text                       = s.Reward.GetGlobalization().Text
 					}
 				).ToArray();
 
 			// > Calcular páginas totales disponibles
-			//   TODO: Calcular... duh
-			rewardsValues.TotalPages
-				= 10;
+			rewardsValues.TotalPages = (int)Math.Ceiling(
+				(double)CurrentUser.UserEarnedReward.Count() / RewardsPerPage
+			);
 
 			// > Preparar valores para la vista
 			ViewData.Add(
