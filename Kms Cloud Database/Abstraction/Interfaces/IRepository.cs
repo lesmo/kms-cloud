@@ -55,26 +55,15 @@ namespace Kms.Cloud.Database.Abstraction.Interfaces {
             this._dbSet = dbContext.Set<TEntity>();
         }
 
-        /// <summary>
-        /// Devuelve todos las Entidades almacenadas en la BD, opcionalmente filtrándolas.
-        /// </summary>
-        /// <param name="filter">Función aplicada para filtrar los registros.</param>
-        /// <param name="orderBy">Función aplicada para ordenar los registros.</param>
-        /// <param name="extra">Función aplicada después de filtrar y ordenar los registros.</param>
-        /// <param name="include">Arreglo con Entidades relacionadas que deberían cargarse en memoria junto con el resultado.</param>
-        /// <returns>Enumeración de los objetos almacenados en la BD.</returns>
-        public virtual IEnumerable<TEntity> GetAll(
+        private IQueryable<TEntity> GetQueryable(
             Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             Func<IQueryable<TEntity>, IQueryable<TEntity>> extra = null,
             string[] include = null
         ) {
-            var query
-                = (IQueryable<TEntity>)this._dbSet.AsQueryable();
-            query
-                = query.AsExpandable();
+            var query = (IQueryable<TEntity>)this._dbSet.AsQueryable();
 
-            if ( filter != null)
+            if ( filter != null )
                 query = query.Where(filter);
 
             if ( orderBy == null ) {
@@ -91,21 +80,35 @@ namespace Kms.Cloud.Database.Abstraction.Interfaces {
 
             if ( include != null && include.Length > 0 ) {
                 foreach ( string includeItem in include )
-                    query
-                        = query.Include(includeItem);
+                    query = query.Include(includeItem);
             }
 
-            List<TEntity>returnValue
-                = query.ToList();
+            return query;
+        }
+
+        /// <summary>
+        /// Devuelve todos las Entidades almacenadas en la BD, opcionalmente filtrándolas.
+        /// </summary>
+        /// <param name="filter">Función aplicada para filtrar los registros.</param>
+        /// <param name="orderBy">Función aplicada para ordenar los registros.</param>
+        /// <param name="extra">Función aplicada después de filtrar y ordenar los registros.</param>
+        /// <param name="include">Arreglo con Entidades relacionadas que deberían cargarse en memoria junto con el resultado.</param>
+        /// <returns>Enumeración de los objetos almacenados en la BD.</returns>
+        public virtual IEnumerable<TEntity> GetAll(
+            Expression<Func<TEntity, bool>> filter = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            Func<IQueryable<TEntity>, IQueryable<TEntity>> extra = null,
+            string[] include = null
+        ) {
+            var returnValue = this.GetQueryable(filter, orderBy, extra, include).ToList();
 
             for ( int i = 0; i < returnValue.Count; i++ ) {
-                returnValue[i]
-                    = EntityDatesUtcKind.ConvertDatesKindToUtc<TEntity>(
-                        returnValue[i]
-                    );
+                returnValue[i] = EntityDatesUtcKind.ConvertDatesKindToUtc<TEntity>(
+                    returnValue[i]
+                );
             }
 
-            return (IEnumerable<TEntity>)returnValue;    
+            return returnValue;    
         }
 
         /// <summary>
@@ -238,12 +241,13 @@ namespace Kms.Cloud.Database.Abstraction.Interfaces {
             this.InitializePropertyInfo();
 
             this._autosetUpdateDateProperties.ForEach((p) => {
+                bool isDateTime = p.PropertyType == typeof(DateTime);
+                bool isNullableDateTime = p.PropertyType == typeof(DateTime?);
+
                 if ( p.PropertyType == typeof(DateTime) ) {
-                    if ( (DateTime)p.GetValue(entity) == DateTime.MinValue )
-                        p.SetValue(entity, DateTime.UtcNow);
+                    p.SetValue(entity, DateTime.UtcNow);
                 } else if ( p.PropertyType == typeof(DateTime?) ) {
-                    if ( !((DateTime?)p.GetValue(entity)).HasValue )
-                        p.SetValue(entity, (DateTime?)DateTime.UtcNow);
+                    p.SetValue(entity, (DateTime?)DateTime.UtcNow);
                 }
             });
 
@@ -261,6 +265,15 @@ namespace Kms.Cloud.Database.Abstraction.Interfaces {
             get {
                 return this.Get(guid);
             }
+        }
+
+        public int GetCount(
+            Expression<Func<TEntity, bool>> filter = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            Func<IQueryable<TEntity>, IQueryable<TEntity>> extra = null,
+            string[] include = null 
+        ) {
+            return this.GetQueryable(filter, orderBy, extra, include).Count();
         }
     }
 }
