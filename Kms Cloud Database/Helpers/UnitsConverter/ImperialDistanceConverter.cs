@@ -26,11 +26,11 @@ namespace Kms.Cloud.Database.Helpers {
         }
 
         public static Double CentimetersToMiles(this IConvertible @this) {
-            return (Double)@this / CentimetersPerMile;
+            return @this.ToDouble() / CentimetersPerMile;
         }
 
         public static Double MilesToCentimeters(this IConvertible @this) {
-            return (Double)@this * CentimetersPerMile;
+            return @this.ToDouble() * CentimetersPerMile;
         }
     }
 }
