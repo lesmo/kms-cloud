@@ -154,11 +154,9 @@ namespace Kms.Cloud.WebApp.Controllers {
 			// + Páginas totales disponibles
 			TipsValues.CurrentCategoryTipsTotalPages
 				= (int)Math.Ceiling(
-					(float)tipCategory.Tip.Where( w =>
-						w.UserTipHistory.Any(t =>
-							t.User.Guid == CurrentUser.Guid
-						)
-					).Count() / TipsPerPage
+					(float)Database.UserTipHistoryStore.GetCount(
+						filter: f => f.User.Guid == CurrentUser.Guid
+					) / TipsPerPage
 				);
 
 			// > Añadir valores a Vista

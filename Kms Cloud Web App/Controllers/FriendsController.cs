@@ -12,8 +12,7 @@ namespace Kms.Cloud.WebApp.Controllers {
 		// GET: /Friends/
 		public ActionResult Index() {
 			// > Inicializar valores de Amigos
-			FriendsValues friendValues
-				= new FriendsValues();
+			var friendValues = new FriendsValues();
 
 			// > Obtener Solicitudes de Amistad
 			friendValues.FriendRequests
@@ -54,6 +53,15 @@ namespace Kms.Cloud.WebApp.Controllers {
 					new FriendModel(s)
 				).ToArray();
 
+			// > Obtener total de amigos
+			friendValues.TotalFriends = Database.UserFriendStore.GetCount(
+				filter: f =>
+					(
+						f.User.Guid == CurrentUser.Guid
+						|| f.Friend.Guid == CurrentUser.Guid
+					) && f.Accepted == true
+			);
+			
 			// > Establecer valores para la Vista
 			ViewData.Add(
 				"LayoutValues",

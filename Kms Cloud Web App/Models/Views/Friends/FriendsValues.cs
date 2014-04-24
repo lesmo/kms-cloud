@@ -19,10 +19,5 @@ namespace Kms.Cloud.WebApp.Models.Views {
             get;
             set;
         }
-
-        public int TotalPages {
-            get;
-            set;
-        }
     }
 }
