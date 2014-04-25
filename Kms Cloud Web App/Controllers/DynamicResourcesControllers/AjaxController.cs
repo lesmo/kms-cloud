@@ -190,22 +190,20 @@ namespace Kms.Cloud.WebApp.Controllers {
 				s.User.Guid == CurrentUser.Guid
 					? s.Friend.UserDataTotalDistanceSum
 					: s.User.UserDataTotalDistanceSum
-			).Select(s =>
-				new {
-					userId     = s.User.Guid.ToBase64String(),
-					pictureUri = s.User.PictureUri,
-					name       = s.User.Name,
-					lastName   = s.User.LastName,
+			).Select(s => new {
+				userId     = s.User.Guid.ToBase64String(),
+				pictureUri = s.User.PictureUri,
+				name       = s.User.Name,
+				lastName   = s.User.LastName,
 					
-					totalDistance = RegionInfo.CurrentRegion.IsMetric
-						? s.TotalDistance.CentimetersToKilometers()
-						: s.TotalDistance.CentimetersToMiles(),
+				totalDistance = RegionInfo.CurrentRegion.IsMetric
+					? s.TotalDistance.CentimetersToKilometers()
+					: s.TotalDistance.CentimetersToMiles(),
 					
-					totalKcal = s.TotalKcal,
-					totalCo2  = s.TotalCo2,
-					totalCash = s.TotalCash.DollarCentsToRegionCurrency()
-				}
-			);
+				totalKcal = s.TotalKcal,
+				totalCo2  = s.TotalCo2,
+				totalCash = s.TotalCash.DollarCentsToRegionCurrency()
+			});
 
 			return Json(friends, JsonRequestBehavior.AllowGet);
 		}
@@ -235,7 +233,11 @@ namespace Kms.Cloud.WebApp.Controllers {
 					totalDistance
 						= RegionInfo.CurrentRegion.IsMetric
 						? s.User.UserDataTotalDistanceSum.TotalDistance.CentimetersToKilometers()
-						: s.User.UserDataTotalDistanceSum.TotalDistance.CentimetersToMiles()
+						: s.User.UserDataTotalDistanceSum.TotalDistance.CentimetersToMiles(),
+
+					totalKcal = s.User.UserDataTotalDistanceSum.TotalKcal,
+					totalCo2  = s.User.UserDataTotalDistanceSum.TotalCo2,
+					totalCash = s.User.UserDataTotalDistanceSum.TotalCash.DollarCentsToRegionCurrency()
 				}
 			);
 
@@ -259,6 +261,29 @@ namespace Kms.Cloud.WebApp.Controllers {
 			friendship.Accepted = true;
 
 			Database.UserFriendStore.Update(friendship);
+			Database.SaveChanges();
+
+			// > Devolver respuesta OK
+			return Json(new {
+				ok = true
+			});
+		}
+
+		public JsonResult FriendRequestReject(string friendId) {
+			// > Buscar la Amistad
+			var friendGuid = new Guid().FromBase64String(friendId);
+			var friendship = Database.UserFriendStore.GetFirst(
+				filter: f =>
+					f.User.Guid == friendGuid
+					&& f.Friend.Guid == CurrentUser.Guid
+					&& f.Accepted == false
+			);
+
+			if ( friendship == null )
+				throw new HttpException(404, "Friendship not found");
+
+			// > Eliminar la solicitud de Amistad
+			Database.UserFriendStore.Delete(friendship);
 			Database.SaveChanges();
 
 			// > Devolver respuesta OK
