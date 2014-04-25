@@ -46,16 +46,13 @@ namespace Kms.Cloud.Api.Controllers {
         [Route("data/search/{activity}")]
         public IEnumerable<DataDistanceResponse> SearchDistance(string activity, DateTime from, DateTime until) {
             // --- Validar que activity esté soportado ---
-            activity
-                = activity.ToUpper(CultureInfo.InvariantCulture);
-            string[] activityEnum
-                = Enum.GetNames(typeof(DataActivity));
-            short activityId
-                = 0;
+            activity         = activity.ToUpper(CultureInfo.InvariantCulture);
+            var activityEnum = Enum.GetNames(typeof(DataActivity));
+            short activityId = 0;
 
-            for ( short i = 1; i < activityEnum.Length; i++ ) {
-                if ( activityEnum[0].ToUpper(CultureInfo.InvariantCulture) == activity )
-                    activityId = i;
+            for ( short i = 0; i < activityEnum.Length; i++ ) {
+                if ( activityEnum[i].ToUpper(CultureInfo.InvariantCulture) == activity )
+                    activityId = (short)(i + 1);
             }
 
             if ( activityId == 0 )
@@ -64,10 +61,8 @@ namespace Kms.Cloud.Api.Controllers {
                 );
 
             // --- Establecer datos recibidos como fecha UTC ---
-            from
-                = DateTime.SpecifyKind(from, DateTimeKind.Utc);
-            until
-                = DateTime.SpecifyKind(until, DateTimeKind.Utc);
+            from  = DateTime.SpecifyKind(from, DateTimeKind.Utc);
+            until = DateTime.SpecifyKind(until, DateTimeKind.Utc);
 
             // --- Validar los campos recibidos ---
             TimeSpan timeSpan = until - from;
@@ -78,29 +73,23 @@ namespace Kms.Cloud.Api.Controllers {
                 throw new ArgumentOutOfRangeException("until", "Time range is so fucking long.");
 
             // --- Obtener distancias recorridas en el rango especificado ---
-            DataActivity dataActivity
-                = (DataActivity)activityId;
-
-            IEnumerable<UserDataHourlyDistance> distanceView
-                = Database.UserDataHourlyDistance.GetAll(
-                    f =>
+            var dataActivity = (DataActivity)activityId;
+            var distanceView = Database.UserDataHourlyDistance.GetAll(
+                    filter: f =>
                         f.User.Guid == CurrentUser.Guid
                         && f.Activity == dataActivity
                         && f.Timestamp > from && f.Timestamp < until,
-                    o => o.OrderBy(b => b.Timestamp)
+                    orderBy: o =>
+                        o.OrderBy(b => b.Timestamp)
                 );
 
             // --- Preparar y devolver respueta ---
             return (
                 from d in distanceView
                 select new DataDistanceResponse() {
-                    Timestamp
-                        = d.Timestamp,
-
-                    Distance
-                        = d.Distance,
-                    Steps
-                        = d.Steps
+                    Timestamp = d.Timestamp,
+                    Distance  = d.Distance,
+                    Steps     = d.Steps
                 }
             );
         }
@@ -114,54 +103,36 @@ namespace Kms.Cloud.Api.Controllers {
         [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
         [HttpGet, Route("data/total")]
         public DataTotalResponse GetDistanceTotal() {
-            // --- Obtener Distancia Total ---
-            IEnumerable<UserDataTotalDistance> distanceView
-                = Database.UserDataTotalDistance.GetAll(
-                    o => o.User.Guid == CurrentUser.Guid
-                );
-            UserDataTotalDistance distanceRunning
-                = (
-                    from d in distanceView
-                    where d.Activity == DataActivity.Running
-                    select d
-                ).FirstOrDefault();
-            UserDataTotalDistance distanceWalking
-                = (
-                    from d in distanceView
-                    where d.Activity == DataActivity.Walking
-                    select d
-                ).FirstOrDefault();
-
             // --- Verificar si se tiene la cabecera {If-Modified-Since} ---
             DateTimeOffset? ifModifiedSince
                 = Request.Headers.IfModifiedSince;
 
             if ( ifModifiedSince.HasValue ) {
                 if (
-                    ifModifiedSince.Value.DateTime > distanceRunning.Timestamp
-                    && ifModifiedSince.Value.DateTime > distanceWalking.Timestamp
+                    ifModifiedSince.Value.DateTime > CurrentUser.UserDataTotalDistanceSum.Timestamp
+                    && ifModifiedSince.Value.DateTime > CurrentUser.UserDataTotalDistanceSum.Timestamp
                 )
                     throw new HttpNotModifiedException();
             }
 
+            var distanceRunning = CurrentUser.UserDataTotalDistance.Where(
+                w => w.Activity == DataActivity.Running
+            ).FirstOrDefault();
+            var distanceWalking = CurrentUser.UserDataTotalDistance.Where(
+                w => w.Activity == DataActivity.Walking
+            ).FirstOrDefault();
+
             // --- Preparar y devolver respuesta ---
             return new DataTotalResponse() {
-                RunningTotalDistance
-                    = distanceRunning.TotalDistance,
-                WalkingTotalDistance
-                    = distanceWalking.TotalDistance,
-                TotalDistance
-                    = distanceRunning.TotalDistance + distanceWalking.TotalDistance,
+                RunningTotalDistance = distanceRunning.TotalDistance,
+                WalkingTotalDistance = distanceWalking.TotalDistance,
+                TotalDistance        = distanceRunning.TotalDistance + distanceWalking.TotalDistance,
 
-                RunningTotalSteps
-                    = distanceRunning.TotalSteps,
-                WalkingTotalSteps
-                    = distanceWalking.TotalSteps,
-                TotalSteps
-                    = distanceRunning.TotalSteps + distanceWalking.TotalSteps,
+                RunningTotalSteps = distanceRunning.TotalSteps,
+                WalkingTotalSteps = distanceWalking.TotalSteps,
+                TotalSteps        = distanceRunning.TotalSteps + distanceWalking.TotalSteps,
 
-                LastModified
-                    = distanceRunning.Timestamp > distanceWalking.Timestamp
+                LastModified = distanceRunning.Timestamp > distanceWalking.Timestamp
                     ? distanceRunning.Timestamp
                     : distanceWalking.Timestamp
             };
@@ -224,11 +195,8 @@ namespace Kms.Cloud.Api.Controllers {
             this.MagicTriggers();
             
             return new HttpResponseMessage() {
-                RequestMessage
-                    = Request,
-
-                StatusCode
-                    = HttpStatusCode.OK
+                RequestMessage = Request,
+                StatusCode     = HttpStatusCode.OK
             };
         }
 
@@ -249,23 +217,23 @@ namespace Kms.Cloud.Api.Controllers {
                 );
 
             // --- Determinar la última fecha registrada ---
-            Data lastData
-                = Database.DataStore.GetFirst(
-                    f => f.User.Guid == CurrentUser.Guid,
-                    o => o.OrderByDescending(b => b.Timestamp)
-                );
-            DateTime lastDataTimestamp
-                = lastData == null
+            Data lastData = Database.DataStore.GetFirst(
+                filter: f =>
+                    f.User.Guid == CurrentUser.Guid,
+                orderBy: o =>
+                    o.OrderByDescending(b => b.Timestamp)
+            );
+
+            DateTime lastDataTimestamp = lastData == null
                 ? DateTime.MinValue
                 : lastData.Timestamp;
 
             // --- Determinar los registros si se almacenarán en BD ---
             // Especificar que fecha es UTC
-            dataPost.Timestamp
-                = DateTime.SpecifyKind(
-                    dataPost.Timestamp,
-                    DateTimeKind.Utc
-                );
+            dataPost.Timestamp = DateTime.SpecifyKind(
+                dataPost.Timestamp,
+                DateTimeKind.Utc
+            );
             
             if ( dataPost.Timestamp < lastDataTimestamp )
                 throw new HttpConflictException(
@@ -279,11 +247,8 @@ namespace Kms.Cloud.Api.Controllers {
             this.MagicTriggers();
 
             return new HttpResponseMessage() {
-                RequestMessage
-                    = Request,
-
-                StatusCode
-                    = HttpStatusCode.OK
+                RequestMessage = Request,
+                StatusCode     = HttpStatusCode.OK
             };
         }
 
@@ -295,12 +260,9 @@ namespace Kms.Cloud.Api.Controllers {
         /// <param name="userBody"></param>
         private void PrepareDataInsert(DataPost dataPost) {
             // --- Validar que Activity esté soportado ---
-            string activity
-                = dataPost.Activity.ToUpper(CultureInfo.InvariantCulture);
-            string[] activityEnum
-                = Enum.GetNames(typeof(DataActivity));
-            short activityId
-                = 0;
+            var activity     = dataPost.Activity.ToUpper(CultureInfo.InvariantCulture);
+            var activityEnum = Enum.GetNames(typeof(DataActivity));
+            short activityId = 0;
 
             for ( short i = 0; i < activityEnum.Length; i++ ) {
                 if ( activityEnum[i].ToUpper(CultureInfo.InvariantCulture) == activity ) {
@@ -318,40 +280,31 @@ namespace Kms.Cloud.Api.Controllers {
             int strideLength;
             switch ( (DataActivity)activityId ) {
                 case DataActivity.Running:
-                    strideLength
-                        = CurrentUser.UserBody.StrideLengthRunning;
+                    strideLength = CurrentUser.UserBody.StrideLengthRunning;
                     break;
                 case DataActivity.Walking:
-                    strideLength
-                        = CurrentUser.UserBody.StrideLengthWalking;
+                    strideLength = CurrentUser.UserBody.StrideLengthWalking;
                     break;
                 default:
-                    strideLength
-                        = 0;
+                    strideLength = 0;
                     break;
             }
 
             // --- Añadir el nuevo registro ---
             Data newData
                 = new Data() {
-                    User
-                        = CurrentUser,
+                    User = CurrentUser,
 
-                    Timestamp
-                        = dataPost.Timestamp,
-                    Activity
-                        = (DataActivity)activityId,
-                    Steps
-                        = dataPost.Steps,
-                    StrideLength
-                        = strideLength,
-                    EqualsKcal
-                        = (int)CurrentUser.UserBody.CalculateCaloriesBurned(
+                    Timestamp    = dataPost.Timestamp,
+                    Activity     = (DataActivity)activityId,
+                    Steps        = dataPost.Steps,
+                    StrideLength = strideLength,
+
+                    EqualsKcal = (int)CurrentUser.UserBody.CalculateCaloriesBurned(
                             dataPost.Steps,
                             (DataActivity)activityId
                         ),
-                    EqualsCo2
-                        = (int)(
+                    EqualsCo2 = (int)(
                             // Distancia en la lectura
                             (strideLength * dataPost.Steps).CentimetersToKilometers()
                             // [x] Litros de Gasolina por Kilómetro
@@ -359,8 +312,7 @@ namespace Kms.Cloud.Api.Controllers {
                             // [x] Gramos de CO2 por Litro de Gasolina
                             * 2303
                         ),
-                    EqualsCash
-                        = (int)(
+                    EqualsCash = (int)(
                             (
                                 // Distancia en la lectura
                                 (strideLength * dataPost.Steps).CentimetersToKilometers()
