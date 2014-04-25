@@ -123,6 +123,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Images\Gui\Friends\" />
     <Folder Include="Views\DynamicResources\" />
   </ItemGroup>
   <ItemGroup>
@@ -166,6 +167,8 @@
     <Compile Include="Routing\TranslatedRouteCollectionExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Scripts\Friends\FriendList.js" />
+    <Content Include="Assets\Scripts\Friends\FriendRequests.js" />
     <Content Include="Assets\Scripts\Overview\PopulateGraphs.js" />
     <Content Include="Assets\Scripts\Shared\Lib\chart.js" />
     <Content Include="Assets\Scripts\Shared\Lib\chart.min.js" />
@@ -173,6 +176,7 @@
     <CodeAnalysisDictionary Include="..\KMS Cloud Code Analysis.ruleset">
       <Link>KMS Cloud Code Analysis.ruleset</Link>
     </CodeAnalysisDictionary>
+    <Content Include="Assets\Friends.js.bundle" />
     <None Include="Assets\Overview.js.bundle" />
     <None Include="Assets\Scripts\Shared\Lib\jquery-1.10.2.intellisense.js" />
     <Content Include="Assets\Scripts\Shared\Lib\jquery-1.10.2.js" />

@@ -7,21 +7,44 @@
     <hr>
 </span>
 <section id="solicitudes">
+    <article class="solicitudItem template"
+             style="display:none"
+             data-uid=""
+             data-total-distance="0"
+             data-total-co2="0"
+             data-total-kcal="0"
+             data-total-cash="0">
+        <figure>
+            <img src="" alt="">
+        </figure>
+        <div class="info">
+            <h4></h4>
+            <span class="kms"></span>
+            <a href="#" class="btn aceptar">@FriendsStrings.AcceptRequest.ToUpper()</a>
+            <a href="#" class="btn rechazar">@FriendsStrings.RejectRequest.ToUpper()</a>
+        </div>
+    </article>
+
     @foreach ( var friend in Model.FriendRequests ) {
-        <article class="solicitudItem">
-            <figure>
-                <img src="@friend.PictureUri.AbsoluteUri" alt="@friend.Name @friend.LastName">
-            </figure>
-            <div class="info">
-                <h4>@friend.Name @friend.LastName</h4>
-                <span class="kms">
-                    @friend.TotalDistance @(RegionInfo.CurrentRegion.IsMetric ? "KMS" : "MI")
-                </span>
-                <a href="#" class="btn aceptar">@FriendsStrings.AcceptRequest.ToUpper()</a>
-                <a href="#" class="btn rechazar">@FriendsStrings.RejectRequest.ToUpper()</a>
-            </div>
-        </article>
-    }
+    <article class="solicitudItem"
+             data-uid="@friend.UserId"
+             data-total-distance="@friend.TotalDistance"
+             data-total-co2="@friend.TotalCo2"
+             data-total-kcal="@friend.TotalKcal"
+             data-total-cash="@friend.TotalCash">
+        <figure>
+            <img src="@friend.PictureUri.AbsoluteUri" alt="@friend.Name @friend.LastName">
+        </figure>
+        <div class="info">
+            <h4>@friend.Name @friend.LastName</h4>
+            <span class="kms">
+                @friend.TotalDistance @(RegionInfo.CurrentRegion.IsMetric ? "KMS" : "MI")
+            </span>
+            <a href="#" class="btn aceptar">@FriendsStrings.AcceptRequest.ToUpper()</a>
+            <a href="#" class="btn rechazar">@FriendsStrings.RejectRequest.ToUpper()</a>
+        </div>
+    </article>
+}
 </section>
 
 <span class="tituloGrafica">
@@ -34,6 +57,22 @@
     @string.Format(FriendsStrings.TotalFriends, Model.TotalFriends)
 </span>
 <section id="amigos" data-total-count="@Model.TotalFriends">
+    <article class="amigosItem template"
+             style="display:none"
+             data-uid="null"
+             data-total-distance="0"
+             data-total-co2="0"
+             data-total-kcal="0"
+             data-total-cash="0">
+        <figure>
+            <img src="" alt="">
+        </figure>
+        <div class="info">
+            <h4></h4>
+            <span class="kms"></span>
+        </div>
+    </article>
+
     @foreach ( var friend in Model.Friends ) {
         <article class="amigosItem"
                  data-uid="@friend.UserId"
@@ -52,7 +91,7 @@
             </div>
         </article>
     }
-    
+
     <div class="amigosComparativa" style="display:none">
         <aside class="tresCol">
             <p>510 KMS</p>
@@ -94,4 +133,15 @@
 </section>
 
 <br />
-<a href="#" class="btn centro">@FriendsStrings.SeeMore</a>
+@if ( Model.TotalFriends > 18 ) {
+    <a id="amigosVerMas" href="#" class="btn centro">
+        <img style="display:none" src="~/Images/Gui/Friends/Gui.Downloading.gif" alt="..." />
+        <span>@FriendsStrings.SeeMore</span>
+    </a>
+} else {
+    <a id="amigosVerMas" href="#" class="btn centro" style="display:none">@FriendsStrings.SeeMore</a>
+}
+
+@section Scripts {
+    @Html.RenderJsBundle("~/Assets/Friends.js.bundle", BundleOptions.Combined)
+}
