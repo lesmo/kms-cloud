@@ -108,11 +108,24 @@ namespace Kms.Cloud.Api.Controllers {
                 = Request.Headers.IfModifiedSince;
 
             if ( ifModifiedSince.HasValue ) {
-                if (
-                    ifModifiedSince.Value.DateTime > CurrentUser.UserDataTotalDistanceSum.Timestamp
-                    && ifModifiedSince.Value.DateTime > CurrentUser.UserDataTotalDistanceSum.Timestamp
-                )
-                    throw new HttpNotModifiedException();
+                if ( CurrentUser.UserDataTotalDistanceSum.Timestamp != default(DateTime) ) {
+                    if ( ifModifiedSince.Value.DateTime > CurrentUser.UserDataTotalDistanceSum.Timestamp )
+                        throw new HttpNotModifiedException();
+                }
+            }
+
+            if ( CurrentUser.UserDataTotalDistanceSum.Timestamp == default(DateTime) ) {
+                return new DataTotalResponse {
+                    RunningTotalDistance = 0,
+                    WalkingTotalDistance = 0,
+                    TotalDistance        = 0,
+
+                    RunningTotalSteps = 0,
+                    WalkingTotalSteps = 0,
+                    TotalSteps        = 0,
+
+                    LastModified = DateTime.UtcNow
+                };
             }
 
             var distanceRunning = CurrentUser.UserDataTotalDistance.Where(
@@ -123,7 +136,7 @@ namespace Kms.Cloud.Api.Controllers {
             ).FirstOrDefault();
 
             // --- Preparar y devolver respuesta ---
-            return new DataTotalResponse() {
+            return new DataTotalResponse {
                 RunningTotalDistance = distanceRunning.TotalDistance,
                 WalkingTotalDistance = distanceWalking.TotalDistance,
                 TotalDistance        = distanceRunning.TotalDistance + distanceWalking.TotalDistance,
@@ -150,6 +163,9 @@ namespace Kms.Cloud.Api.Controllers {
         [HttpPost]
         [Route("data/bulk")]
         public HttpResponseMessage PostDataBulk([FromBody]IEnumerable<DataPost> dataPost) {
+            if ( dataPost.Count() < 1 )
+                throw new HttpBadRequestException();
+
             // --- Validar que Usuario actual tenga capturado Perfil Físico ---
             if ( CurrentUser.UserBody == null )
                 throw new HttpConflictException(
@@ -276,9 +292,11 @@ namespace Kms.Cloud.Api.Controllers {
                     "301" + ControllerStrings.Warning301_ActivityInvalid
                 );
 
+            var dataActivity = (DataActivity)activityId;
+
             // --- Determinar el largo de zancada ---
             int strideLength;
-            switch ( (DataActivity)activityId ) {
+            switch ( dataActivity ) {
                 case DataActivity.Running:
                     strideLength = CurrentUser.UserBody.StrideLengthRunning;
                     break;
@@ -296,15 +314,15 @@ namespace Kms.Cloud.Api.Controllers {
                     User = CurrentUser,
 
                     Timestamp    = dataPost.Timestamp,
-                    Activity     = (DataActivity)activityId,
+                    Activity     = dataActivity,
                     Steps        = dataPost.Steps,
                     StrideLength = strideLength,
 
-                    EqualsKcal = (int)CurrentUser.UserBody.CalculateCaloriesBurned(
+                    EqualsKcal = (Int32)CurrentUser.UserBody.CalculateCaloriesBurned(
                             dataPost.Steps,
-                            (DataActivity)activityId
+                            dataActivity
                         ),
-                    EqualsCo2 = (int)(
+                    EqualsCo2 = (Int32)(
                             // Distancia en la lectura
                             (strideLength * dataPost.Steps).CentimetersToKilometers()
                             // [x] Litros de Gasolina por Kilómetro
@@ -312,7 +330,7 @@ namespace Kms.Cloud.Api.Controllers {
                             // [x] Gramos de CO2 por Litro de Gasolina
                             * 2303
                         ),
-                    EqualsCash = (int)(
+                    EqualsCash = (Int32)(
                             (
                                 // Distancia en la lectura
                                 (strideLength * dataPost.Steps).CentimetersToKilometers()

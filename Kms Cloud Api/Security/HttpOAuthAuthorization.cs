@@ -372,6 +372,7 @@ namespace Kms.Cloud.Api.Security {
             
             // - [4] Calcular HMAC-SHA1 de BaseString -
             // Obtener HMAC-SHA1
+            var baseStringString = baseString.ToString();
             var hmacSha1      = new HMACSHA1(Encoding.UTF8.GetBytes(hmacSha1Key));
             var hmacSha1Bytes = hmacSha1.ComputeHash(
                 Encoding.UTF8.GetBytes(baseString.ToString())
