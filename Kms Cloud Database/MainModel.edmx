@@ -42,6 +42,7 @@
     <EntitySet Name="IPictureSet_UserRewardGiftClaimed" EntityType="MainModel.Store.IPictureSet_UserRewardGiftClaimed" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="IPictureSet_RewardGiftPicture" EntityType="MainModel.Store.IPictureSet_RewardGiftPicture" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="IPictureSet_RewardSponsor" EntityType="MainModel.Store.IPictureSet_RewardSponsor" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="IPictureSet_UserPicture" EntityType="MainModel.Store.IPictureSet_UserPicture" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="MotionLevelTip" EntityType="MainModel.Store.MotionLevelTip" store:Type="Tables" Schema="dbo" />
     <AssociationSet Name="ApiKeyToken" Association="MainModel.Store.ApiKeyToken">
       <End Role="ApiKey" EntitySet="ApiKeySet" />
@@ -187,6 +188,10 @@
       <End Role="Tip" EntitySet="TipSet" />
       <End Role="MotionLevelTip" EntitySet="MotionLevelTip" />
     </AssociationSet>
+    <AssociationSet Name="UserPictureUser" Association="MainModel.Store.UserPictureUser">
+      <End Role="UserPicture" EntitySet="IPictureSet_UserPicture" />
+      <End Role="User" EntitySet="UserSet" />
+    </AssociationSet>
     <AssociationSet Name="FK_TipCategory_inherits_IPicture" Association="MainModel.Store.FK_TipCategory_inherits_IPicture">
       <End Role="IPicture" EntitySet="IPictureSet" />
       <End Role="TipCategory" EntitySet="IPictureSet_TipCategory" />
@@ -227,12 +232,16 @@
       <End Role="IPicture" EntitySet="IPictureSet" />
       <End Role="RewardSponsor" EntitySet="IPictureSet_RewardSponsor" />
     </AssociationSet>
+    <AssociationSet Name="FK_UserPicture_inherits_IPicture" Association="MainModel.Store.FK_UserPicture_inherits_IPicture">
+      <End Role="IPicture" EntitySet="IPictureSet" />
+      <End Role="UserPicture" EntitySet="IPictureSet_UserPicture" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="UserSet">
     <Key>
       <PropertyRef Name="Guid" />
     </Key>
-    <Property Name="Guid" Type="uniqueidentifier" StoreGeneratedPattern="None" Nullable="false" />
+    <Property Name="Guid" Type="uniqueidentifier" Nullable="false" />
     <Property Name="CreationDate" Type="datetime" Nullable="false" />
     <Property Name="Email" Type="varchar" Nullable="false" MaxLength="255" />
     <Property Name="Password" Type="varbinary" Nullable="true" MaxLength="40" />
@@ -250,12 +259,12 @@
     </Key>
     <Property Name="CreationDate" Type="datetime" Nullable="false" />
     <Property Name="ExpirationDate" Type="datetime" Nullable="true" />
-    <Property Name="Guid" Type="uniqueidentifier" StoreGeneratedPattern="None" Nullable="false" />
+    <Property Name="Guid" Type="uniqueidentifier" Nullable="false" />
     <Property Name="Secret" Type="uniqueidentifier" Nullable="false" />
-    <Property Name="LastUseDate" Type="datetime" Nullable="true" />
+    <Property Name="LastUseDate" Type="datetime" Nullable="false" />
     <Property Name="LoginAttempts" Type="tinyint" Nullable="false" />
     <Property Name="CallbackUri" Type="varchar" Nullable="true" MaxLength="255" />
-    <Property Name="VerificationCode" Type="uniqueidentifier" Nullable="true" StoreGeneratedPattern="None" />
+    <Property Name="VerificationCode" Type="uniqueidentifier" Nullable="true" />
     <Property Name="ApiKey_Guid" Type="uniqueidentifier" Nullable="false" />
     <Property Name="User_Guid" Type="uniqueidentifier" Nullable="true" />
   </EntityType>
@@ -266,7 +275,7 @@
     <Property Name="CreationDate" Type="datetime" Nullable="false" />
     <Property Name="Platform" Type="nvarchar" Nullable="false" MaxLength="64" />
     <Property Name="Description" Type="nvarchar" Nullable="true" MaxLength="64" />
-    <Property Name="Guid" Type="uniqueidentifier" StoreGeneratedPattern="None" Nullable="false" />
+    <Property Name="Guid" Type="uniqueidentifier" Nullable="false" />
     <Property Name="Secret" Type="uniqueidentifier" Nullable="false" />
     <Property Name="TokenUpgradeRequired" Type="bit" Nullable="false" DefaultValue="false" />
     <Property Name="DebugEnabled" Type="bit" Nullable="false" DefaultValue="false" />
@@ -278,7 +287,7 @@
     <Key>
       <PropertyRef Name="Guid" />
     </Key>
-    <Property Name="Guid" Type="uniqueidentifier" StoreGeneratedPattern="None" Nullable="false" />
+    <Property Name="Guid" Type="uniqueidentifier" Nullable="false" />
     <Property Name="CreationDate" Type="datetime" Nullable="false" />
     <Property Name="DistanceTrigger" Type="bigint" Nullable="true" />
     <Property Name="DaysTrigger" Type="bigint" Nullable="false" />
@@ -289,7 +298,7 @@
     <Key>
       <PropertyRef Name="Guid" />
     </Key>
-    <Property Name="Guid" Type="uniqueidentifier" StoreGeneratedPattern="None" Nullable="false" />
+    <Property Name="Guid" Type="uniqueidentifier" Nullable="false" />
     <Property Name="DistanceThresholdStart" Type="int" Nullable="false" />
     <Property Name="DistanceThresholdEnd" Type="int" Nullable="false" />
     <Property Name="DaysThresholdStart" Type="smallint" Nullable="false" />
@@ -326,7 +335,7 @@
     <Key>
       <PropertyRef Name="Guid" />
     </Key>
-    <Property Name="Guid" Type="uniqueidentifier" StoreGeneratedPattern="None" Nullable="false" />
+    <Property Name="Guid" Type="uniqueidentifier" Nullable="false" />
     <Property Name="CreationDate" Type="datetime" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="IsShipped" Type="bit" Nullable="false" DefaultValue="false" />
     <Property Name="Reward_Guid" Type="uniqueidentifier" Nullable="false" />
@@ -403,7 +412,7 @@
     <Key>
       <PropertyRef Name="Guid" />
     </Key>
-    <Property Name="Guid" Type="uniqueidentifier" StoreGeneratedPattern="None" Nullable="false" />
+    <Property Name="Guid" Type="uniqueidentifier" Nullable="false" />
     <Property Name="CreationDate" Type="datetime" Nullable="false" />
     <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
     <Property Name="Tip_Guid" Type="uniqueidentifier" Nullable="false" />
@@ -599,6 +608,13 @@
     <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
     <Property Name="WebsiteUri" Type="nvarchar(max)" Nullable="false" />
     <Property Name="Guid" Type="uniqueidentifier" Nullable="false" />
+  </EntityType>
+  <EntityType Name="IPictureSet_UserPicture">
+    <Key>
+      <PropertyRef Name="Guid" />
+    </Key>
+    <Property Name="Guid" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
   </EntityType>
   <EntityType Name="MotionLevelTip">
     <Key>
@@ -1044,6 +1060,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="UserPictureUser">
+    <End Role="UserPicture" Type="MainModel.Store.IPictureSet_UserPicture" Multiplicity="*" />
+    <End Role="User" Type="MainModel.Store.UserSet" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Guid" />
+      </Principal>
+      <Dependent Role="UserPicture">
+        <PropertyRef Name="User_Guid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_MotionLevelTip_MotionLevel">
     <End Role="MotionLevel" Type="MainModel.Store.MotionLevelSet" Multiplicity="1" />
     <End Role="MotionLevelTip" Type="MainModel.Store.MotionLevelTip" Multiplicity="*" />
@@ -1204,6 +1232,20 @@
         <PropertyRef Name="Guid" />
       </Principal>
       <Dependent Role="RewardSponsor">
+        <PropertyRef Name="Guid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserPicture_inherits_IPicture">
+    <End Role="IPicture" Type="MainModel.Store.IPictureSet" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="UserPicture" Type="MainModel.Store.IPictureSet_UserPicture" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="IPicture">
+        <PropertyRef Name="Guid" />
+      </Principal>
+      <Dependent Role="UserPicture">
         <PropertyRef Name="Guid" />
       </Dependent>
     </ReferentialConstraint>
@@ -1379,6 +1421,10 @@
             <End Role="MotionLevel" EntitySet="MotionLevelSet" />
             <End Role="Tip" EntitySet="TipSet" />
           </AssociationSet>
+          <AssociationSet Name="UserPictureUser" Association="MainModel.UserPictureUser">
+            <End Role="UserPicture" EntitySet="IPictureSet" />
+            <End Role="User" EntitySet="UserSet" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="User">
           <Documentation>
@@ -1466,6 +1512,7 @@
           <NavigationProperty Name="UserDataHourlyDistance" Relationship="MainModel.UserDataHourlyDistanceUser" FromRole="User" ToRole="UserDataHourlyDistance" />
           <Property Name="PictureUri" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Notification" Relationship="MainModel.NotificationUser" FromRole="User" ToRole="Notification" />
+          <NavigationProperty Name="UserPicture" Relationship="MainModel.UserPictureUser" FromRole="User" ToRole="UserPicture" />
         </EntityType>
         <EntityType Name="Token">
           <Documentation>
@@ -2252,6 +2299,13 @@
           <End Type="MainModel.MotionLevel" Role="MotionLevel" Multiplicity="*" />
           <End Type="MainModel.Tip" Role="Tip" Multiplicity="*" />
         </Association>
+        <EntityType Name="UserPicture" BaseType="MainModel.IPicture" >
+          <NavigationProperty Name="User" Relationship="MainModel.UserPictureUser" FromRole="UserPicture" ToRole="User" />
+        </EntityType>
+        <Association Name="UserPictureUser">
+          <End Type="MainModel.UserPicture" Role="UserPicture" Multiplicity="0..1" />
+          <End Type="MainModel.User" Role="User" Multiplicity="1" />
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2521,6 +2575,11 @@
           <ScalarProperty Name="Guid" ColumnName="Guid" />
           <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="WebsiteUri" ColumnName="WebsiteUri" />
+        </MappingFragment>
+      </EntityTypeMapping>
+      <EntityTypeMapping TypeName="IsTypeOf(MainModel.UserPicture)">
+        <MappingFragment StoreEntitySet="IPictureSet_UserPicture">
+          <ScalarProperty Name="Guid" ColumnName="Guid" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -2893,6 +2952,14 @@
       </EndProperty>
       <EndProperty Name="Tip">
         <ScalarProperty Name="Guid" ColumnName="Tip_Guid" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="UserPictureUser" TypeName="MainModel.UserPictureUser" StoreEntitySet="IPictureSet_UserPicture">
+      <EndProperty Name="User">
+        <ScalarProperty Name="Guid" ColumnName="User_Guid" />
+      </EndProperty>
+      <EndProperty Name="UserPicture">
+        <ScalarProperty Name="Guid" ColumnName="Guid" />
       </EndProperty>
     </AssociationSetMapping>
   </EntityContainerMapping>

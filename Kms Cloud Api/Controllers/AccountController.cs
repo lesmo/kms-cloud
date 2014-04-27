@@ -31,6 +31,10 @@ namespace Kms.Cloud.Api.Controllers {
             return new AccountResponse() {
                 AccountCreationDate
                     = CurrentUser.CreationDate,
+                PictureUri
+                    = CurrentUser.UserPicture == null
+                    ? null
+                    : GetDynamicResourceUri(CurrentUser.UserPicture),
                 UserId
                     = CurrentUser.Guid.ToBase64String(),
                 Name

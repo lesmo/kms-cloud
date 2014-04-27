@@ -48,7 +48,9 @@ namespace Kms.Cloud.Api.Controllers {
                     LastName
                         = f.LastName,
                     PictureUri
-                        = new Uri(f.PictureUri)
+                        = f.UserPicture == null
+                        ? null
+                        : GetDynamicResourceUri(f.UserPicture)
                 }
             );
         }
@@ -98,7 +100,9 @@ namespace Kms.Cloud.Api.Controllers {
                             LastName
                                 = s.LastName,
                             PictureUri
-                                = new Uri(s.PictureUri)
+                                = s.UserPicture == null
+                                ? null
+                                : GetDynamicResourceUri(s.UserPicture)
                         },
                     TotalDistance
                         = s.UserDataTotalDistanceSum.TotalDistance,
@@ -251,7 +255,9 @@ namespace Kms.Cloud.Api.Controllers {
                     LastName
                         = s.User.LastName,
                     PictureUri
-                        = new Uri(s.User.PictureUri)
+                        = s.User.UserPicture == null
+                        ? null
+                        : GetDynamicResourceUri(s.User.UserPicture)
                 }
             );
         }
@@ -286,7 +292,9 @@ namespace Kms.Cloud.Api.Controllers {
                     LastName
                         = s.Friend.LastName,
                     PictureUri
-                        = new Uri(s.Friend.PictureUri)
+                        = s.Friend.UserPicture == null
+                        ? null
+                        : GetDynamicResourceUri(s.Friend.UserPicture)
                 }
             );
         }

@@ -259,6 +259,15 @@ namespace Kilometros_WebGlobalization.API {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Resource requested could not be found..
+        /// </summary>
+        public static string Warning601_ResourceNotFound {
+            get {
+                return ResourceManager.GetString("Warning601_ResourceNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Gift requested could not be found, or ID is invalid.
         /// </summary>
         public static string Warning701_GiftNotFound {

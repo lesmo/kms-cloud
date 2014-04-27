@@ -42,7 +42,7 @@
         <EntityTypeShape EntityType="MainModel.UserEarnedReward" Width="1.875" PointX="11.5" PointY="11.125" />
         <AssociationConnector Association="MainModel.UserUserEarnedReward" />
         <AssociationConnector Association="MainModel.UserEarnedRewardReward" />
-        <EntityTypeShape EntityType="MainModel.ContactInfo" Width="1.5" PointX="4.25" PointY="7.25" />
+        <EntityTypeShape EntityType="MainModel.ContactInfo" Width="1.5" PointX="4.625" PointY="4.625" />
         <AssociationConnector Association="MainModel.ContactInfoUser" />
         <EntityTypeShape EntityType="MainModel.ShippingInformation" Width="2.25" PointX="3.375" PointY="10.75" />
         <AssociationConnector Association="MainModel.UserShippingInformation" />
@@ -75,6 +75,8 @@
         <AssociationConnector Association="MainModel.NotificationUser" />
         <AssociationConnector Association="MainModel.FK_RewardSponsorReward" />
         <AssociationConnector Association="MainModel.MotionLevelTip" />
+        <EntityTypeShape EntityType="MainModel.UserPicture" Width="1.5" PointX="3.75" PointY="9" IsExpanded="false" />
+        <AssociationConnector Association="MainModel.UserPictureUser" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

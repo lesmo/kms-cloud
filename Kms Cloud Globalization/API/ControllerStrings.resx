@@ -183,6 +183,9 @@
   <data name="Warning502_AccountDataNotChanged" xml:space="preserve">
     <value>Account Data received is not different to current data</value>
   </data>
+  <data name="Warning601_ResourceNotFound" xml:space="preserve">
+    <value>Resource requested could not be found.</value>
+  </data>
   <data name="Warning701_GiftNotFound" xml:space="preserve">
     <value>Gift requested could not be found, or ID is invalid</value>
   </data>

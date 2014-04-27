@@ -51,10 +51,5 @@ namespace Kms.Cloud.Database
         public virtual DbSet<UserFriend> UserFriendSet { get; set; }
         public virtual DbSet<RegionParticular> RegionParticularSet { get; set; }
         public virtual DbSet<Notification> NotificationSet { get; set; }
-
-        public System.Data.Entity.DbSet<Kms.Cloud.Database.Reward> Rewards {
-            get;
-            set;
-        }
     }
 }

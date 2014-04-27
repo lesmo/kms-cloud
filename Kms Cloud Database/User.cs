@@ -57,5 +57,6 @@ namespace Kms.Cloud.Database
         public virtual ICollection<UserDataTotalDistance> UserDataTotalDistance { get; set; }
         public virtual ICollection<UserDataHourlyDistance> UserDataHourlyDistance { get; set; }
         public virtual ICollection<Notification> Notification { get; set; }
+        public virtual UserPicture UserPicture { get; set; }
     }
 }

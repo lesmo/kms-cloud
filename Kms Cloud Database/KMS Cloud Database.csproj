@@ -222,6 +222,9 @@
     <Compile Include="UserMotionLevelHistory.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="UserPicture.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="UserRewardGiftClaimed.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
