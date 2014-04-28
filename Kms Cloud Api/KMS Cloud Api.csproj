@@ -56,7 +56,7 @@
     <WarningLevel>4</WarningLevel>
     <PublishDatabaseSettings>
       <Objects>
-        <ObjectGroup Name="MainModelContainer-Deployment" Order="1" Enabled="True">
+        <ObjectGroup Name="MainModelContainer-Deployment" Order="1" Enabled="False">
           <Destination Path="Data Source=tcp:zy7gqdwrhd.database.windows.net,1433%3bInitial Catalog=kms-db-master%3bUser ID=kms-db-super-master-ninja%40zy7gqdwrhd%3bPassword=6auEqOiF0ygFEu7sOqnQ" />
           <Object Type="DbFullSql">
             <PreSource Path="Data Source=.\SQLEXPRESS%3bInitial Catalog=KilometrosDatabase%3bIntegrated Security=True%3bApplication Name=EntityFramework" ScriptSchema="True" ScriptData="False" CopyAllFullTextCatalogs="False" DriDefaults="True" />
