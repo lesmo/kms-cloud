@@ -34,7 +34,7 @@
     <NoWarn>1591</NoWarn>
     <PublishDatabaseSettings>
       <Objects>
-        <ObjectGroup Name="MainModelContainer-Deployment" Order="1">
+        <ObjectGroup Name="MainModelContainer-Deployment" Order="1" Enabled="False">
           <Destination Path="Data Source=tcp:ics1j1r8vx.database.windows.net,1433%3bInitial Catalog=kms-api-aAzKXwik7v%3bUser ID=kms-api%40ics1j1r8vx%3bPassword=LrNH8bCQ" />
           <Object Type="DbFullSql" Enabled="True">
             <PreSource Path="Data Source=.\SQLEXPRESS%3bInitial Catalog=KilometrosDatabase%3bIntegrated Security=True%3bMultipleActiveResultSets=True%3bApplication Name=EntityFramework" ScriptSchema="True" ScriptData="True" CopyAllFullTextCatalogs="False" DriDefaults="True" />
@@ -56,18 +56,16 @@
     <WarningLevel>4</WarningLevel>
     <PublishDatabaseSettings>
       <Objects>
-        <ObjectGroup Name="MainModelContainer-Deployment" Order="1">
-          <Destination Path="Data Source=tcp:ics1j1r8vx.database.windows.net,1433%3bInitial Catalog=kms-api-aAzKXwik7v%3bUser ID=kms-api%40ics1j1r8vx%3bPassword=LrNH8bCQ" />
+        <ObjectGroup Name="MainModelContainer-Deployment" Order="1" Enabled="True">
+          <Destination Path="Data Source=tcp:zy7gqdwrhd.database.windows.net,1433%3bInitial Catalog=kms-db-master%3bUser ID=kms-db-super-master-ninja%40zy7gqdwrhd%3bPassword=6auEqOiF0ygFEu7sOqnQ" />
           <Object Type="DbFullSql">
             <PreSource Path="Data Source=.\SQLEXPRESS%3bInitial Catalog=KilometrosDatabase%3bIntegrated Security=True%3bApplication Name=EntityFramework" ScriptSchema="True" ScriptData="False" CopyAllFullTextCatalogs="False" DriDefaults="True" />
             <Source Path="obj\Release\AutoScripts\MainModelContainer-Deployment_SchemaOnly.sql" Transacted="True" />
           </Object>
-          <Object Type="DbFullSql" xmlns="">
-            <Source Path="..\Kms Cloud Api\MainModelInitialize.sql" Transacted="False" />
-          </Object>
         </ObjectGroup>
       </Objects>
     </PublishDatabaseSettings>
+    <FilesToIncludeForPublish>OnlyFilesToRunTheApp</FilesToIncludeForPublish>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
