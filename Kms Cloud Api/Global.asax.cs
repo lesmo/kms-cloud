@@ -24,18 +24,32 @@ namespace Kms.Cloud.Api {
         /// </summary>
         public static Version AssemblyVersion {
             get {
-                if ( WebApiApplication._assemblyVersion != null )
-                    return WebApiApplication._assemblyVersion;
-
-                var controllerType     = typeof(Controllers.AccountCreateController);
-                var controllerAssembly = Assembly.GetAssembly(controllerType);
-                var assemblyName       = controllerAssembly.GetName();
-
-                WebApiApplication._assemblyVersion = assemblyName.Version;
+                if ( WebApiApplication._assemblyVersion == null )
+                    WebApiApplication.LoadAssemblyMeta();
+                
                 return WebApiApplication._assemblyVersion;
             }
         }
 
+        public static String AssemblyName {
+            get {
+                if ( string.IsNullOrEmpty(WebApiApplication._assemblyName) )
+                    WebApiApplication.LoadAssemblyMeta();
+
+                return WebApiApplication._assemblyName;
+            }
+        }
+
+        private static void LoadAssemblyMeta() {
+            var controllerType     = typeof(Controllers.AccountCreateController);
+            var controllerAssembly = Assembly.GetAssembly(controllerType);
+            var assemblyName       = controllerAssembly.GetName();
+            
+            WebApiApplication._assemblyName = assemblyName.Name;
+            WebApiApplication._assemblyVersion = assemblyName.Version;
+        }
+        
+        private static String _assemblyName;
         private static Version _assemblyVersion;
     }
 }

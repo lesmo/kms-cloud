@@ -35,10 +35,10 @@ namespace Kms.Cloud.Api.MessageHandlers {
                     "000 " + MessageHandlerStrings.Warning000_HttpsRequired
                 );
 
-                return await MiscHelper.ReturnHttpResponseAndHalt(response);
+                return await response.NewHttpResponseTask();
             }
             #endif
-            
+
             // --- Validar que no ésta URI no esté en lista de ByPass ---
             if (
                 WebApiConfig.KmsOAuthConfig.BypassOAuthAbsoluteUris.Contains(
