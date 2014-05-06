@@ -17,13 +17,15 @@ using System.Security.Principal;
 using Kilometros_WebGlobalization.API;
 using System.IO;
 using System.Collections.Specialized;
+using Kms.Cloud.Database.Abstraction;
 
 namespace Kms.Cloud.Api.MessageHandlers {
     public class RequestSecurityHandler : DelegatingHandler {
-        private Kms.Cloud.Database.Abstraction.WorkUnit Database
-            = new Kms.Cloud.Database.Abstraction.WorkUnit();
+        private WorkUnit Database;
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken) {
+            Database = (WorkUnit)HttpContext.Current.Items["Database"];
+
             #if !DEBUG
             // --- Validar que la peitición venga de HTTPS
             if ( request.RequestUri.Scheme != Uri.UriSchemeHttps ) {
@@ -73,17 +75,11 @@ namespace Kms.Cloud.Api.MessageHandlers {
             }
 
             // --- Extraer información de OAuth de la cabecera Authorize ---
-            HttpOAuthAuthorization httpOAuth
-                = HttpOAuthAuthorization.FromAuthenticationHeader(
-                    request.Headers.Authorization,
-                    Database
-                );
+            var httpOAuth = HttpOAuthAuthorization.FromAuthenticationHeader(
+                request.Headers.Authorization
+            );
 
-            bool httpOAuthValidRequest
-                = false;
-            httpOAuthValidRequest
-                = await httpOAuth.ValidateRequestAsync(request);
-
+            var httpOAuthValidRequest = await httpOAuth.ValidateRequestAsync(request);
             if ( httpOAuthValidRequest ) {
                 // Actualizar LastUseDate de Token
                 if( httpOAuth.Token != null )

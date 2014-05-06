@@ -105,7 +105,7 @@ namespace Kms.Cloud.Api.Controllers {
                 );
 
             if ( this.OAuth3rdCredential != null && this.OAuth3rdCredential.User.Guid != CurrentUser.Guid ) {
-                throw new HttpNotFoundException(
+                throw new HttpConflictException(
                     "109 " + ControllerStrings.Warning109_SocialTokenAlreadyInUse
                 );
             }

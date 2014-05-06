@@ -17,6 +17,9 @@ namespace Kms.Cloud.Api.ExceptionFilters {
             } else if ( actionExecutedContext.Exception is HttpNoContentException ) {
                 actionExecutedContext.Response
                     = new HttpResponseMessage(HttpStatusCode.NoContent);
+            } else if ( actionExecutedContext.Exception is HttpNotFoundException ) {
+                actionExecutedContext.Response
+                    = new HttpResponseMessage(HttpStatusCode.NotFound);
             } else if ( actionExecutedContext.Exception is HttpAlreadyLoggedInException ) {
                 actionExecutedContext.Response
                     = new HttpResponseMessage(HttpStatusCode.Forbidden);

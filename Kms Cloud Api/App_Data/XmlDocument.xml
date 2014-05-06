@@ -500,6 +500,24 @@
                 la petición, permitiéndo acceder a información 
             </summary>
         </member>
+        <member name="M:Kms.Cloud.Api.Controllers.BaseController.GetDynamicResourceUri(System.String,System.String,System.String)">
+            <summary>
+                Devuelve una Uri absoluta que apunta al Recurso generado dinámicamente especificado
+                por el nombre del archivo (normalmente el GUID del recurso en BD) y su extensión.
+            </summary>
+            <param name="method">
+                Método en controlador DynamicResources responsable de generar el recurso.
+            </param>
+            <param name="filename">
+                Nombre del archivo (normalmente el GUID del recurso en BD).
+            </param>
+            <param name="ext">
+                Extensión esperada por Método.
+            </param>
+            <returns>
+                URI absoluta que apunta al recurso descrito por los parámetros.
+            </returns>
+        </member>
         <member name="P:Kms.Cloud.Api.Controllers.BaseController.Database">
             <summary>
                 Provee acceso a un Contexto de Base de Datos para el
@@ -776,7 +794,7 @@
                 Contexto de Base de Datos a utilizar para asociar el Consumer y Token.
             </param>
         </member>
-        <member name="M:Kms.Cloud.Api.Security.HttpOAuthAuthorization.#ctor(System.String,Kms.Cloud.Database.Abstraction.WorkUnit)">
+        <member name="M:Kms.Cloud.Api.Security.HttpOAuthAuthorization.#ctor(System.String)">
             <summary>
                 Crea una nueva instancia de Autorización HTTP OAuth 1.0a a partir de los parámetros
                 de la cabecera HTTP Authorization.

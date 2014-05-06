@@ -241,9 +241,6 @@ namespace Kms.Cloud.Database.Abstraction.Interfaces {
             this.InitializePropertyInfo();
 
             this._autosetUpdateDateProperties.ForEach((p) => {
-                bool isDateTime = p.PropertyType == typeof(DateTime);
-                bool isNullableDateTime = p.PropertyType == typeof(DateTime?);
-
                 if ( p.PropertyType == typeof(DateTime) ) {
                     p.SetValue(entity, DateTime.UtcNow);
                 } else if ( p.PropertyType == typeof(DateTime?) ) {

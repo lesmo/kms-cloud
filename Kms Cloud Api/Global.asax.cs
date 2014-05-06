@@ -19,6 +19,13 @@ namespace Kms.Cloud.Api {
             AreaRegistration.RegisterAllAreas();
         }
 
+        private void Application_BeginRequest(object sender, EventArgs e) {
+            HttpContext.Current.Items.Add(
+                "Database",
+                new Kms.Cloud.Database.Abstraction.WorkUnit()
+            );
+        }
+
         /// <summary>
         ///     Devuelve la Versión del Ensamblado del API de KMS.
         /// </summary>

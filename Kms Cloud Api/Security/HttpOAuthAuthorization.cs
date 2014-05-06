@@ -18,11 +18,12 @@ using System.Web;
 
 namespace Kms.Cloud.Api.Security {
     public class HttpOAuthAuthorization {
+        private WorkUnit Database = (WorkUnit)HttpContext.Current.Items["Database"];
+
         public static HttpOAuthAuthorization FromAuthenticationHeader(
-            AuthenticationHeaderValue authHeader,
-            WorkUnit database
+            AuthenticationHeaderValue authHeader
         ) {
-            return new HttpOAuthAuthorization(authHeader.Parameter, database);
+            return new HttpOAuthAuthorization(authHeader.Parameter);
         }
         
         /// <summary>
@@ -62,7 +63,7 @@ namespace Kms.Cloud.Api.Security {
         /// <param name="database">
         ///     Contexto de Base de Datos a utilizar para identificar el Consumer y Token.
         /// </param>
-        public HttpOAuthAuthorization(string oAuthParametersLine, WorkUnit database) {
+        public HttpOAuthAuthorization(string oAuthParametersLine) {
             // --- Obtener parámetros de OAuth ---
             var oAuthParametersStrings = oAuthParametersLine.Trim().Split(new char[] { ',' });
 
@@ -85,10 +86,10 @@ namespace Kms.Cloud.Api.Security {
 
             // --- Capturar parámetros de OAuth ---
             if ( oAuthParameters.AllKeys.Contains("oauth_consumer_key") )
-                this.ConsumerKey = database.ApiKeyStore.Get(oAuthParameters["oauth_consumer_key"]);
+                this.ConsumerKey = Database.ApiKeyStore.Get(oAuthParameters["oauth_consumer_key"]);
 
             if ( oAuthParameters.AllKeys.Contains("oauth_token") )
-                this.Token = database.TokenStore.Get(oAuthParameters["oauth_token"]);
+                this.Token = Database.TokenStore.Get(oAuthParameters["oauth_token"]);
             
             if ( this.Token != null ) {
                 bool killToken = false;
@@ -100,8 +101,8 @@ namespace Kms.Cloud.Api.Security {
                     killToken = true;
 
                 if ( killToken ) {
-                    database.TokenStore.Delete(this.Token.Guid);
-                    database.SaveChanges();
+                    Database.TokenStore.Delete(this.Token.Guid);
+                    Database.SaveChanges();
                 }
             }
             
@@ -137,7 +138,7 @@ namespace Kms.Cloud.Api.Security {
 
             try {
                 var oAuthNonce = oAuthParameters["oauth_nonce"];
-                var nonce      = database.OAuthNonceStore.GetFirst(
+                var nonce      = Database.OAuthNonceStore.GetFirst(
                     f => f.Nonce == oAuthNonce
                 );
 
@@ -146,8 +147,8 @@ namespace Kms.Cloud.Api.Security {
                         Nonce = oAuthNonce
                     };
                         
-                    database.OAuthNonceStore.Add(this.Nonce);
-                    database.SaveChanges();
+                    Database.OAuthNonceStore.Add(this.Nonce);
+                    Database.SaveChanges();
                 }
             } catch ( KeyNotFoundException ) {
             }

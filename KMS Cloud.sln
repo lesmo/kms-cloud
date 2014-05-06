@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30110.0
+VisualStudioVersion = 12.0.30324.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KMS Cloud API", "Kms Cloud Api\KMS Cloud API.csproj", "{F3B3A316-BE72-481A-81A0-57D85A6A09CC}"
 EndProject
@@ -13,6 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		KMS Cloud Code Analysis Dictionary.xml = KMS Cloud Code Analysis Dictionary.xml
 		WE2013-settings.xml = WE2013-settings.xml
+		WebEssentials-Settings.json = WebEssentials-Settings.json
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KMS Cloud Globalization", "Kms Cloud Globalization\KMS Cloud Globalization.csproj", "{9AAF5681-CF18-414D-9853-A20FFFA64EBA}"

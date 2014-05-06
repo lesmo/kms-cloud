@@ -1,11 +1,13 @@
 ﻿using Kms.Cloud.Api.Security;
 using Kms.Cloud.Database;
+using Kms.Cloud.Database.Abstraction;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Web;
 using System.Web.Http;
 
 namespace Kms.Cloud.Api.Controllers {
@@ -17,16 +19,11 @@ namespace Kms.Cloud.Api.Controllers {
         ///     y OAuth NO pueden ser modificados o almacenados en éste
         ///     contexto, debe obtenerse un objeto desde ésta instancia.
         /// </summary>
-        protected Kms.Cloud.Database.Abstraction.WorkUnit Database {
+        protected WorkUnit Database {
             get {
-                if ( this._database == null )
-                    this._database
-                        = new Kms.Cloud.Database.Abstraction.WorkUnit();
-                
-                return this._database;
+                return (WorkUnit)HttpContext.Current.Items["Database"];
             }
         }
-        private Kms.Cloud.Database.Abstraction.WorkUnit _database = null;
 
         /// <summary>
         ///     Contiene la Identidad del Contexto de Seguridad actual de
@@ -37,8 +34,7 @@ namespace Kms.Cloud.Api.Controllers {
         protected HttpOAuthAuthorization OAuth {
             get {
                 if ( this._oAuth == null )
-                    this._oAuth
-                        = new HttpOAuthAuthorization(Identity.OAuth, Database);
+                    this._oAuth = new HttpOAuthAuthorization(Identity.OAuth, Database);
 
                 return this._oAuth;
             }
