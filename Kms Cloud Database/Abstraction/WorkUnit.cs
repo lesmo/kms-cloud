@@ -400,6 +400,38 @@ namespace Kms.Cloud.Database.Abstraction {
         private GenericRepository<UserDataTotalDistance> _userDataTotalDistance = null;
         #endregion
 
+        #region Regionalization Storage
+        public GenericRepository<Region> RegionStore {
+            get {
+                if ( this._regionRepository == null )
+                    this._regionRepository = new GenericRepository<Region>(this._context);
+
+                return this._regionRepository;
+            }
+        }
+        private GenericRepository<Region> _regionRepository = null;
+
+        public GenericRepository<RegionSubdivision> RegionSubdivisionStore {
+            get {
+                if ( this._regionSubdivisionRepository == null )
+                    this._regionSubdivisionRepository = new GenericRepository<RegionSubdivision>(this._context);
+
+                return this._regionSubdivisionRepository;
+            }
+        }
+        private GenericRepository<RegionSubdivision> _regionSubdivisionRepository = null;
+
+        public GenericRepository<RegionParticular> RegionParticularStore {
+            get {
+                if ( this._regionParticularRepository == null )
+                    this._regionParticularRepository = new GenericRepository<RegionParticular>(this._context);
+
+                return this._regionParticularRepository;
+            }
+        }
+        private GenericRepository<RegionParticular> _regionParticularRepository = null;
+        #endregion
+
         /// <summary>
         ///     Acceso directo al almacén de imágenes
         /// </summary>
