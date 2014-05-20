@@ -34,7 +34,7 @@ namespace Kms.Cloud.Api.Controllers {
                     User      = CurrentUser
                 };
             } catch ( OAuthUnexpectedResponse ex ) {
-                throw new HttpBadRequestException(
+                throw new HttpNotFoundException(
                     "105 " + ControllerStrings.Warning105_SocialTokenNotFound,
                     ex
                 );
@@ -64,7 +64,7 @@ namespace Kms.Cloud.Api.Controllers {
                     User      = CurrentUser
                 };
             } catch ( OAuthUnexpectedResponse ex ) {
-                throw new HttpBadRequestException(
+                throw new HttpNotFoundException(
                     "105 " + ControllerStrings.Warning105_SocialTokenNotFound,
                     ex
                 );
