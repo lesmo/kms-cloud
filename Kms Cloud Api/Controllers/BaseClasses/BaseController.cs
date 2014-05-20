@@ -15,9 +15,7 @@ namespace Kms.Cloud.Api.Controllers {
     public abstract class BaseController : ApiController {
         /// <summary>
         ///     Provee acceso a un Contexto de Base de Datos para el
-        ///     controlador actual. Los objetos expuestos por Identity
-        ///     y OAuth NO pueden ser modificados o almacenados en éste
-        ///     contexto, debe obtenerse un objeto desde ésta instancia.
+        ///     controlador actual.
         /// </summary>
         protected WorkUnit Database {
             get {
