@@ -92,11 +92,6 @@ namespace Kms.Cloud.Api.Controllers {
         }
         
         protected void ValidateOAuth3rdAddRequest(OAuthService provider, IOAuthTokenPost dataPost) {
-            if ( CurrentUser == null )
-                throw new InvalidOperationException(
-                    "For some fucked up reason, there's no User in the current context. What else am I supposed to do?"
-                );
-
             this.OAuth3rdCredential =
                 Database.OAuthCredentialStore.GetFirst(
                     filter: f =>
@@ -104,7 +99,7 @@ namespace Kms.Cloud.Api.Controllers {
                         && f.Uid == dataPost.ID
                 );
 
-            if ( this.OAuth3rdCredential != null && this.OAuth3rdCredential.User.Guid != CurrentUser.Guid ) {
+            if ( this.OAuth3rdCredential != null || this.OAuth3rdCredential.User.Guid != CurrentUser.Guid ) {
                 throw new HttpConflictException(
                     "109 " + ControllerStrings.Warning109_SocialTokenAlreadyInUse
                 );
