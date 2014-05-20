@@ -229,6 +229,7 @@
     <Compile Include="Controllers\RewardsController.cs" />
     <Compile Include="Controllers\OAuth3rdPartyLoginController.cs" />
     <Compile Include="Controllers\TipsController.cs" />
+    <Compile Include="Controllers\WorldController.cs" />
     <Compile Include="ExceptionFilters\HttpStatusExceptionFilter.cs" />
     <Compile Include="ExceptionFilters\DbValidationExceptionFilter.cs" />
     <Compile Include="ExceptionFilters\UnhandledExceptionFilter.cs" />
@@ -278,6 +279,7 @@
     <Compile Include="MessageHandlers\RequestSecurityHandler.cs" />
     <Compile Include="MessageHandlers\ResponseEncoder.cs" />
     <Compile Include="Models\RequestModels\AccountPost.cs" />
+    <Compile Include="Models\ResponseModels\WorldCountryResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -323,6 +325,7 @@
     <Folder Include="Areas\HelpPage\Views\StaticPages\" />
     <Folder Include="Areas\Login\Models\" />
     <Folder Include="Areas\Login\Views\Shared\" />
+    <Folder Include="Views\Geography\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\KMS Interop\Kms Interop\Kms Interop.csproj">

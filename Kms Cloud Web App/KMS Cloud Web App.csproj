@@ -989,6 +989,7 @@
     <Content Include="Assets\Scripts\Shared\Lib\jquery-1.10.2.min.js.map" />
     <Content Include="Assets\Scripts\Shared\Lib\jquery-1.10.2.min.map" />
     <Content Include="KMS Cloud Web App SNK.pfx" />
+    <None Include="Properties\PublishProfiles\kms-web-app.pubxml" />
     <None Include="Web.RemoteDebug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
