@@ -1,0 +1,171 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{1F4E4E4C-4E46-47CB-A3FC-D1DBF78246A3}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Kms.Interop</RootNamespace>
+    <AssemblyName>KMS Interop Cloud</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>KMS Interop Cloud.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\KMS Interop\Kms Interop\Blockity\BlockityHelpers.cs">
+      <Link>Blockity\BlockityHelpers.cs</Link>
+    </Compile>
+    <Compile Include="..\..\KMS Interop\Kms Interop\Blockity\BlockityTypes.cs">
+      <Link>Blockity\BlockityTypes.cs</Link>
+    </Compile>
+    <Compile Include="..\..\KMS Interop\Kms Interop\Blockity\RequestCommands.cs">
+      <Link>Blockity\RequestCommands.cs</Link>
+    </Compile>
+    <Compile Include="..\..\KMS Interop\Kms Interop\Blockity\ResponseCommands.cs">
+      <Link>Blockity\ResponseCommands.cs</Link>
+    </Compile>
+    <Compile Include="..\..\KMS Interop\Kms Interop\InnerCore\CommandRequest\FactoryResetRequest.cs">
+      <Link>InnerCore\CommandRequest\FactoryResetRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\KMS Interop\Kms Interop\InnerCore\CommandRequest\ReadDataRequest.cs">
+      <Link>InnerCore\CommandRequest\ReadDataRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\KMS Interop\Kms Interop\InnerCore\CommandRequest\SetDateTimeRequest.cs">
+      <Link>InnerCore\CommandRequest\SetDateTimeRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\KMS Interop\Kms Interop\InnerCore\CommandResponse\FactoryResetResponse.cs">
+      <Link>InnerCore\CommandResponse\FactoryResetResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\..\KMS Interop\Kms Interop\InnerCore\CommandResponse\ReadDataResponse.cs">
+      <Link>InnerCore\CommandResponse\ReadDataResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\..\KMS Interop\Kms Interop\InnerCore\CommandResponse\SetDateTimeResponse.cs">
+      <Link>InnerCore\CommandResponse\SetDateTimeResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\..\KMS Interop\Kms Interop\InnerCore\Command\CoreCommandException.cs">
+      <Link>InnerCore\Command\CoreCommandException.cs</Link>
+    </Compile>
+    <Compile Include="..\..\KMS Interop\Kms Interop\InnerCore\Command\ICoreCommand.cs">
+      <Link>InnerCore\Command\ICoreCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\..\KMS Interop\Kms Interop\InnerCore\Command\ICoreCommandAbstract.cs">
+      <Link>InnerCore\Command\ICoreCommandAbstract.cs</Link>
+    </Compile>
+    <Compile Include="..\..\KMS Interop\Kms Interop\InnerCore\Command\ICoreCommandContent.cs">
+      <Link>InnerCore\Command\ICoreCommandContent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\KMS Interop\Kms Interop\InnerCore\Command\ICoreCommandContentAbstract.cs">
+      <Link>InnerCore\Command\ICoreCommandContentAbstract.cs</Link>
+    </Compile>
+    <Compile Include="..\..\KMS Interop\Kms Interop\InnerCore\ICoreCommunicator.cs">
+      <Link>InnerCore\ICoreCommunicator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\KMS Interop\Kms Interop\OAuth\Exceptions\OAuthConsumerKeySetInvalid.cs">
+      <Link>OAuth\Exceptions\OAuthConsumerKeySetInvalid.cs</Link>
+    </Compile>
+    <Compile Include="..\..\KMS Interop\Kms Interop\OAuth\Exceptions\OAuthUnauthorized.cs">
+      <Link>OAuth\Exceptions\OAuthUnauthorized.cs</Link>
+    </Compile>
+    <Compile Include="..\..\KMS Interop\Kms Interop\OAuth\Exceptions\OAuthUnexpectedRequest.cs">
+      <Link>OAuth\Exceptions\OAuthUnexpectedRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\KMS Interop\Kms Interop\OAuth\Exceptions\OAuthUnexpectedResponse.cs">
+      <Link>OAuth\Exceptions\OAuthUnexpectedResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\..\KMS Interop\Kms Interop\OAuth\HttpRequestMethod.cs">
+      <Link>OAuth\HttpRequestMethod.cs</Link>
+    </Compile>
+    <Compile Include="..\..\KMS Interop\Kms Interop\OAuth\IOAuthClient.cs">
+      <Link>OAuth\IOAuthClient.cs</Link>
+    </Compile>
+    <Compile Include="..\..\KMS Interop\Kms Interop\OAuth\OAuth2\OAuth2Client.cs">
+      <Link>OAuth\OAuth2\OAuth2Client.cs</Link>
+    </Compile>
+    <Compile Include="..\..\KMS Interop\Kms Interop\OAuth\OAuthClientUris.cs">
+      <Link>OAuth\OAuthClientUris.cs</Link>
+    </Compile>
+    <Compile Include="..\..\KMS Interop\Kms Interop\OAuth\OAuthCryptoSet.cs">
+      <Link>OAuth\OAuthCryptoSet.cs</Link>
+    </Compile>
+    <Compile Include="..\..\KMS Interop\Kms Interop\OAuth\OAuthResponse.cs">
+      <Link>OAuth\OAuthResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\..\KMS Interop\Kms Interop\OAuth\OAuthTokenNotSet.cs">
+      <Link>OAuth\OAuthTokenNotSet.cs</Link>
+    </Compile>
+    <Compile Include="..\..\KMS Interop\Kms Interop\OAuth\OAuth\OAuthClient.cs">
+      <Link>OAuth\OAuth\OAuthClient.cs</Link>
+    </Compile>
+    <Compile Include="..\..\KMS Interop\Kms Interop\OAuth\OAuth\OAuthClientUrisNotSet.cs">
+      <Link>OAuth\OAuth\OAuthClientUrisNotSet.cs</Link>
+    </Compile>
+    <Compile Include="..\..\KMS Interop\Kms Interop\OAuth\SocialClients\FacebookClient.cs">
+      <Link>OAuth\SocialClients\FacebookClient.cs</Link>
+    </Compile>
+    <Compile Include="..\..\KMS Interop\Kms Interop\OAuth\SocialClients\FacebookPermission.cs">
+      <Link>OAuth\SocialClients\FacebookPermission.cs</Link>
+    </Compile>
+    <Compile Include="..\..\KMS Interop\Kms Interop\OAuth\SocialClients\IOAuthSocialClient.cs">
+      <Link>OAuth\SocialClients\IOAuthSocialClient.cs</Link>
+    </Compile>
+    <Compile Include="..\..\KMS Interop\Kms Interop\OAuth\SocialClients\TwitterClient.cs">
+      <Link>OAuth\SocialClients\TwitterClient.cs</Link>
+    </Compile>
+    <Compile Include="..\..\KMS Interop\Kms Interop\OAuth\Utils\EnumStringUnderlined.cs">
+      <Link>OAuth\Utils\EnumStringUnderlined.cs</Link>
+    </Compile>
+    <Compile Include="..\..\KMS Interop\Kms Interop\OAuth\Utils\NameValueCollectionExpansion.cs">
+      <Link>OAuth\Utils\NameValueCollectionExpansion.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="KMS Interop Cloud.pfx" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -521,9 +521,7 @@
         <member name="P:Kms.Cloud.Api.Controllers.BaseController.Database">
             <summary>
                 Provee acceso a un Contexto de Base de Datos para el
-                controlador actual. Los objetos expuestos por Identity
-                y OAuth NO pueden ser modificados o almacenados en éste
-                contexto, debe obtenerse un objeto desde ésta instancia.
+                controlador actual.
             </summary>
         </member>
         <member name="M:Kms.Cloud.Api.Controllers.AccountCreateController.CreateKmsAccount(Kms.Cloud.Api.Models.RequestModels.CreateKmsAccountPost)">

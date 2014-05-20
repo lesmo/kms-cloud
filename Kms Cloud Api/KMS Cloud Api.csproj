@@ -305,7 +305,6 @@
     <Content Include="Areas\Login\Views\Home\OAuthBasicLoginSuccess.cshtml" />
     <Content Include="Areas\Login\Views\Home\OAuthTokenInvalid.cshtml" />
     <Content Include="KMS Cloud API SNK.pfx" />
-    <None Include="Properties\PublishProfiles\KMS Web API.pubxml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -313,6 +312,7 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
+    <None Include="Properties\PublishProfiles\kms-web-api.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -328,10 +328,6 @@
     <Folder Include="Views\Geography\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\KMS Interop\Kms Interop\Kms Interop.csproj">
-      <Project>{599494b1-8d7f-44df-9d70-f0e2b8d118f0}</Project>
-      <Name>Kms Interop</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Kms Cloud Database\KMS Cloud Database.csproj">
       <Project>{af2a5b08-71b1-410a-9dfb-31a037851d33}</Project>
       <Name>KMS Cloud Database</Name>
@@ -339,6 +335,10 @@
     <ProjectReference Include="..\Kms Cloud Globalization\KMS Cloud Globalization.csproj">
       <Project>{9aaf5681-cf18-414d-9853-a20fffa64eba}</Project>
       <Name>KMS Cloud Globalization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KMS Interop Cloud\KMS Interop Cloud.csproj">
+      <Project>{1f4e4e4c-4e46-47cb-a3fc-d1dbf78246a3}</Project>
+      <Name>KMS Interop Cloud</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
