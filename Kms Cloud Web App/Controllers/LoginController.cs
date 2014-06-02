@@ -14,25 +14,24 @@ namespace Kms.Cloud.WebApp.Controllers {
 		}
 
 		// POST: /Login/
-		[ValidateAntiForgeryToken]
+		// TODO: Re-enable AntiForgeryToken check
+		//[ValidateAntiForgeryToken]
 		[AcceptVerbs(HttpVerbs.Post)]
 		public ActionResult CreateSession(string email, string password, string returnUrl = null) {
 			if ( User.Identity.IsAuthenticated )
 				return Redirect("~/Overview");
 
 			// > Buscar al Usuario en BD por su Email
-			email
-				= email.ToLower();
-			User user
-				= Database.UserStore.GetFirst(
-					filter: f =>
-						f.Email == email.ToLower()
-				);
+			email = email.ToLower();
+			var user = Database.UserStore.GetFirst(
+				filter: f =>
+					f.Email == email.ToLower()
+			);
 
 			// > Validar que el Usuario exista y las contraseñas coincidan
 			if ( user == null || ! user.PasswordMatches(password) )
-				return View("Index", true);
-
+				return Redirect("http://www.kms.me/#loginfail");
+			
 			// > Crear sesión y redirigir a donde aplique
 			FormsAuthentication.SetAuthCookie(user.Guid.ToBase64String(), true);
 			
