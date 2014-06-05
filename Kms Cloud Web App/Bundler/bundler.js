@@ -126,8 +126,8 @@ var scanIndex = 0;
 
 function scanDir(allFiles, cb) {
 
-    var jsBundles  = allFiles.filter(function (file) { return file.endsWith(".js.bundle"); });
-    var cssBundles = allFiles.filter(function (file) { return file.endsWith(".css.bundle"); });
+    var jsBundles  = allFiles.filter(function (file) { return file.endsWith(".js.bundler"); });
+    var cssBundles = allFiles.filter(function (file) { return file.endsWith(".css.bundler"); });
 
     function getOptions(fileLines) {
         var options = clone(defaultOptions);
@@ -153,7 +153,7 @@ function scanDir(allFiles, cb) {
             };
             function processBundle(jsBundle) {
                 var bundleDir = path.dirname(jsBundle);
-                var bundleName = jsBundle.replace('.bundle', '');
+                var bundleName = jsBundle.replace('.bundler', '');
                 readTextFile(jsBundle, function (data) {
                     var jsFiles = removeCR(data).split("\n");
                     var options = getOptions(jsFiles);
@@ -184,7 +184,7 @@ function scanDir(allFiles, cb) {
             };
             function processBundle(cssBundle) {
                 var bundleDir = path.dirname(cssBundle);
-                var bundleName = cssBundle.replace('.bundle', '');
+                var bundleName = cssBundle.replace('.bundler', '');
                 readTextFile(cssBundle, function (data) {
                     var cssFiles = removeCR(data).split("\n");
                     var options = getOptions(cssFiles);
