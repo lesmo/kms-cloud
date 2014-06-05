@@ -7,8 +7,12 @@ using System.Net.Http;
 using System.Web.Http;
 
 namespace Kms.Cloud.Api.Controllers {
+    
     [AllowAnonymous]
     public class WorldController : BaseController {
+        /// <summary>
+        ///     Obtener el Catálogo Mundial de Países y Subdivisiones ISO 3166-2.
+        /// </summary>
         [HttpGet, Route("world")]
         public IEnumerable<WorldCountryResponse> GetWorld() {
             return Database.RegionStore.GetAll(

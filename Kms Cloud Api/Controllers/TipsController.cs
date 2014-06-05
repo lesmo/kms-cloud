@@ -13,8 +13,14 @@ using System.Web.Http;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Kms.Cloud.Api.Controllers {
-    [Authorize]
+    /// <summary>
+    ///     Obtener Tips conseguidos/liberados.
+    /// </summary>
     public class TipsController : BaseController {
+
+        /// <summary>
+        ///     Obtener las Categorías de Tips disponibles.
+        /// </summary>
         [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
         [HttpGet, Route("tips/categories")]
         public IEnumerable<TipCategoryResponse> GetTipsCategories() {
@@ -56,9 +62,18 @@ namespace Kms.Cloud.Api.Controllers {
             return tipCategoriesResponse;
         }
 
+        /// <summary>
+        ///     Obtener el Historial de Tips conseguidos/liberados por el Usuario.
+        /// </summary>
+        /// <param name="page">
+        ///     Página actual. Por defecto es 1.
+        /// </param>
+        /// <param name="perPage">
+        ///     Elementos a obtener por página. Por defecto es 20.
+        /// </param>
         [HttpGet]
         [Route("tips/history")]
-        public IEnumerable<TipResponse> GetTipsHistory(int page = 0, int perPage = 20) {
+        public IEnumerable<TipResponse> GetTipsHistory(int page = 1, int perPage = 20) {
             // --- Verificar si se tiene la cabecera {If-Modified-Since} ---
             DateTimeOffset? ifModifiedSince
                 = Request.Headers.IfModifiedSince;
@@ -84,7 +99,7 @@ namespace Kms.Cloud.Api.Controllers {
                     orderBy: o =>
                         o.OrderByDescending(b => b.CreationDate),
                     extra: x =>
-                        x.Skip(page * perPage).Take(perPage),
+                        x.Skip((page - 1) * perPage).Take(perPage),
                     include:
                         new string[] { "Tip.TipCategory" }
                 );
@@ -145,6 +160,12 @@ namespace Kms.Cloud.Api.Controllers {
             return response;
         }
 
+        /// <summary>
+        ///     Obtiene el detalle de un Tip en particular.
+        /// </summary>
+        /// <param name="earnedRewardId">
+        ///     ID del Tip del que se quiere obtener el detalle.
+        /// </param>
         [HttpGet]
         [Route("tips/{tipGuidBase64}")]
         public TipResponse GetTip(string tipId) {

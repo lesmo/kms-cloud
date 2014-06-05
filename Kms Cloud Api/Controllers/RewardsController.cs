@@ -12,8 +12,20 @@ using System.Web.Http;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Kms.Cloud.Api.Controllers {
-    [Authorize]
+    /// <summary>
+    ///     Obtener el detalle de Recompensas conseguidas por el Usuario actual.
+    /// </summary>
     public class RewardsController : BaseController {
+
+        /// <summary>
+        ///     Obtener el Historial de Recompensas conseguidas por el Usuario actual.
+        /// </summary>
+        /// <param name="page">
+        ///     Página actual. Por defecto es 1.
+        /// </param>
+        /// <param name="perPage">
+        ///     Elementos a obtener por página. Por defecto es 20.
+        /// </param>
         [SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
         [HttpGet, Route("rewards/history")]
         public IEnumerable<RewardResponse> GetRewardsHistory(int page = 1, int perPage = 20) {
@@ -43,7 +55,7 @@ namespace Kms.Cloud.Api.Controllers {
                     orderBy: o =>
                         o.OrderByDescending(b => b.CreationDate),
                     extra: x =>
-                        x.Skip(page * perPage).Take(perPage),
+                        x.Skip((page - 1) * perPage).Take(perPage),
                     include:
                         new string[] { "Reward.RewardGlobalization", "RewardGift.RewardPictures" }
                 );
@@ -128,6 +140,12 @@ namespace Kms.Cloud.Api.Controllers {
             return response;
         }
 
+        /// <summary>
+        ///     Obtiene el detalle de una Recompensa en particular.
+        /// </summary>
+        /// <param name="earnedRewardId">
+        ///     ID de la Recompensa de la que se quiere obtener el detalle.
+        /// </param>
         [HttpGet]
         [Route("rewards/{earnedRewardId}")]
         public RewardResponse GetReward(string earnedRewardId) {

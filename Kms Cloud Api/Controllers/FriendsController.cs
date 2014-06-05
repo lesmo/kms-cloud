@@ -13,12 +13,13 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Kms.Cloud.Api.Controllers {
     /// <summary>
-    ///     Permite interactuar con la lista de Amigos del Usuario.
+    ///     Permite interactuar con la lista de Amigos del Usuario listando solicitudes de amistad
+    ///     enviadas, recibidas, aceptadas, obteniendo la lista de marcadores y la lista de solicitudes.
     /// </summary>
     [Authorize]
     public class FriendsController : BaseController {
         /// <summary>
-        ///     Devuelve la lista de Amigos.
+        ///     Obtener la lista de Amigos.
         /// </summary>
         [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
         [HttpGet, Route("friends")]
@@ -56,8 +57,8 @@ namespace Kms.Cloud.Api.Controllers {
         }
 
         /// <summary>
-        ///      Devuelve la lista de marcadores de los Amigos. La lista incluye al Usuario, y está
-        ///      ordenada del más alto al más bajo.
+        ///      Obtener la lista de marcadores de los Amigos. La lista incluye al Usuario de la sesión actual,
+        ///      y está ordenada del más alto al más bajo en distancia acumulada. 
         /// </summary>
         [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
         [HttpGet, Route("friends/highscores")]
@@ -113,8 +114,11 @@ namespace Kms.Cloud.Api.Controllers {
         }
 
         /// <summary>
-        ///     Envia una Solicitud de Amistad al Usuario especificado.
+        ///     Enviar una Solicitud de Amistad al Usuario especificado.
         /// </summary>
+        /// <param name="userId">
+        ///     ID de Usuario a quien se le enviará la solicitud de Amistad.
+        /// </param>
         [HttpPost]
         [Route("friends/requests/{userId}")]
         public HttpResponseMessage RequestFriendship(string userId) {
@@ -173,10 +177,11 @@ namespace Kms.Cloud.Api.Controllers {
         }
 
         /// <summary>
-        ///     Acepta la Solicitud de Amistad del Usuario especificado.
+        ///     Aceptar la Solicitud de Amistad del Usuario especificado.
         /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
+        /// <param name="userId">
+        ///     ID del Usuario de quien se aceptará la solicitud de amistad.
+        /// </param>
         [HttpPost]
         [Route("friends/requests/{userId}/accept")]
         public HttpResponseMessage AcceptFriendship(string userId) {
@@ -226,7 +231,7 @@ namespace Kms.Cloud.Api.Controllers {
         }
 
         /// <summary>
-        ///     Devuelve las Solicitudes de Amistad recibidas por el Usuario.
+        ///     Obtener las Solicitudes de Amistad recibidas por el Usuario.
         /// </summary>
         [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
         [HttpGet, Route("friends/requests/received")]
@@ -263,7 +268,7 @@ namespace Kms.Cloud.Api.Controllers {
         }
 
         /// <summary>
-        ///     Devuelve las Solicitudes de Amistad enviadas por el Usuario.
+        ///     Obtener las Solicitudes de Amistad enviadas por el Usuario.
         /// </summary>
         [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
         [HttpGet, Route("friends/requests/sent")]

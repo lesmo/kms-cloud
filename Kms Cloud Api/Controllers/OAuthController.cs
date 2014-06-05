@@ -14,7 +14,16 @@ using System.Globalization;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Kms.Cloud.Api.Controllers {
+    /// <summary>
+    ///     Estos recursos están definidos escencialmente por el protocolo OAuth 1.0a, y permiten obtener
+    ///     un Request Token, intercambiar un Request Token por un Access Token teniendo un Verifier Code
+    ///     y cerrar una sesión en KMS eliminando el Token de la Sesión activa.
+    /// </summary>
     public class OAuthController : OAuthBaseController {
+        /// <summary>
+        ///     Obtener un Request Token de OAuth para la Nube KMS.
+        /// </summary>
+        /// <returns></returns>
         [AllowAnonymous]
         [HttpPost, Route("oauth/request_token")]
         public HttpResponseMessage OAuthRequestToken() {
@@ -71,6 +80,14 @@ namespace Kms.Cloud.Api.Controllers {
             };
         }
 
+        /// <summary>
+        ///     Obtener un Access Token para la Nube KMS, intercambiando un Verifier Code. Debe tenerse un Request Token
+        ///     válido en la Cabecera HTTP Authorization.
+        /// </summary>
+        /// <param name="oAuthVerifier">
+        ///     El Verifier Code obtenido por el proceso de Login Web.
+        /// </param>
+        /// <returns></returns>
         [AllowAnonymous]
         [HttpPost, Route("oauth/access_token")]
         public HttpResponseMessage OAuthAccessToken([FromBody]OAuthAccessTokenPost oAuthVerifier) {
@@ -100,6 +117,12 @@ namespace Kms.Cloud.Api.Controllers {
             return ExchangeOAuthAccessToken();
         }
 
+        /// <summary>
+        ///     Actualizar la fecha de expiración del Access Token de la Nube KMS. También puede
+        ///     utilizarse éste recurso para determinar si un Token todavía es válido para interactuar
+        ///     con la Nube KMS.
+        /// </summary>
+        /// <returns></returns>
         [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
         [HttpGet, Route("oauth/session")]
         public HttpResponseMessage GetToken() {
@@ -119,7 +142,11 @@ namespace Kms.Cloud.Api.Controllers {
                 return new HttpResponseMessage(HttpStatusCode.OK);
             }
         }
-        
+
+        /// <summary>
+        ///     Eliminar el Token de Sesión del Usuario actual en la Nube KMS.
+        /// </summary>
+        /// <returns></returns>
         [HttpDelete]
         [Route("oauth/session")]
         public HttpResponseMessage DeleteToken() {

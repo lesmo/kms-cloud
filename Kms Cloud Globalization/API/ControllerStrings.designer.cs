@@ -286,6 +286,15 @@ namespace Kilometros_WebGlobalization.API {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Gift has been claimed, and will be shipped soon.
+        /// </summary>
+        public static string Warning703_GiftShippingPending {
+            get {
+                return ResourceManager.GetString("Warning703_GiftShippingPending", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tip requested could not be found, or ID is invalid.
         /// </summary>
         public static string Warning801_TipNotFound {

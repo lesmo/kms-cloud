@@ -192,6 +192,9 @@
   <data name="Warning702_GiftOutOfStock" xml:space="preserve">
     <value>Gift requested is out of stock</value>
   </data>
+  <data name="Warning703_GiftShippingPending" xml:space="preserve">
+    <value>Gift has been claimed, and will be shipped soon</value>
+  </data>
   <data name="Warning801_TipNotFound" xml:space="preserve">
     <value>Tip requested could not be found, or ID is invalid</value>
   </data>

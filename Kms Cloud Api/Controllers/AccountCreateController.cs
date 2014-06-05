@@ -12,20 +12,17 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Kms.Cloud.Api.Controllers {
     /// <summary>
-    ///     Permite generar una nueva Cuenta en la Nube de KMS. Para crear una nueva cuenta
+    ///     Permite generar una nueva Cuenta en la Nube de KMS. Para crear una nueva Cuenta
     ///     que permitirá login con Facebook, Twitter, Fitbit o Nike+, será necesario crear
-    ///     una cuenta en éste recurso y posteriormente utilizar el apropiado en OAuth3rdPartyAdd.
+    ///     una Cuenta en éste recurso y después utilizar el apropiado dentro de OAuth3rdPartyAdd.
     /// </summary>
     public class AccountCreateController : BaseController {
         /// <summary>
-        ///     Crea una nueva Cuenta en la Nube KMS.
+        ///     Crear una nueva Cuenta en la Nube KMS.
         /// </summary>
         /// <param name="dataPost">
         ///     Información de la nueva cuenta de Usuario.
         /// </param>
-        /// <returns>
-        ///
-        /// </returns>
         [AllowAnonymous]
         [SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase")]
         [HttpPost, Route("account")]
@@ -84,7 +81,7 @@ namespace Kms.Cloud.Api.Controllers {
                     Weight
                         = dataPost.Weight,
                     Sex
-                        = dataPost.Gender.ToString(),
+                        = dataPost.Gender.ToString().ToUpper(CultureInfo.InvariantCulture),
                     User
                         = user
                 };

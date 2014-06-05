@@ -489,9 +489,9 @@
         </member>
         <member name="T:Kms.Cloud.Api.Controllers.AccountCreateController">
             <summary>
-                Permite generar una nueva Cuenta en la Nube de KMS. Para crear una nueva cuenta
+                Permite generar una nueva Cuenta en la Nube de KMS. Para crear una nueva Cuenta
                 que permitirá login con Facebook, Twitter, Fitbit o Nike+, será necesario crear
-                una cuenta en éste recurso y posteriormente utilizar el apropiado en OAuth3rdPartyAdd.
+                una Cuenta en éste recurso y después utilizar el apropiado dentro de OAuth3rdPartyAdd.
             </summary>
         </member>
         <member name="F:Kms.Cloud.Api.Controllers.BaseController.Identity">
@@ -525,19 +525,16 @@
             </summary>
         </member>
         <member name="M:Kms.Cloud.Api.Controllers.AccountCreateController.CreateKmsAccount(Kms.Cloud.Api.Models.RequestModels.CreateKmsAccountPost)">
-             <summary>
-                 Crea una nueva Cuenta en la Nube KMS.
-             </summary>
-             <param name="dataPost">
-                 Información de la nueva cuenta de Usuario.
-             </param>
-             <returns>
-            
-             </returns>
+            <summary>
+                Crear una nueva Cuenta en la Nube KMS.
+            </summary>
+            <param name="dataPost">
+                Información de la nueva cuenta de Usuario.
+            </param>
         </member>
         <member name="T:Kms.Cloud.Api.Controllers.DataController">
             <summary>
-                Permite subir y descargar Datos generados por los Dispositivos KMS, o los Servicios de Terceros
+                Subir y bajar Datos generados por los Dispositivos KMS, o los Servicios de Terceros
                 soportados por la Nube KMS.
             </summary>
         </member>
@@ -557,7 +554,8 @@
             </param>
             <returns></returns>
             <remarks>
-                Sólo puede solicitarse hasta un año como rango a la vez. No hay límite en cuanto a fechas en el pasado.
+                Sólo puede solicitarse hasta un año como rango a la vez. Por ahora, no hay límite en cuanto a
+                fechas en el pasado pero éste comportamiento podría cambiar.
             </remarks>
         </member>
         <member name="M:Kms.Cloud.Api.Controllers.DataController.GetDistanceTotal">
@@ -573,22 +571,19 @@
                 Subir Datos generados por el Dispositivo KMS.
             </summary>
             <param name="dataPost">
-                Datos del Dispositivo KMS.
+                Registros generados por el Dispositivo KMS. Cada registro corresponde a una franja
+                temporal de 2 minutos.
             </param>
-            <returns>
-                
-            </returns>
         </member>
         <member name="M:Kms.Cloud.Api.Controllers.DataController.PostData(Kms.Cloud.Api.Models.RequestModels.DataPost)">
             <summary>
-                Subir un solo Dato generado por el Dispositivo KMS.
+                Subir un solo Registro generado por el Dispositivo KMS. El uso de éste recurso está
+                desaconsejado para Apps de producción (rápidamente podrías consumir la cuota de peticiones
+                que tiene tu API-Key). Está aquí principalmente para debugging en ambas partes (server y Apps).
             </summary>
             <param name="dataPost">
-                Dato del Dispositivo KMS.
+                Registro del Dispositivo KMS.
             </param>
-            <returns>
-                
-            </returns>
         </member>
         <member name="M:Kms.Cloud.Api.Controllers.DataController.PrepareDataInsert(Kms.Cloud.Api.Models.RequestModels.DataPost)">
             <summary>
@@ -600,36 +595,31 @@
         </member>
         <member name="T:Kms.Cloud.Api.Controllers.AccountController">
             <summary>
-                Devuelve y modifica la Ínformación de la Cuenta de Usuario en la Nube KMS.
+                Obtener y actualizar la Ínformación de una Cuenta de Usuario en la Nube KMS.
             </summary>
         </member>
         <member name="M:Kms.Cloud.Api.Controllers.AccountController.GetAccount">
             <summary>
-                Devuelve la Información de Cuenta de Usuario en la Nube KMS.
+                Devuelve la Información de la Cuenta de Usuario en la Nube KMS de la sesión actual.
             </summary>
-            <returns>
-            </returns>
         </member>
         <member name="M:Kms.Cloud.Api.Controllers.AccountController.PostAccount(Kms.Cloud.Api.Models.RequestModels.AccountPost)">
             <summary>
-                Establece la Información de Cuenta de Usuario en la Nube KMS.
+                Actualiza la Información de Cuenta de Usuario en la Nube KMS de la sesión actual.
             </summary>
             <param name="accountPost">
                 Nueva Información de Cuenta de Usuario en la Nube KMS.
             </param>
-            <returns>HTTP 200 OK</returns>
         </member>
         <member name="T:Kms.Cloud.Api.Controllers.ContactInfoController">
             <summary>
-                Devuelve y modifica la Ínformación de la Contacto del Usuario en la Nube KMS.
+                Obtener y modificar la Ínformación de la Contacto del Usuario en la Nube KMS.
             </summary>
         </member>
         <member name="M:Kms.Cloud.Api.Controllers.ContactInfoController.GetContactInfo">
             <summary>
-                Devuelve la Información de Contacto del Usuario en la Nube KMS.
+                Obtener la Información de Contacto del Usuario en la Nube KMS.
             </summary>
-            <returns>
-            </returns>
         </member>
         <member name="M:Kms.Cloud.Api.Controllers.ContactInfoController.PostAccount(Kms.Cloud.Api.Models.RequestModels.ContactInfoPost)">
             <summary>
@@ -638,54 +628,167 @@
             <param name="dataPost">
                 Nueva Información de Contacto del Usuario en la Nube KMS.
             </param>
-            <returns></returns>
+        </member>
+        <member name="T:Kms.Cloud.Api.Controllers.DynamicResourcesController">
+            <summary>
+                Descargar "assets", "medios" o "recursos" generados dinámicamente por el servidor. Esto
+                incluye normalmente Fotografías de Regalos, Iconos de Recompensas, Tips, y las Fotos de
+                Perfil de los Usuarios. Todos los recursos del API devuelven una URL completa a las imágenes
+                mencionadas, y normalmente apuntan a estos métodos. La documentación está aquí, y seguirá
+                aquí, hasta el día en que los cerdos vuelen, por muy inútil que ésta parezca.
+            </summary>
+        </member>
+        <member name="M:Kms.Cloud.Api.Controllers.DynamicResourcesController.Image(System.String,System.String)">
+            <summary>
+                Descargar una Imágen Dinámica.
+            </summary>
+            <param name="filename">Nombre del archivo.</param>
+            <param name="ext">Extensión del archivo.</param>
         </member>
         <member name="T:Kms.Cloud.Api.Controllers.FriendsController">
             <summary>
-                Permite interactuar con la lista de Amigos del Usuario.
+                Permite interactuar con la lista de Amigos del Usuario listando solicitudes de amistad
+                enviadas, recibidas, aceptadas, obteniendo la lista de marcadores y la lista de solicitudes.
             </summary>
         </member>
         <member name="M:Kms.Cloud.Api.Controllers.FriendsController.GetFriendsList">
             <summary>
-                Devuelve la lista de Amigos.
+                Obtener la lista de Amigos.
             </summary>
         </member>
         <member name="M:Kms.Cloud.Api.Controllers.FriendsController.GetFriendsHighScores">
             <summary>
-                 Devuelve la lista de marcadores de los Amigos. La lista incluye al Usuario, y está
-                 ordenada del más alto al más bajo.
+                 Obtener la lista de marcadores de los Amigos. La lista incluye al Usuario de la sesión actual,
+                 y está ordenada del más alto al más bajo en distancia acumulada. 
             </summary>
         </member>
         <member name="M:Kms.Cloud.Api.Controllers.FriendsController.RequestFriendship(System.String)">
             <summary>
-                Envia una Solicitud de Amistad al Usuario especificado.
+                Enviar una Solicitud de Amistad al Usuario especificado.
             </summary>
+            <param name="userId">
+                ID de Usuario a quien se le enviará la solicitud de Amistad.
+            </param>
         </member>
         <member name="M:Kms.Cloud.Api.Controllers.FriendsController.AcceptFriendship(System.String)">
             <summary>
-                Acepta la Solicitud de Amistad del Usuario especificado.
+                Aceptar la Solicitud de Amistad del Usuario especificado.
             </summary>
-            <param name="userId"></param>
-            <returns></returns>
+            <param name="userId">
+                ID del Usuario de quien se aceptará la solicitud de amistad.
+            </param>
         </member>
         <member name="M:Kms.Cloud.Api.Controllers.FriendsController.GetReceivedFriendRequests">
             <summary>
-                Devuelve las Solicitudes de Amistad recibidas por el Usuario.
+                Obtener las Solicitudes de Amistad recibidas por el Usuario.
             </summary>
         </member>
         <member name="M:Kms.Cloud.Api.Controllers.FriendsController.GetSentFriendRequests">
             <summary>
-                Devuelve las Solicitudes de Amistad enviadas por el Usuario.
+                Obtener las Solicitudes de Amistad enviadas por el Usuario.
             </summary>
+        </member>
+        <member name="T:Kms.Cloud.Api.Controllers.PhysiqueController">
+            <summary>
+                Obtener y actualizar el Perfil Físico del Usuario en la Nube KMS de la sesión actual.
+            </summary>
+        </member>
+        <member name="M:Kms.Cloud.Api.Controllers.PhysiqueController.GetPhysique">
+            <summary>
+                Obtener el Perfil Fïsico del Usuario actual.
+            </summary>
+        </member>
+        <member name="M:Kms.Cloud.Api.Controllers.PhysiqueController.PostPhysique(Kms.Cloud.Api.Models.RequestModels.PhysiquePost)">
+            <summary>
+                Actualizar el Perfil Físico del Usuario.
+            </summary>
+            <param name="dataPost">Nueva información del Perfil Físico del Usuario.</param>
+        </member>
+        <member name="T:Kms.Cloud.Api.Controllers.OAuth3rdPartyAddController">
+            <summary>
+                Permite asociar cuentas de Redes Sociales a la Cuenta del Usuario de la sesión actual,
+                de forma que pueda iniciar sesión con ellas y, en su caso, integrar información de servicios
+                de terceros soportados por KMS.
+            </summary>
+        </member>
+        <member name="M:Kms.Cloud.Api.Controllers.OAuth3rdPartyAddController.FacebookAdd(Kms.Cloud.Api.Models.RequestModels.OAuthFacebookLoginPost)">
+            <summary>
+                Asociar una cuenta de Facebook con el Usuario actual de KMS.
+            </summary>
+            <param name="dataPost">
+                Código de sesión y ID del Usuario en Facebook.
+            </param>
+        </member>
+        <member name="M:Kms.Cloud.Api.Controllers.OAuth3rdPartyAddController.TwitterAdd(Kms.Cloud.Api.Models.RequestModels.OAuth3rdLoginPost)">
+            <summary>
+                Asociar una cuenta de Twitter con el Usuario actual de KMS.
+            </summary>
+            <param name="dataPost">
+                Información de Sesión del Usuario de Twitter.
+            </param>
+        </member>
+        <member name="M:Kms.Cloud.Api.Controllers.OAuth3rdPartyAddController.FitbitAdd(Kms.Cloud.Api.Models.RequestModels.OAuth3rdLoginPost)">
+            <summary>
+                Asociar una cuenta de Fitbit con el Usuario actual de KMS. Actualmente
+                la funcionalidad no está implementada, y enviar peticiones causará
+                la muerte de un gatito.
+            </summary>
+            <param name="postData"></param>
+        </member>
+        <member name="M:Kms.Cloud.Api.Controllers.OAuth3rdPartyAddController.NikeAdd(Kms.Cloud.Api.Models.RequestModels.OAuth3rdLoginPost)">
+            <summary>
+                Asociar una cuenta de Nike+ con el Usuario actual de KMS. Actualmente
+                la funcionalidad no está implementada, y enviar peticiones causará
+                la muerte de un gatito.
+            </summary>
+            <param name="postData"></param>
+        </member>
+        <member name="T:Kms.Cloud.Api.Controllers.OAuthController">
+            <summary>
+                Estos recursos están definidos escencialmente por el protocolo OAuth 1.0a, y permiten obtener
+                un Request Token, intercambiar un Request Token por un Access Token teniendo un Verifier Code
+                y cerrar una sesión en KMS eliminando el Token de la Sesión activa.
+            </summary>
+        </member>
+        <member name="M:Kms.Cloud.Api.Controllers.OAuthController.OAuthRequestToken">
+            <summary>
+                Obtener un Request Token de OAuth para la Nube KMS.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Kms.Cloud.Api.Controllers.OAuthController.OAuthAccessToken(Kms.Cloud.Api.Models.RequestModels.OAuthAccessTokenPost)">
+            <summary>
+                Obtener un Access Token para la Nube KMS, intercambiando un Verifier Code. Debe tenerse un Request Token
+                válido en la Cabecera HTTP Authorization.
+            </summary>
+            <param name="oAuthVerifier">
+                El Verifier Code obtenido por el proceso de Login Web.
+            </param>
+            <returns></returns>
+        </member>
+        <member name="M:Kms.Cloud.Api.Controllers.OAuthController.GetToken">
+            <summary>
+                Actualizar la fecha de expiración del Access Token de la Nube KMS. También puede
+                utilizarse éste recurso para determinar si un Token todavía es válido para interactuar
+                con la Nube KMS.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Kms.Cloud.Api.Controllers.OAuthController.DeleteToken">
+            <summary>
+                Eliminar el Token de Sesión del Usuario actual en la Nube KMS.
+            </summary>
+            <returns></returns>
         </member>
         <member name="M:Kms.Cloud.Api.Controllers.GiftsController.GetRewards">
             <summary>
-                Devuelve el historial de los Regalos conseguidos por el Usuario.
+                Obtener el historial de los Regalos conseguidos por el Usuario.
             </summary>
         </member>
         <member name="M:Kms.Cloud.Api.Controllers.GiftsController.GetRewardGift(System.String)">
             <summary>
-                Devuelve la información de canje del Regalo especificado.
+                Obtener la información de canje del Regalo especificado. Esta petición sólo funciona
+                si el Usuario ya "canjeó" o "reclamó" el Regalo en my/gifts/{giftId}.
             </summary>
             <param name="giftId">
                 ID del Regalo, obtenido en el Payload de la Notificación Push o en
@@ -701,25 +804,134 @@
                 el Historial de Recompensas (rewards/history).
             </param>
         </member>
+        <member name="T:Kms.Cloud.Api.Controllers.RewardsController">
+            <summary>
+                Obtener el detalle de Recompensas conseguidas por el Usuario actual.
+            </summary>
+        </member>
+        <member name="M:Kms.Cloud.Api.Controllers.RewardsController.GetRewardsHistory(System.Int32,System.Int32)">
+            <summary>
+                Obtener el Historial de Recompensas conseguidas por el Usuario actual.
+            </summary>
+            <param name="page">
+                Página actual. Por defecto es 1.
+            </param>
+            <param name="perPage">
+                Elementos a obtener por página. Por defecto es 20.
+            </param>
+        </member>
+        <member name="M:Kms.Cloud.Api.Controllers.RewardsController.GetReward(System.String)">
+            <summary>
+                Obtiene el detalle de una Recompensa en particular.
+            </summary>
+            <param name="earnedRewardId">
+                ID de la Recompensa de la que se quiere obtener el detalle.
+            </param>
+        </member>
+        <member name="T:Kms.Cloud.Api.Controllers.OAuth3rdPartyLoginController">
+            <summary>
+                Permite iniciar sesión en la Nube de KMS intercambiando un Request Token de KMS por un Access Token
+                utilizando el Access Token de alguna Red Social soportada.
+            </summary>
+        </member>
         <member name="M:Kms.Cloud.Api.Controllers.OAuth3rdPartyLoginController.FacebookLogin(Kms.Cloud.Api.Models.RequestModels.OAuthFacebookLoginPost)">
             <summary>
-                Intercambia un Request Token de OAuth para la Nube de KMS por un Access Token,
+                Intercambiar un Request Token de OAuth para la Nube de KMS por un Access Token,
                 utilizando un Código de Facebook.
             </summary>
-            <remarks>
-                El Código de Facebook NO ES el Token, es un código generado por el proceso de Login
-                y es diferente del Token. Facebook utiliza este proceso para poder compartir la
-                Sesión del Usuario entre Apps y Servidor Web, y mantener así Tokens independientes
-                y seguros.
-            </remarks>
             <param name="dataPost">
-                Aparte de la cabecera propia de OAuth, en el cuerpo de POST deben incluirse el Código
+                Aparte de la cabecera propia de OAuth para KMS, en el cuerpo de POST deben incluirse el Código
                 de Facebook y el ID de Usuario en Faceboook.
             </param>
+        </member>
+        <member name="M:Kms.Cloud.Api.Controllers.OAuth3rdPartyLoginController.TwitterLogin(Kms.Cloud.Api.Models.RequestModels.OAuth3rdLoginPost)">
+            <summary>
+                Intercambiar un Request Token de OAuth para la Nube de KMS por un Access Token,
+                utilizando un Access Token de Twitter.
+            </summary>
+            <param name="dataPost">
+                Aparte de la cabecera propia de OAuth para KMS, en el cuerpo de POST deben incluirse el Token,
+                Token Secret y ID del Usuario en Twitter.
+            </param>
+        </member>
+        <member name="M:Kms.Cloud.Api.Controllers.OAuth3rdPartyLoginController.FitbitLogin">
+            <summary>
+                Intercambiar un Request Token de OAuth para la Nube de KMS por un Access Token,
+                utilizando un Access Token de Fitbit. Actualmente
+                la funcionalidad no está implementada, y enviar peticiones causará
+                la muerte de un gatito.
+            </summary>
+            <param name="dataPost">
+                Aparte de la cabecera propia de OAuth para KMS, en el cuerpo de POST deben incluirse el Token,
+                Token Secret y ID del Usuario en Fitbit.
+            </param>
+        </member>
+        <member name="M:Kms.Cloud.Api.Controllers.OAuth3rdPartyLoginController.NikeLogin">
+            <summary>
+                Intercambiar un Request Token de OAuth para la Nube de KMS por un Access Token,
+                utilizando un Access Token de Nike+. Actualmente
+                la funcionalidad no está implementada, y enviar peticiones causará
+                la muerte de un gatito.
+            </summary>
+            <param name="dataPost">
+                Aparte de la cabecera propia de OAuth para KMS, en el cuerpo de POST deben incluirse el Token,
+                Token Secret y ID del Usuario en Nike+.
+            </param>
+        </member>
+        <member name="T:Kms.Cloud.Api.Controllers.TipsController">
+            <summary>
+                Obtener Tips conseguidos/liberados.
+            </summary>
+        </member>
+        <member name="M:Kms.Cloud.Api.Controllers.TipsController.GetTipsCategories">
+            <summary>
+                Obtener las Categorías de Tips disponibles.
+            </summary>
+        </member>
+        <member name="M:Kms.Cloud.Api.Controllers.TipsController.GetTipsHistory(System.Int32,System.Int32)">
+            <summary>
+                Obtener el Historial de Tips conseguidos/liberados por el Usuario.
+            </summary>
+            <param name="page">
+                Página actual. Por defecto es 1.
+            </param>
+            <param name="perPage">
+                Elementos a obtener por página. Por defecto es 20.
+            </param>
+        </member>
+        <member name="M:Kms.Cloud.Api.Controllers.TipsController.GetTip(System.String)">
+            <summary>
+                Obtiene el detalle de un Tip en particular.
+            </summary>
+            <param name="earnedRewardId">
+                ID del Tip del que se quiere obtener el detalle.
+            </param>
+        </member>
+        <member name="M:Kms.Cloud.Api.Controllers.WorldController.GetWorld">
+            <summary>
+                Obtener el Catálogo Mundial de Países y Subdivisiones ISO 3166-2.
+            </summary>
         </member>
         <member name="P:Kms.Cloud.Api.WebApiApplication.AssemblyVersion">
             <summary>
                 Devuelve la Versión del Ensamblado del API de KMS.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.RequestModels.OAuthFacebookLoginPost.ID">
+            <summary>
+                ID del Usuario de Facebook, y es un número. Sin embargo, el número es enorme y
+                por recomendación de Facebook debe tratarse como una cadena de texto.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.RequestModels.OAuthFacebookLoginPost.Code">
+            <summary>
+                Código de sesión de Facebook. Cuando se realiza el proceso normal de Login, DEBE
+                solicitarse a Facebook que se genere un Token y un Código.
+                
+                El Código de Facebook NO ES el Token, es un código generado por el proceso de Login
+                y es diferente del Token. Facebook utiliza este proceso para poder compartir la
+                Sesión del Usuario entre Apps y Servidor Web, y mantener así Tokens independientes
+                y seguros.
             </summary>
         </member>
         <member name="P:Kms.Cloud.Api.Models.RequestModels.OAuth3rdLoginPost.Token">
@@ -777,6 +989,365 @@
         <member name="P:Kms.Cloud.Api.Models.ResponseModels.DataTotalResponse.LastModified">
             <summary>
                 Fecha del último dato registrado.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.ResponseModels.FriendResponse.UserId">
+            <summary>
+                ID de Usuario del Amigo.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.ResponseModels.FriendResponse.CreationDate">
+            <summary>
+                Fecha de Creación de la Cuenta del Amigo.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.ResponseModels.FriendResponse.Name">
+            <summary>
+                Nombre (real) del Usuario amigo.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.ResponseModels.FriendResponse.LastName">
+            <summary>
+                Apellido del Usuario amigo.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.ResponseModels.FriendResponse.PictureUri">
+            <summary>
+                URL a la Foto de Perfil del amigo.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.ResponseModels.FriendScoreResponse.Friend">
+            <summary>
+                Objeto del Amigo que representa éste elemento de la lista.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.ResponseModels.FriendScoreResponse.TotalDistance">
+            <summary>
+                Distancia Total recorrida por el Usuario representado en el
+                objeto Friend EN CENTÍMETROS.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.ResponseModels.FriendScoreResponse.IsMe">
+            <summary>
+                Indica si el objeto Friend de éste elemento en la lista es
+                el Usuario de la sesión actual. Para facilitar resaltarlo
+                en las listas o lo que quieras.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.ResponseModels.GiftClaimResponse.ExpirationDate">
+            <summary>
+                Fecha de Expiración del Código de Canje.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.ResponseModels.GiftClaimResponse.RedeemCode">
+            <summary>
+                Código de Canje.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.ResponseModels.GiftClaimResponse.RedeemPicture">
+            <summary>
+                URL a la representación gráfica del Código de Canje. Por ejemplo: un
+                Código QR, un Código de Barras, o un MIcrosoft Tag (sí, claro) o algo
+                similar. Podría aprovecharse Passbook en iOS para almacenar éste
+                código en el dispositivo del Usuario.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.ResponseModels.GiftResponse.NameSingular">
+            <summary>
+                Nombre en singular del Regalo. Por ejemplo: "Boleto de Cine".
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.ResponseModels.GiftResponse.NamePlural">
+            <summary>
+                Nombre en plural del Regalo. Por ejemplo: "Boletos de Cine".
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.ResponseModels.GiftResponse.RedeemCode">
+            <summary>
+                Código de Canje.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.ResponseModels.GiftResponse.RedeemPicture">
+            <summary>
+                URL a la representación gráfica del Código de Canje. Por ejemplo: un
+                Código QR, un Código de Barras, o un MIcrosoft Tag (sí, claro) o algo
+                similar. Podría aprovecharse Passbook en iOS para almacenar éste
+                código en el dispositivo del Usuario.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.ResponseModels.GiftResponse.Pictures">
+            <summary>
+                Lista de URLs de las fotografías del regalo. Por ejemplo: una fotografía
+                de un frappé.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.ResponseModels.AccountResponse.AccountCreationDate">
+            <summary>
+                Fecha de Creación de la Cuenta.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.ResponseModels.AccountResponse.UserId">
+            <summary>
+                ID de la Cuenta.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.ResponseModels.AccountResponse.Name">
+            <summary>
+                Nombre (real) del Usuario.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.ResponseModels.AccountResponse.LastName">
+            <summary>
+                Apellido del Usuario.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.ResponseModels.AccountResponse.Email">
+            <summary>
+                Dirección de E-mail del Usuario.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.ResponseModels.AccountResponse.RegionCode">
+            <summary>
+                Código de Región del Usuario.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.ResponseModels.AccountResponse.PreferredCultureCode">
+            <summary>
+                Código de Cultura preferido por el Usuario.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.ResponseModels.AccountResponse.PictureUri">
+            <summary>
+                URL a la Fotografía de Perfil del Usuario.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.ResponseModels.ContactInfoResponse.HomePhone">
+            <summary>
+                Teléfono de Casa del Usuario.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.ResponseModels.ContactInfoResponse.MobilePhone">
+            <summary>
+                Teléfono Móvil del Usuario.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.ResponseModels.ContactInfoResponse.WorkPhone">
+            <summary>
+                Teléfono de Trabajo del Usuario.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.ResponseModels.PhysiqueResponse.Age">
+            <summary>
+                Edad del Usuario. Exacta.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.ResponseModels.PhysiqueResponse.Height">
+            <summary>
+                Altura del Usuario EN CENTÍMETROS.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.ResponseModels.PhysiqueResponse.Weight">
+            <summary>
+                Peso del Usuario EN GRAMOS.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.ResponseModels.PhysiqueResponse.Sex">
+            <summary>
+                Género del Usuario. Puede ser "m" para Masculino o "f" para Femenino.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.ResponseModels.PhysiqueResponse.StrideLengthWalking">
+            <summary>
+                Distancia de zancada del Usuario caminando EN CENTÍMETROS.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.ResponseModels.PhysiqueResponse.StrideLengthRunning">
+            <summary>
+                Distancia de zancada del Usuario corriendo EN CENTÍMETROS.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.ResponseModels.RewardResponse.RewardId">
+            <summary>
+                ID de la Recompensa.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.ResponseModels.RewardResponse.EarnDate">
+            <summary>
+                Fecha en la que se consiguió la Recompensa.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.ResponseModels.RewardResponse.Title">
+            <summary>
+                Título de la Recompensa.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.ResponseModels.RewardResponse.Text">
+            <summary>
+                Texto de la Recompensa.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.ResponseModels.RewardResponse.Source">
+            <summary>
+                Fuente de la Recompensa (para citas, contextualización o argumentación).
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.ResponseModels.RewardResponse.RewardGifts">
+            <summary>
+                Regalos disponibles para Reclamar/Canjear por desbloquear la recompensa.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.ResponseModels.RewardResponse.RegionCodes">
+            <summary>
+                Códigos de Regiones en las que está disponbile ésta Recompensa.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.RequestModels.CreateKmsAccountPost.Name">
+            <summary>
+                Nombre (real) del Usuario.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.RequestModels.CreateKmsAccountPost.LastName">
+            <summary>
+                Apellido del Usuario.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.RequestModels.CreateKmsAccountPost.Email">
+            <summary>
+                Dirección de E-mail del Usuario.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.RequestModels.CreateKmsAccountPost.Password">
+            <summary>
+                Contraseña a utilizarse para iniciar sesión en KMS. Enviada en texto plano. ¡No te preocupes!
+                La conexión con KMS es através de SSL, así que todo está bien.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.RequestModels.CreateKmsAccountPost.RegionCode">
+            <summary>
+                Código de Región del Usuario.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.RequestModels.CreateKmsAccountPost.CultureCode">
+            <summary>
+                Código de Cultura del Usuario.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.RequestModels.CreateKmsAccountPost.UtcOffset">
+            <summary>
+                ATENCIÓN: Propiedad "deprecated". Se eliminará del API y BD muy pronto.
+                Franja UTC preferida por el Usuario.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.RequestModels.CreateKmsAccountPost.Birthdate">
+            <summary>
+                Fecha de nacimiento del Usuario.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.RequestModels.CreateKmsAccountPost.Height">
+            <summary>
+                Estatura del Usuario EN CENTÍMETROS.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.RequestModels.CreateKmsAccountPost.Weight">
+            <summary>
+                Peso del Usuario EN GRAMOS.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.RequestModels.CreateKmsAccountPost.Gender">
+            <summary>
+                Género del Usuario. Puede ser "m" para Masculino, o "f" para Femenino.
+                Es indistitnto para mayúsculas y minúsculas.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.RequestModels.DataPost.Timestamp">
+            <summary>
+                Estampa de Tiempo del registro generado por el Dispositivo KMS en UTC.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.RequestModels.DataPost.Steps">
+            <summary>
+                Número de pasos reportados por el Dispositivo KMS.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.RequestModels.DataPost.Activity">
+            <summary>
+                Actividad que reporta el Dispositivo KMS. Puede ser: "running", "walking" o "sleeping".
+                En un futuro ésta propiedad podría no modificar la forma en que se agrupa estadísticamente
+                la información subida a la Nube KMS.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.RequestModels.ContactInfoPost.HomePhone">
+            <summary>
+                Teléfono de Casa del Usuario.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.RequestModels.ContactInfoPost.MobilePhone">
+            <summary>
+                Teléfono Móvil del Usuario.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.RequestModels.ContactInfoPost.WorkPhone">
+            <summary>
+                Teléfono de Trabajo del Usuario.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.RequestModels.PhysiquePost.Age">
+            <summary>
+                Edad del Usuario. Exacta.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.RequestModels.PhysiquePost.Height">
+            <summary>
+                Altura del Usuario EN CENTÍMETROS.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.RequestModels.PhysiquePost.Weight">
+            <summary>
+                Peso del Usuario EN GRAMOS.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.RequestModels.PhysiquePost.Sex">
+            <summary>
+                Género del Usuario. Puede ser "m" para Masculino o "f" para Femenino.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.RequestModels.PhysiquePost.StrideLengthWalking">
+            <summary>
+                Distancia de zancada del Usuario caminando EN CENTÍMETROS. Actualmente se
+                ignora por completo.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.RequestModels.PhysiquePost.StrideLengthRunning">
+            <summary>
+                Distancia de zancada del Usuario corriendo EN CENTÍMETROS. Actualmente se
+                ignora por completo.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.RequestModels.AccountPost.Name">
+            <summary>
+                Nombre (real) del Usuario.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.RequestModels.AccountPost.Email">
+            <summary>
+                Dirección de E-mail del Usuario.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.RequestModels.AccountPost.PreferredCultureCode">
+            /// <summary>
+                Código de Cultura preferido por el Usuario.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.RequestModels.AccountPost.RegionCode">
+            <summary>
+                Código de Región del Usuario.
+            </summary>
+        </member>
+        <member name="P:Kms.Cloud.Api.Models.RequestModels.AccountPost.Password">
+            <summary>
+                Contraseña a utilizarse para iniciar sesión en KMS. Enviada en texto plano. ¡No te preocupes!
+                La conexión con KMS es através de SSL, así que todo está bien. Cambiar la contraseña invalidará
+                TODOS los Tokens de Sesión del Usuario actual.
             </summary>
         </member>
         <member name="M:Kms.Cloud.Api.Security.HttpOAuthAuthorization.#ctor(Kms.Cloud.Api.Security.HttpOAuthAuthorization,Kms.Cloud.Database.Abstraction.WorkUnit)">

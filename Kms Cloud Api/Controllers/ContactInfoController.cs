@@ -17,15 +17,13 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Kms.Cloud.Api.Controllers {
     /// <summary>
-    ///     Devuelve y modifica la Ínformación de la Contacto del Usuario en la Nube KMS.
+    ///     Obtener y modificar la Ínformación de la Contacto del Usuario en la Nube KMS.
     /// </summary>
     [Authorize]
     public class ContactInfoController : BaseController {
         /// <summary>
-        ///     Devuelve la Información de Contacto del Usuario en la Nube KMS.
+        ///     Obtener la Información de Contacto del Usuario en la Nube KMS.
         /// </summary>
-        /// <returns>
-        /// </returns>
         [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
         [HttpGet, Route("my/contact-info")]
         public ContactInfoResponse GetContactInfo() {
@@ -66,7 +64,6 @@ namespace Kms.Cloud.Api.Controllers {
         /// <param name="dataPost">
         ///     Nueva Información de Contacto del Usuario en la Nube KMS.
         /// </param>
-        /// <returns></returns>
         [HttpPost]
         [Route("my/contact-info")]
         public HttpResponseMessage PostAccount([FromBody]ContactInfoPost dataPost) {

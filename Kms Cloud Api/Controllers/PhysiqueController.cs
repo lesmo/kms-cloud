@@ -16,8 +16,14 @@ using Kilometros_WebGlobalization.API;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Kms.Cloud.Api.Controllers {
-    [Authorize]
+    /// <summary>
+    ///     Obtener y actualizar el Perfil Físico del Usuario en la Nube KMS de la sesión actual.
+    /// </summary>
     public class PhysiqueController : BaseController {
+
+        /// <summary>
+        ///     Obtener el Perfil Fïsico del Usuario actual.
+        /// </summary>
         [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
         [HttpGet, Route("my/physique")]
         public PhysiqueResponse GetPhysique() {
@@ -58,6 +64,10 @@ namespace Kms.Cloud.Api.Controllers {
             };
         }
 
+        /// <summary>
+        ///     Actualizar el Perfil Físico del Usuario.
+        /// </summary>
+        /// <param name="dataPost">Nueva información del Perfil Físico del Usuario.</param>
         [HttpPost]
         [Route("my/physique")]
         public HttpResponseMessage PostPhysique([FromBody]PhysiquePost dataPost) {
@@ -68,15 +78,15 @@ namespace Kms.Cloud.Api.Controllers {
                 };
 
             physique.Height
-                = dataPost.Height;
+                = (Int16)dataPost.Height;
             physique.Weight
                 = dataPost.Weight;
             physique.Sex
                 = dataPost.Sex;
-            physique.StrideLengthRunning
-                = dataPost.StrideLengthRunning;
-            physique.StrideLengthWalking
-                = dataPost.StrideLengthWalking;
+            //physique.StrideLengthRunning
+            //    = dataPost.StrideLengthRunning;
+            //physique.StrideLengthWalking
+            //    = dataPost.StrideLengthWalking;
 
             if ( OAuth.Token.User.UserBody == null )
                 Database.UserBodyStore.Add(physique);

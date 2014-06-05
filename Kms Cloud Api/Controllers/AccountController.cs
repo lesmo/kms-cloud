@@ -14,15 +14,13 @@ using System.Web;
 
 namespace Kms.Cloud.Api.Controllers {
     /// <summary>
-    ///     Devuelve y modifica la Ínformación de la Cuenta de Usuario en la Nube KMS.
+    ///     Obtener y actualizar la Ínformación de una Cuenta de Usuario en la Nube KMS.
     /// </summary>
     [Authorize]
     public class AccountController : BaseController {
         /// <summary>
-        ///     Devuelve la Información de Cuenta de Usuario en la Nube KMS.
+        ///     Devuelve la Información de la Cuenta de Usuario en la Nube KMS de la sesión actual.
         /// </summary>
-        /// <returns>
-        /// </returns>
         [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
         [HttpGet]
         [Route("my/account")]
@@ -51,15 +49,17 @@ namespace Kms.Cloud.Api.Controllers {
         }
 
         /// <summary>
-        ///     Establece la Información de Cuenta de Usuario en la Nube KMS.
+        ///     Actualiza la Información de Cuenta de Usuario en la Nube KMS de la sesión actual.
         /// </summary>
         /// <param name="accountPost">
         ///     Nueva Información de Cuenta de Usuario en la Nube KMS.
         /// </param>
-        /// <returns>HTTP 200 OK</returns>
         [SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase")]
         [HttpPost, Route("my/account")]
         public HttpResponseMessage PostAccount([FromBody]AccountPost accountPost) {
+            // TODO: Change user password!
+            // TODO: Validate email address.
+
             CurrentUser.PreferredCultureCode
                 = accountPost.PreferredCultureCode.ToUpper(CultureInfo.InvariantCulture);
             CurrentUser.RegionCode

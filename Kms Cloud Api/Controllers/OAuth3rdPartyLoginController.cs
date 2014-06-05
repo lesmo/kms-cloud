@@ -18,19 +18,17 @@ using System.Web;
 using System.Web.Http;
 
 namespace Kms.Cloud.Api.Controllers {
+    /// <summary>
+    ///     Permite iniciar sesión en la Nube de KMS intercambiando un Request Token de KMS por un Access Token
+    ///     utilizando el Access Token de alguna Red Social soportada.
+    /// </summary>
     public class OAuth3rdPartyLoginController : OAuthBaseController {
         /// <summary>
-        ///     Intercambia un Request Token de OAuth para la Nube de KMS por un Access Token,
+        ///     Intercambiar un Request Token de OAuth para la Nube de KMS por un Access Token,
         ///     utilizando un Código de Facebook.
         /// </summary>
-        /// <remarks>
-        ///     El Código de Facebook NO ES el Token, es un código generado por el proceso de Login
-        ///     y es diferente del Token. Facebook utiliza este proceso para poder compartir la
-        ///     Sesión del Usuario entre Apps y Servidor Web, y mantener así Tokens independientes
-        ///     y seguros.
-        /// </remarks>
         /// <param name="dataPost">
-        ///     Aparte de la cabecera propia de OAuth, en el cuerpo de POST deben incluirse el Código
+        ///     Aparte de la cabecera propia de OAuth para KMS, en el cuerpo de POST deben incluirse el Código
         ///     de Facebook y el ID de Usuario en Faceboook.
         /// </param>
         [AllowAnonymous]
@@ -60,6 +58,14 @@ namespace Kms.Cloud.Api.Controllers {
             return ExchangeOAuthAccessToken();
         }
 
+        /// <summary>
+        ///     Intercambiar un Request Token de OAuth para la Nube de KMS por un Access Token,
+        ///     utilizando un Access Token de Twitter.
+        /// </summary>
+        /// <param name="dataPost">
+        ///     Aparte de la cabecera propia de OAuth para KMS, en el cuerpo de POST deben incluirse el Token,
+        ///     Token Secret y ID del Usuario en Twitter.
+        /// </param>
         [AllowAnonymous]
         [HttpPost, Route("oauth/3rd/twitter/login")]
         public HttpResponseMessage TwitterLogin([FromBody]OAuth3rdLoginPost dataPost) {
@@ -87,12 +93,32 @@ namespace Kms.Cloud.Api.Controllers {
             return ExchangeOAuthAccessToken();
         }
 
+        /// <summary>
+        ///     Intercambiar un Request Token de OAuth para la Nube de KMS por un Access Token,
+        ///     utilizando un Access Token de Fitbit. Actualmente
+        ///     la funcionalidad no está implementada, y enviar peticiones causará
+        ///     la muerte de un gatito.
+        /// </summary>
+        /// <param name="dataPost">
+        ///     Aparte de la cabecera propia de OAuth para KMS, en el cuerpo de POST deben incluirse el Token,
+        ///     Token Secret y ID del Usuario en Fitbit.
+        /// </param>
         [HttpPost]
         [Route("oauth/3rd/fitbit/login")]
         public void FitbitLogin() {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        ///     Intercambiar un Request Token de OAuth para la Nube de KMS por un Access Token,
+        ///     utilizando un Access Token de Nike+. Actualmente
+        ///     la funcionalidad no está implementada, y enviar peticiones causará
+        ///     la muerte de un gatito.
+        /// </summary>
+        /// <param name="dataPost">
+        ///     Aparte de la cabecera propia de OAuth para KMS, en el cuerpo de POST deben incluirse el Token,
+        ///     Token Secret y ID del Usuario en Nike+.
+        /// </param>
         [HttpPost]
         [Route("oauth/3rd/nike/login")]
         public void NikeLogin() {

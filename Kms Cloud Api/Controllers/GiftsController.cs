@@ -16,7 +16,7 @@ namespace Kms.Cloud.Api.Controllers {
     [Authorize]
     public class GiftsController : BaseController {
         /// <summary>
-        ///     Devuelve el historial de los Regalos conseguidos por el Usuario.
+        ///     Obtener el historial de los Regalos conseguidos por el Usuario.
         /// </summary>
         [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
         [HttpGet, Route("my/gifts/history")]
@@ -25,7 +25,8 @@ namespace Kms.Cloud.Api.Controllers {
         }
 
         /// <summary>
-        ///     Devuelve la información de canje del Regalo especificado.
+        ///     Obtener la información de canje del Regalo especificado. Esta petición sólo funciona
+        ///     si el Usuario ya "canjeó" o "reclamó" el Regalo en my/gifts/{giftId}.
         /// </summary>
         /// <param name="giftId">
         ///     ID del Regalo, obtenido en el Payload de la Notificación Push o en
@@ -75,15 +76,10 @@ namespace Kms.Cloud.Api.Controllers {
                 RedeemCode
                     = userRewardGiftClaim.RedeemCode,
                 RedeemPicture
-                    = string.Format(
-                        CultureInfo.InvariantCulture,
-                        "{0}.{1}",
-                        userRewardGiftClaim.Guid.ToBase64String(),
-                        userRewardGiftClaim.PictureExtension
-                    ),
+                    = GetDynamicResourceUri(userRewardGiftClaim),
 
                 Pictures
-                    = rewardGiftPictures
+                    = rewardGift.RewardGiftPictures.Select(s => GetDynamicResourceUri(s))
             };
         }
 
@@ -161,6 +157,10 @@ namespace Kms.Cloud.Api.Controllers {
             Database.UserRewardGiftClaimedStore.Update(giftClaim);
             Database.SaveChanges();
 
+            // Devolver estatus "204 No Content" si el Regalo lo envía KMS.
+            if ( rewardGift.IsShipped )
+                throw new HttpNoContentException("703" + ControllerStrings.Warning703_GiftShippingPending);
+
             // --- Devolver detalles de canje ---
             return new GiftClaimResponse() {
                 ExpirationDate
@@ -170,12 +170,7 @@ namespace Kms.Cloud.Api.Controllers {
                 RedeemCode
                     = giftClaim.RedeemCode,
                 RedeemPicture
-                    = string.Format(
-                        CultureInfo.InvariantCulture,
-                        "{0}.{1}",
-                        giftClaim.Guid.ToBase64String(),
-                        giftClaim.PictureExtension
-                    )
+                    = GetDynamicResourceUri(giftClaim)
             };
         }
     }

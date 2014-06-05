@@ -21,7 +21,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Kms.Cloud.Api.Controllers {
     /// <summary>
-    ///     Permite subir y descargar Datos generados por los Dispositivos KMS, o los Servicios de Terceros
+    ///     Subir y bajar Datos generados por los Dispositivos KMS, o los Servicios de Terceros
     ///     soportados por la Nube KMS.
     /// </summary>
     public class DataController : BaseController {
@@ -40,7 +40,8 @@ namespace Kms.Cloud.Api.Controllers {
         /// </param>
         /// <returns></returns>
         /// <remarks>
-        ///     Sólo puede solicitarse hasta un año como rango a la vez. No hay límite en cuanto a fechas en el pasado.
+        ///     Sólo puede solicitarse hasta un año como rango a la vez. Por ahora, no hay límite en cuanto a
+        ///     fechas en el pasado pero éste comportamiento podría cambiar.
         /// </remarks>
         [HttpGet]
         [Route("data/search/{activity}")]
@@ -156,11 +157,9 @@ namespace Kms.Cloud.Api.Controllers {
         ///     Subir Datos generados por el Dispositivo KMS.
         /// </summary>
         /// <param name="dataPost">
-        ///     Datos del Dispositivo KMS.
+        ///     Registros generados por el Dispositivo KMS. Cada registro corresponde a una franja
+        ///     temporal de 2 minutos.
         /// </param>
-        /// <returns>
-        ///     
-        /// </returns>
         [HttpPost]
         [Route("data/bulk")]
         public HttpResponseMessage PostDataBulk([FromBody]IEnumerable<DataPost> dataPost) {
@@ -218,14 +217,13 @@ namespace Kms.Cloud.Api.Controllers {
         }
 
         /// <summary>
-        ///     Subir un solo Dato generado por el Dispositivo KMS.
+        ///     Subir un solo Registro generado por el Dispositivo KMS. El uso de éste recurso está
+        ///     desaconsejado para Apps de producción (rápidamente podrías consumir la cuota de peticiones
+        ///     que tiene tu API-Key). Está aquí principalmente para debugging en ambas partes (server y Apps).
         /// </summary>
         /// <param name="dataPost">
-        ///     Dato del Dispositivo KMS.
+        ///     Registro del Dispositivo KMS.
         /// </param>
-        /// <returns>
-        ///     
-        /// </returns>
         public HttpResponseMessage PostData([FromBody]DataPost dataPost) {
             // --- Validar que Usuario actual tenga capturado Perfil Físico ---
             if ( CurrentUser.UserBody == null )
