@@ -124,7 +124,8 @@ namespace Kms.Cloud.Api.Controllers {
                     WalkingTotalSteps = 0,
                     TotalSteps        = 0,
 
-                    LastModified = DateTime.UtcNow
+                    // TODO: Cambiar con fecha en la que se lanza KMS.
+                    LastModified = new DateTime(2014, 1, 1, 0, 0, 0, DateTimeKind.Utc)
                 };
             }
 
