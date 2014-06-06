@@ -9,7 +9,16 @@ using System.Net.Http;
 using System.Web.Http;
 
 namespace Kms.Cloud.Api.Controllers {
+    /// <summary>
+    ///     Obtener y asociar Dispositivos KMS a la Cuenta del Usuario.
+    /// </summary>
     public class DeviceController : BaseController {
+        /// <summary>
+        ///     Asociar un Número de Serie de Dispositivo KMS con el Usuario actual. Sólo es posible
+        ///     asociar un Dispositivo a un Usuario, intentar asociar un dispositivo que ya está
+        ///     asociado con un Usuario causará el asesinato de un cachorrito.
+        /// </summary>
+        /// <param name="serialString">Número de Seride de Dispositivo KMS</param>
         public IHttpActionResult LinkDevice(String serialString) {
             Int64 serialNumber;
             
@@ -35,7 +44,5 @@ namespace Kms.Cloud.Api.Controllers {
 
             return Ok(); 
         }
-
-
     }
 }
