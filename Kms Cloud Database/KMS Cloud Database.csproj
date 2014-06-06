@@ -102,7 +102,7 @@
     <Compile Include="EntityValidation\Users\Token.cs" />
     <Compile Include="EntityValidation\Users\User.cs" />
     <Compile Include="EntityValidation\Users\UserBody.cs" />
-    <Compile Include="Helpers\Base36Encoder.cs" />
+    <Compile Include="Helpers\BaseNumericEncoder.cs" />
     <Compile Include="Helpers\Crc64.cs" />
     <Compile Include="Helpers\CurrencyConverter.cs" />
     <Compile Include="Helpers\EntityDatesUtcKind.cs" />

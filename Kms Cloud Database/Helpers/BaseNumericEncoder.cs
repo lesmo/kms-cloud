@@ -5,18 +5,29 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Kms.Cloud.Database.Helpers {
-    public static class Base36Encoder {
-        private const string Clist = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        private static readonly char[] Clistarr = Clist.ToCharArray();
+    public class Base36Encoder : BaseNumericEncoder {
+        private const string Base36 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        public Base36Encoder() : base(Base36) {
+        }
+    }
 
-        public static long Decode(string inputString) {
+    public class BaseNumericEncoder {
+        private readonly char[] mCharMapArray;// = Clist.ToCharArray();
+        private readonly string mCharMap;
+
+        public BaseNumericEncoder(String charMap) {
+            mCharMap      = charMap;
+            mCharMapArray = charMap.ToCharArray();
+        }
+
+        public long Decode(string inputString) {
             long result = 0;
             var pow = 0;
             for ( var i = inputString.Length - 1; i >= 0; i-- ) {
                 var c = inputString[i];
-                var pos = Clist.IndexOf(c);
+                var pos = mCharMap.IndexOf(c);
                 if ( pos > -1 )
-                    result += pos * (long)Math.Pow(Clist.Length, pow);
+                    result += pos * (long)Math.Pow(mCharMapArray.Length, pow);
                 else
                     return -1;
                 pow++;
@@ -24,13 +35,15 @@ namespace Kms.Cloud.Database.Helpers {
             return result;
         }
 
-        public static string Encode(long inputNumber) {
+        public string Encode(long inputNumber) {
             var sb = new StringBuilder();
+
             inputNumber = Math.Abs(inputNumber);
             do {
-                sb.Append(Clistarr[inputNumber % (long)Clist.Length]);
-                inputNumber /= (long)Clist.Length;
+                sb.Append(mCharMapArray[inputNumber % (long)mCharMapArray.Length]);
+                inputNumber /= (long)mCharMapArray.Length;
             } while ( inputNumber != 0 );
+
             return Reverse(sb.ToString());
         }
 
