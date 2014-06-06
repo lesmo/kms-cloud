@@ -457,5 +457,19 @@ namespace Kms.Cloud.Database.Abstraction {
             }
         }
         private GenericRepository<Notification> _notification = null;
+
+        /// <summary>
+        ///     Almacén de Dispositivos.
+        /// </summary>
+        public GenericRepository<Device> DeviceStore {
+            get {
+                if ( this._device == null )
+                    this._device = new GenericRepository<Device>(this._context);
+
+                return this._device;
+            }
+        }
+        private GenericRepository<Device> _device = null;
+
     }
 }

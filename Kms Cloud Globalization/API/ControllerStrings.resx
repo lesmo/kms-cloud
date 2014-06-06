@@ -162,6 +162,9 @@
   <data name="Warning206_CannotCreateUserWithEmail" xml:space="preserve">
     <value>There is another User using provided email</value>
   </data>
+  <data name="Warning207_NoDevicesLinked" xml:space="preserve">
+    <value>At least one device must be linked before Data upload</value>
+  </data>
   <data name="Warning301_ActivityInvalid" xml:space="preserve">
     <value>Activity requested is invalid</value>
   </data>
@@ -200,5 +203,11 @@
   </data>
   <data name="Warning901_RewardNotFound" xml:space="preserve">
     <value>Reward requested could not be found, or ID is invalid</value>
+  </data>
+  <data name="WarningA01_DeviceNotFound" xml:space="preserve">
+    <value>Device requested could not be found, or is invalid</value>
+  </data>
+  <data name="WarningA02_DeviceAlreadyLinked" xml:space="preserve">
+    <value>Device requested is already linked to another user</value>
   </data>
 </root>

@@ -1425,6 +1425,11 @@
             <End Role="UserPicture" EntitySet="IPictureSet" />
             <End Role="User" EntitySet="UserSet" />
           </AssociationSet>
+          <EntitySet Name="DeviceSet" EntityType="MainModel.Device" />
+          <AssociationSet Name="DeviceUser" Association="MainModel.DeviceUser">
+            <End Role="Device" EntitySet="DeviceSet" />
+            <End Role="User" EntitySet="UserSet" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="User">
           <Documentation>
@@ -1513,6 +1518,7 @@
           <Property Name="PictureUri" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Notification" Relationship="MainModel.NotificationUser" FromRole="User" ToRole="Notification" />
           <NavigationProperty Name="UserPicture" Relationship="MainModel.UserPictureUser" FromRole="User" ToRole="UserPicture" />
+          <NavigationProperty Name="Device" Relationship="MainModel.DeviceUser" FromRole="User" ToRole="Device" />
         </EntityType>
         <EntityType Name="Token">
           <Documentation>
@@ -2304,6 +2310,21 @@
         </EntityType>
         <Association Name="UserPictureUser">
           <End Type="MainModel.UserPicture" Role="UserPicture" Multiplicity="0..1" />
+          <End Type="MainModel.User" Role="User" Multiplicity="1" />
+        </Association>
+        <EntityType Name="Device">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SerialNumber" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="User" Relationship="MainModel.DeviceUser" FromRole="Device" ToRole="User" />
+          <Property Name="CreationDate" Type="DateTime" Nullable="false" />
+          <Property Name="LinkDate" Type="DateTime" Nullable="true" />
+          <Property Name="RegionCode" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <Association Name="DeviceUser">
+          <End Type="MainModel.Device" Role="Device" Multiplicity="*" />
           <End Type="MainModel.User" Role="User" Multiplicity="1" />
         </Association>
       </Schema>

@@ -28,6 +28,7 @@ namespace Kms.Cloud.Database
             this.UserDataTotalDistance = new HashSet<UserDataTotalDistance>();
             this.UserDataHourlyDistance = new HashSet<UserDataHourlyDistance>();
             this.Notification = new HashSet<Notification>();
+            this.Device = new HashSet<Device>();
         }
     
         public System.Guid Guid { get; set; }
@@ -58,5 +59,6 @@ namespace Kms.Cloud.Database
         public virtual ICollection<UserDataHourlyDistance> UserDataHourlyDistance { get; set; }
         public virtual ICollection<Notification> Notification { get; set; }
         public virtual UserPicture UserPicture { get; set; }
+        public virtual ICollection<Device> Device { get; set; }
     }
 }

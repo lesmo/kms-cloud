@@ -166,6 +166,10 @@ namespace Kms.Cloud.Api.Controllers {
             if ( dataPost.Count() < 1 )
                 throw new HttpBadRequestException();
 
+            // --- Validar que Usuario actual tenga asociado al menos un Dispositivo ---
+            if ( CurrentUser.Device.Count < 1 )
+                throw new HttpConflictException("207 " + ControllerStrings.Warning207_NoDevicesLinked);
+
             // --- Validar que Usuario actual tenga capturado Perfil Físico ---
             if ( CurrentUser.UserBody == null )
                 throw new HttpConflictException(

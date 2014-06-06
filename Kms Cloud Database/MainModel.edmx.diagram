@@ -77,6 +77,8 @@
         <AssociationConnector Association="MainModel.MotionLevelTip" />
         <EntityTypeShape EntityType="MainModel.UserPicture" Width="1.5" PointX="3.75" PointY="9" IsExpanded="false" />
         <AssociationConnector Association="MainModel.UserPictureUser" />
+        <EntityTypeShape EntityType="MainModel.Device" Width="1.5" PointX="1.625" PointY="11.75" />
+        <AssociationConnector Association="MainModel.DeviceUser" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

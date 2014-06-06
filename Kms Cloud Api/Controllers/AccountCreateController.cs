@@ -14,7 +14,9 @@ namespace Kms.Cloud.Api.Controllers {
     /// <summary>
     ///     Permite generar una nueva Cuenta en la Nube de KMS. Para crear una nueva Cuenta
     ///     que permitirá login con Facebook, Twitter, Fitbit o Nike+, será necesario crear
-    ///     una Cuenta en éste recurso y después utilizar el apropiado dentro de OAuth3rdPartyAdd.
+    ///     una Cuenta en éste recurso y después utilizar el apropiado dentro del Controlador
+    ///     OAuth3rdPartyAdd. Los Usuarios creados deberán asociar un Número de Serie de
+    ///     Dispositivo KMS antes de poder sincronizar información.
     /// </summary>
     public class AccountCreateController : BaseController {
         /// <summary>

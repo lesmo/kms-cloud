@@ -88,6 +88,9 @@
     <Compile Include="DataActivity.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Device.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="EntityExtras\User.cs" />
     <Compile Include="EntityExtras\UserBody.cs" />
     <Compile Include="EntityLocalization\IEntityGlobalization.cs" />

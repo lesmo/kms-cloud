@@ -196,6 +196,15 @@ namespace Kilometros_WebGlobalization.API {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to At least one device must be linked before Data upload.
+        /// </summary>
+        public static string Warning207_NoDevicesLinked {
+            get {
+                return ResourceManager.GetString("Warning207_NoDevicesLinked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Activity requested is invalid.
         /// </summary>
         public static string Warning301_ActivityInvalid {
@@ -309,6 +318,24 @@ namespace Kilometros_WebGlobalization.API {
         public static string Warning901_RewardNotFound {
             get {
                 return ResourceManager.GetString("Warning901_RewardNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Device requested could not be found, or is invalid.
+        /// </summary>
+        public static string WarningA01_DeviceNotFound {
+            get {
+                return ResourceManager.GetString("WarningA01_DeviceNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Device requested is already linked to another user.
+        /// </summary>
+        public static string WarningA02_DeviceAlreadyLinked {
+            get {
+                return ResourceManager.GetString("WarningA02_DeviceAlreadyLinked", resourceCulture);
             }
         }
     }
