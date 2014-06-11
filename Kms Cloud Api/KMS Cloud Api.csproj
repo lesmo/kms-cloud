@@ -188,6 +188,7 @@
     <Compile Include="Areas\HelpPage\CustomSamples\DefaultValues.cs" />
     <Compile Include="Areas\HelpPage\CustomSamples\ContactInfoControllerSamples.cs" />
     <Compile Include="Areas\HelpPage\CustomSamples\OAuthControllerSamples.cs" />
+    <Compile Include="Areas\HelpPage\CustomSamples\WorldControllerSamples.cs" />
     <Compile Include="Areas\HelpPage\HelpPageAreaRegistration.cs" />
     <Compile Include="Areas\HelpPage\HelpPageConfigurationExtensions.cs" />
     <Compile Include="Areas\HelpPage\ModelDescriptions\CollectionModelDescription.cs" />
