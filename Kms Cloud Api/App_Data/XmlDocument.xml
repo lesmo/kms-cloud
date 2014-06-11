@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <doc>
     <assembly>
-        <name>Kms.Cloud.Api</name>
+        <name>KMS Cloud API</name>
     </assembly>
     <members>
         <member name="M:Kms.Cloud.Api.Areas.HelpPage.ApiDescriptionExtensions.GetFriendlyId(System.Web.Http.Description.ApiDescription)">
@@ -945,12 +945,13 @@
             <summary>
                 Código de sesión de Facebook. Cuando se realiza el proceso normal de Login, DEBE
                 solicitarse a Facebook que se genere un Token y un Código.
-                
+            </summary>
+            <remarks>
                 El Código de Facebook NO ES el Token, es un código generado por el proceso de Login
                 y es diferente del Token. Facebook utiliza este proceso para poder compartir la
                 Sesión del Usuario entre Apps y Servidor Web, y mantener así Tokens independientes
                 y seguros.
-            </summary>
+            </remarks>
         </member>
         <member name="P:Kms.Cloud.Api.Models.RequestModels.OAuth3rdLoginPost.Token">
             <summary>

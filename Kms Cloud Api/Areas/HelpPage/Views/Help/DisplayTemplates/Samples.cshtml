@@ -9,11 +9,18 @@
     var mediaTypes = samples.Keys;
 }
 <div>
-    @foreach (var mediaType in mediaTypes)
-    {
-        <h4 class="sample-header">@mediaType</h4>
+    @foreach ( var mediaType in mediaTypes ) {
+        if ( mediaType.StartsWith("http-header") ) {
+            <h4 class="sample-header" style="background:#ff6168">Cabecera(s) HTTP</h4>
+        } else {
+            <h4 class="sample-header">@mediaType</h4>
+        }
+
         <div class="sample-content">
-            <span><b>Ejemplo:</b></span>
+            @if ( !mediaType.StartsWith("http-header") ) {
+                <span><b>Ejemplo:</b></span>
+            }
+
             @{
                 var sample = samples[mediaType];
                 if (sample == null)

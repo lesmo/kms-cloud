@@ -8,7 +8,7 @@
 @model Collection<ApiDescription>
 
 @{
-    ViewBag.Title = "ASP.NET Web API Help Page";
+    ViewBag.Title = WebApiApplication.AssemblyName + " v" + WebApiApplication.AssemblyVersion.ToString();
 
     // Group APIs by controller
     ILookup<HttpControllerDescriptor, ApiDescription> apiGroups = Model.ToLookup(api => api.ActionDescriptor.ControllerDescriptor);
@@ -27,11 +27,13 @@
                 </p>
                 <p>
                     La <strong>Nube KMS</strong> tiene la capacidad de responder a las peticiones utilizando <strong>JSON</strong>
-                    o <strong>XML</strong>, según defina la petición <strong>HTTP</strong>. Este comportamiento que puede definirse a través de las
-                    <a href="#">Cabeceras HTTP</a>.
+                    o <strong>XML</strong>, según defina la petición <strong>HTTP</strong> (excepto por las peticiones propias del protoclo
+                    OAuth). Este comportamiento que puede definirse a través de las <a href="#">Cabeceras HTTP</a>.
                 </p>
                 <p>
-                    La documentación de cada uno de los <i>Recursos HTTP</i> está siempre actualizada con los últimos cambios y modificaciones añadidos al API
+                    La documentación de cada uno de los <i>Recursos HTTP</i> en estas páginas están generadas automáticamente a partir del
+                    código fuente que corresponde a la compilación actual del API, por lo que siempre refleja las últimas características
+                    y funciones disponibles, aunque no estén propiamente descritas.
                 </p>
             </div>
         </section>

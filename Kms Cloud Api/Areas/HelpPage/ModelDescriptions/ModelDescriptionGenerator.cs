@@ -346,6 +346,7 @@ namespace Kms.Cloud.Api.Areas.HelpPage.ModelDescriptions
                     if (DocumentationProvider != null)
                     {
                         propertyModel.Documentation = DocumentationProvider.GetDocumentation(property);
+                        propertyModel.Remarks = DocumentationProvider.GetRemarks(property);
                     }
 
                     GenerateAnnotations(property, propertyModel);
@@ -367,6 +368,7 @@ namespace Kms.Cloud.Api.Areas.HelpPage.ModelDescriptions
                     if (DocumentationProvider != null)
                     {
                         propertyModel.Documentation = DocumentationProvider.GetDocumentation(field);
+                        propertyModel.Remarks = DocumentationProvider.GetRemarks(field);
                     }
 
                     complexModelDescription.Properties.Add(propertyModel);

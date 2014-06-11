@@ -44,18 +44,22 @@
 
     <p>@description.ResponseDescription.Documentation</p>
 
-    @if (Model.ResourceDescription != null)
+    @if (Model.ResourceDescription != null )
     {
-        @Html.DisplayFor(m => m.ResourceDescription.ModelType, "ModelDescriptionLink", new { modelDescription = Model.ResourceDescription })
-        <br /><br />
-        if (Model.ResourceProperties != null)
-        {
-            @Html.DisplayFor(m => m.ResourceProperties, "Parameters")
+        if ( Model.ResourceDescription.ModelType == typeof(IHttpActionResult) || Model.ResourceDescription.ModelType == typeof(System.Net.Http.HttpResponseMessage) ) {
+            <p>Respuesta sin parámetros serializables.</p>
+        } else {
+            @Html.DisplayFor(m => m.ResourceDescription.ModelType, "ModelDescriptionLink", new { modelDescription = Model.ResourceDescription })
+            <br /><br />
+            if (Model.ResourceProperties != null)
+            {
+                @Html.DisplayFor(m => m.ResourceProperties, "Parameters")
+            }
         }
     }
     else
     {
-        <p>None.</p>
+        <p>Ninguno.</p>
     }
 
     @if (Model.SampleResponses.Count > 0)

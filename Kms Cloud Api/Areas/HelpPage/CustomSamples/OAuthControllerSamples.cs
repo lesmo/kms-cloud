@@ -15,11 +15,11 @@ namespace Kms.Cloud.Api.Areas.HelpPage.CustomSamples {
                     CultureInfo.InvariantCulture,
 
                     "Authorization: OAuth\n"
-                    + @"  oauth_consumer_key=""{0}"""
-                    + @"  oauth_signature=""{1}"""
-                    + @"  oauth_signature_method=""{2}"""
-                    + @"  oauth_timestamp=""{3}"""
-                    + @"  oauth_nonce=""{4}""",
+                    + "  oauth_consumer_key=\"{0}\"\n"
+                    + "  oauth_signature=\"{1}\"\n"
+                    + "  oauth_signature_method=\"{2}\"\n"
+                    + "  oauth_timestamp=\"{3}\"\n"
+                    + "  oauth_nonce=\"{4}\"",
 
                     DefaultValues.OAuthConsumerKey,
                     DefaultValues.OAuthSignature,
@@ -27,7 +27,7 @@ namespace Kms.Cloud.Api.Areas.HelpPage.CustomSamples {
                     DefaultValues.OAuthTimestamp,
                     DefaultValues.OAuthNonce
                 ),
-                new System.Net.Http.Headers.MediaTypeHeaderValue("HTTP Authorization"),
+                new System.Net.Http.Headers.MediaTypeHeaderValue("http-header/authorization"),
                 "OAuth",
                 "OAuthRequestToken"
             );
@@ -37,9 +37,9 @@ namespace Kms.Cloud.Api.Areas.HelpPage.CustomSamples {
                 string.Format(
                     CultureInfo.InvariantCulture,
 
-                    "oauth_token={0}"
-                    + "&oauth_token_secret={1}"
-                    + "&oauth_callback_confirmed={2}"
+                    "oauth_token={0}\n"
+                    + "&oauth_token_secret={1}\n"
+                    + "&oauth_callback_confirmed={2}\n"
                     + "&x_token_expires={3}",
 
                     DefaultValues.OAuthToken,
@@ -59,12 +59,12 @@ namespace Kms.Cloud.Api.Areas.HelpPage.CustomSamples {
                     CultureInfo.InvariantCulture,
 
                     "Authorization: OAuth\n"
-                    + @"  oauth_consumer_key=""{0}"""
-                    + @"  oauth_signature=""{1}"""
-                    + @"  oauth_signature_method=""{2}"""
-                    + @"  oauth_timestamp=""{3}"""
-                    + @"  oauth_nonce=""{4}"""
-                    + @"  oauth_verifier=""{5}""",
+                    + "  oauth_consumer_key=\"{0}\"\n"
+                    + "  oauth_signature=\"{1}\"\n"
+                    + "  oauth_signature_method=\"{2}\"\n"
+                    + "  oauth_timestamp=\"{3}\"\n"
+                    + "  oauth_nonce=\"{4}\"\n"
+                    + "  oauth_verifier=\"{5}\"",
 
                     DefaultValues.OAuthConsumerKey,
                     DefaultValues.OAuthSignature,
@@ -73,7 +73,7 @@ namespace Kms.Cloud.Api.Areas.HelpPage.CustomSamples {
                     DefaultValues.OAuthNonce,
                     DefaultValues.OAuthTokenSecret
                 ),
-                new System.Net.Http.Headers.MediaTypeHeaderValue("HTTP Authorization"),
+                new System.Net.Http.Headers.MediaTypeHeaderValue("http-header/authorization"),
                 "OAuth",
                 "OAuthAccessToken"
             );
@@ -83,12 +83,12 @@ namespace Kms.Cloud.Api.Areas.HelpPage.CustomSamples {
                 string.Format(
                     CultureInfo.InvariantCulture,
 
-                    "oauth_token={0}&oauth_token_secret={1}",
+                    "oauth_token={0}\n&oauth_token_secret={1}",
 
                     DefaultValues.OAuthToken2,
                     DefaultValues.OAuthTokenSecret2
                 ),
-                new System.Net.Http.Headers.MediaTypeHeaderValue("HTTP Authorization"),
+                new System.Net.Http.Headers.MediaTypeHeaderValue("application/form-url-encoded"),
                 "OAuth",
                 "OAuthAccessToken"
             );

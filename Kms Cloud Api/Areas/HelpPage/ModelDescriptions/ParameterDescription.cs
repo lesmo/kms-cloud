@@ -14,6 +14,8 @@ namespace Kms.Cloud.Api.Areas.HelpPage.ModelDescriptions
 
         public string Documentation { get; set; }
 
+        public string Remarks { get; set; }
+
         public string Name { get; set; }
 
         public ModelDescription TypeDescription { get; set; }

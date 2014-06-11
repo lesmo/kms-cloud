@@ -9,7 +9,7 @@
 {
     <table class="help-page-table">
         <thead>
-            <tr><th>Parámetro</th><th>Descripción</th><th>Tipo</th><th>Comentarios</th></tr>
+            <tr><th>Parámetro</th><th>Descripción</th><th>Tipo</th></tr>
         </thead>
         <tbody>
             @foreach (ParameterDescription parameter in Model)
@@ -19,22 +19,12 @@
                     <td class="parameter-name">@parameter.Name</td>
                     <td class="parameter-documentation">
                         <p>@parameter.Documentation</p>
+                        @if ( !string.IsNullOrEmpty(parameter.Remarks) ) {
+                            <p class="warning-message-container">@parameter.Remarks</p>
+                        }
                     </td>
                     <td class="parameter-type">
                         @Html.DisplayFor(m => modelDescription.ModelType, "ModelDescriptionLink", new { modelDescription = modelDescription })
-                    </td>
-                    <td class="parameter-annotations">
-                        @if (parameter.Annotations.Count > 0)
-                        {
-                            foreach (var annotation in parameter.Annotations)
-                            {
-                                <p>@annotation.Documentation</p>
-                            }
-                        }
-                        else
-                        {
-                            <p>-</p>
-                        }
                     </td>
                 </tr>
             }

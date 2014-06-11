@@ -8,5 +8,9 @@ namespace Kms.Cloud.Api.Areas.HelpPage.ModelDescriptions
         string GetDocumentation(MemberInfo member);
 
         string GetDocumentation(Type type);
+
+        string GetRemarks(MemberInfo member);
+
+        string GetRemarks(Type member);
     }
 }
