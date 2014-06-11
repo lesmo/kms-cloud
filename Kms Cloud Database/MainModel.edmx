@@ -32,6 +32,7 @@
     <EntitySet Name="UserFriendSet" EntityType="MainModel.Store.UserFriendSet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="RegionParticularSet" EntityType="MainModel.Store.RegionParticularSet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="NotificationSet" EntityType="MainModel.Store.NotificationSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="DeviceSet" EntityType="MainModel.Store.DeviceSet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="IPictureSet_TipCategory" EntityType="MainModel.Store.IPictureSet_TipCategory" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="IGlobalizationSet_TipCategoryGlobalization" EntityType="MainModel.Store.IGlobalizationSet_TipCategoryGlobalization" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="IGlobalizationSet_TipGlobalization" EntityType="MainModel.Store.IGlobalizationSet_TipGlobalization" store:Type="Tables" Schema="dbo" />
@@ -190,6 +191,10 @@
     </AssociationSet>
     <AssociationSet Name="UserPictureUser" Association="MainModel.Store.UserPictureUser">
       <End Role="UserPicture" EntitySet="IPictureSet_UserPicture" />
+      <End Role="User" EntitySet="UserSet" />
+    </AssociationSet>
+    <AssociationSet Name="DeviceUser" Association="MainModel.Store.DeviceUser">
+      <End Role="Device" EntitySet="DeviceSet" />
       <End Role="User" EntitySet="UserSet" />
     </AssociationSet>
     <AssociationSet Name="FK_TipCategory_inherits_IPicture" Association="MainModel.Store.FK_TipCategory_inherits_IPicture">
@@ -521,6 +526,17 @@
     <Property Name="ObjectGuid" Type="uniqueidentifier" Nullable="false" />
     <Property Name="NotificationType" Type="int" Nullable="false" />
     <Property Name="Discarded" Type="bit" Nullable="false" />
+    <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
+  </EntityType>
+  <EntityType Name="DeviceSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SerialNumber" Type="bigint" Nullable="false" />
+    <Property Name="CreationDate" Type="datetime" Nullable="false" />
+    <Property Name="LinkDate" Type="datetime" Nullable="true" />
+    <Property Name="RegionCode" Type="varchar" Nullable="true" MaxLength="32" />
     <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
   </EntityType>
   <EntityType Name="IPictureSet_TipCategory">
@@ -1068,6 +1084,18 @@
         <PropertyRef Name="Guid" />
       </Principal>
       <Dependent Role="UserPicture">
+        <PropertyRef Name="User_Guid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="DeviceUser">
+    <End Role="Device" Type="MainModel.Store.DeviceSet" Multiplicity="*" />
+    <End Role="User" Type="MainModel.Store.UserSet" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Guid" />
+      </Principal>
+      <Dependent Role="Device">
         <PropertyRef Name="User_Guid" />
       </Dependent>
     </ReferentialConstraint>
@@ -1936,7 +1964,8 @@
           <End Type="MainModel.RewardGift" Role="RewardGift" Multiplicity="1" >
             <OnDelete Action="Cascade" />
           </End>
-          <End Type="MainModel.UserRewardGiftClaimed" Role="UserRewardGiftClaimed" Multiplicity="*" />
+          <End Type="MainModel.UserRewardGiftClaimed" Role="UserRewardGiftClaimed" Multiplicity="*" >
+          </End>
         </Association>
         <Association Name="UserRewardGiftClaimedUser">
           <End Type="MainModel.UserRewardGiftClaimed" Role="UserRewardGiftClaimed" Multiplicity="*" />
@@ -2319,9 +2348,9 @@
           <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="SerialNumber" Type="Int64" Nullable="false" />
           <NavigationProperty Name="User" Relationship="MainModel.DeviceUser" FromRole="Device" ToRole="User" />
-          <Property Name="CreationDate" Type="DateTime" Nullable="false" />
-          <Property Name="LinkDate" Type="DateTime" Nullable="true" />
-          <Property Name="RegionCode" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="false" />
+          <Property Name="CreationDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LinkDate" Type="DateTime" Nullable="true" Precision="3" />
+          <Property Name="RegionCode" Type="String" Nullable="true" MaxLength="32" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="DeviceUser">
           <End Type="MainModel.Device" Role="Device" Multiplicity="*" />
@@ -2690,6 +2719,17 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="DeviceSet">
+      <EntityTypeMapping TypeName="IsTypeOf(MainModel.Device)">
+        <MappingFragment StoreEntitySet="DeviceSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="SerialNumber" ColumnName="SerialNumber" />
+          <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+          <ScalarProperty Name="LinkDate" ColumnName="LinkDate" />
+          <ScalarProperty Name="RegionCode" ColumnName="RegionCode" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <AssociationSetMapping Name="ApiKeyToken" TypeName="MainModel.ApiKeyToken" StoreEntitySet="TokenSet">
       <EndProperty Name="ApiKey">
         <ScalarProperty Name="Guid" ColumnName="ApiKey_Guid" />
@@ -2981,6 +3021,14 @@
       </EndProperty>
       <EndProperty Name="UserPicture">
         <ScalarProperty Name="Guid" ColumnName="Guid" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="DeviceUser" TypeName="MainModel.DeviceUser" StoreEntitySet="DeviceSet">
+      <EndProperty Name="User">
+        <ScalarProperty Name="Guid" ColumnName="User_Guid" />
+      </EndProperty>
+      <EndProperty Name="Device">
+        <ScalarProperty Name="Id" ColumnName="Id" />
       </EndProperty>
     </AssociationSetMapping>
   </EntityContainerMapping>

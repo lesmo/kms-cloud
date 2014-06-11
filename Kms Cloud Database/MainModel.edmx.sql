@@ -2,8 +2,8 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 04/27/2014 14:36:49
--- Generated from EDMX file: F:\KMS Invent\KMS Cloud\Kms Cloud Database\MainModel.edmx
+-- Date Created: 06/10/2014 20:00:05
+-- Generated from EDMX file: E:\KMS Invent\KMS Cloud\Kms Cloud Database\MainModel.edmx
 -- --------------------------------------------------
 
 SET QUOTED_IDENTIFIER OFF;
@@ -17,26 +17,59 @@ GO
 -- Dropping existing FOREIGN KEY constraints
 -- --------------------------------------------------
 
+IF OBJECT_ID(N'[dbo].[FK_ApiKeyHistory]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[ApiKeySet] DROP CONSTRAINT [FK_ApiKeyHistory];
+GO
 IF OBJECT_ID(N'[dbo].[FK_ApiKeyToken]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[TokenSet] DROP CONSTRAINT [FK_ApiKeyToken];
 GO
-IF OBJECT_ID(N'[dbo].[FK_UserToken]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[TokenSet] DROP CONSTRAINT [FK_UserToken];
+IF OBJECT_ID(N'[dbo].[FK_ContactInfoUser]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[ContactInfoSet] DROP CONSTRAINT [FK_ContactInfoUser];
 GO
-IF OBJECT_ID(N'[dbo].[FK_TipCategoryTipCategoryGlobalization]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[IGlobalizationSet_TipCategoryGlobalization] DROP CONSTRAINT [FK_TipCategoryTipCategoryGlobalization];
+IF OBJECT_ID(N'[dbo].[FK_DeviceUser]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[DeviceSet] DROP CONSTRAINT [FK_DeviceUser];
 GO
-IF OBJECT_ID(N'[dbo].[FK_TipCategoryTip]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[TipSet] DROP CONSTRAINT [FK_TipCategoryTip];
+IF OBJECT_ID(N'[dbo].[FK_MotionLevelGlobalization_inherits_IGlobalization]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[IGlobalizationSet_MotionLevelGlobalization] DROP CONSTRAINT [FK_MotionLevelGlobalization_inherits_IGlobalization];
 GO
-IF OBJECT_ID(N'[dbo].[FK_TipTipGlobalization]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[IGlobalizationSet_TipGlobalization] DROP CONSTRAINT [FK_TipTipGlobalization];
+IF OBJECT_ID(N'[dbo].[FK_MotionLevelTip_MotionLevel]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[MotionLevelTip] DROP CONSTRAINT [FK_MotionLevelTip_MotionLevel];
 GO
-IF OBJECT_ID(N'[dbo].[FK_UserUserBody]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[UserBodySet] DROP CONSTRAINT [FK_UserUserBody];
+IF OBJECT_ID(N'[dbo].[FK_MotionLevelTip_Tip]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[MotionLevelTip] DROP CONSTRAINT [FK_MotionLevelTip_Tip];
 GO
-IF OBJECT_ID(N'[dbo].[FK_TipMotionLevelTipMotionLevelGlobalization]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[IGlobalizationSet_MotionLevelGlobalization] DROP CONSTRAINT [FK_TipMotionLevelTipMotionLevelGlobalization];
+IF OBJECT_ID(N'[dbo].[FK_NotificationUser]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[NotificationSet] DROP CONSTRAINT [FK_NotificationUser];
+GO
+IF OBJECT_ID(N'[dbo].[FK_OAuthCredentialUser]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[OAuthCredentialSet] DROP CONSTRAINT [FK_OAuthCredentialUser];
+GO
+IF OBJECT_ID(N'[dbo].[FK_RegionRegionSubdivision]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[RegionSubdivisionSet] DROP CONSTRAINT [FK_RegionRegionSubdivision];
+GO
+IF OBJECT_ID(N'[dbo].[FK_RegionRegionSubdivisionRegionParticular]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[RegionParticularSet] DROP CONSTRAINT [FK_RegionRegionSubdivisionRegionParticular];
+GO
+IF OBJECT_ID(N'[dbo].[FK_Reward_inherits_IPicture]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[IPictureSet_Reward] DROP CONSTRAINT [FK_Reward_inherits_IPicture];
+GO
+IF OBJECT_ID(N'[dbo].[FK_RewardGiftGlobalization_inherits_IGlobalization]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[IGlobalizationSet_RewardGiftGlobalization] DROP CONSTRAINT [FK_RewardGiftGlobalization_inherits_IGlobalization];
+GO
+IF OBJECT_ID(N'[dbo].[FK_RewardGiftPicture_inherits_IPicture]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[IPictureSet_RewardGiftPicture] DROP CONSTRAINT [FK_RewardGiftPicture_inherits_IPicture];
+GO
+IF OBJECT_ID(N'[dbo].[FK_RewardGiftRewardGiftGlobalization]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[IGlobalizationSet_RewardGiftGlobalization] DROP CONSTRAINT [FK_RewardGiftRewardGiftGlobalization];
+GO
+IF OBJECT_ID(N'[dbo].[FK_RewardGiftRewardGiftPictures]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[IPictureSet_RewardGiftPicture] DROP CONSTRAINT [FK_RewardGiftRewardGiftPictures];
+GO
+IF OBJECT_ID(N'[dbo].[FK_RewardGiftUserRewardGiftClaimed]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[IPictureSet_UserRewardGiftClaimed] DROP CONSTRAINT [FK_RewardGiftUserRewardGiftClaimed];
+GO
+IF OBJECT_ID(N'[dbo].[FK_RewardGlobalization_inherits_IGlobalization]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[IGlobalizationSet_RewardGlobalization] DROP CONSTRAINT [FK_RewardGlobalization_inherits_IGlobalization];
 GO
 IF OBJECT_ID(N'[dbo].[FK_RewardRewardGift]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[RewardGiftSet] DROP CONSTRAINT [FK_RewardRewardGift];
@@ -47,83 +80,11 @@ GO
 IF OBJECT_ID(N'[dbo].[FK_RewardRewardRegionalization]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[RewardRegionalizationSet] DROP CONSTRAINT [FK_RewardRewardRegionalization];
 GO
-IF OBJECT_ID(N'[dbo].[FK_RewardGiftRewardGiftGlobalization]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[IGlobalizationSet_RewardGiftGlobalization] DROP CONSTRAINT [FK_RewardGiftRewardGiftGlobalization];
-GO
-IF OBJECT_ID(N'[dbo].[FK_RewardGiftUserRewardGiftClaimed]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[IPictureSet_UserRewardGiftClaimed] DROP CONSTRAINT [FK_RewardGiftUserRewardGiftClaimed];
-GO
-IF OBJECT_ID(N'[dbo].[FK_UserRewardGiftClaimedUser]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[IPictureSet_UserRewardGiftClaimed] DROP CONSTRAINT [FK_UserRewardGiftClaimedUser];
-GO
-IF OBJECT_ID(N'[dbo].[FK_UserUserMotionLevelHistory]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[UserMotionLevelHistorySet] DROP CONSTRAINT [FK_UserUserMotionLevelHistory];
-GO
-IF OBJECT_ID(N'[dbo].[FK_UserMotionLevelHistoryMotionLevel]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[UserMotionLevelHistorySet] DROP CONSTRAINT [FK_UserMotionLevelHistoryMotionLevel];
-GO
-IF OBJECT_ID(N'[dbo].[FK_UserUserEarnedReward]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[UserEarnedRewardSet] DROP CONSTRAINT [FK_UserUserEarnedReward];
-GO
-IF OBJECT_ID(N'[dbo].[FK_UserEarnedRewardReward]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[UserEarnedRewardSet] DROP CONSTRAINT [FK_UserEarnedRewardReward];
-GO
-IF OBJECT_ID(N'[dbo].[FK_ContactInfoUser]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[ContactInfoSet] DROP CONSTRAINT [FK_ContactInfoUser];
-GO
-IF OBJECT_ID(N'[dbo].[FK_UserShippingInformation]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[ShippingInformationSet] DROP CONSTRAINT [FK_UserShippingInformation];
-GO
-IF OBJECT_ID(N'[dbo].[FK_RegionRegionSubdivision]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[RegionSubdivisionSet] DROP CONSTRAINT [FK_RegionRegionSubdivision];
-GO
-IF OBJECT_ID(N'[dbo].[FK_ApiKeyHistory]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[ApiKeySet] DROP CONSTRAINT [FK_ApiKeyHistory];
-GO
-IF OBJECT_ID(N'[dbo].[FK_UserData]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[DataSet] DROP CONSTRAINT [FK_UserData];
-GO
-IF OBJECT_ID(N'[dbo].[FK_UserTipHistoryUser]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[UserTipHistorySet] DROP CONSTRAINT [FK_UserTipHistoryUser];
-GO
-IF OBJECT_ID(N'[dbo].[FK_UserTipHistoryTip]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[UserTipHistorySet] DROP CONSTRAINT [FK_UserTipHistoryTip];
-GO
-IF OBJECT_ID(N'[dbo].[FK_RewardGiftRewardGiftPictures]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[IPictureSet_RewardGiftPicture] DROP CONSTRAINT [FK_RewardGiftRewardGiftPictures];
-GO
-IF OBJECT_ID(N'[dbo].[FK_OAuthCredentialUser]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[OAuthCredentialSet] DROP CONSTRAINT [FK_OAuthCredentialUser];
-GO
-IF OBJECT_ID(N'[dbo].[FK_UserRewardGiftShippingStatusUserRewardGiftClaimed]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[UserRewardGiftShippingStatusSet] DROP CONSTRAINT [FK_UserRewardGiftShippingStatusUserRewardGiftClaimed];
-GO
-IF OBJECT_ID(N'[dbo].[FK_UserFriendSet_UserSet_Friend_Guid]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[UserFriendSet] DROP CONSTRAINT [FK_UserFriendSet_UserSet_Friend_Guid];
-GO
-IF OBJECT_ID(N'[dbo].[FK_UserFriendSet_UserSet_User_Guid]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[UserFriendSet] DROP CONSTRAINT [FK_UserFriendSet_UserSet_User_Guid];
-GO
-IF OBJECT_ID(N'[dbo].[FK_UserUserDataTotalDistance]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[UserDataTotalDistance] DROP CONSTRAINT [FK_UserUserDataTotalDistance];
-GO
-IF OBJECT_ID(N'[dbo].[FK_UserDataHourlyDistanceUser]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[UserDataHourlyDistance] DROP CONSTRAINT [FK_UserDataHourlyDistanceUser];
-GO
-IF OBJECT_ID(N'[dbo].[FK_RegionRegionSubdivisionRegionParticular]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[RegionParticularSet] DROP CONSTRAINT [FK_RegionRegionSubdivisionRegionParticular];
-GO
-IF OBJECT_ID(N'[dbo].[FK_NotificationUser]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[NotificationSet] DROP CONSTRAINT [FK_NotificationUser];
+IF OBJECT_ID(N'[dbo].[FK_RewardSponsor_inherits_IPicture]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[IPictureSet_RewardSponsor] DROP CONSTRAINT [FK_RewardSponsor_inherits_IPicture];
 GO
 IF OBJECT_ID(N'[dbo].[FK_RewardSponsorReward]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[IPictureSet_Reward] DROP CONSTRAINT [FK_RewardSponsorReward];
-GO
-IF OBJECT_ID(N'[dbo].[FK_MotionLevelTip_MotionLevel]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[MotionLevelTip] DROP CONSTRAINT [FK_MotionLevelTip_MotionLevel];
-GO
-IF OBJECT_ID(N'[dbo].[FK_MotionLevelTip_Tip]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[MotionLevelTip] DROP CONSTRAINT [FK_MotionLevelTip_Tip];
 GO
 IF OBJECT_ID(N'[dbo].[FK_TipCategory_inherits_IPicture]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[IPictureSet_TipCategory] DROP CONSTRAINT [FK_TipCategory_inherits_IPicture];
@@ -131,115 +92,103 @@ GO
 IF OBJECT_ID(N'[dbo].[FK_TipCategoryGlobalization_inherits_IGlobalization]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[IGlobalizationSet_TipCategoryGlobalization] DROP CONSTRAINT [FK_TipCategoryGlobalization_inherits_IGlobalization];
 GO
+IF OBJECT_ID(N'[dbo].[FK_TipCategoryTip]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[TipSet] DROP CONSTRAINT [FK_TipCategoryTip];
+GO
+IF OBJECT_ID(N'[dbo].[FK_TipCategoryTipCategoryGlobalization]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[IGlobalizationSet_TipCategoryGlobalization] DROP CONSTRAINT [FK_TipCategoryTipCategoryGlobalization];
+GO
 IF OBJECT_ID(N'[dbo].[FK_TipGlobalization_inherits_IGlobalization]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[IGlobalizationSet_TipGlobalization] DROP CONSTRAINT [FK_TipGlobalization_inherits_IGlobalization];
 GO
-IF OBJECT_ID(N'[dbo].[FK_MotionLevelGlobalization_inherits_IGlobalization]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[IGlobalizationSet_MotionLevelGlobalization] DROP CONSTRAINT [FK_MotionLevelGlobalization_inherits_IGlobalization];
+IF OBJECT_ID(N'[dbo].[FK_TipMotionLevelTipMotionLevelGlobalization]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[IGlobalizationSet_MotionLevelGlobalization] DROP CONSTRAINT [FK_TipMotionLevelTipMotionLevelGlobalization];
 GO
-IF OBJECT_ID(N'[dbo].[FK_Reward_inherits_IPicture]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[IPictureSet_Reward] DROP CONSTRAINT [FK_Reward_inherits_IPicture];
+IF OBJECT_ID(N'[dbo].[FK_TipTipGlobalization]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[IGlobalizationSet_TipGlobalization] DROP CONSTRAINT [FK_TipTipGlobalization];
 GO
-IF OBJECT_ID(N'[dbo].[FK_RewardGlobalization_inherits_IGlobalization]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[IGlobalizationSet_RewardGlobalization] DROP CONSTRAINT [FK_RewardGlobalization_inherits_IGlobalization];
+IF OBJECT_ID(N'[dbo].[FK_UserData]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[DataSet] DROP CONSTRAINT [FK_UserData];
 GO
-IF OBJECT_ID(N'[dbo].[FK_RewardGiftGlobalization_inherits_IGlobalization]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[IGlobalizationSet_RewardGiftGlobalization] DROP CONSTRAINT [FK_RewardGiftGlobalization_inherits_IGlobalization];
+IF OBJECT_ID(N'[dbo].[FK_UserDataHourlyDistanceUser]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[UserDataHourlyDistance] DROP CONSTRAINT [FK_UserDataHourlyDistanceUser];
 GO
-IF OBJECT_ID(N'[dbo].[FK_UserRewardGiftClaimed_inherits_IPicture]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[IPictureSet_UserRewardGiftClaimed] DROP CONSTRAINT [FK_UserRewardGiftClaimed_inherits_IPicture];
+IF OBJECT_ID(N'[dbo].[FK_UserEarnedRewardReward]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[UserEarnedRewardSet] DROP CONSTRAINT [FK_UserEarnedRewardReward];
 GO
-IF OBJECT_ID(N'[dbo].[FK_RewardGiftPicture_inherits_IPicture]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[IPictureSet_RewardGiftPicture] DROP CONSTRAINT [FK_RewardGiftPicture_inherits_IPicture];
+IF OBJECT_ID(N'[dbo].[FK_UserFriendSet_UserSet_Friend_Guid]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[UserFriendSet] DROP CONSTRAINT [FK_UserFriendSet_UserSet_Friend_Guid];
 GO
-IF OBJECT_ID(N'[dbo].[FK_RewardSponsor_inherits_IPicture]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[IPictureSet_RewardSponsor] DROP CONSTRAINT [FK_RewardSponsor_inherits_IPicture];
+IF OBJECT_ID(N'[dbo].[FK_UserFriendSet_UserSet_User_Guid]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[UserFriendSet] DROP CONSTRAINT [FK_UserFriendSet_UserSet_User_Guid];
+GO
+IF OBJECT_ID(N'[dbo].[FK_UserMotionLevelHistoryMotionLevel]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[UserMotionLevelHistorySet] DROP CONSTRAINT [FK_UserMotionLevelHistoryMotionLevel];
+GO
+IF OBJECT_ID(N'[dbo].[FK_UserPicture_inherits_IPicture]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[IPictureSet_UserPicture] DROP CONSTRAINT [FK_UserPicture_inherits_IPicture];
+GO
+IF OBJECT_ID(N'[dbo].[FK_UserPictureUser]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[IPictureSet_UserPicture] DROP CONSTRAINT [FK_UserPictureUser];
+GO
+IF OBJECT_ID(N'[dbo].[FK_UserRewardGiftClaimedUser]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[IPictureSet_UserRewardGiftClaimed] DROP CONSTRAINT [FK_UserRewardGiftClaimedUser];
+GO
+IF OBJECT_ID(N'[dbo].[FK_UserRewardGiftShippingStatusUserRewardGiftClaimed]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[UserRewardGiftShippingStatusSet] DROP CONSTRAINT [FK_UserRewardGiftShippingStatusUserRewardGiftClaimed];
+GO
+IF OBJECT_ID(N'[dbo].[FK_UserShippingInformation]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[ShippingInformationSet] DROP CONSTRAINT [FK_UserShippingInformation];
+GO
+IF OBJECT_ID(N'[dbo].[FK_UserTipHistoryTip]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[UserTipHistorySet] DROP CONSTRAINT [FK_UserTipHistoryTip];
+GO
+IF OBJECT_ID(N'[dbo].[FK_UserTipHistoryUser]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[UserTipHistorySet] DROP CONSTRAINT [FK_UserTipHistoryUser];
+GO
+IF OBJECT_ID(N'[dbo].[FK_UserToken]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[TokenSet] DROP CONSTRAINT [FK_UserToken];
+GO
+IF OBJECT_ID(N'[dbo].[FK_UserUserBody]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[UserBodySet] DROP CONSTRAINT [FK_UserUserBody];
+GO
+IF OBJECT_ID(N'[dbo].[FK_UserUserDataTotalDistance]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[UserDataTotalDistance] DROP CONSTRAINT [FK_UserUserDataTotalDistance];
+GO
+IF OBJECT_ID(N'[dbo].[FK_UserUserEarnedReward]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[UserEarnedRewardSet] DROP CONSTRAINT [FK_UserUserEarnedReward];
+GO
+IF OBJECT_ID(N'[dbo].[FK_UserUserMotionLevelHistory]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[UserMotionLevelHistorySet] DROP CONSTRAINT [FK_UserUserMotionLevelHistory];
 GO
 
 -- --------------------------------------------------
 -- Dropping existing tables
 -- --------------------------------------------------
 
-IF OBJECT_ID(N'[dbo].[UserSet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[UserSet];
-GO
-IF OBJECT_ID(N'[dbo].[TokenSet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[TokenSet];
-GO
 IF OBJECT_ID(N'[dbo].[ApiKeySet]', 'U') IS NOT NULL
     DROP TABLE [dbo].[ApiKeySet];
-GO
-IF OBJECT_ID(N'[dbo].[TipSet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[TipSet];
-GO
-IF OBJECT_ID(N'[dbo].[MotionLevelSet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[MotionLevelSet];
-GO
-IF OBJECT_ID(N'[dbo].[DataSet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[DataSet];
-GO
-IF OBJECT_ID(N'[dbo].[UserBodySet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[UserBodySet];
-GO
-IF OBJECT_ID(N'[dbo].[RewardGiftSet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[RewardGiftSet];
-GO
-IF OBJECT_ID(N'[dbo].[RewardRegionalizationSet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[RewardRegionalizationSet];
-GO
-IF OBJECT_ID(N'[dbo].[UserMotionLevelHistorySet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[UserMotionLevelHistorySet];
-GO
-IF OBJECT_ID(N'[dbo].[UserEarnedRewardSet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[UserEarnedRewardSet];
 GO
 IF OBJECT_ID(N'[dbo].[ContactInfoSet]', 'U') IS NOT NULL
     DROP TABLE [dbo].[ContactInfoSet];
 GO
-IF OBJECT_ID(N'[dbo].[ShippingInformationSet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[ShippingInformationSet];
+IF OBJECT_ID(N'[dbo].[DataSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[DataSet];
 GO
-IF OBJECT_ID(N'[dbo].[RegionSet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[RegionSet];
-GO
-IF OBJECT_ID(N'[dbo].[RegionSubdivisionSet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[RegionSubdivisionSet];
-GO
-IF OBJECT_ID(N'[dbo].[UserTipHistorySet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[UserTipHistorySet];
+IF OBJECT_ID(N'[dbo].[DeviceSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[DeviceSet];
 GO
 IF OBJECT_ID(N'[dbo].[IGlobalizationSet]', 'U') IS NOT NULL
     DROP TABLE [dbo].[IGlobalizationSet];
 GO
-IF OBJECT_ID(N'[dbo].[IPictureSet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[IPictureSet];
+IF OBJECT_ID(N'[dbo].[IGlobalizationSet_MotionLevelGlobalization]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[IGlobalizationSet_MotionLevelGlobalization];
 GO
-IF OBJECT_ID(N'[dbo].[UserRewardGiftShippingStatusSet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[UserRewardGiftShippingStatusSet];
+IF OBJECT_ID(N'[dbo].[IGlobalizationSet_RewardGiftGlobalization]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[IGlobalizationSet_RewardGiftGlobalization];
 GO
-IF OBJECT_ID(N'[dbo].[OAuthCredentialSet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[OAuthCredentialSet];
-GO
-IF OBJECT_ID(N'[dbo].[OAuthNonceSet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[OAuthNonceSet];
-GO
-IF OBJECT_ID(N'[dbo].[UserDataHourlyDistance]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[UserDataHourlyDistance];
-GO
-IF OBJECT_ID(N'[dbo].[UserDataTotalDistance]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[UserDataTotalDistance];
-GO
-IF OBJECT_ID(N'[dbo].[UserFriendSet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[UserFriendSet];
-GO
-IF OBJECT_ID(N'[dbo].[RegionParticularSet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[RegionParticularSet];
-GO
-IF OBJECT_ID(N'[dbo].[NotificationSet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[NotificationSet];
-GO
-IF OBJECT_ID(N'[dbo].[IPictureSet_TipCategory]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[IPictureSet_TipCategory];
+IF OBJECT_ID(N'[dbo].[IGlobalizationSet_RewardGlobalization]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[IGlobalizationSet_RewardGlobalization];
 GO
 IF OBJECT_ID(N'[dbo].[IGlobalizationSet_TipCategoryGlobalization]', 'U') IS NOT NULL
     DROP TABLE [dbo].[IGlobalizationSet_TipCategoryGlobalization];
@@ -247,20 +196,11 @@ GO
 IF OBJECT_ID(N'[dbo].[IGlobalizationSet_TipGlobalization]', 'U') IS NOT NULL
     DROP TABLE [dbo].[IGlobalizationSet_TipGlobalization];
 GO
-IF OBJECT_ID(N'[dbo].[IGlobalizationSet_MotionLevelGlobalization]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[IGlobalizationSet_MotionLevelGlobalization];
+IF OBJECT_ID(N'[dbo].[IPictureSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[IPictureSet];
 GO
 IF OBJECT_ID(N'[dbo].[IPictureSet_Reward]', 'U') IS NOT NULL
     DROP TABLE [dbo].[IPictureSet_Reward];
-GO
-IF OBJECT_ID(N'[dbo].[IGlobalizationSet_RewardGlobalization]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[IGlobalizationSet_RewardGlobalization];
-GO
-IF OBJECT_ID(N'[dbo].[IGlobalizationSet_RewardGiftGlobalization]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[IGlobalizationSet_RewardGiftGlobalization];
-GO
-IF OBJECT_ID(N'[dbo].[IPictureSet_UserRewardGiftClaimed]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[IPictureSet_UserRewardGiftClaimed];
 GO
 IF OBJECT_ID(N'[dbo].[IPictureSet_RewardGiftPicture]', 'U') IS NOT NULL
     DROP TABLE [dbo].[IPictureSet_RewardGiftPicture];
@@ -268,8 +208,80 @@ GO
 IF OBJECT_ID(N'[dbo].[IPictureSet_RewardSponsor]', 'U') IS NOT NULL
     DROP TABLE [dbo].[IPictureSet_RewardSponsor];
 GO
+IF OBJECT_ID(N'[dbo].[IPictureSet_TipCategory]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[IPictureSet_TipCategory];
+GO
+IF OBJECT_ID(N'[dbo].[IPictureSet_UserPicture]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[IPictureSet_UserPicture];
+GO
+IF OBJECT_ID(N'[dbo].[IPictureSet_UserRewardGiftClaimed]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[IPictureSet_UserRewardGiftClaimed];
+GO
+IF OBJECT_ID(N'[dbo].[MotionLevelSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[MotionLevelSet];
+GO
 IF OBJECT_ID(N'[dbo].[MotionLevelTip]', 'U') IS NOT NULL
     DROP TABLE [dbo].[MotionLevelTip];
+GO
+IF OBJECT_ID(N'[dbo].[NotificationSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[NotificationSet];
+GO
+IF OBJECT_ID(N'[dbo].[OAuthCredentialSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[OAuthCredentialSet];
+GO
+IF OBJECT_ID(N'[dbo].[OAuthNonceSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[OAuthNonceSet];
+GO
+IF OBJECT_ID(N'[dbo].[RegionParticularSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[RegionParticularSet];
+GO
+IF OBJECT_ID(N'[dbo].[RegionSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[RegionSet];
+GO
+IF OBJECT_ID(N'[dbo].[RegionSubdivisionSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[RegionSubdivisionSet];
+GO
+IF OBJECT_ID(N'[dbo].[RewardGiftSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[RewardGiftSet];
+GO
+IF OBJECT_ID(N'[dbo].[RewardRegionalizationSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[RewardRegionalizationSet];
+GO
+IF OBJECT_ID(N'[dbo].[ShippingInformationSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[ShippingInformationSet];
+GO
+IF OBJECT_ID(N'[dbo].[TipSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[TipSet];
+GO
+IF OBJECT_ID(N'[dbo].[TokenSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[TokenSet];
+GO
+IF OBJECT_ID(N'[dbo].[UserBodySet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[UserBodySet];
+GO
+IF OBJECT_ID(N'[dbo].[UserDataHourlyDistance]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[UserDataHourlyDistance];
+GO
+IF OBJECT_ID(N'[dbo].[UserDataTotalDistance]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[UserDataTotalDistance];
+GO
+IF OBJECT_ID(N'[dbo].[UserEarnedRewardSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[UserEarnedRewardSet];
+GO
+IF OBJECT_ID(N'[dbo].[UserFriendSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[UserFriendSet];
+GO
+IF OBJECT_ID(N'[dbo].[UserMotionLevelHistorySet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[UserMotionLevelHistorySet];
+GO
+IF OBJECT_ID(N'[dbo].[UserRewardGiftShippingStatusSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[UserRewardGiftShippingStatusSet];
+GO
+IF OBJECT_ID(N'[dbo].[UserSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[UserSet];
+GO
+IF OBJECT_ID(N'[dbo].[UserTipHistorySet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[UserTipHistorySet];
 GO
 
 -- --------------------------------------------------
@@ -560,6 +572,17 @@ CREATE TABLE [dbo].[NotificationSet] (
 );
 GO
 
+-- Creating table 'DeviceSet'
+CREATE TABLE [dbo].[DeviceSet] (
+    [Id] bigint IDENTITY(1,1) NOT NULL,
+    [SerialNumber] bigint  NOT NULL,
+    [CreationDate] datetime  NOT NULL,
+    [LinkDate] datetime  NULL,
+    [RegionCode] varchar(32)  NULL,
+    [User_Guid] uniqueidentifier  NOT NULL
+);
+GO
+
 -- Creating table 'IPictureSet_TipCategory'
 CREATE TABLE [dbo].[IPictureSet_TipCategory] (
     [Guid] uniqueidentifier  NOT NULL
@@ -820,6 +843,12 @@ ADD CONSTRAINT [PK_NotificationSet]
     PRIMARY KEY CLUSTERED ([Guid] ASC);
 GO
 
+-- Creating primary key on [Id] in table 'DeviceSet'
+ALTER TABLE [dbo].[DeviceSet]
+ADD CONSTRAINT [PK_DeviceSet]
+    PRIMARY KEY CLUSTERED ([Id] ASC);
+GO
+
 -- Creating primary key on [Guid] in table 'IPictureSet_TipCategory'
 ALTER TABLE [dbo].[IPictureSet_TipCategory]
 ADD CONSTRAINT [PK_IPictureSet_TipCategory]
@@ -903,6 +932,7 @@ ADD CONSTRAINT [FK_ApiKeyToken]
     REFERENCES [dbo].[ApiKeySet]
         ([Guid])
     ON DELETE CASCADE ON UPDATE NO ACTION;
+GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_ApiKeyToken'
 CREATE INDEX [IX_FK_ApiKeyToken]
@@ -917,6 +947,7 @@ ADD CONSTRAINT [FK_UserToken]
     REFERENCES [dbo].[UserSet]
         ([Guid])
     ON DELETE CASCADE ON UPDATE NO ACTION;
+GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_UserToken'
 CREATE INDEX [IX_FK_UserToken]
@@ -931,6 +962,7 @@ ADD CONSTRAINT [FK_TipCategoryTipCategoryGlobalization]
     REFERENCES [dbo].[IPictureSet_TipCategory]
         ([Guid])
     ON DELETE CASCADE ON UPDATE NO ACTION;
+GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_TipCategoryTipCategoryGlobalization'
 CREATE INDEX [IX_FK_TipCategoryTipCategoryGlobalization]
@@ -945,6 +977,7 @@ ADD CONSTRAINT [FK_TipCategoryTip]
     REFERENCES [dbo].[IPictureSet_TipCategory]
         ([Guid])
     ON DELETE CASCADE ON UPDATE NO ACTION;
+GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_TipCategoryTip'
 CREATE INDEX [IX_FK_TipCategoryTip]
@@ -959,6 +992,7 @@ ADD CONSTRAINT [FK_TipTipGlobalization]
     REFERENCES [dbo].[TipSet]
         ([Guid])
     ON DELETE CASCADE ON UPDATE NO ACTION;
+GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_TipTipGlobalization'
 CREATE INDEX [IX_FK_TipTipGlobalization]
@@ -973,6 +1007,7 @@ ADD CONSTRAINT [FK_UserUserBody]
     REFERENCES [dbo].[UserSet]
         ([Guid])
     ON DELETE CASCADE ON UPDATE NO ACTION;
+GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_UserUserBody'
 CREATE INDEX [IX_FK_UserUserBody]
@@ -987,6 +1022,7 @@ ADD CONSTRAINT [FK_TipMotionLevelTipMotionLevelGlobalization]
     REFERENCES [dbo].[MotionLevelSet]
         ([Guid])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_TipMotionLevelTipMotionLevelGlobalization'
 CREATE INDEX [IX_FK_TipMotionLevelTipMotionLevelGlobalization]
@@ -1001,6 +1037,7 @@ ADD CONSTRAINT [FK_RewardRewardGift]
     REFERENCES [dbo].[IPictureSet_Reward]
         ([Guid])
     ON DELETE CASCADE ON UPDATE NO ACTION;
+GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_RewardRewardGift'
 CREATE INDEX [IX_FK_RewardRewardGift]
@@ -1015,6 +1052,7 @@ ADD CONSTRAINT [FK_RewardRewardGlobalization]
     REFERENCES [dbo].[IPictureSet_Reward]
         ([Guid])
     ON DELETE CASCADE ON UPDATE NO ACTION;
+GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_RewardRewardGlobalization'
 CREATE INDEX [IX_FK_RewardRewardGlobalization]
@@ -1029,6 +1067,7 @@ ADD CONSTRAINT [FK_RewardRewardRegionalization]
     REFERENCES [dbo].[IPictureSet_Reward]
         ([Guid])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_RewardRewardRegionalization'
 CREATE INDEX [IX_FK_RewardRewardRegionalization]
@@ -1043,6 +1082,7 @@ ADD CONSTRAINT [FK_RewardGiftRewardGiftGlobalization]
     REFERENCES [dbo].[RewardGiftSet]
         ([Guid])
     ON DELETE CASCADE ON UPDATE NO ACTION;
+GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_RewardGiftRewardGiftGlobalization'
 CREATE INDEX [IX_FK_RewardGiftRewardGiftGlobalization]
@@ -1057,6 +1097,7 @@ ADD CONSTRAINT [FK_RewardGiftUserRewardGiftClaimed]
     REFERENCES [dbo].[RewardGiftSet]
         ([Guid])
     ON DELETE CASCADE ON UPDATE NO ACTION;
+GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_RewardGiftUserRewardGiftClaimed'
 CREATE INDEX [IX_FK_RewardGiftUserRewardGiftClaimed]
@@ -1071,6 +1112,7 @@ ADD CONSTRAINT [FK_UserRewardGiftClaimedUser]
     REFERENCES [dbo].[UserSet]
         ([Guid])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_UserRewardGiftClaimedUser'
 CREATE INDEX [IX_FK_UserRewardGiftClaimedUser]
@@ -1085,6 +1127,7 @@ ADD CONSTRAINT [FK_UserUserMotionLevelHistory]
     REFERENCES [dbo].[UserSet]
         ([Guid])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_UserUserMotionLevelHistory'
 CREATE INDEX [IX_FK_UserUserMotionLevelHistory]
@@ -1099,6 +1142,7 @@ ADD CONSTRAINT [FK_UserMotionLevelHistoryMotionLevel]
     REFERENCES [dbo].[MotionLevelSet]
         ([Guid])
     ON DELETE CASCADE ON UPDATE NO ACTION;
+GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_UserMotionLevelHistoryMotionLevel'
 CREATE INDEX [IX_FK_UserMotionLevelHistoryMotionLevel]
@@ -1113,6 +1157,7 @@ ADD CONSTRAINT [FK_UserUserEarnedReward]
     REFERENCES [dbo].[UserSet]
         ([Guid])
     ON DELETE CASCADE ON UPDATE NO ACTION;
+GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_UserUserEarnedReward'
 CREATE INDEX [IX_FK_UserUserEarnedReward]
@@ -1127,6 +1172,7 @@ ADD CONSTRAINT [FK_UserEarnedRewardReward]
     REFERENCES [dbo].[IPictureSet_Reward]
         ([Guid])
     ON DELETE CASCADE ON UPDATE NO ACTION;
+GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_UserEarnedRewardReward'
 CREATE INDEX [IX_FK_UserEarnedRewardReward]
@@ -1141,6 +1187,7 @@ ADD CONSTRAINT [FK_ContactInfoUser]
     REFERENCES [dbo].[UserSet]
         ([Guid])
     ON DELETE CASCADE ON UPDATE NO ACTION;
+GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_ContactInfoUser'
 CREATE INDEX [IX_FK_ContactInfoUser]
@@ -1155,6 +1202,7 @@ ADD CONSTRAINT [FK_UserShippingInformation]
     REFERENCES [dbo].[UserSet]
         ([Guid])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_UserShippingInformation'
 CREATE INDEX [IX_FK_UserShippingInformation]
@@ -1169,6 +1217,7 @@ ADD CONSTRAINT [FK_RegionRegionSubdivision]
     REFERENCES [dbo].[RegionSet]
         ([Id])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_RegionRegionSubdivision'
 CREATE INDEX [IX_FK_RegionRegionSubdivision]
@@ -1183,6 +1232,7 @@ ADD CONSTRAINT [FK_ApiKeyHistory]
     REFERENCES [dbo].[ApiKeySet]
         ([Guid])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_ApiKeyHistory'
 CREATE INDEX [IX_FK_ApiKeyHistory]
@@ -1197,6 +1247,7 @@ ADD CONSTRAINT [FK_UserData]
     REFERENCES [dbo].[UserSet]
         ([Guid])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_UserData'
 CREATE INDEX [IX_FK_UserData]
@@ -1211,6 +1262,7 @@ ADD CONSTRAINT [FK_UserTipHistoryUser]
     REFERENCES [dbo].[UserSet]
         ([Guid])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_UserTipHistoryUser'
 CREATE INDEX [IX_FK_UserTipHistoryUser]
@@ -1225,6 +1277,7 @@ ADD CONSTRAINT [FK_UserTipHistoryTip]
     REFERENCES [dbo].[TipSet]
         ([Guid])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_UserTipHistoryTip'
 CREATE INDEX [IX_FK_UserTipHistoryTip]
@@ -1239,6 +1292,7 @@ ADD CONSTRAINT [FK_RewardGiftRewardGiftPictures]
     REFERENCES [dbo].[RewardGiftSet]
         ([Guid])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_RewardGiftRewardGiftPictures'
 CREATE INDEX [IX_FK_RewardGiftRewardGiftPictures]
@@ -1253,6 +1307,7 @@ ADD CONSTRAINT [FK_OAuthCredentialUser]
     REFERENCES [dbo].[UserSet]
         ([Guid])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_OAuthCredentialUser'
 CREATE INDEX [IX_FK_OAuthCredentialUser]
@@ -1267,6 +1322,7 @@ ADD CONSTRAINT [FK_UserRewardGiftShippingStatusUserRewardGiftClaimed]
     REFERENCES [dbo].[IPictureSet_UserRewardGiftClaimed]
         ([Guid])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_UserRewardGiftShippingStatusUserRewardGiftClaimed'
 CREATE INDEX [IX_FK_UserRewardGiftShippingStatusUserRewardGiftClaimed]
@@ -1281,6 +1337,7 @@ ADD CONSTRAINT [FK_UserFriendSet_UserSet_Friend_Guid]
     REFERENCES [dbo].[UserSet]
         ([Guid])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_UserFriendSet_UserSet_Friend_Guid'
 CREATE INDEX [IX_FK_UserFriendSet_UserSet_Friend_Guid]
@@ -1295,6 +1352,7 @@ ADD CONSTRAINT [FK_UserFriendSet_UserSet_User_Guid]
     REFERENCES [dbo].[UserSet]
         ([Guid])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_UserFriendSet_UserSet_User_Guid'
 CREATE INDEX [IX_FK_UserFriendSet_UserSet_User_Guid]
@@ -1309,6 +1367,7 @@ ADD CONSTRAINT [FK_UserUserDataTotalDistance]
     REFERENCES [dbo].[UserSet]
         ([Guid])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_UserUserDataTotalDistance'
 CREATE INDEX [IX_FK_UserUserDataTotalDistance]
@@ -1323,6 +1382,7 @@ ADD CONSTRAINT [FK_UserDataHourlyDistanceUser]
     REFERENCES [dbo].[UserSet]
         ([Guid])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_UserDataHourlyDistanceUser'
 CREATE INDEX [IX_FK_UserDataHourlyDistanceUser]
@@ -1337,6 +1397,7 @@ ADD CONSTRAINT [FK_RegionRegionSubdivisionRegionParticular]
     REFERENCES [dbo].[RegionSubdivisionSet]
         ([Id])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_RegionRegionSubdivisionRegionParticular'
 CREATE INDEX [IX_FK_RegionRegionSubdivisionRegionParticular]
@@ -1351,6 +1412,7 @@ ADD CONSTRAINT [FK_NotificationUser]
     REFERENCES [dbo].[UserSet]
         ([Guid])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_NotificationUser'
 CREATE INDEX [IX_FK_NotificationUser]
@@ -1365,6 +1427,7 @@ ADD CONSTRAINT [FK_RewardSponsorReward]
     REFERENCES [dbo].[IPictureSet_RewardSponsor]
         ([Guid])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_RewardSponsorReward'
 CREATE INDEX [IX_FK_RewardSponsorReward]
@@ -1388,6 +1451,7 @@ ADD CONSTRAINT [FK_MotionLevelTip_Tip]
     REFERENCES [dbo].[TipSet]
         ([Guid])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_MotionLevelTip_Tip'
 CREATE INDEX [IX_FK_MotionLevelTip_Tip]
@@ -1402,10 +1466,26 @@ ADD CONSTRAINT [FK_UserPictureUser]
     REFERENCES [dbo].[UserSet]
         ([Guid])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_UserPictureUser'
 CREATE INDEX [IX_FK_UserPictureUser]
 ON [dbo].[IPictureSet_UserPicture]
+    ([User_Guid]);
+GO
+
+-- Creating foreign key on [User_Guid] in table 'DeviceSet'
+ALTER TABLE [dbo].[DeviceSet]
+ADD CONSTRAINT [FK_DeviceUser]
+    FOREIGN KEY ([User_Guid])
+    REFERENCES [dbo].[UserSet]
+        ([Guid])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_DeviceUser'
+CREATE INDEX [IX_FK_DeviceUser]
+ON [dbo].[DeviceSet]
     ([User_Guid]);
 GO
 
