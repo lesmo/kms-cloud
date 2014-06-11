@@ -9,7 +9,7 @@ using System.Web;
 using System.Web.Http;
 
 namespace Kms.Cloud.Api.Areas.HelpPage.CustomSamples {
-    public static class MyContactInfoControllerSamples {
+    public static class ContactInfoControllerSamples {
         public static void Register(Dictionary<Type, object> typeSamples, HttpConfiguration config) {
             // --- Petición ---
             typeSamples.Add(
@@ -41,7 +41,7 @@ namespace Kms.Cloud.Api.Areas.HelpPage.CustomSamples {
                     HttpUtility.UrlEncode(DefaultValues.Base64String)
                 ),
                 new MediaTypeHeaderValue("application/x-www-form-urlencoded"),
-                "MyContactInfo",
+                "ContactInfo",
                 "PostAccount"
             );
 

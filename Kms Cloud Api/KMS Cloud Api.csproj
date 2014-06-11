@@ -59,7 +59,7 @@
         <ObjectGroup Name="MainModelContainer-Deployment" Order="1" Enabled="False">
           <Destination Path="Data Source=tcp:zy7gqdwrhd.database.windows.net,1433%3bInitial Catalog=kms-db-master%3bUser ID=kms-db-super-master-ninja%40zy7gqdwrhd%3bPassword=6auEqOiF0ygFEu7sOqnQ" />
           <Object Type="DbFullSql">
-            <PreSource Path="Data Source=.\SQLEXPRESS%3bInitial Catalog=KilometrosDatabase%3bIntegrated Security=True%3bApplication Name=EntityFramework" ScriptSchema="True" ScriptData="False" CopyAllFullTextCatalogs="False" DriDefaults="True" />
+            <PreSource Path="Data Source=.\SQLEXPRESS%3bInitial Catalog=Kms.Cloud.Database%3bIntegrated Security=True%3bApplication Name=EntityFramework" ScriptSchema="True" ScriptData="False" CopyAllFullTextCatalogs="False" DriDefaults="True" />
             <Source Path="obj\Release\AutoScripts\MainModelContainer-Deployment_SchemaOnly.sql" Transacted="True" />
           </Object>
         </ObjectGroup>
@@ -186,7 +186,8 @@
     <Compile Include="Areas\HelpPage\Controllers\HelpController.cs" />
     <Compile Include="Areas\HelpPage\Controllers\StaticPagesController.cs" />
     <Compile Include="Areas\HelpPage\CustomSamples\DefaultValues.cs" />
-    <Compile Include="Areas\HelpPage\CustomSamples\MyContactInfoControllerSamples.cs" />
+    <Compile Include="Areas\HelpPage\CustomSamples\ContactInfoControllerSamples.cs" />
+    <Compile Include="Areas\HelpPage\CustomSamples\OAuthControllerSamples.cs" />
     <Compile Include="Areas\HelpPage\HelpPageAreaRegistration.cs" />
     <Compile Include="Areas\HelpPage\HelpPageConfigurationExtensions.cs" />
     <Compile Include="Areas\HelpPage\ModelDescriptions\CollectionModelDescription.cs" />

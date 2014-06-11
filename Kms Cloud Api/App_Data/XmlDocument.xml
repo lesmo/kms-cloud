@@ -491,7 +491,9 @@
             <summary>
                 Permite generar una nueva Cuenta en la Nube de KMS. Para crear una nueva Cuenta
                 que permitirá login con Facebook, Twitter, Fitbit o Nike+, será necesario crear
-                una Cuenta en éste recurso y después utilizar el apropiado dentro de OAuth3rdPartyAdd.
+                una Cuenta en éste recurso y después utilizar el apropiado dentro del Controlador
+                OAuth3rdPartyAdd. Los Usuarios creados deberán asociar un Número de Serie de
+                Dispositivo KMS antes de poder sincronizar información.
             </summary>
         </member>
         <member name="F:Kms.Cloud.Api.Controllers.BaseController.Identity">
@@ -628,6 +630,22 @@
             <param name="dataPost">
                 Nueva Información de Contacto del Usuario en la Nube KMS.
             </param>
+        </member>
+        <member name="T:Kms.Cloud.Api.Controllers.DeviceController">
+            <summary>
+                Obtener y asociar Dispositivos KMS a la Cuenta del Usuario. Los Numeros de Serie pueden
+                contener números, sólo las letras ACEFHJKLMNPRTVWXZ, son indistintos de mayúsculas y
+                minúsculas y tienen un largo de 7 carácteres, aunque en el futuro podrían tener un largo
+                mayor.
+            </summary>
+        </member>
+        <member name="M:Kms.Cloud.Api.Controllers.DeviceController.LinkDevice(System.String)">
+            <summary>
+                Asociar un Número de Serie de Dispositivo KMS con el Usuario actual. Sólo es posible
+                asociar un Dispositivo a un Usuario, intentar asociar un dispositivo que ya está
+                asociado con un Usuario causará el asesinato de un cachorrito.
+            </summary>
+            <param name="serialString">Número de Serie de de Dispositivo KMS</param>
         </member>
         <member name="T:Kms.Cloud.Api.Controllers.DynamicResourcesController">
             <summary>
