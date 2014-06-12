@@ -57,7 +57,7 @@ namespace Kms.Cloud.Api.MessageHandlers {
             }
 
             // --- Validar que se recibió cabecera Authorization correctamente ---
-            if ( request.Headers.Authorization.Scheme != "OAuth" ) {
+            if ( request.Headers.Authorization == null || request.Headers.Authorization.Scheme != "OAuth" ) {
                 HttpResponseMessage response
                     = new HttpResponseMessage(HttpStatusCode.Unauthorized);
 
