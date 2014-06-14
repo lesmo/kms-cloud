@@ -1353,7 +1353,7 @@
             </summary>
         </member>
         <member name="P:Kms.Cloud.Api.Models.RequestModels.AccountPost.PreferredCultureCode">
-            /// <summary>
+            <summary>
                 Código de Cultura preferido por el Usuario.
             </summary>
         </member>

@@ -15,7 +15,7 @@ namespace Kms.Cloud.Api.Models.RequestModels {
         /// </summary>
         public string Email { get; set; }
 
-        /// /// <summary>
+        /// <summary>
         ///     Código de Cultura preferido por el Usuario.
         /// </summary>
         public string PreferredCultureCode { get; set; }

@@ -23,7 +23,6 @@ namespace Kms.Cloud.Api.Controllers {
         /// <summary>
         ///     Obtener un Request Token de OAuth para la Nube KMS.
         /// </summary>
-        /// <returns></returns>
         [AllowAnonymous]
         [HttpPost, Route("oauth/request_token")]
         public HttpResponseMessage OAuthRequestToken() {
@@ -87,7 +86,9 @@ namespace Kms.Cloud.Api.Controllers {
         /// <param name="oAuthVerifier">
         ///     El Verifier Code obtenido por el proceso de Login Web.
         /// </param>
-        /// <returns></returns>
+        /// <remarks>
+        ///     Esta petición debe realizarse con un Request Token de KMS en las cabeceras HTTP.
+        /// </remarks>
         [AllowAnonymous]
         [HttpPost, Route("oauth/access_token")]
         public HttpResponseMessage OAuthAccessToken([FromBody]OAuthAccessTokenPost oAuthVerifier) {

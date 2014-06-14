@@ -315,6 +315,9 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
+    <Content Include="Areas\HelpPage\Views\StaticPages\OAuth.cshtml" />
+    <Content Include="Areas\HelpPage\Views\StaticPages\KmsHttpHeaders.cshtml" />
+    <Content Include="Areas\HelpPage\Views\StaticPages\DisplayTemplates\ApiGroup.cshtml" />
     <None Include="Properties\PublishProfiles\kms-web-api.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -325,7 +328,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Areas\HelpPage\Views\StaticPages\" />
     <Folder Include="Areas\Login\Models\" />
     <Folder Include="Areas\Login\Views\Shared\" />
     <Folder Include="Views\Geography\" />

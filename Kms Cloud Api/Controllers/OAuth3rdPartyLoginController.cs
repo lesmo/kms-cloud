@@ -31,6 +31,9 @@ namespace Kms.Cloud.Api.Controllers {
         ///     Aparte de la cabecera propia de OAuth para KMS, en el cuerpo de POST deben incluirse el Código
         ///     de Facebook y el ID de Usuario en Faceboook.
         /// </param>
+        /// <remarks>
+        ///     Esta petición debe realizarse con un Request Token de KMS en las cabeceras HTTP.
+        /// </remarks>
         [AllowAnonymous]
         [HttpPost, Route("oauth/3rd/facebook/login")]
         public HttpResponseMessage FacebookLogin([FromBody]OAuthFacebookLoginPost dataPost) {
@@ -66,6 +69,9 @@ namespace Kms.Cloud.Api.Controllers {
         ///     Aparte de la cabecera propia de OAuth para KMS, en el cuerpo de POST deben incluirse el Token,
         ///     Token Secret y ID del Usuario en Twitter.
         /// </param>
+        /// <remarks>
+        ///     Esta petición debe realizarse con un Request Token de KMS en las cabeceras HTTP.
+        /// </remarks>
         [AllowAnonymous]
         [HttpPost, Route("oauth/3rd/twitter/login")]
         public HttpResponseMessage TwitterLogin([FromBody]OAuth3rdLoginPost dataPost) {
@@ -103,6 +109,9 @@ namespace Kms.Cloud.Api.Controllers {
         ///     Aparte de la cabecera propia de OAuth para KMS, en el cuerpo de POST deben incluirse el Token,
         ///     Token Secret y ID del Usuario en Fitbit.
         /// </param>
+        /// <remarks>
+        ///     Esta petición debe realizarse con un Request Token de KMS en las cabeceras HTTP.
+        /// </remarks>
         [HttpPost]
         [Route("oauth/3rd/fitbit/login")]
         public void FitbitLogin() {
@@ -119,6 +128,9 @@ namespace Kms.Cloud.Api.Controllers {
         ///     Aparte de la cabecera propia de OAuth para KMS, en el cuerpo de POST deben incluirse el Token,
         ///     Token Secret y ID del Usuario en Nike+.
         /// </param>
+        /// <remarks>
+        ///     Esta petición debe realizarse con un Request Token de KMS en las cabeceras HTTP.
+        /// </remarks>
         [HttpPost]
         [Route("oauth/3rd/nike/login")]
         public void NikeLogin() {

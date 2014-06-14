@@ -85,7 +85,7 @@ namespace Kms.Cloud.Api.Controllers {
                 Database.TokenStore.Update(OAuth.Token);
                 Database.SaveChanges();
 
-                throw new HttpBadRequestException(
+                throw new HttpNotFoundException(
                     "105 " + ControllerStrings.Warning105_SocialTokenNotFound
                 );
             }
