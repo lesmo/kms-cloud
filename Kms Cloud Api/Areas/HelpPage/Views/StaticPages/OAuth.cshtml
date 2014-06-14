@@ -1,0 +1,129 @@
+﻿@using System.Web.Http
+@using System.Web.Http.Controllers
+@using System.Web.Http.Description
+@using System.Collections.ObjectModel
+@using Kms.Cloud.Api
+@using Kms.Cloud.Api.Areas.HelpPage.Models
+@using System.Reflection;
+@model List<ApiDescription>
+
+    @{
+        ViewBag.Title = WebApiApplication.AssemblyName + " OAuth 1.0a";
+
+        // Group APIs by controller
+        ILookup<HttpControllerDescriptor, ApiDescription> apiGroups = Model.ToLookup(api => api.ActionDescriptor.ControllerDescriptor);
+    }
+
+    <div id="body" class="help-page">
+        <section class="featured">
+            <div class="content-wrapper">
+                <h1>OAuth v1.0a en KMS</h1>
+                <p>
+                    El <strong>API REST de KMS</strong> utiliza el protocolo <a href="http://www.oauth.net">OAuth 1.0a</a>,
+                    y añade algunos <i>recursos HTTP</i> extra y que no forman parte del protocolo para los procesos de autenticación
+                    a través de servicios como Facebook, Twitter, Fitbit, Nike+ y básicamente cualquier otro servicio que implemente
+                    OAuth.
+                </p>
+                <p>
+                    Todas las peticiones al API <strong>deben estar debidamente firmadas</strong>, incluso aquellas que no necesitan del
+                    contexto del Usuario (como el caso de <a href="/docs/Api/GET-World">GET world</a>). Para estos casos, es necesario
+                    realizar la petición con un <strong>Request Token</strong>.
+                </p>
+            </div>
+        </section>
+        <section class="content-wrapper main-content clear-fix">
+            @foreach ( var group in apiGroups.OrderBy(o => o.Key.ControllerName) ) {
+                @Html.DisplayFor(m => group, "ApiGroup")
+            }
+        </section>
+        <section class="featured">
+            <div class="content-wrapper">
+                <h1>¿Cómo Iniciar Sesión?</h1>
+                <p>
+                    Considera utilizar <a href="http://oauth.net/code/">alguna de las librerías</a> que ya existen de
+                    <strong>OAuth 1.0a</strong> antes de hacer lo que yo y escribir tu propia implementación. Te ahorrarás
+                    <strong>HARTO</strong> tiempo y reducirás el tiempo que necesitarás para encontrar los miles de errores
+                    que están directamente relacionados con la criptografía del protocolo, y que probablemente te encontrarás
+                    si no estás acostumbrado a juguetear con Hashes, Firmas, Nonce, perros con rabia, y demás.
+                </p>
+                <p>
+                    Las URLs <a href="http://oauth.net/core/1.0a/#anchor4">especificadas por el protocolo</a> OAuth para KMS son:
+                    <ul>
+                        <li>
+                            Request Token URL:
+                            <br />
+                            <a href="/docs/Api/POST-oauth-request_token">https://api.kms.me/oauth/request_token</a>
+                        </li>
+                        <li>
+                            User Authorization URL:
+                            <br />
+                            <a>https://api.kms.me/authorize</a> <i>(no disponible actualmente)</i><br />
+                            <a>https://api.kms.me/authorize-basic</a>
+                        </li>
+                        <li>
+                            Access Token URL:
+                            <br />
+                            <a href="/docs/Api/POST-oauth-access_token">https://api.kms.me/request_token</a>
+                        </li>
+                    </ul>
+                </p>
+
+                <p class="warning-message-container">
+                    La URL <strong><u>oauth/authorize-basic</u></strong> sólo puede utilizarse si el API-Key tiene
+                    autorización para realizar un "login básico", utilizando una autenticación de tipo
+                    <a href="http://en.wikipedia.org/wiki/Basic_access_authentication">
+                        HTTP Basic Access Authentication
+                    </a>. Este proceso automáticamente hace que el usuario acepte compartir toda la
+                    información de KMS con la aplicación que solicita la autorización, y por ello
+                    <strong>únicamente</strong> las Apps oficiales de KMS están autorizadas para
+                    utilizar este método de autenticación.
+                </p>
+
+                <p>
+                    En esta sección se describen únicamente las formas distintas <strong>
+                        de las establecidas por el protocolo OAuth 1.0a
+                    </strong> que tenemos para iniciar una sesión en la <strong>Nube de KMS</strong>, y no se detallan los
+                    pormenores de cómo funciona el flujo de OAuth.
+                </p>
+
+                <h2>Iniciar Sesión con Facebook</h2>
+                <p>
+                    El proceso para iniciar sesión en la Nube de KMS a través de Facebook, consiste en:
+                    <ol>
+                        <li>Utilizar el API/SDK de Facebook para obtener un <strong>Código</strong>.</li>
+                        <li><a href="/docs/Api/POST-oauth-request_token">Solicitar</a> un <strong>Request Token</strong> al API de KMS.</li>
+                        <li>
+                            <a href="/docs/Api/POST-oauth-3rd-facebook-login">Intercambiar</a> el
+                            <strong>Código de <u>KMS</u></strong> y el
+                            <strong>Código <u>Facebook</u></strong> por un <strong>Access Token de <u>KMS</u></strong>.
+                        </li>
+                    </ol>
+                </p>
+                <p>
+                    <i>Ejemplo por escribirse...</i>
+                </p>
+
+                <h2>Iniciar Sesión con Twitter/Fitbit</h2>
+                <p>
+                    El proceso para iniciar sesión en la Nube de KMS a través de Twitter/Fitbit, consiste en:
+                    <ol>
+                        <li>Utilizar el API/SDK de Twitter para obtener un <strong>Access Token</strong>.</li>
+                        <li><a href="/docs/Api/POST-oauth-request_token">Solicitar</a> un <strong>Request Token</strong> al API de KMS.</li>
+                        <li>
+                            Intercambiar el <strong>Request Token de <u>KMS</u></strong> y el
+                            <strong>
+                                Access Token de
+                                <u>
+                                    <a href="/docs/Api/POST-oauth-3rd-facebook-login">Twitter</a>/
+                                    <a href="/docs/Api/POST-oauth-3rd-fitbit-login">Fitbit</a>
+                                </u>
+                            </strong> por un <strong>Access Token de <u>KMS</u></strong>.
+                        </li>
+                    </ol>
+                </p>
+                <p>
+                    <i>Ejemplo por escribirse...</i>
+                </p>
+            </div>
+        </section>
+    </div>

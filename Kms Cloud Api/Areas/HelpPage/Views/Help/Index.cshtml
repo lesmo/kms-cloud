@@ -5,7 +5,7 @@
 @using Kms.Cloud.Api
 @using Kms.Cloud.Api.Areas.HelpPage.Models
 @using System.Reflection;
-@model Collection<ApiDescription>
+@model List<ApiDescription>
 
 @{
     ViewBag.Title = WebApiApplication.AssemblyName + " v" + WebApiApplication.AssemblyVersion.ToString();
@@ -14,7 +14,6 @@
     ILookup<HttpControllerDescriptor, ApiDescription> apiGroups = Model.ToLookup(api => api.ActionDescriptor.ControllerDescriptor);
 }
 
-    <link type="text/css" href="~/Areas/HelpPage/HelpPage.css" rel="stylesheet" />
     <div id="body" class="help-page">
         <section class="featured">
             <div class="content-wrapper">

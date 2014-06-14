@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Web.Http;
 using System.Web.Mvc;
 using Kms.Cloud.Api.Areas.HelpPage.ModelDescriptions;
@@ -22,8 +23,13 @@ namespace Kms.Cloud.Api.Areas.HelpPage.Controllers {
         public HttpConfiguration Configuration { get; private set; }
 
         public ActionResult Index() {
+            var viewModel = Configuration.Services.GetApiExplorer().ApiDescriptions
+                .Where(w => ! w.ActionDescriptor.ControllerDescriptor.ControllerName.ToUpper().StartsWith("OAUTH"))
+                .ToList();
+
+            ViewBag.Page = "RESTAPI";
             ViewBag.DocumentationProvider = Configuration.Services.GetDocumentationProvider();
-            return View(Configuration.Services.GetApiExplorer().ApiDescriptions);
+            return View(viewModel);
         }
 
         public ActionResult Api(string apiId) {
@@ -35,6 +41,7 @@ namespace Kms.Cloud.Api.Areas.HelpPage.Controllers {
                 }
             }
 
+            ViewBag.Page = apiId.ToUpper().StartsWith("OAUTH") ? "OAUTH" : "RESTAPI";
             return View(ErrorViewName);
         }
 

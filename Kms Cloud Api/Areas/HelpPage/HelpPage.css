@@ -195,6 +195,11 @@ header nav ul {
 header nav ul li {
 	float: left;
 	margin: 0 5px;
+
+	-moz-transition: background-color linear 200ms;
+	-o-transition: background-color linear 200ms;
+	-webkit-transition: background-color linear 200ms;
+	transition: background-color linear 200ms;
 }
 
 header nav ul li a {
@@ -202,11 +207,15 @@ header nav ul li a {
 	padding: 7px 13px;
 	color: #00C5DB !important;
 	text-transform: uppercase;
-	
+
+	-moz-transition: color linear 200ms;
+	-o-transition: color linear 200ms;
+	-webkit-transition: color linear 200ms;
+	transition: color linear 200ms;
 }
-header nav ul li:hover {
+header nav ul li:hover, header nav ul li.active {
 	background: #00C5DB;
 }
-header nav ul li:hover a {
+header nav ul li:hover a, header nav ul li.active a {
 	color: #fff !important;
 }

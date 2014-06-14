@@ -23,10 +23,36 @@ namespace Kms.Cloud.Api.Areas.HelpPage.CustomSamples {
             = "es-mx";
         public const string CultureCode2
             = "es";
+
         public const string RegionCode1
             = "mx-mex";
         public const string RegionCode2
             = "mx-gro";
+        public const string CountryCode1
+            = "mx";
+        public const string CountryName1
+            = "Mexico";
+        public const string CountryCode2
+            = "us";
+        public const string CountryName2
+            = "United States";
+        public const string SubdivisionCode1
+            = "dif";
+        public const string SubdivisionName1
+            = "Distrito Federal";
+        public const string SubdivisionCode2
+            = "mex";
+        public const string SubdivisionName2
+            = "Mexico";
+        public const string SubdivisionCode3
+            = "ca";
+        public const string SubdivisionName3
+            = "California";
+        public const string SubdivisionCode4
+            = "fl";
+        public const string SubdivisionName4
+            = "Florida";
+
         public const string Base64String
             = "M7Si3yeVCEGq7J/QexEsCQ==";
         public const string GuidBase641

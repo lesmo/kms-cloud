@@ -4,25 +4,30 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
+    <link type="text/css" href="~/Areas/HelpPage/HelpPage.css" rel="stylesheet" />
     @RenderSection("scripts", required: false)
 </head>
 <body>
     <header class="help-page">
         <div class="content-wrapper">
-            <a href="@Url.Action("Index")">
+            <a href="@Url.Action("Index", "Help")">
                 <span id="kms-api-logo"></span>
             </a>
 
             <nav>
                 <ul>
-                    <li>
-                        @Html.ActionLink("REST API", "Index")
+                    <li class="@(ViewBag.Page == "RESTAPI" ? "active" : "")">
+                        @Html.ActionLink("REST API", "Index", "Help")
                     </li>
-                    <li>
-                        @Html.ActionLink("OAuth KMS", "Index")
+                    
+                    <li class="@(ViewBag.Page == "OAUTH" ? "active" : "")">
+                        @Html.ActionLink("OAuth KMS", "OAuth", "StaticPages")
                     </li>
-                    <li>
-                        @Html.ActionLink("Cabeceras HTTP", "Index")
+
+                    <li class="@(ViewBag.Page == "HTTPHEADERS" ? "active": "")">
+                        @Html.ActionLink("Cabeceras HTTP", "Index", "StaticPages", new {
+                            view = "KmsHttpHeaders"
+                        })
                     </li>
                 </ul>
             </nav>
