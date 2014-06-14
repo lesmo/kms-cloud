@@ -79,6 +79,8 @@ namespace Kms.Cloud.Api.Areas.HelpPage.Models
         /// </summary>
         public IDictionary<MediaTypeHeaderValue, object> SampleResponses { get; private set; }
 
+        public string Remarks { get; set; }
+
         /// <summary>
         /// Gets the error messages associated with this model.
         /// </summary>

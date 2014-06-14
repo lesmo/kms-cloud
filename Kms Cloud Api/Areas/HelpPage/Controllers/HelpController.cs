@@ -33,7 +33,14 @@ namespace Kms.Cloud.Api.Areas.HelpPage.Controllers {
         }
 
         public ActionResult Api(string apiId) {
-            if (!String.IsNullOrEmpty(apiId)) {
+            try {
+                var apiName = apiId.Split(new char[]{'-'}, 2)[1];
+                ViewBag.Page = apiName.ToUpper().StartsWith("OAUTH") ? "OAUTH" : "RESTAPI";
+            } catch {
+                ViewBag.Page = Kms.Cloud.Api.WebApiApplication.AssemblyName;
+            }
+
+            if ( ! String.IsNullOrEmpty(apiId) ) {
                 HelpPageApiModel apiModel = Configuration.GetHelpPageApiModel(apiId);
                 if (apiModel != null)
                 {
@@ -41,7 +48,6 @@ namespace Kms.Cloud.Api.Areas.HelpPage.Controllers {
                 }
             }
 
-            ViewBag.Page = apiId.ToUpper().StartsWith("OAUTH") ? "OAUTH" : "RESTAPI";
             return View(ErrorViewName);
         }
 

@@ -235,13 +235,16 @@ namespace Kms.Cloud.Api.Areas.HelpPage
 
         private static HelpPageApiModel GenerateApiModel(ApiDescription apiDescription, HttpConfiguration config)
         {
+            ModelDescriptionGenerator modelGenerator = config.GetModelDescriptionGenerator();
+            HelpPageSampleGenerator sampleGenerator = config.GetHelpPageSampleGenerator();
+            var documentation = config.Services.GetDocumentationProvider() as IModelDocumentationProvider;
+
             HelpPageApiModel apiModel = new HelpPageApiModel()
             {
                 ApiDescription = apiDescription,
+                Remarks = documentation.GetRemarks(apiDescription.ActionDescriptor)
             };
-
-            ModelDescriptionGenerator modelGenerator = config.GetModelDescriptionGenerator();
-            HelpPageSampleGenerator sampleGenerator = config.GetHelpPageSampleGenerator();
+            
             GenerateUriParameters(apiModel, modelGenerator);
             GenerateRequestModelDescription(apiModel, modelGenerator, sampleGenerator);
             GenerateResourceDescription(apiModel, modelGenerator);

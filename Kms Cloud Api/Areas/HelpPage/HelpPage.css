@@ -35,8 +35,8 @@
 	margin-top: 20px;
 	padding: 7px 20px;
 	color: #525252;
-	background: #EFDCA9; 
-	border: 1px solid #CCCCCC;
+	background: #FFF9BC; 
+	border: none;
 }
 
 .help-page-table {
@@ -66,10 +66,6 @@
 	padding: 0px;
 	font-family: inherit;
 	font-size: 100%;
-}
-
-.help-page-table tbody tr:hover td {
-	background-color: #F3F3F3;
 }
 
 .help-page a:hover {

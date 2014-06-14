@@ -102,6 +102,19 @@ namespace Kms.Cloud.Api.Areas.HelpPage
             return GetTagValue(typeNode, "remarks");
         }
 
+        public string GetRemarks(HttpActionDescriptor actionDescriptor) {
+            XPathNavigator methodNode = GetMethodNode(actionDescriptor);
+
+            if ( methodNode != null ) {
+                XPathNavigator returnsNode = methodNode.SelectSingleNode("remarks");
+
+                if ( returnsNode != null )
+                    return returnsNode.Value.Trim();
+            }
+
+            return null;
+        }
+
         private XPathNavigator GetMethodNode(HttpActionDescriptor actionDescriptor)
         {
             ReflectedHttpActionDescriptor reflectedActionDescriptor = actionDescriptor as ReflectedHttpActionDescriptor;

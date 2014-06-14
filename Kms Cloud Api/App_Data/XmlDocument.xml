@@ -772,7 +772,6 @@
             <summary>
                 Obtener un Request Token de OAuth para la Nube KMS.
             </summary>
-            <returns></returns>
         </member>
         <member name="M:Kms.Cloud.Api.Controllers.OAuthController.OAuthAccessToken(Kms.Cloud.Api.Models.RequestModels.OAuthAccessTokenPost)">
             <summary>
@@ -782,7 +781,9 @@
             <param name="oAuthVerifier">
                 El Verifier Code obtenido por el proceso de Login Web.
             </param>
-            <returns></returns>
+            <remarks>
+                Esta petición debe realizarse con un Request Token de KMS en las cabeceras HTTP.
+            </remarks>
         </member>
         <member name="M:Kms.Cloud.Api.Controllers.OAuthController.GetToken">
             <summary>
@@ -861,6 +862,9 @@
                 Aparte de la cabecera propia de OAuth para KMS, en el cuerpo de POST deben incluirse el Código
                 de Facebook y el ID de Usuario en Faceboook.
             </param>
+            <remarks>
+                Esta petición debe realizarse con un Request Token de KMS en las cabeceras HTTP.
+            </remarks>
         </member>
         <member name="M:Kms.Cloud.Api.Controllers.OAuth3rdPartyLoginController.TwitterLogin(Kms.Cloud.Api.Models.RequestModels.OAuth3rdLoginPost)">
             <summary>
@@ -871,6 +875,9 @@
                 Aparte de la cabecera propia de OAuth para KMS, en el cuerpo de POST deben incluirse el Token,
                 Token Secret y ID del Usuario en Twitter.
             </param>
+            <remarks>
+                Esta petición debe realizarse con un Request Token de KMS en las cabeceras HTTP.
+            </remarks>
         </member>
         <member name="M:Kms.Cloud.Api.Controllers.OAuth3rdPartyLoginController.FitbitLogin">
             <summary>
@@ -883,6 +890,9 @@
                 Aparte de la cabecera propia de OAuth para KMS, en el cuerpo de POST deben incluirse el Token,
                 Token Secret y ID del Usuario en Fitbit.
             </param>
+            <remarks>
+                Esta petición debe realizarse con un Request Token de KMS en las cabeceras HTTP.
+            </remarks>
         </member>
         <member name="M:Kms.Cloud.Api.Controllers.OAuth3rdPartyLoginController.NikeLogin">
             <summary>
@@ -895,6 +905,9 @@
                 Aparte de la cabecera propia de OAuth para KMS, en el cuerpo de POST deben incluirse el Token,
                 Token Secret y ID del Usuario en Nike+.
             </param>
+            <remarks>
+                Esta petición debe realizarse con un Request Token de KMS en las cabeceras HTTP.
+            </remarks>
         </member>
         <member name="T:Kms.Cloud.Api.Controllers.TipsController">
             <summary>

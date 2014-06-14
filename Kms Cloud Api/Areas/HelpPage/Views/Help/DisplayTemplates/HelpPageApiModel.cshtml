@@ -11,6 +11,10 @@
 <div>
     <p>@description.Documentation</p>
 
+    @if ( !String.IsNullOrEmpty(Model.Remarks) ) {
+        <p class="warning-message-container">@Model.Remarks</p>
+    }
+
     <h2>Información de Petición</h2>
 
     <h3>Parámetros en URI (QueryString)</h3>
