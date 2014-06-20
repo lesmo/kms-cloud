@@ -221,7 +221,7 @@
     <Compile Include="Controllers\DataController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ContactInfoController.cs" />
-    <Compile Include="Controllers\DeviceController.cs" />
+    <Compile Include="Controllers\DevicesController.cs" />
     <Compile Include="Controllers\DynamicResourcesController.cs" />
     <Compile Include="Controllers\FriendsController.cs" />
     <Compile Include="Controllers\BaseClasses\BaseController.cs" />
