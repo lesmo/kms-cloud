@@ -10,10 +10,7 @@ using System.Web.Http;
 
 namespace Kms.Cloud.Api.Controllers {
     /// <summary>
-    ///     Obtener y asociar Dispositivos KMS a la Cuenta del Usuario. Los Numeros de Serie pueden
-    ///     contener números, sólo las letras ACEFHJKLMNPRTVWXZ, son indistintos de mayúsculas y
-    ///     minúsculas y tienen un largo de 7 carácteres, aunque en el futuro podrían tener un largo
-    ///     mayor.
+    ///     Obtener y asociar Dispositivos KMS a la Cuenta del Usuario.
     /// </summary>
     public class DeviceController : BaseController {
         private const String serialStringCharMap = "0123456789ACEFHJKLMNPRTVWXZ";
@@ -24,6 +21,11 @@ namespace Kms.Cloud.Api.Controllers {
         ///     asociado con un Usuario causará el asesinato de un cachorrito.
         /// </summary>
         /// <param name="serialString">Número de Serie de de Dispositivo KMS</param>
+        /// <remarks>
+        ///     Los Numeros de Serie pueden contener números, sólo las letras ACEFHJKLMNPRTVWXZ, son
+        ///     indistintos de mayúsculas y minúsculas y tienen un largo de 7 carácteres, aunque en el 
+        ///     futuro podrían tener un largo mayor.
+        /// </remarks>
         public IHttpActionResult LinkDevice(String serialString) {
             Int64 serialNumber;
             var serialEncoder = new BaseNumericEncoder(serialStringCharMap);
