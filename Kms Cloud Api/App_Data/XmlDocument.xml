@@ -631,12 +631,12 @@
                 Nueva Información de Contacto del Usuario en la Nube KMS.
             </param>
         </member>
-        <member name="T:Kms.Cloud.Api.Controllers.DeviceController">
+        <member name="T:Kms.Cloud.Api.Controllers.DevicesController">
             <summary>
                 Obtener y asociar Dispositivos KMS a la Cuenta del Usuario.
             </summary>
         </member>
-        <member name="M:Kms.Cloud.Api.Controllers.DeviceController.LinkDevice(System.String)">
+        <member name="M:Kms.Cloud.Api.Controllers.DevicesController.LinkDevice(System.String)">
             <summary>
                 Asociar un Número de Serie de Dispositivo KMS con el Usuario actual. Sólo es posible
                 asociar un Dispositivo a un Usuario, intentar asociar un dispositivo que ya está
