@@ -25,6 +25,7 @@ namespace Kms.Cloud.Api.Areas.HelpPage.Controllers {
         public ActionResult Index() {
             var viewModel = Configuration.Services.GetApiExplorer().ApiDescriptions
                 .Where(w => ! w.ActionDescriptor.ControllerDescriptor.ControllerName.ToUpper().StartsWith("OAUTH"))
+                .Where(w => ! w.ActionDescriptor.ControllerDescriptor.ControllerName.ToUpper().StartsWith("DYNAMICRESOURCE"))
                 .ToList();
 
             ViewBag.Page = "RESTAPI";
