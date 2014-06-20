@@ -633,10 +633,7 @@
         </member>
         <member name="T:Kms.Cloud.Api.Controllers.DeviceController">
             <summary>
-                Obtener y asociar Dispositivos KMS a la Cuenta del Usuario. Los Numeros de Serie pueden
-                contener números, sólo las letras ACEFHJKLMNPRTVWXZ, son indistintos de mayúsculas y
-                minúsculas y tienen un largo de 7 carácteres, aunque en el futuro podrían tener un largo
-                mayor.
+                Obtener y asociar Dispositivos KMS a la Cuenta del Usuario.
             </summary>
         </member>
         <member name="M:Kms.Cloud.Api.Controllers.DeviceController.LinkDevice(System.String)">
@@ -646,6 +643,11 @@
                 asociado con un Usuario causará el asesinato de un cachorrito.
             </summary>
             <param name="serialString">Número de Serie de de Dispositivo KMS</param>
+            <remarks>
+                Los Numeros de Serie pueden contener números, sólo las letras ACEFHJKLMNPRTVWXZ, son
+                indistintos de mayúsculas y minúsculas y tienen un largo de 7 carácteres, aunque en el 
+                futuro podrían tener un largo mayor.
+            </remarks>
         </member>
         <member name="T:Kms.Cloud.Api.Controllers.DynamicResourcesController">
             <summary>
