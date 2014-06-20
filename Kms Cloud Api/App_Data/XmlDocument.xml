@@ -612,6 +612,10 @@
             <param name="accountPost">
                 Nueva Información de Cuenta de Usuario en la Nube KMS.
             </param>
+            <remarks>
+                Por el momento: no es posible cambiar la contraseña del Usuario utilizando éste método,
+                la dirección de E-mail no se valida en el servidor (aún).
+            </remarks>
         </member>
         <member name="T:Kms.Cloud.Api.Controllers.ContactInfoController">
             <summary>
@@ -1376,6 +1380,10 @@
             <summary>
                 Código de Región del Usuario.
             </summary>
+            <remarks>
+                Si el usuario tiene una Región Particular asociada (por ejemplo si es MX-DIF-TELMEX), no será
+                posible modificar ningún detalle de la región del Usuario.
+            </remarks>
         </member>
         <member name="P:Kms.Cloud.Api.Models.RequestModels.AccountPost.Password">
             <summary>

@@ -54,6 +54,10 @@ namespace Kms.Cloud.Api.Controllers {
         /// <param name="accountPost">
         ///     Nueva Información de Cuenta de Usuario en la Nube KMS.
         /// </param>
+        /// <remarks>
+        ///     Por el momento: no es posible cambiar la contraseña del Usuario utilizando éste método,
+        ///     la dirección de E-mail no se valida en el servidor (aún).
+        /// </remarks>
         [SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase")]
         [HttpPost, Route("my/account")]
         public HttpResponseMessage PostAccount([FromBody]AccountPost accountPost) {
@@ -62,11 +66,13 @@ namespace Kms.Cloud.Api.Controllers {
 
             CurrentUser.PreferredCultureCode
                 = accountPost.PreferredCultureCode.ToUpper(CultureInfo.InvariantCulture);
-            CurrentUser.RegionCode
-                = accountPost.RegionCode.ToUpper(CultureInfo.InvariantCulture);
             CurrentUser.Email
                 = accountPost.Email.ToLower(CultureInfo.InvariantCulture);
-            
+
+            if ( CurrentUser.RegionCode.Split(new char[] { '-' }).Length > 2 )
+                CurrentUser.RegionCode
+                    = accountPost.RegionCode.ToUpper(CultureInfo.InvariantCulture);
+
             Database.UserStore.Update(CurrentUser);
             Database.SaveChanges();
 

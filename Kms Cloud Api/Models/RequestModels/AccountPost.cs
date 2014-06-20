@@ -23,6 +23,10 @@ namespace Kms.Cloud.Api.Models.RequestModels {
         /// <summary>
         ///     Código de Región del Usuario.
         /// </summary>
+        /// <remarks>
+        ///     Si el usuario tiene una Región Particular asociada (por ejemplo si es MX-DIF-TELMEX), no será
+        ///     posible modificar ningún detalle de la región del Usuario.
+        /// </remarks>
         public string RegionCode { get; set; }
 
         /// <summary>
