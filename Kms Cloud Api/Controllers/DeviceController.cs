@@ -26,6 +26,8 @@ namespace Kms.Cloud.Api.Controllers {
         ///     indistintos de mayúsculas y minúsculas y tienen un largo de 7 carácteres, aunque en el 
         ///     futuro podrían tener un largo mayor.
         /// </remarks>
+        [HttpPost]
+        [Route("my/devices/link")]
         public IHttpActionResult LinkDevice(String serialString) {
             Int64 serialNumber;
             var serialEncoder = new BaseNumericEncoder(serialStringCharMap);
