@@ -50,6 +50,10 @@ namespace Kms.Cloud.Api.Controllers {
                 throw new HttpConflictException("A02" + ControllerStrings.WarningA02_DeviceAlreadyLinked);
 
             device.User = CurrentUser;
+
+            if ( !String.IsNullOrEmpty(device.RegionCode) )
+                CurrentUser.RegionCode = device.RegionCode;
+
             Database.SaveChanges();
 
             return Ok(); 
