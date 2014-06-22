@@ -1,8 +1,16 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
+    <meta name="og:app_id" content="671595709566936" />
+    <meta name="og:url" content="https://api.kms.me/docs" />
+    <meta name="og:image" content="https://api.kms.me/kms-cloud-fb.jpg" />
+    <meta name="og:site_name" content="KMS Cloud API" />
+    <meta name="og:description" content="Documentación del KMS Cloud API para cargar y obtener información generada por los usuarios." />
+
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
+
+
     <title>@ViewBag.Title</title>
     <link type="text/css" href="~/Areas/HelpPage/HelpPage.css" rel="stylesheet" />
     @RenderSection("scripts", required: false)
@@ -25,9 +33,7 @@
                     </li>
 
                     <li class="@(ViewBag.Page == "HTTPHEADERS" ? "active": "")">
-                        @Html.ActionLink("Cabeceras HTTP", "Index", "StaticPages", new {
-                            view = "KmsHttpHeaders"
-                        })
+                        @Html.ActionLink("Cabeceras HTTP", "KmsHttpHeaders", "StaticPages")
                     </li>
                 </ul>
             </nav>

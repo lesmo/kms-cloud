@@ -301,7 +301,11 @@
     </CodeAnalysisDictionary>
     <Content Include="App_Data\XmlDocument.xml" />
     <Content Include="Areas\HelpPage\HelpPage.css" />
+    <None Include="KMS Cloud Logo Source.fw.png" />
     <Content Include="Areas\HelpPage\kms-api-docs.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="kms-cloud-fb.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="favicon.ico" />
