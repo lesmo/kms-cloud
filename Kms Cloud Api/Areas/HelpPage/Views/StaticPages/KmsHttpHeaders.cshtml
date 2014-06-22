@@ -1,1 +1,314 @@
-﻿
+﻿<div id="body" class="help-page http-headers">
+    <section class="featured">
+        <div class="content-wrapper">
+            <h1>Cabeceras HTTP soportadas</h1>
+            <p>
+                El <strong>API REST de KMS</strong> utiliza el protocolo <a href="http://www.oauth.net">OAuth 1.0a</a>,
+                y por ende es <strong>OBLIGATORIO</strong> que <strong><u>todas</u></strong> las peticiones hechas al API
+                estén firmadas debidamente, y tener la cabecera HTTP <code>Authorization</code> siempre definida.
+            </p>
+            <p>
+                Además de la cabecera <code>Authorization</code>, el API soporta algunas cabeceras propias del protocolo HTTP
+                para ayudar a optimizar la transferencia de datos entre los teléfonos móviles y los servidores y proveer de
+                más información útil durante el desarrollo para conocer, por ejemplo, porqué ocurrió un error.
+            </p>
+        </div>
+    </section>
+    <section class="content-wrapper main-content clear-fix">
+        <div class="content-wrapper">
+            <h2>Lista de Cabeceras HTTP Soportadas</h2>
+            <h3>Cabeceras de Petición</h3>
+            <table class="help-page-table full-body">
+                <thead>
+                <th>Cabecera</th>
+                <th>Función</th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><pre>Accept</pre></td>
+                        <td>
+                            <p>
+                                Definir ésta cabecera modifica el formato de la respuesta del API. Actualmente el API
+                                es capaz de responder en XML y JSON. Los valores válidos para ésta cabecera son:
+                                <ul>
+                                    <li><code>application/json</code> para JSON</li>
+                                    <li><code>text/json</code> para JSON</li>
+                                    <li><code>application/xml</code> para XML</li>
+                                    <li><code>text/xml</code> para XML</li>
+                                </ul>
+                            </p>
+                            <p>
+                                Si no se define ésta cabecera, se asume <code>application/json</code>.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><pre>Accept-Charset</pre></td>
+                        <td>
+                            <p>
+                                Definir ésta cabecera modifica el código de carácteres utilizado por el API para responder
+                                a la petición.
+                            </p>
+                            <p>
+                                El API soporta hartas codificaciones, en concreto:
+                                <ul>
+                                    <li>ASCII</li>
+                                    <li>Unicode</li>
+                                    <li>UTF32</li>
+                                    <li>UTF7</li>
+                                    <li>UTF8</li>
+                                </ul>
+                            </p>
+                            <p>
+                                Si no se define ésta cabecera, se devolverá la respuesta codificada en UTF8. Honestamente no
+                                sé quién querría modificar la codificación hoy en día, pero la funcionalidad está ahí.
+                            </p>
+                            <p class="warning-message-container">
+                                Como <a href="https://www.lesmo.com.mx">Lesmo</a> es un loco de la optimización, podría ser que
+                                se cambie la codificación por defecto de UTF8 por UTF7 en el futuro. ¡Tranquilo! Lo vamos a
+                                revisar juntos si el momento llega.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><pre>Accept-Encoding</pre></td>
+                        <td>
+                            <p>
+                                Definir ésta cebecera módifica la forma en la que se codifica la respuesta, básicamente define
+                                en qué algoritmos debe comprimirse la respuesta. Sería lo mejor implementar su uso en la Apps
+                                para teléfonos móviles.
+                            </p>
+                            <p>
+                                El API soporta los algorimos:
+                                <ul>
+                                    <li>gzip</li>
+                                    <li>deflate</li>
+                                </ul>
+                            </p>
+                            <p>
+                                Si no se define ésta cabecera, la respuesta no se comprime. Nuevos algoritmos podrían añadirse
+                                si después determinamos que es factible.
+                            </p>
+                            <p class="warning-message-container">
+                                La funcionalidad de compresión <strong>no ha sido probada</strong>, y para la primera entrega
+                                a producción de las Apps <strong><u>debería omitirse</u></strong>. Si hay tiempo, podríamos
+                                realizar las pruebas necesarias.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><pre>Accept-Language</pre><br /><i>(Código de Cultura)</i></td>
+                        <td>
+                            <p>
+                                Definir ésta cabecera modifica el lenguaje utilizado en los mensajes generados en la cabecera
+                                <code>Warning</code>, el cuerpo de respuesta para estatus diferentes de <code>HTTP 200</code> y
+                                <code>HTTP 201</code>, además de los textos en el Cuerpo de Respuesta (como Tips o Recompensas).
+                            </p>
+                            <p>
+                                El lenguaje sigue lo descrito en el <a href="http://tools.ietf.org/html/rfc1766">RFC 1736</a>.
+                                Es decir, debe seguirse el formato <code>aa-bb(b)</code>, donde <strong>aa</strong> es el idioma
+                                y <strong>bb</strong> es su denominador regional. Una lista de los lenguajes válidos puede
+                                <a href="javascript:alert('BAZINGA! Todavía no hay una lista. Aguanta las carnitas.');">encontrarse aquí</a>.
+                            </p>
+                            <p>
+                                Por costumbre del M$ Framework .NET utilizado, a esta combinación de <code>idioma-región</code> se
+                                le refiere como Código de Cultura porque... pues no tiene nombre, y aprenderse el número de ISO
+                                y/o RFC es un <abbr title="PAIN IN THE ASS">PITA</abbr>.
+                            </p>
+                            <p>
+                                Si no se define ésta cabecera, la respuesta toma el Código de Cultura definido en la información
+                                de la Cuenta de Usuario (la propiedad <code>PrefferredCultureCode</code>).
+                            </p>
+                            <p class="warning-message-container">
+                                Actualmente en la Nube de KMS existen úncamente el idioma Inglés <code>(en)</code> y Español <code>(es)</code>.
+                                La limitación regional no se toma en consideración. Inicialmente se tenía pensado modificar los valores
+                                numéricos para presentarlos en las unidades cotidianas de los usuarios (yardas, millas, onzas, kilos, etc.),
+                                pero es más sencillo que las Apps lo hagan (si se vuelve necesario en el futuro).
+                            </p>
+                            <p class="warning-message-container">
+                                La parte regional del Código de Cultura se aprovecha internamente en KMS para limitar Tips, Recompensas y
+                                Regalos a la Región del Usuario. No es posible utilizar ésta cabecera para, por ejemplo, obtener información
+                                de una empresa dándo por ejemplo el valor <code>es-mx-dif-bimbo</code>; simplemente se asume <code>es</code> y
+                                el resto se ignora.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><pre>Authorization</pre></td>
+                        <td>
+                            <p>
+                                Ésta cabecera está descrita por el protocolo HTTP, y es crucial para el protocolo
+                                <a href="http://oauth.net/core/1.0a/#auth_header">OAuth 1.0a</a> que utiliza el API. El valor
+                                de ésta cabecera <strong>es sensible a mayúsculas y minúsculas</strong>.
+                            </p>
+                            <p class="warning-message-container">
+                                La única contravención hacia lo descrito por el protocolo OAuth es la posibilidad de incluir
+                                los campos propios de OAuth en el cuerpo de la petición (como campos de una petición POST,
+                                por ejemplo), y el API actualmente no soporta esa funcionalidad. No se tiene planeado implementarla.
+                                <br /><br />
+                                Honestamente tampoco creo que nadie más lo soporta. LOL.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><pre>If-Modified-Since</pre></td>
+                        <td>
+                            <p>
+                                Definir ésta cabecera hace que el API determine si la información almacenada en la Nube de KMS
+                                es más reciente que la fecha en ésta cabecera, y si es el caso devuelve la información. Obviamente,
+                                por ello únicamente tiene efecto al realizarse la peticiones <code>HTTP GET</code>.
+                            </p>
+                            <p>
+                                Si el API determina que la información no se ha modificado con relación a ésta fecha (es decir, que
+                                la fecha de modificación de los datos en la Nube es anterior a la fecha de la cabecera), entonces
+                                devuelve un status <code>HTTP 304 Not Modified</code>.
+                            </p>
+                            <p class="warning-message-container">
+                                La funcionalidad de ésta cabecera no está totalmente implementada en algunos recursos.
+                            </p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Cabeceras de Respuesta</h3>
+            <p class="warning-message-container">
+                Todas éstas cabeceras se incluyen la respuesta del API, excepto por <code>Last-Modified</code> (que en ocasiones no
+                es posible calcular), <code>Retry-After</code> (que sólo se presenta en respuestas <code>HTTP 429 Too Many Requests</code>),
+                <code>Warning</code> (que normalmente sólo se presenta en errores) y <code>WWW-Authenticate</code> (en respuestas
+                <code>HTTP 401 Unauthorized</code>).
+            </p>
+            <table class="help-page-table full-body">
+                <thead>
+                <th>Cabecera</th>
+                <th>Función</th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><pre>Content-Encoding</pre></td>
+                        <td>
+                            <p>
+                                Ésta cabecera describe la forma en la que se codificó la respuesta, básicamente define
+                                en qué algoritmo se comprimió la respuesta. Normalmente te interesa verificar que el
+                                valor de ésta cabecera corresponde al valor que enviaste en <code>Accept-Encoding</code>.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><pre>Content-Language</pre></td>
+                        <td>
+                            <p>
+                                Ésta cabecera describe el Código de Cultura, o lenguaje, utilizado en los textos de la
+                                respuesta. Puedes utilizar ésto para, por ejemplo, notificar al Usuario que el contenido
+                                no está disponible en su idioma si no coincide con la configuración de la App (o el
+                                teléfono/tablet en donde se ejecuta).
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><pre>Content-Length</pre></td>
+                        <td>
+                            <p>
+                                Contiene el largo, en bytes, de la respuesta. Y ya. Es estándar y no hay nada más.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><pre>Content-Type</pre></td>
+                        <td>
+                            <p>
+                                Contiene el formato que tiene la respuesta. Puede ser cualquier valor válido de los
+                                descritos en <code>Accept-Encoding</code>.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><pre>Last-Modified</pre></td>
+                        <td>
+                            <p>
+                                Ésta cabecera describe la última fecha de modificación de la información devuelta. No todos
+                                los recursos la devuelven, pero son raros los que no. Esto sigue estrictamente
+                                <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.29">el estándar HTTP</a>
+                                descrito para ésta cabecera.
+                            </p>
+                            <p>
+                                Puede valerte un pepino el valor de ésta cabecera, pues los recursos que devuelven la fecha
+                                de modificación en la Cabecera HTTP también la incluyen en el Cuerpo de Respuesta. Inicialmente
+                                la propiedad <code>"LastModified"</code> en el Cuerpo de Respuesta se añadió como <i>facilitador</i>
+                                al momento de procesar la respuesta, pero terminó volviendose la principal.
+                            </p>
+                            <p>
+                                La fecha en ésta cebecera está en el formato del RFC 1123, como por ejemplo:<br />
+                                <code>Tue, 15 Nov 1994 08:12:31 GMT</code>
+                            </p>
+                            <p class="warning-message-container">
+                                La funcionalidad de ésta cabecera no está totalmente implementada en algunos recursos.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><pre>Retry-After</pre></td>
+                        <td>
+                            <p>
+                                Enviada cuando la respuesta es de tipo <code>HTTP 429 Too Many Requests</code>, describe un tiempo
+                                de espera necesario antes de poder realizar ésta petición de nuevo.
+                            </p>
+                            <p>
+                                Esto únicaente sucede al momento de abusarse de peticiones por API-Key, y únicamente afecta a las
+                                API-Keys que no forman parte de las Apps oficiales de KMS.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><pre>Warning</pre></td>
+                        <td>
+                            <p>
+                                La presencia de ésta cabecera únicamente ocurre cuando el estatus de la respuesta no es
+                                <code>HTTP 200 OK</code> o <code>HTTP 201 Created</code>, y contiene un código interno de KMS
+                                seguido de un mensaje en el idioma especificado por la cabecera <code>Accept-Language</code>
+                                o la propiedad <code>PreferredCultureCode</code> de la Cuenta de Usuario. No siempre está
+                                presente en errores de tipo <code>HTTP 404</code> o <code>HTTP 204 No Content</code>.
+                            </p>
+                            <p>
+                                Si el idioma de <code>Accept-Language</code> o la propiedad <code>PreferredCultureCode</code>
+                                de la Cuenta de Usuario sin inválidos, o no se tienen los textos en ese idioma, el mensaje
+                                está dado en Inglés.
+                            </p>
+                            <p>
+                                Por ejemplo: <br />
+                                <code>Warning: 207 At least one device must be linked before Data upload.</code>
+                            </p>
+                            <p class="warning-message-container">
+                                Habrá una lista de todos los códigos utilizados para ésta Cabecera... en algún momento, por
+                                prefieres utilizar tus propios textos y/o procedimientos para manejar los errores.
+                            </p>
+                            <p class="warning-message-container">
+                                Por el momento el mensaje no se codifica de ninguna forma, por lo que carácteres especiales
+                                de algunos idiomas podría no mostrarse correctamente. Podría ser que en el futuro se "escapen"
+                                éstos carácteres utilizando sus entidades en HTML (como Á = &amp;Aacute;), o el mensaje se
+                                codifique en Base 64 (aunque esto último sería un <abbr title="PAIN IN THE ASS">PITA</abbr>
+                                durante testing o desarrollo).
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><pre>WWW-Authenticate</pre></td>
+                        <td>
+                            <p>
+                                Ésta cabecera se envía cuando el servidor responde con <code>HTTP 401 Unauthorized</code>,
+                                que normalmente significa que tu Token ya no es válido o tu cabecera OAuth es inválida.
+                            </p>
+                            <p>
+                                <strong>Siempre</strong> tendrá el valor:<br />
+                                <code>WWW-Authenticate: OAuth realm="api.kms.me"</code>
+                            </p>
+                            <p>
+                                Si tiene un valor diferente, <strong>repórtalo al 088</strong> y huye. Es un hijack.
+                            </p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>

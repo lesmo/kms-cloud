@@ -60,8 +60,8 @@
 	vertical-align: top;
 }
 
-.help-page-table pre,
-.help-page-table p {
+.help-page-table:not(.full-body) pre,
+.help-page-table:not(.full-body) p {
 	margin: 0px;
 	padding: 0px;
 	font-family: inherit;
@@ -214,4 +214,8 @@ header nav ul li:hover, header nav ul li.active {
 }
 header nav ul li:hover a, header nav ul li.active a {
 	color: #fff !important;
+}
+code {
+	padding: 2px;
+	background: #eee;
 }

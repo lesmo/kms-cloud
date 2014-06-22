@@ -20,9 +20,9 @@ namespace Kms.Cloud.Api.Areas.HelpPage.Controllers {
 			private set;
 		}
 
-		public ActionResult Index(string view) {
-			ViewBag.Page = view.ToUpper();
-			return View(view);
+		public ActionResult KmsHttpHeaders() {
+			ViewBag.Page = "HTTPHEADERS";
+			return View();
 		}
 
 		public ActionResult OAuth() {
