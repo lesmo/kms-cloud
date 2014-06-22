@@ -640,6 +640,11 @@
                 Obtener y asociar Dispositivos KMS a la Cuenta del Usuario.
             </summary>
         </member>
+        <member name="M:Kms.Cloud.Api.Controllers.DevicesController.ListDevices">
+            <summary>
+                Obtener los dispositivos asociados con la Cuenta del Usuario.
+            </summary>
+        </member>
         <member name="M:Kms.Cloud.Api.Controllers.DevicesController.LinkDevice(System.String)">
             <summary>
                 Asociar un Número de Serie de Dispositivo KMS con el Usuario actual. Sólo es posible
@@ -648,9 +653,9 @@
             </summary>
             <param name="serialString">Número de Serie de de Dispositivo KMS</param>
             <remarks>
-                Los Numeros de Serie pueden contener números, sólo las letras ACEFHJKLMNPRTVWXZ, son
+                Los Numeros de Serie pueden contener los carácteres 0123456789ACEFHJKLMNPRTVWXZ, son
                 indistintos de mayúsculas y minúsculas y tienen un largo de 7 carácteres, aunque en el 
-                futuro podrían tener un largo mayor.
+                futuro podrían tener un largo mayor. Usa esta información a tu favor, joven Padawan.
             </remarks>
         </member>
         <member name="T:Kms.Cloud.Api.Controllers.DynamicResourcesController">
