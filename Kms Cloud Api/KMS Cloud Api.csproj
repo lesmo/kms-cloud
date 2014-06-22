@@ -260,6 +260,7 @@
     <Compile Include="Models\RequestModels\OAuthAccessTokenPost.cs" />
     <Compile Include="Models\ResponseModels\DataDistanceResponse.cs" />
     <Compile Include="Models\ResponseModels\DataTotalResponse.cs" />
+    <Compile Include="Models\ResponseModels\DeviceResponse.cs" />
     <Compile Include="Models\ResponseModels\FriendResponse.cs" />
     <Compile Include="Models\ResponseModels\FriendScoreResponse.cs" />
     <Compile Include="Models\ResponseModels\GiftClaimResponse.cs" />

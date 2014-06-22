@@ -1,5 +1,6 @@
 ﻿using Kilometros_WebGlobalization.API;
 using Kms.Cloud.Api.Exceptions;
+using Kms.Cloud.Api.Models.ResponseModels;
 using Kms.Cloud.Database.Helpers;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,24 @@ namespace Kms.Cloud.Api.Controllers {
     /// </summary>
     public class DevicesController : BaseController {
         private const String serialStringCharMap = "0123456789ACEFHJKLMNPRTVWXZ";
+        private BaseNumericEncoder SerialEncoder = new BaseNumericEncoder(serialStringCharMap);
+
+        /// <summary>
+        ///     Obtener los dispositivos asociados con la Cuenta del Usuario.
+        /// </summary>
+        [HttpGet]
+        [Route("my/devices")]
+        public IEnumerable<DeviceResponse> ListDevices() {
+            return Database.DeviceStore.GetAll(
+                filter: f =>
+                    f.User.Guid == CurrentUser.Guid,
+                orderBy: o =>
+                    o.OrderBy(b => b.LinkDate)
+            ).Select(s => new DeviceResponse {
+                LinkDate = s.LinkDate.Value,
+                SerialString = SerialEncoder.Encode(s.SerialNumber)
+            });
+        }
 
         /// <summary>
         ///     Asociar un Número de Serie de Dispositivo KMS con el Usuario actual. Sólo es posible
@@ -22,18 +41,17 @@ namespace Kms.Cloud.Api.Controllers {
         /// </summary>
         /// <param name="serialString">Número de Serie de de Dispositivo KMS</param>
         /// <remarks>
-        ///     Los Numeros de Serie pueden contener números, sólo las letras ACEFHJKLMNPRTVWXZ, son
+        ///     Los Numeros de Serie pueden contener los carácteres 0123456789ACEFHJKLMNPRTVWXZ, son
         ///     indistintos de mayúsculas y minúsculas y tienen un largo de 7 carácteres, aunque en el 
-        ///     futuro podrían tener un largo mayor.
+        ///     futuro podrían tener un largo mayor. Usa esta información a tu favor, joven Padawan.
         /// </remarks>
         [HttpPost]
         [Route("my/devices/link/{serialString}")]
         public IHttpActionResult LinkDevice(String serialString) {
             Int64 serialNumber;
-            var serialEncoder = new BaseNumericEncoder(serialStringCharMap);
             
             try {
-                serialNumber = serialEncoder.Decode(serialString);
+                serialNumber = SerialEncoder.Decode(serialString);
             } catch {
                 throw new HttpBadRequestException("A01" + ControllerStrings.WarningA01_DeviceNotFound);
             }
@@ -50,6 +68,7 @@ namespace Kms.Cloud.Api.Controllers {
                 throw new HttpConflictException("A02" + ControllerStrings.WarningA02_DeviceAlreadyLinked);
 
             device.User = CurrentUser;
+            device.LinkDate = DateTime.UtcNow;
 
             if ( !String.IsNullOrEmpty(device.RegionCode) )
                 CurrentUser.RegionCode = device.RegionCode;
