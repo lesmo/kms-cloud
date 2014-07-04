@@ -99,7 +99,10 @@ namespace Kms.Cloud.Api.Controllers {
                         && f.Uid == dataPost.ID
                 );
 
-            if ( this.OAuth3rdCredential != null || this.OAuth3rdCredential.User.Guid != CurrentUser.Guid ) {
+            if ( this.OAuth3rdCredential == null )
+                return;
+
+            if ( this.OAuth3rdCredential.User != null && this.OAuth3rdCredential.User.Guid != CurrentUser.Guid ) {
                 throw new HttpConflictException(
                     "109 " + ControllerStrings.Warning109_SocialTokenAlreadyInUse
                 );
