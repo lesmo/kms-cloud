@@ -17,7 +17,7 @@ namespace Kms.Cloud.Database
         public long Id { get; set; }
         public System.DateTime CreationDate { get; set; }
         public long Key { get; set; }
-        public string Secret { get; set; }
+        public System.Guid Secret { get; set; }
         public string IPAddress { get; set; }
     
         public virtual Token Token { get; set; }
