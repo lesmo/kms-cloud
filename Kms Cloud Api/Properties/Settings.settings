@@ -14,5 +14,8 @@
     <Setting Name="TwitterClientConsumerSecret" Type="System.String" Scope="Application">
       <Value Profile="(Default)">085mxc60cNcrozw2Hh0P6UdIhqIvVE87qMJYXd2TIc</Value>
     </Setting>
+    <Setting Name="KmsWebAppUriMask" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://app.kms.me/Login/Auto?k={0}&amp;h={{0}}</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

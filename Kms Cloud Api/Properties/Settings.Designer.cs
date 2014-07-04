@@ -58,5 +58,14 @@ namespace Kms.Cloud.Api.Properties {
                 return ((string)(this["TwitterClientConsumerSecret"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://app.kms.me/Login/Auto?k={0}&h={{0}}")]
+        public string KmsWebAppUriMask {
+            get {
+                return ((string)(this["KmsWebAppUriMask"]));
+            }
+        }
     }
 }
