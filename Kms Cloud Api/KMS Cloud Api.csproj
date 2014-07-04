@@ -87,6 +87,7 @@
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.1.1\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -232,6 +233,7 @@
     <Compile Include="Controllers\RewardsController.cs" />
     <Compile Include="Controllers\OAuth3rdPartyLoginController.cs" />
     <Compile Include="Controllers\TipsController.cs" />
+    <Compile Include="Controllers\WebAutoLoginController.cs" />
     <Compile Include="Controllers\WorldController.cs" />
     <Compile Include="ExceptionFilters\HttpStatusExceptionFilter.cs" />
     <Compile Include="ExceptionFilters\DbValidationExceptionFilter.cs" />
@@ -283,6 +285,7 @@
     <Compile Include="MessageHandlers\RequestSecurityHandler.cs" />
     <Compile Include="MessageHandlers\ResponseEncoder.cs" />
     <Compile Include="Models\RequestModels\AccountPost.cs" />
+    <Compile Include="Models\ResponseModels\WebAppLinkResponse.cs" />
     <Compile Include="Models\ResponseModels\WorldCountryResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">

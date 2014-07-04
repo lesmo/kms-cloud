@@ -651,7 +651,10 @@
                 asociar un Dispositivo a un Usuario, intentar asociar un dispositivo que ya está
                 asociado con un Usuario causará el asesinato de un cachorrito.
             </summary>
-            <param name="serialString">Número de Serie de de Dispositivo KMS</param>
+            <param name="serialString">
+                Número de Serie de de Dispositivo KMS. Si tu API-Key está en modo DEBUG, puedes utilizar
+                "1234567" para generar automáticamente un número de serie nuevo y asociarlo al Usuario.
+            </param>
             <remarks>
                 Los Numeros de Serie pueden contener los carácteres 0123456789ACEFHJKLMNPRTVWXZ, son
                 indistintos de mayúsculas y minúsculas y tienen un largo de 7 carácteres, aunque en el 
@@ -948,6 +951,11 @@
             <param name="earnedRewardId">
                 ID del Tip del que se quiere obtener el detalle.
             </param>
+        </member>
+        <member name="M:Kms.Cloud.Api.Controllers.WebAutoLoginController.GetLink">
+            <summary>
+                Generar un nuevo Token de Inicio de Sesión Automático para el Dashboard Web.
+            </summary>
         </member>
         <member name="M:Kms.Cloud.Api.Controllers.WorldController.GetWorld">
             <summary>
@@ -1395,6 +1403,13 @@
                 Contraseña a utilizarse para iniciar sesión en KMS. Enviada en texto plano. ¡No te preocupes!
                 La conexión con KMS es através de SSL, así que todo está bien. Cambiar la contraseña invalidará
                 TODOS los Tokens de Sesión del Usuario actual.
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:Kms.Cloud.Api.Models.ResponseModels.WebAppLinkResponse.AutoLoginSecret" -->
+        <member name="P:Kms.Cloud.Api.Models.ResponseModels.WebAppLinkResponse.UriMask">
+            <summary>
+                Máscara de la URI para auto-login en la Web App. Sustituye {0} en ésta cadena
+                por el HMAC-SHA1 del AutoLoginToken.
             </summary>
         </member>
         <member name="M:Kms.Cloud.Api.Security.HttpOAuthAuthorization.#ctor(Kms.Cloud.Api.Security.HttpOAuthAuthorization,Kms.Cloud.Database.Abstraction.WorkUnit)">
