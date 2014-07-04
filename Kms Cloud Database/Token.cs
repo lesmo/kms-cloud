@@ -14,6 +14,11 @@ namespace Kms.Cloud.Database
     
     public partial class Token
     {
+        public Token()
+        {
+            this.WebAutoLoginToken = new HashSet<WebAutoLoginToken>();
+        }
+    
         public System.DateTime CreationDate { get; set; }
         public Nullable<System.DateTime> ExpirationDate { get; set; }
         public System.Guid Guid { get; set; }
@@ -22,8 +27,10 @@ namespace Kms.Cloud.Database
         public byte LoginAttempts { get; set; }
         public string CallbackUri { get; set; }
         public Nullable<System.Guid> VerificationCode { get; set; }
+        public string IPAddress { get; set; }
     
         public virtual ApiKey ApiKey { get; set; }
         public virtual User User { get; set; }
+        public virtual ICollection<WebAutoLoginToken> WebAutoLoginToken { get; set; }
     }
 }

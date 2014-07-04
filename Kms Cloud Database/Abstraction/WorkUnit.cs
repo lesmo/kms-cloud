@@ -471,5 +471,17 @@ namespace Kms.Cloud.Database.Abstraction {
         }
         private GenericRepository<Device> _device = null;
 
+        /// <summary>
+        ///     Almacén de Tokens de Auto-Login
+        /// </summary>
+        public GenericRepository<WebAutoLoginToken> WebAutoLoginTokenStore {
+            get {
+                if ( this._webAutoLoginRepository == null )
+                    this._webAutoLoginRepository = new GenericRepository<WebAutoLoginToken>(this._context);
+
+                return _webAutoLoginRepository;
+            }
+        }
+        private GenericRepository<WebAutoLoginToken> _webAutoLoginRepository = null;
     }
 }

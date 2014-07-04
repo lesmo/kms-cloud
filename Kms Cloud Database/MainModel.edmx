@@ -33,6 +33,7 @@
     <EntitySet Name="RegionParticularSet" EntityType="MainModel.Store.RegionParticularSet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="NotificationSet" EntityType="MainModel.Store.NotificationSet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="DeviceSet" EntityType="MainModel.Store.DeviceSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="WebAutoLoginTokenSet" EntityType="MainModel.Store.WebAutoLoginTokenSet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="IPictureSet_TipCategory" EntityType="MainModel.Store.IPictureSet_TipCategory" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="IGlobalizationSet_TipCategoryGlobalization" EntityType="MainModel.Store.IGlobalizationSet_TipCategoryGlobalization" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="IGlobalizationSet_TipGlobalization" EntityType="MainModel.Store.IGlobalizationSet_TipGlobalization" store:Type="Tables" Schema="dbo" />
@@ -196,6 +197,10 @@
     <AssociationSet Name="DeviceUser" Association="MainModel.Store.DeviceUser">
       <End Role="Device" EntitySet="DeviceSet" />
       <End Role="User" EntitySet="UserSet" />
+    </AssociationSet>
+    <AssociationSet Name="TokenWebAutoLoginToken" Association="MainModel.Store.TokenWebAutoLoginToken">
+      <End Role="Token" EntitySet="TokenSet" />
+      <End Role="WebAutoLoginToken" EntitySet="WebAutoLoginTokenSet" />
     </AssociationSet>
     <AssociationSet Name="FK_TipCategory_inherits_IPicture" Association="MainModel.Store.FK_TipCategory_inherits_IPicture">
       <End Role="IPicture" EntitySet="IPictureSet" />
@@ -537,7 +542,17 @@
     <Property Name="CreationDate" Type="datetime" Nullable="false" />
     <Property Name="LinkDate" Type="datetime" Nullable="true" />
     <Property Name="RegionCode" Type="varchar" Nullable="true" MaxLength="32" />
-    <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="User_Guid" Type="uniqueidentifier" Nullable="true" />
+  </EntityType>
+  <EntityType Name="WebAutoLoginTokenSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CreationDate" Type="datetime" Nullable="false" />
+    <Property Name="UnsignedToken" Type="nchar" Nullable="false" MaxLength="40" />
+    <Property Name="Key" Type="bigint" Nullable="false" />
+    <Property Name="Token_Guid" Type="uniqueidentifier" Nullable="false" />
   </EntityType>
   <EntityType Name="IPictureSet_TipCategory">
     <Key>
@@ -1090,13 +1105,25 @@
   </Association>
   <Association Name="DeviceUser">
     <End Role="Device" Type="MainModel.Store.DeviceSet" Multiplicity="*" />
-    <End Role="User" Type="MainModel.Store.UserSet" Multiplicity="1" />
+    <End Role="User" Type="MainModel.Store.UserSet" Multiplicity="0..1" />
     <ReferentialConstraint>
       <Principal Role="User">
         <PropertyRef Name="Guid" />
       </Principal>
       <Dependent Role="Device">
         <PropertyRef Name="User_Guid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="TokenWebAutoLoginToken">
+    <End Role="Token" Type="MainModel.Store.TokenSet" Multiplicity="1" />
+    <End Role="WebAutoLoginToken" Type="MainModel.Store.WebAutoLoginTokenSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Token">
+        <PropertyRef Name="Guid" />
+      </Principal>
+      <Dependent Role="WebAutoLoginToken">
+        <PropertyRef Name="Token_Guid" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -1458,6 +1485,11 @@
             <End Role="Device" EntitySet="DeviceSet" />
             <End Role="User" EntitySet="UserSet" />
           </AssociationSet>
+          <EntitySet Name="WebAutoLoginTokenSet" EntityType="MainModel.WebAutoLoginToken" />
+          <AssociationSet Name="TokenWebAutoLoginToken" Association="MainModel.TokenWebAutoLoginToken">
+            <End Role="Token" EntitySet="TokenSet" />
+            <End Role="WebAutoLoginToken" EntitySet="WebAutoLoginTokenSet" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="User">
           <Documentation>
@@ -1585,6 +1617,8 @@
           <Property Name="LoginAttempts" Type="Byte" Nullable="false" />
           <Property Name="CallbackUri" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="true" />
           <Property Name="VerificationCode" Type="Guid" annotation:StoreGeneratedPattern="None" Nullable="true" />
+          <NavigationProperty Name="WebAutoLoginToken" Relationship="MainModel.TokenWebAutoLoginToken" FromRole="Token" ToRole="WebAutoLoginToken" />
+          <Property Name="IPAddress" Type="String" Nullable="false" MaxLength="40" Unicode="false" FixedLength="false" />
         </EntityType>
         <EntityType Name="ApiKey">
           <Documentation>
@@ -2354,7 +2388,22 @@
         </EntityType>
         <Association Name="DeviceUser">
           <End Type="MainModel.Device" Role="Device" Multiplicity="*" />
-          <End Type="MainModel.User" Role="User" Multiplicity="1" />
+          <End Type="MainModel.User" Role="User" Multiplicity="0..1" />
+        </Association>
+        <EntityType Name="WebAutoLoginToken">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Token" Relationship="MainModel.TokenWebAutoLoginToken" FromRole="WebAutoLoginToken" ToRole="Token" />
+          <Property Name="CreationDate" Type="DateTime" Nullable="false" />
+          <Property Name="Key" Type="Int64" Nullable="false" />
+          <Property Name="Secret" Type="String" Nullable="false" FixedLength="true" MaxLength="40" />
+          <Property Name="IPAddress" Type="String" Nullable="false" MaxLength="40" Unicode="false" FixedLength="false" />
+        </EntityType>
+        <Association Name="TokenWebAutoLoginToken">
+          <End Type="MainModel.Token" Role="Token" Multiplicity="1" />
+          <End Type="MainModel.WebAutoLoginToken" Role="WebAutoLoginToken" Multiplicity="*" />
         </Association>
       </Schema>
     </edmx:ConceptualModels>
@@ -2730,6 +2779,16 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="WebAutoLoginTokenSet">
+      <EntityTypeMapping TypeName="IsTypeOf(MainModel.WebAutoLoginToken)">
+        <MappingFragment StoreEntitySet="WebAutoLoginTokenSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+          <ScalarProperty Name="Secret" ColumnName="UnsignedToken" />
+          <ScalarProperty Name="Key" ColumnName="Key" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <AssociationSetMapping Name="ApiKeyToken" TypeName="MainModel.ApiKeyToken" StoreEntitySet="TokenSet">
       <EndProperty Name="ApiKey">
         <ScalarProperty Name="Guid" ColumnName="ApiKey_Guid" />
@@ -3028,6 +3087,15 @@
         <ScalarProperty Name="Guid" ColumnName="User_Guid" />
       </EndProperty>
       <EndProperty Name="Device">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+      <Condition ColumnName="User_Guid" IsNull="false" />
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="TokenWebAutoLoginToken" TypeName="MainModel.TokenWebAutoLoginToken" StoreEntitySet="WebAutoLoginTokenSet">
+      <EndProperty Name="Token">
+        <ScalarProperty Name="Guid" ColumnName="Token_Guid" />
+      </EndProperty>
+      <EndProperty Name="WebAutoLoginToken">
         <ScalarProperty Name="Id" ColumnName="Id" />
       </EndProperty>
     </AssociationSetMapping>
