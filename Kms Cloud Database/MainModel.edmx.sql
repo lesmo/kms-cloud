@@ -2,13 +2,13 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 06/24/2014 16:31:58
+-- Date Created: 07/03/2014 23:25:47
 -- Generated from EDMX file: E:\KMS Invent\KMS Cloud\Kms Cloud Database\MainModel.edmx
 -- --------------------------------------------------
 
 SET QUOTED_IDENTIFIER OFF;
 GO
-USE [Kms.Cloud.Database];
+USE [kms-db-dev];
 GO
 IF SCHEMA_ID(N'dbo') IS NULL EXECUTE(N'CREATE SCHEMA [dbo]');
 GO
@@ -323,6 +323,7 @@ CREATE TABLE [dbo].[TokenSet] (
     [LoginAttempts] tinyint  NOT NULL,
     [CallbackUri] varchar(255)  NULL,
     [VerificationCode] uniqueidentifier  NULL,
+    [IPAddress] varchar(40)  NULL,
     [ApiKey_Guid] uniqueidentifier  NOT NULL,
     [User_Guid] uniqueidentifier  NULL
 );
@@ -596,8 +597,9 @@ GO
 CREATE TABLE [dbo].[WebAutoLoginTokenSet] (
     [Id] bigint IDENTITY(1,1) NOT NULL,
     [CreationDate] datetime  NOT NULL,
-    [UnsignedToken] nchar(40)  NOT NULL,
     [Key] bigint  NOT NULL,
+    [Secret] uniqueidentifier  NOT NULL,
+    [IPAddress] varchar(40)  NULL,
     [Token_Guid] uniqueidentifier  NOT NULL
 );
 GO
