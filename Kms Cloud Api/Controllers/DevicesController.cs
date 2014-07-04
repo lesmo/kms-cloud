@@ -4,6 +4,7 @@ using Kms.Cloud.Api.Models.ResponseModels;
 using Kms.Cloud.Database.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -39,7 +40,10 @@ namespace Kms.Cloud.Api.Controllers {
         ///     asociar un Dispositivo a un Usuario, intentar asociar un dispositivo que ya está
         ///     asociado con un Usuario causará el asesinato de un cachorrito.
         /// </summary>
-        /// <param name="serialString">Número de Serie de de Dispositivo KMS</param>
+        /// <param name="serialString">
+        ///     Número de Serie de de Dispositivo KMS. Si tu API-Key está en modo DEBUG, puedes utilizar
+        ///     "1234567" para generar automáticamente un número de serie nuevo y asociarlo al Usuario.
+        /// </param>
         /// <remarks>
         ///     Los Numeros de Serie pueden contener los carácteres 0123456789ACEFHJKLMNPRTVWXZ, son
         ///     indistintos de mayúsculas y minúsculas y tienen un largo de 7 carácteres, aunque en el 
@@ -49,11 +53,21 @@ namespace Kms.Cloud.Api.Controllers {
         [Route("my/devices/link/{serialString}")]
         public IHttpActionResult LinkDevice(String serialString) {
             Int64 serialNumber;
-            
-            try {
-                serialNumber = SerialEncoder.Decode(serialString);
-            } catch {
-                throw new HttpBadRequestException("A01" + ControllerStrings.WarningA01_DeviceNotFound);
+
+            if ( OAuth.ConsumerKey.DebugEnabled && serialString.ToUpper(CultureInfo.CurrentCulture) == "1234567") {
+                serialNumber = new Random().Next(99999, 999999999);
+
+                Database.DeviceStore.Add(new Database.Device {
+                    SerialNumber = serialNumber
+                });
+
+                Database.SaveChanges();
+            } else {
+                try {
+                    serialNumber = SerialEncoder.Decode(serialString);
+                } catch {
+                    throw new HttpBadRequestException("A01" + ControllerStrings.WarningA01_DeviceNotFound);
+                }
             }
 
             var device = Database.DeviceStore.GetFirst(
