@@ -275,6 +275,7 @@
     <Property Name="LoginAttempts" Type="tinyint" Nullable="false" />
     <Property Name="CallbackUri" Type="varchar" Nullable="true" MaxLength="255" />
     <Property Name="VerificationCode" Type="uniqueidentifier" Nullable="true" />
+    <Property Name="IPAddress" Type="varchar" Nullable="true" MaxLength="40" />
     <Property Name="ApiKey_Guid" Type="uniqueidentifier" Nullable="false" />
     <Property Name="User_Guid" Type="uniqueidentifier" Nullable="true" />
   </EntityType>
@@ -550,8 +551,9 @@
     </Key>
     <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="CreationDate" Type="datetime" Nullable="false" />
-    <Property Name="UnsignedToken" Type="nchar" Nullable="false" MaxLength="40" />
     <Property Name="Key" Type="bigint" Nullable="false" />
+    <Property Name="Secret" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="IPAddress" Type="varchar" Nullable="true" MaxLength="40" />
     <Property Name="Token_Guid" Type="uniqueidentifier" Nullable="false" />
   </EntityType>
   <EntityType Name="IPictureSet_TipCategory">
@@ -1618,7 +1620,7 @@
           <Property Name="CallbackUri" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="true" />
           <Property Name="VerificationCode" Type="Guid" annotation:StoreGeneratedPattern="None" Nullable="true" />
           <NavigationProperty Name="WebAutoLoginToken" Relationship="MainModel.TokenWebAutoLoginToken" FromRole="Token" ToRole="WebAutoLoginToken" />
-          <Property Name="IPAddress" Type="String" Nullable="false" MaxLength="40" Unicode="false" FixedLength="false" />
+          <Property Name="IPAddress" Type="String" MaxLength="40" Unicode="false" FixedLength="false" Nullable="true" />
         </EntityType>
         <EntityType Name="ApiKey">
           <Documentation>
@@ -2398,8 +2400,8 @@
           <NavigationProperty Name="Token" Relationship="MainModel.TokenWebAutoLoginToken" FromRole="WebAutoLoginToken" ToRole="Token" />
           <Property Name="CreationDate" Type="DateTime" Nullable="false" />
           <Property Name="Key" Type="Int64" Nullable="false" />
-          <Property Name="Secret" Type="String" Nullable="false" FixedLength="true" MaxLength="40" />
-          <Property Name="IPAddress" Type="String" Nullable="false" MaxLength="40" Unicode="false" FixedLength="false" />
+          <Property Name="Secret" Type="Guid" Nullable="false" />
+          <Property Name="IPAddress" Type="String" MaxLength="40" Unicode="false" FixedLength="false" Nullable="true" />
         </EntityType>
         <Association Name="TokenWebAutoLoginToken">
           <End Type="MainModel.Token" Role="Token" Multiplicity="1" />
@@ -2439,6 +2441,7 @@
           <ScalarProperty Name="LoginAttempts" ColumnName="LoginAttempts" />
           <ScalarProperty Name="CallbackUri" ColumnName="CallbackUri" />
           <ScalarProperty Name="VerificationCode" ColumnName="VerificationCode" />
+          <ScalarProperty Name="IPAddress" ColumnName="IPAddress" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -2784,8 +2787,9 @@
         <MappingFragment StoreEntitySet="WebAutoLoginTokenSet">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
-          <ScalarProperty Name="Secret" ColumnName="UnsignedToken" />
           <ScalarProperty Name="Key" ColumnName="Key" />
+          <ScalarProperty Name="Secret" ColumnName="Secret" />
+          <ScalarProperty Name="IPAddress" ColumnName="IPAddress" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
