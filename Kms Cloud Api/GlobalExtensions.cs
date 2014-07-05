@@ -20,10 +20,10 @@ namespace Kms.Cloud.Api {
         public static String GetClientIpAddress(this HttpRequestMessage request) {
             // Source: http://forums.asp.net/post/4855159.aspx
             if ( request.Properties.ContainsKey("MS_HttpContext") ) {
-                return ((HttpContext)request.Properties["MS_HttpContext"]).Request.UserHostAddress;
+                var prop = ((HttpContextWrapper)request.Properties["MS_HttpContext"]).Request;
+                return prop.UserHostAddress;
             } else if ( request.Properties.ContainsKey(RemoteEndpointMessageProperty.Name) ) {
-                RemoteEndpointMessageProperty prop;
-                prop = (RemoteEndpointMessageProperty)request.Properties[RemoteEndpointMessageProperty.Name];
+                var prop = (RemoteEndpointMessageProperty)request.Properties[RemoteEndpointMessageProperty.Name];
                 return prop.Address;
             } else {
                 return String.Empty;
