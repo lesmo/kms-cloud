@@ -41,7 +41,10 @@ namespace Kms.Cloud.WebApp.Controllers {
 			// Determinar si aún es vigente el Token y la IP de origen coincide
 			if (
 				autologinToken.CreationDate < DateTime.UtcNow.AddMinutes(-2)
-				|| autologinToken.IPAddress != Request.UserHostAddress
+				|| (
+					autologinToken.IPAddress != null
+					&& autologinToken.IPAddress != Request.UserHostAddress
+				)
 			) {
 				Database.WebAutoLoginTokenStore.Delete(autologinToken.Id);
 				Database.SaveChanges();
@@ -50,8 +53,8 @@ namespace Kms.Cloud.WebApp.Controllers {
 			}
 
 			// Obtener Consumer Secret y Token Secret
-			var consumerSecret = autologinToken.Token.Secret.ToString("N");
-			var tokenSecret    = autologinToken.Token.ApiKey.Secret.ToString("N");
+			var consumerSecret = autologinToken.Token.ApiKey.Secret.ToString("N");
+			var tokenSecret    = autologinToken.Token.Secret.ToString("N");
 
 			// Calcular hash HMAC-SHA1 de Token
 			var hmacSha1Key = consumerSecret + "&" + tokenSecret;
