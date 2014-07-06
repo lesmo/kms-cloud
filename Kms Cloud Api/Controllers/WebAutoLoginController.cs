@@ -23,6 +23,7 @@ namespace Kms.Cloud.Api.Controllers {
                 Token = OAuth.Token,
                 Key = (Int64)(new Random().NextDouble() * 10000000000000000000),
                 Secret = Guid.NewGuid(),
+                IPAddress = Request.GetClientIpAddress()
             };
 
             Database.WebAutoLoginTokenStore.Add(autoLoginToken);
