@@ -61,7 +61,7 @@ namespace Kms.Cloud.Database.Abstraction.Functional {
 
             // > Preparar Region Code
             regionCode
-                = regionCode.ToLowerInvariant().Trim();
+                = regionCode.ToUpperInvariant().Trim();
 
             bool validRegionCode
                 =  new Regex(
@@ -75,29 +75,32 @@ namespace Kms.Cloud.Database.Abstraction.Functional {
                 );
 
             string[] regionCodeParts
-                = new string[3] { null, null, null};
+                = new string[4] { null, null, null, null };
             regionCode.ToLowerInvariant().Split(
-                new char[] { '-' }, 3
+                new char[] { '-' }, 4
             ).CopyTo(regionCodeParts, 0);
 
             // > Determinar la condicional a utilizar para obtener sólo resultados
             //   que aplican a la Región especificada
             Expression<Func<RewardRegionalization, bool>> regionFilter;
-            string regionCodePart1, regionCodePart2, regionCodePart3;
+            string regionCodePart1, regionCodePart2, regionCodePart3, regionCodePart4;
 
+            // > Esta re-asignación es necesaria, pues de lo contrario el LINQ no compila
             regionCodePart1
                 = regionCodeParts[0];
             regionCodePart2
                 = regionCodeParts[1];
             regionCodePart3
                 = regionCodeParts[2];
+            regionCodePart4
+                = regionCodeParts[3];
 
-            if ( regionCodePart2 == null ) { // - Si se tiene {país}
+            if ( regionCodePart2 == null ) { // - Si sólo se tiene {país}
                 regionFilter = f => !(
                     (
                         f.RegionCode == regionCodePart1
                         || f.RegionCode == regionCodePart1 + "-*"
-                    ) && f.Exclude == true
+                    ) || f.Exclude == false
                 );
             } else if ( regionCodePart3 == null ) { // - Si se tiene {país-subdivisión}
                 regionFilter = f => !(
@@ -105,17 +108,29 @@ namespace Kms.Cloud.Database.Abstraction.Functional {
                         f.RegionCode == regionCodePart1
                         || f.RegionCode == regionCodePart1 + "-*"
                         || f.RegionCode == regionCodePart1 + "-" + regionCodePart2
-                    ) && f.Exclude == true
+                    ) || f.Exclude == false
                 );
-            } else { // - Si se tiene {país-subdivisión-particular}
+            } else if ( regionCodePart4 == null ) { // - Si se tiene {pais-subdivision-particular}
                 regionFilter = f => !(
                     (
                         f.RegionCode == regionCodePart1
                         || f.RegionCode == regionCodePart1 + "-*"
                         || f.RegionCode == regionCodePart1 + "-" + regionCodePart2
                         || f.RegionCode == regionCodePart1 + "-" + regionCodePart2 + "-*"
-                        || f.RegionCode == regionCodePart1 + "-" + regionCodePart2 + "-" + regionCodePart2
-                    ) && f.Exclude == true
+                        || f.RegionCode == regionCodePart1 + "-" + regionCodePart2 + "-" + regionCodePart3
+                    ) || f.Exclude == false
+                );
+            } else { // - Si se tiene {país-subdivisión-particular-particularisimo}
+                regionFilter = f => !(
+                    (
+                        f.RegionCode == regionCodePart1
+                        || f.RegionCode == regionCodePart1 + "-*"
+                        || f.RegionCode == regionCodePart1 + "-" + regionCodePart2
+                        || f.RegionCode == regionCodePart1 + "-" + regionCodePart2 + "-*"
+                        || f.RegionCode == regionCodePart1 + "-" + regionCodePart2 + "-" + regionCodePart3
+                        || f.RegionCode == regionCodePart1 + "-" + regionCodePart2 + "-" + regionCodePart3 + "-*"
+                        || f.RegionCode == regionCodePart1 + "-" + regionCodePart2 + "-" + regionCodePart3 + "-" + regionCodePart4
+                    ) || f.Exclude == false
                 );
             }
 
@@ -124,7 +139,7 @@ namespace Kms.Cloud.Database.Abstraction.Functional {
                 (
                     filter ?? PredicateBuilder.True<Reward>()
                 ).And(f =>
-                    f.RewardRegionalization.Any(regionFilter.Compile())
+                    f.RewardRegionalization.Count < 1 || f.RewardRegionalization.Any(regionFilter.Compile())
                 ).Expand(),
                 orderBy,
                 extra,
