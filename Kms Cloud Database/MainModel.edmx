@@ -1891,6 +1891,8 @@
           <NavigationProperty Name="RewardRegionalization" Relationship="MainModel.RewardRewardRegionalization" FromRole="Reward" ToRole="RewardRegionalization" />
           <NavigationProperty Name="UserEarnedReward" Relationship="MainModel.UserEarnedRewardReward" FromRole="Reward" ToRole="UserEarnedReward" />
           <NavigationProperty Name="RewardSponsor" Relationship="MainModel.FK_RewardSponsorReward" FromRole="Reward" ToRole="RewardSponsor" />
+          <Property Name="ContinuousSyncDaysTrigger" Type="Int32" Nullable="true" />
+          <Property Name="WeeklyActivityDeltaTrigger" Type="Int16" Nullable="true" />
           </EntityType>
         <EntityType Name="RewardGift">
           <Key>

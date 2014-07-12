@@ -23,6 +23,8 @@ namespace Kms.Cloud.Database
         }
     
         public long DistanceTrigger { get; set; }
+        public Nullable<int> ContinuousSyncDaysTrigger { get; set; }
+        public Nullable<short> WeeklyActivityDeltaTrigger { get; set; }
     
         public virtual ICollection<RewardGift> RewardGift { get; set; }
         public virtual ICollection<RewardGlobalization> RewardGlobalization { get; set; }
