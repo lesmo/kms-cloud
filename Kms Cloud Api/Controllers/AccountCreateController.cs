@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Globalization;
 using System.Diagnostics.CodeAnalysis;
+using Kms.Cloud.Api.MagicTriggers;
 
 namespace Kms.Cloud.Api.Controllers {
     /// <summary>
@@ -116,8 +117,9 @@ namespace Kms.Cloud.Api.Controllers {
             Database.UserStore.Add(user);
             Database.UserBodyStore.Add(userBody);
             Database.TokenStore.Add(token);
-
             Database.TokenStore.Delete(OAuth.Token);
+
+            new RewardTipTrigger(user, Database);
 
             Database.SaveChanges();
 

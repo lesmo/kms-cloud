@@ -7,9 +7,8 @@ using System.Web;
 
 namespace Kms.Cloud.Api.MagicTriggers {
     [SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly")]
-    public sealed class AsyncRewardTipTrigger : IDisposable {
-        private Kms.Cloud.Database.Abstraction.WorkUnit Database
-            = new Kms.Cloud.Database.Abstraction.WorkUnit();
+    public sealed class RewardTipTrigger : IDisposable {
+        private Kms.Cloud.Database.Abstraction.WorkUnit Database;
         private User CurrentUser;
         private Int64 CurrentUserTotalDistance;
 
@@ -17,7 +16,10 @@ namespace Kms.Cloud.Api.MagicTriggers {
             Database.Dispose();
         }
 
-        public AsyncRewardTipTrigger(User currentUser) {
+        public RewardTipTrigger(User currentUser, Kms.Cloud.Database.Abstraction.WorkUnit database = null) {
+            // --- Establecer objeto de conexión a BD ---
+            Database = database ?? new Kms.Cloud.Database.Abstraction.WorkUnit();
+
             // --- Obtener objeto de Usuario ---
             CurrentUser = Database.UserStore[currentUser.Guid];
 
@@ -43,7 +45,7 @@ namespace Kms.Cloud.Api.MagicTriggers {
                     // + Obtener recomepnsas donde la Distancia de Debloqueo sea menor a la
                     //   Distancia Total Recorrida por el Usuario, y la recompensa no se haya
                     //   desbloqueado anteriormente por el Usuario.
-                    f.DistanceTrigger < CurrentUserTotalDistance
+                    f.DistanceTrigger <= CurrentUserTotalDistance
                     && ! f.UserEarnedReward.Any(r =>
                         r.User.Guid == CurrentUser.Guid
                     ),
@@ -67,7 +69,7 @@ namespace Kms.Cloud.Api.MagicTriggers {
         }
 
         private void TriggerTipsByDays() {
-            var userDaysRegistered = (DateTime.UtcNow - CurrentUser.CreationDate).Days;
+            var userDaysRegistered = (DateTime.UtcNow - CurrentUser.CreationDate).TotalDays;
 
             // > Obtener los Tips que ahora sean liberables por el Usuario
             var tips  = Database.TipStore.GetAll(

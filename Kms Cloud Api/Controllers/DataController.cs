@@ -350,7 +350,7 @@ namespace Kms.Cloud.Api.Controllers {
         private void MagicTriggers() {
             new Thread(
                 new ParameterizedThreadStart((object user) => {
-                    new AsyncRewardTipTrigger(user as User);
+                    new RewardTipTrigger(user as User);
                 })
             ).Start(CurrentUser);
         }

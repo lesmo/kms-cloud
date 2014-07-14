@@ -251,7 +251,7 @@
     </Compile>
     <Compile Include="GlobalExtensions.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="MagicTriggers\AsyncRewardTipTrigger.cs" />
+    <Compile Include="MagicTriggers\RewardTipTrigger.cs" />
     <Compile Include="MagicTriggers\RewardsPushTrigger.cs" />
     <Compile Include="MagicTriggers\TipsPushTrigger.cs" />
     <Compile Include="MessageHandlers\ResponseLastModifiedHandler.cs" />
