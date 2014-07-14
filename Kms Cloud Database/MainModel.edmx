@@ -407,15 +407,15 @@
     </Key>
     <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="IsoCode" Type="char" Nullable="false" MaxLength="2" />
-    <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="128" />
+    <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="1024" />
   </EntityType>
   <EntityType Name="RegionSubdivisionSet">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="IsoCode" Type="char" Nullable="false" MaxLength="3" />
-    <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="128" />
+    <Property Name="IsoCode" Type="varchar" Nullable="false" MaxLength="5" />
+    <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="1024" />
     <Property Name="UtcOffset" Type="smallint" Nullable="false" />
     <Property Name="Region_Id" Type="bigint" Nullable="false" />
   </EntityType>
@@ -520,7 +520,7 @@
     </Key>
     <Property Name="Id" Type="bigint" Nullable="false" />
     <Property Name="Code" Type="varchar" Nullable="false" MaxLength="24" />
-    <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="128" />
+    <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="512" />
     <Property Name="RegionSubdivision_Id" Type="bigint" Nullable="false" />
   </EntityType>
   <EntityType Name="NotificationSet">
@@ -593,6 +593,8 @@
       <PropertyRef Name="Guid" />
     </Key>
     <Property Name="DistanceTrigger" Type="bigint" Nullable="false" />
+    <Property Name="ContinuousSyncDaysTrigger" Type="int" Nullable="true" />
+    <Property Name="WeeklyActivityDeltaTrigger" Type="smallint" Nullable="true" />
     <Property Name="Guid" Type="uniqueidentifier" Nullable="false" />
     <Property Name="RewardSponsor_Guid" Type="uniqueidentifier" Nullable="true" />
   </EntityType>
@@ -2143,7 +2145,7 @@
           </Key>
           <Property Type="Int64" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="String" Name="IsoCode" Nullable="false" MaxLength="2" Unicode="false" FixedLength="true" />
-          <Property Type="String" Name="Name" Nullable="false" Unicode="true" MaxLength="128" FixedLength="false" />
+          <Property Type="String" Name="Name" Nullable="false" Unicode="true" MaxLength="1024" FixedLength="false" />
           <NavigationProperty Name="RegionSubdivision" Relationship="MainModel.RegionRegionSubdivision" FromRole="Region" ToRole="RegionSubdivision" />
         </EntityType>
         <EntityType Name="RegionSubdivision">
@@ -2151,8 +2153,8 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Type="Int64" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="String" Name="IsoCode" Nullable="false" MaxLength="3" Unicode="false" FixedLength="true" />
-          <Property Type="String" Name="Name" Nullable="false" Unicode="true" MaxLength="128" FixedLength="false" />
+          <Property Type="String" Name="IsoCode" Nullable="false" MaxLength="5" Unicode="false" FixedLength="false" />
+          <Property Type="String" Name="Name" Nullable="false" Unicode="true" MaxLength="1024" FixedLength="false" />
           <NavigationProperty Name="Region" Relationship="MainModel.RegionRegionSubdivision" FromRole="RegionSubdivision" ToRole="Region" />
           <Property Name="UtcOffset" Type="Int16" Nullable="false" />
           <NavigationProperty Name="RegionParticular" Relationship="MainModel.FK_RegionRegionSubdivisionRegionParticular" FromRole="RegionSubdivision" ToRole="RegionParticularSet" />
@@ -2333,7 +2335,7 @@
           </Key>
           <Property Name="Id" Type="Int64" Nullable="false" />
           <Property Name="Code" Type="String" Nullable="false" MaxLength="24" FixedLength="false" Unicode="false" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="512" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="RegionSubdivision" Relationship="MainModel.FK_RegionRegionSubdivisionRegionParticular" FromRole="RegionParticularSet" ToRole="RegionSubdivision" />
         </EntityType>
         <Association Name="FK_RegionRegionSubdivisionRegionParticular">
@@ -2659,6 +2661,8 @@
         <MappingFragment StoreEntitySet="IPictureSet_Reward">
           <ScalarProperty Name="Guid" ColumnName="Guid" />
           <ScalarProperty Name="DistanceTrigger" ColumnName="DistanceTrigger" />
+          <ScalarProperty Name="ContinuousSyncDaysTrigger" ColumnName="ContinuousSyncDaysTrigger" />
+          <ScalarProperty Name="WeeklyActivityDeltaTrigger" ColumnName="WeeklyActivityDeltaTrigger" />
         </MappingFragment>
       </EntityTypeMapping>
       <EntityTypeMapping TypeName="IsTypeOf(MainModel.UserRewardGiftClaimed)">

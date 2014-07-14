@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 07/03/2014 23:25:47
+-- Date Created: 07/12/2014 20:00:47
 -- Generated from EDMX file: E:\KMS Invent\KMS Cloud\Kms Cloud Database\MainModel.edmx
 -- --------------------------------------------------
 
@@ -455,15 +455,15 @@ GO
 CREATE TABLE [dbo].[RegionSet] (
     [Id] bigint IDENTITY(1,1) NOT NULL,
     [IsoCode] char(2)  NOT NULL,
-    [Name] nvarchar(128)  NOT NULL
+    [Name] nvarchar(1024)  NOT NULL
 );
 GO
 
 -- Creating table 'RegionSubdivisionSet'
 CREATE TABLE [dbo].[RegionSubdivisionSet] (
     [Id] bigint IDENTITY(1,1) NOT NULL,
-    [IsoCode] char(3)  NOT NULL,
-    [Name] nvarchar(128)  NOT NULL,
+    [IsoCode] varchar(5)  NOT NULL,
+    [Name] nvarchar(1024)  NOT NULL,
     [UtcOffset] smallint  NOT NULL,
     [Region_Id] bigint  NOT NULL
 );
@@ -566,7 +566,7 @@ GO
 CREATE TABLE [dbo].[RegionParticularSet] (
     [Id] bigint  NOT NULL,
     [Code] varchar(24)  NOT NULL,
-    [Name] nvarchar(128)  NOT NULL,
+    [Name] nvarchar(512)  NOT NULL,
     [RegionSubdivision_Id] bigint  NOT NULL
 );
 GO
@@ -639,6 +639,8 @@ GO
 -- Creating table 'IPictureSet_Reward'
 CREATE TABLE [dbo].[IPictureSet_Reward] (
     [DistanceTrigger] bigint  NOT NULL,
+    [ContinuousSyncDaysTrigger] int  NULL,
+    [WeeklyActivityDeltaTrigger] smallint  NULL,
     [Guid] uniqueidentifier  NOT NULL,
     [RewardSponsor_Guid] uniqueidentifier  NULL
 );
