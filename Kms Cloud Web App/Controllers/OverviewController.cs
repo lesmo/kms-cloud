@@ -32,7 +32,7 @@ namespace Kms.Cloud.WebApp.Controllers {
 				Text     = lastTip.GetGlobalization().Text,
 				TipId    = lastTip.Guid.ToBase64String()
 			};
-			   
+			
 			// > Obtener registro de actividades de las últimas 24 hrs
 			//   [MUST REVIEW + OPTIMIZE]
 			var lowerBound  = DateTime.UtcNow.AddHours(-24);
