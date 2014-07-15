@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Web;
+using Kms.Cloud.WebApp.Properties;
 
 namespace Kms.Cloud.WebApp.Controllers {
     public abstract partial class BaseController {
@@ -28,14 +29,23 @@ namespace Kms.Cloud.WebApp.Controllers {
                     return null;
 
                 // > Inicializar objeto
+                var userPicture = GetDynamicResourceUri(
+                    CurrentUser.UserPicture
+                    ?? Database.IPictureStore.Get(Settings.Default.KmsNoPictureFemale)
+                );
+
+                if ( CurrentUser.UserPicture == null && CurrentUser.UserBody.Sex == "m" )
+                    userPicture = GetDynamicResourceUri(
+                        Database.IPictureStore.Get(Settings.Default.KmsNoPicturMale)
+                    );
+
                 this._layoutValues = new LayoutValues() {
                     UserName
                         = CurrentUser.Name,
                     UserLastname
                         = CurrentUser.LastName,
                     UserPicture
-                        = new Uri(CurrentUser.PictureUri),
-
+                        = userPicture,
                     LocationString
                         = RegionInfo.CurrentRegion.NativeName,
 
