@@ -2417,7 +2417,9 @@
           <Property Name="IPAddress" Type="String" MaxLength="40" Unicode="false" FixedLength="false" Nullable="true" />
         </EntityType>
         <Association Name="TokenWebAutoLoginToken">
-          <End Type="MainModel.Token" Role="Token" Multiplicity="1" />
+          <End Type="MainModel.Token" Role="Token" Multiplicity="1" >
+            <OnDelete Action="Cascade" />
+          </End>
           <End Type="MainModel.WebAutoLoginToken" Role="WebAutoLoginToken" Multiplicity="*" />
         </Association>
       </Schema>
