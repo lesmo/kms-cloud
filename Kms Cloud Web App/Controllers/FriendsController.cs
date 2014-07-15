@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using System.Globalization;
 
 namespace Kms.Cloud.WebApp.Controllers {
+	[KmsAuthorize]
 	public class FriendsController : BaseController {
 		// GET: /Friends/
 		public ActionResult Index() {

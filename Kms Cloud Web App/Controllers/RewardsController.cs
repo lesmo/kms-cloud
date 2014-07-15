@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 
 namespace Kms.Cloud.WebApp.Controllers {
+	[KmsAuthorize]
 	public class RewardsController : BaseController {
 		private const int RewardsPerPage = 10;
 

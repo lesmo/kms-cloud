@@ -9,10 +9,10 @@ using System.Web;
 using System.Web.Mvc;
 
 namespace Kms.Cloud.WebApp.Controllers {
+	[KmsAuthorize]
 	public class OverviewController : BaseController {
 		//
 		// GET: /Overview/
-		[Authorize]
 		public ActionResult Index() {
 			var modelValues = new OverviewValues();
 			

@@ -11,7 +11,7 @@ namespace Kms.Cloud.WebApp.Controllers {
         [RequireHttps]
     #endif
     public abstract partial class BaseController {
-        protected User CurrentUser {
+        public User CurrentUser {
             get {
                 if ( this._currentUser != null )
                     return this._currentUser;
