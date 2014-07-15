@@ -21,21 +21,20 @@ namespace Kms.Cloud.Api.MagicTriggers {
             Database = database ?? new Kms.Cloud.Database.Abstraction.WorkUnit();
 
             // --- Obtener objeto de Usuario ---
-            CurrentUser = Database.UserStore[currentUser.Guid];
+            CurrentUser = database == null
+                ? currentUser
+                : Database.UserStore.Get(currentUser.Guid);
 
             if ( CurrentUser == null)
                 return;
 
             CurrentUserTotalDistance = CurrentUser.UserDataTotalDistanceSum.TotalDistance;
-
-            try {
-                TriggerRewardsByDistance();
-            } catch ( Exception ex ) {
-                //TODO: Hacer log de error
-            }
         }
 
-        private void TriggerRewardsByDistance() {
+        public void TriggerRewardsByDistance() {
+            if ( CurrentUser == null )
+                throw new InvalidOperationException("User is NULL, make sure you saved it first.");
+
             // > Obtener las Recompensas que ahora sean desbloqueables por el Usuario
             var rewards  = Database.RewardStore.GetAllForRegion(
                 regionCode:
@@ -58,8 +57,8 @@ namespace Kms.Cloud.Api.MagicTriggers {
             );
 
             // > Iterar cada Recompensa y desbloquearla
-            foreach ( Reward reward in rewards.Reverse() ) {
-                Database.UserEarnedRewardStore.AddAndSave(new UserEarnedReward {
+            foreach ( var reward in rewards.Reverse() ) {
+                Database.UserEarnedRewardStore.Add(new UserEarnedReward {
                     Reward = reward,
                     User   = CurrentUser
                 });
@@ -68,14 +67,17 @@ namespace Kms.Cloud.Api.MagicTriggers {
             }
         }
 
-        private void TriggerTipsByDays() {
+        public void TriggerTipsByDays() {
+            if ( CurrentUser == null )
+                throw new InvalidOperationException("User is NULL, make sure you saved it first.");
+
             var userDaysRegistered = (DateTime.UtcNow - CurrentUser.CreationDate).TotalDays;
 
             // > Obtener los Tips que ahora sean liberables por el Usuario
             var tips  = Database.TipStore.GetAll(
                 filter: f =>
                     // + Obtener Tips que tengan la condicional de Distancia
-                    f.DaysTrigger == userDaysRegistered
+                    f.DaysTrigger <= userDaysRegistered
                     // + ... que correspnda a su Nivel de Actividad
                     && f.MotionLevel.Any(t =>
                         t.Guid == CurrentUser.CurrentMotionLevel.Guid
@@ -89,8 +91,8 @@ namespace Kms.Cloud.Api.MagicTriggers {
             );
 
             // > Iterar cada Tip y liberarlo
-            foreach ( Tip tip in tips ) {
-                Database.UserTipHistoryStore.AddAndSave(new UserTipHistory {
+            foreach ( var tip in tips ) {
+                Database.UserTipHistoryStore.Add(new UserTipHistory {
                     Tip = tip,
                     User = CurrentUser
                 });

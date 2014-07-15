@@ -4,6 +4,7 @@ using Kms.Cloud.Api.Security;
 using Kilometros_WebGlobalization.API;
 using Kms.Cloud.Database;
 using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
@@ -114,12 +115,25 @@ namespace Kms.Cloud.Api.Controllers {
                 };
 
             // --- Integrar cambios a BD ---
+            MotionLevel motionLevel
+                = Database.MotionLevelStore.GetFirst(
+                    orderBy: o =>
+                        o.OrderBy(b => b.DistanceThresholdStart)
+                );
+
             Database.UserStore.Add(user);
             Database.UserBodyStore.Add(userBody);
+            Database.UserMotionLevelStore.Add(new UserMotionLevelHistory {
+                CreationDate = DateTime.UtcNow,
+                User = user,
+                MotionLevel = motionLevel
+            });
             Database.TokenStore.Add(token);
             Database.TokenStore.Delete(OAuth.Token);
 
-            new RewardTipTrigger(user, Database);
+            var triggers = new RewardTipTrigger(user, Database);
+            triggers.TriggerRewardsByDistance();
+            triggers.TriggerTipsByDays();
 
             Database.SaveChanges();
 
