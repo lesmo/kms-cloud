@@ -148,6 +148,9 @@
     <Compile Include="Controllers\DynamicResourcesControllers\AjaxController.Rewards.cs">
       <DependentUpon>AjaxController.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controllers\DynamicResourcesControllers\AjaxController.Search.cs">
+      <DependentUpon>AjaxController.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controllers\DynamicResourcesControllers\AjaxController.Tips.cs">
       <DependentUpon>AjaxController.cs</DependentUpon>
     </Compile>
@@ -156,6 +159,7 @@
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\OverviewController.cs" />
     <Compile Include="Controllers\RewardsController.cs" />
+    <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\TipsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -170,6 +174,7 @@
     <Compile Include="Models\Views\Rewards\RewardModel.cs" />
     <Compile Include="Models\Views\Rewards\RewardUnknownModel.cs" />
     <Compile Include="Models\Views\Rewards\RewardsValues.cs" />
+    <Compile Include="Models\Views\Search\SearchValues.cs" />
     <Compile Include="Models\Views\Tips\TipCategoryModel.cs" />
     <Compile Include="Models\Views\Tips\TipModel.cs" />
     <Compile Include="Models\Views\Tips\TipsValues.cs" />
@@ -1015,6 +1020,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Content Include="Views\Search\Index.cshtml" />
     <None Include="Web.RemoteDebug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
