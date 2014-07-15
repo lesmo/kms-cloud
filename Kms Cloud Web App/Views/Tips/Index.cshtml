@@ -79,7 +79,7 @@
                             page = 1
                         })">1</a>
                     </li>
-                    @for ( int i = 2; i <= Model.CurrentCategoryTipsTotalPages; i++ ) {
+                    @for ( int i = 2; i <= Model.CurrentCategoryTipsTotalPages && i <= 14; i++ ) {
                         <li>
                             <a href="@Url.Action("Index", new {
                                 cat = Model.CurrentCategory.CategoryId,
