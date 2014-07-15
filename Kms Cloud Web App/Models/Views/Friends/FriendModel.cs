@@ -1,5 +1,6 @@
 ﻿using Kms.Cloud.Database;
 using Kms.Cloud.Database.Helpers;
+using Kms.Cloud.WebApp.Controllers;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -8,7 +9,7 @@ using System.Web;
 
 namespace Kms.Cloud.WebApp.Models.Views {
     public class FriendModel {
-        public FriendModel(User user) {
+        public FriendModel(User user, BaseController controller) {
             this.UserId
                 = user.Guid.ToBase64String();
 
@@ -17,7 +18,7 @@ namespace Kms.Cloud.WebApp.Models.Views {
             this.LastName
                 = user.LastName;
             this.PictureUri
-                = new Uri(user.PictureUri);
+                = controller.GetDynamicResourceUri(user.UserPicture);
 
             this.TotalDistanceCentimeters
                 = RegionInfo.CurrentRegion.IsMetric

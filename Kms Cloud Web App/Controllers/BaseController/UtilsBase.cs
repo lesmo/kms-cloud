@@ -6,7 +6,7 @@ using System.Web;
 
 namespace Kms.Cloud.WebApp.Controllers {
     public abstract partial class BaseController {
-        protected Uri GetDynamicResourceUri(IPicture pictureObject) {
+        public Uri GetDynamicResourceUri(IPicture pictureObject) {
             return this.GetDynamicResourceUri(
                 "Images",
                 pictureObject.Guid.ToBase64String(),
@@ -30,7 +30,7 @@ namespace Kms.Cloud.WebApp.Controllers {
         /// <returns>
         ///     URI absoluta que apunta al recurso descrito por los parámetros.
         /// </returns>
-        protected Uri GetDynamicResourceUri(string method, string filename, string ext) {
+        public Uri GetDynamicResourceUri(string method, string filename, string ext) {
             var contentUrl = Url.Content(
                 string.Format(
                     "~/{0}/{1}.{2}",
