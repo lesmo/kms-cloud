@@ -65,7 +65,7 @@ namespace Kms.Cloud.Database.Abstraction.Functional {
 
             bool validRegionCode
                 =  new Regex(
-                    @"^([a-z]{2})(\-[a-z]{3}(\-[a-z]*)?)?$"
+                    @"^([a-z]{2})(\-[a-z]{3}(\-[a-z]*)?)?$", RegexOptions.IgnoreCase
                 ).IsMatch(regionCode);
 
             if ( ! validRegionCode )
