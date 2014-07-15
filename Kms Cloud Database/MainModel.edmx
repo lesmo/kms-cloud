@@ -365,7 +365,7 @@
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="CreationDate" Type="datetime" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CreationDate" Type="datetime" StoreGeneratedPattern="None" Nullable="false" />
     <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
     <Property Name="MotionLevel_Guid" Type="uniqueidentifier" Nullable="false" />
   </EntityType>
@@ -373,7 +373,7 @@
     <Key>
       <PropertyRef Name="Guid" />
     </Key>
-    <Property Name="Guid" Type="uniqueidentifier" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Guid" Type="uniqueidentifier" StoreGeneratedPattern="None" Nullable="false" />
     <Property Name="CreationDate" Type="datetime" Nullable="false" />
     <Property Name="Discarded" Type="bit" Nullable="false" />
     <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
@@ -2020,7 +2020,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Type="Int64" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" cg:SetterAccess="Internal" />
-          <Property Type="DateTime" Name="CreationDate" Nullable="false" annotation:StoreGeneratedPattern="Identity" Precision="3" >
+          <Property Type="DateTime" Name="CreationDate" Nullable="false" annotation:StoreGeneratedPattern="None" Precision="3" >
             <Documentation>
               <Summary>Fecha en la que se consiguió éste Nivel de Actividad.</Summary>
             </Documentation>
@@ -2037,8 +2037,11 @@
           </NavigationProperty>
         </EntityType>
         <Association Name="UserUserMotionLevelHistory">
-          <End Type="MainModel.User" Role="User" Multiplicity="1" />
-          <End Type="MainModel.UserMotionLevelHistory" Role="UserMotionLevelHistory" Multiplicity="*" />
+          <End Type="MainModel.User" Role="User" Multiplicity="1" >
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="MainModel.UserMotionLevelHistory" Role="UserMotionLevelHistory" Multiplicity="*" >
+          </End>
         </Association>
         <Association Name="UserMotionLevelHistoryMotionLevel">
           <End Type="MainModel.UserMotionLevelHistory" Role="UserMotionLevelHistory" Multiplicity="*" />
@@ -2053,7 +2056,7 @@
           <Key>
             <PropertyRef Name="Guid" />
           </Key>
-          <Property Type="Guid" Name="Guid" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Guid" Name="Guid" Nullable="false" annotation:StoreGeneratedPattern="None" />
           <Property Type="DateTime" Name="CreationDate" Nullable="false" Precision="3" />
           <NavigationProperty Name="User" Relationship="MainModel.UserUserEarnedReward" FromRole="UserEarnedReward" ToRole="User" />
           <NavigationProperty Name="Reward" Relationship="MainModel.UserEarnedRewardReward" FromRole="UserEarnedReward" ToRole="Reward" />
@@ -2063,7 +2066,8 @@
           <End Type="MainModel.User" Role="User" Multiplicity="1" >
             <OnDelete Action="Cascade" />
           </End>
-          <End Type="MainModel.UserEarnedReward" Role="UserEarnedReward" Multiplicity="*" />
+          <End Type="MainModel.UserEarnedReward" Role="UserEarnedReward" Multiplicity="*" >
+          </End>
         </Association>
         <Association Name="UserEarnedRewardReward">
           <End Type="MainModel.UserEarnedReward" Role="UserEarnedReward" Multiplicity="*" />
@@ -2181,8 +2185,11 @@
           <Property Name="CreationDate" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="None" Precision="3" />
         </EntityType>
         <Association Name="UserTipHistoryUser">
-          <End Type="MainModel.UserTipHistory" Role="UserTipHistory" Multiplicity="*" />
-          <End Type="MainModel.User" Role="User" Multiplicity="1" />
+          <End Type="MainModel.UserTipHistory" Role="UserTipHistory" Multiplicity="*" >
+          </End>
+          <End Type="MainModel.User" Role="User" Multiplicity="1" >
+            <OnDelete Action="Cascade" />
+          </End>
         </Association>
         <Association Name="UserTipHistoryTip">
           <End Type="MainModel.UserTipHistory" Role="UserTipHistory" Multiplicity="*" />
@@ -2394,7 +2401,9 @@
         </EntityType>
         <Association Name="DeviceUser">
           <End Type="MainModel.Device" Role="Device" Multiplicity="*" />
-          <End Type="MainModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="MainModel.User" Role="User" Multiplicity="0..1" >
+            <OnDelete Action="Cascade" />
+          </End>
         </Association>
         <EntityType Name="WebAutoLoginToken">
           <Key>
