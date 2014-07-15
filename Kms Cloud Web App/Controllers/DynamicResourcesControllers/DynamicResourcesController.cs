@@ -16,7 +16,7 @@ namespace Kms.Cloud.WebApp.Controllers {
 			IPicture picture
 				= Database.IPictureStore.Get(filename);
 
-			if ( picture == null || picture.PictureExtension != ext )
+			if ( picture == null || picture.Picture == null || picture.PictureExtension != ext )
 				throw new HttpException(
 					404,
 					"Not Found"
