@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 
 namespace Kms.Cloud.WebApp.Controllers {
+	[KmsAuthorize]
 	public partial class AjaxController : BaseController {
 		/*
 		 *   

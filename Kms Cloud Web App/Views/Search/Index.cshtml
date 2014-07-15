@@ -1,0 +1,52 @@
+﻿@model SearchValues
+
+<span class="resultados">
+    <p>@Model.Results.Count() Resultados de tu búsqueda</p>
+    <h3>"@Model.SearchString"</h3>
+</span>
+
+<ul class="busquedaResultados">
+    @foreach ( var result in Model.Results ) {
+        <li>
+            <a href="#">
+                <figure><img src="@result.PictureUri" alt="@result.PictureUri @result.LastName"></figure>
+                <span class="info">
+                    <h4>@result.Name @result.LastName</h4>
+                    <p>
+                        @result.TotalDistance @(RegionInfo.CurrentRegion.IsMetric ? "kms" : "mi")
+                    </p>
+                </span>
+            </a>
+        </li>
+    }
+</ul>
+
+<div class="paginacion">
+    <ul>
+        <li>
+            <a href="@Url.Action("Index", new {
+                q    = Model.SearchString,
+                page = 1
+            })">«</a>
+        </li>
+        <li>
+            <a href="@Url.Action("Index", new {
+                page = 1
+            })">1</a>
+        </li>
+        @for ( int i = 2; i <= Model.ResultsPages && i <= 14; i++ ) {
+            <li>
+                <a href="@Url.Action("Index", new {
+                    q    = Model.SearchString,
+                    page = i
+                })">@i</a>
+            </li>
+        }
+        <li>
+            <a href="@Url.Action("Index", new {
+                q    = Model.SearchString,
+                page = Model.ResultsPages
+            })">»</a>
+        </li>
+    </ul>
+</div>

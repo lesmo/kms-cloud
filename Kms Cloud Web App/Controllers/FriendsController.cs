@@ -27,7 +27,7 @@ namespace Kms.Cloud.WebApp.Controllers {
 				include:
 					new string[] { "User" }
 			).Select(s =>
-				new FriendModel(s.User)
+				new FriendModel(s.User, this)
 			).ToArray();
 
 			// > Obtener Amigos
@@ -49,7 +49,7 @@ namespace Kms.Cloud.WebApp.Controllers {
 					? s.Friend
 					: s.User
 			).Select(s =>
-				new FriendModel(s)
+				new FriendModel(s, this)
 			).ToArray();
 
 			// > Obtener total de amigos
