@@ -146,8 +146,13 @@ namespace Kms.Cloud.Database.Abstraction.Interfaces {
         /// <param name="guid">GUID de la Entidad</param>
         /// <returns>Entidad</returns>
         public virtual TEntity Get(Guid guid) {
+            var result = this._dbSet.Find(guid);
+            
+            if ( result == null )
+                return null;
+
             return EntityDatesUtcKind.ConvertDatesKindToUtc<TEntity>(
-                (TEntity)this._dbSet.Find(guid)
+                (TEntity)result
             );
         }
 
@@ -163,12 +168,14 @@ namespace Kms.Cloud.Database.Abstraction.Interfaces {
             if ( guid != default(Guid) )
                 return this.Get(guid);
 
-            if ( Guid.TryParse(guidString, out guid) )
-                return this.Get(guid);
-
             Int64 idLong;
-            if ( Int64.TryParse(guidString, out idLong) )
-                return this.Get(idLong);
+            if ( Int64.TryParse(guidString, out idLong) ) {
+                try {
+                    return this.Get(idLong);
+                } catch {
+                    return null;
+                }
+            }
 
             return null;
         }
