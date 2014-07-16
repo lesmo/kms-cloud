@@ -90,6 +90,38 @@ namespace Kms.Cloud.WebApp.Controllers {
             return Json(friendships, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult FriendRequestSend(string friendId) {
+            var friend = Database.UserStore.Get(friendId);
+
+            if ( friend == null )
+                throw new HttpException(404, "User not found");
+
+            var friendship = Database.UserFriendStore.GetFirst(
+                filter: f => 
+                    (
+                        f.User.Guid == friend.Guid
+                        && f.Friend.Guid == CurrentUser.Guid
+                    ) || (
+                        f.User.Guid == CurrentUser.Guid
+                        && f.Friend.Guid == friend.Guid
+                    )
+            );
+
+            if ( friendship != null )
+                throw new HttpException(400, "Friendship already exists");
+
+            Database.UserFriendStore.Add(new UserFriend {
+                Accepted = false,
+                Friend   = friend,
+                User     = CurrentUser                
+            });
+            Database.SaveChanges();
+
+            return Json(new {
+                ok = true
+            });
+        }
+
         public JsonResult FriendRequestAccept(string friendId) {
             // > Buscar la Amistad
             var friendGuid = new Guid().FromBase64String(friendId);
