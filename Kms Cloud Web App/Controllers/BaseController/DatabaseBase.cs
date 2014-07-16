@@ -20,7 +20,7 @@ namespace Kms.Cloud.WebApp.Controllers {
 		///     y OAuth NO pueden ser modificados o almacenados en éste
 		///     contexto, debe obtenerse un objeto desde ésta instancia.
 		/// </summary>
-		protected Kms.Cloud.Database.Abstraction.WorkUnit Database {
+		internal Kms.Cloud.Database.Abstraction.WorkUnit Database {
 			get {
 				if ( this._database == null )
 					this._database
