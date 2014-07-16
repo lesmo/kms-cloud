@@ -1047,6 +1047,12 @@ footer nav ul li a {
 .btn.aceptar:hover {
   background-color: #23c46d;
 }
+.btn.aceptar.disabled {
+  background-color: #e7e7e7;
+}
+.btn.aceptar.disabled:hover {
+  background-color: #e7e7e7;
+}
 .btn.rechazar {
   background-color: #00ccc3;
   color: #fff;
