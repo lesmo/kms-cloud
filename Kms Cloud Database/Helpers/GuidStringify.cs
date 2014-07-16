@@ -41,12 +41,16 @@ namespace Kms.Cloud.Database {
             compactBase64
                 = compactBase64.Replace('-', '+');
 
-            byte[] guidBytes
-                = Convert.FromBase64String(
-                    compactBase64 + "=="
-                );
+            try {
+                byte[] guidBytes
+                    = Convert.FromBase64String(
+                        compactBase64 + "=="
+                    );
 
-            return new Guid(guidBytes);
+                return new Guid(guidBytes);
+            } catch {
+                return default(Guid);
+            }
         }
     }
 }
