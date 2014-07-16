@@ -1,0 +1,98 @@
+﻿@model ProfileModel
+
+<div id="perfilEditar">
+    <section class="Usuario">
+        <figure>
+            <img src="@Model.PictureUri">
+        </figure>
+        <h2>Nombre del Usuario</h2>
+    </section>
+    <div class="informacion">
+        <dl>
+            <dt>Nombre</dt>
+            <dd>@Model.Name @Model.LastName</dd>
+            <dt>País</dt>
+            <dd>@Model.Location</dd>
+            @*
+            <dt>Amigos</dt>
+            <dd>Lorem Ipsum</dd>
+            *@
+        </dl>
+    </div>
+    <a href="javascript:doKMS_friendRequest_send('@Model.UserId');" class="btn centro aceptar">AGREGAR A AMIGOS</a>
+</div>
+
+<div class="usuarioDatos">
+    <aside class="tresCol">
+        <p>@Model.TotalDistance @(RegionInfo.CurrentRegion.IsMetric ? "KMS" : "MI")</p>
+        <em>ACUMULADOS</em>
+    </aside>
+    <aside class="equivalencias">
+        <ul>
+            <li>
+                <figure>
+                    <img src="~/Images/Gui/Overview/Gui.Co2.jpg" alt="@OverviewStrings.Co2Alt">
+                </figure>
+                <span>
+                    <span class="numero">
+                        @Model.TotalCo2 @(RegionInfo.CurrentRegion.IsMetric ? "kg" : "lb")
+                    </span>
+                    <span class="leyenda">CO<sub>2</sub></span>
+                </span>
+            </li>
+            <li>
+                <figure>
+                    <img src="~/Images/Gui/Overview/Gui.Kcal.jpg" alt="@OverviewStrings.KcalAlt">
+                </figure>
+                <span>
+                    <span class="numero">@Model.TotalKcal</span>
+                    <span class="leyenda">kcal</span>
+                </span>
+            </li>
+            <li>
+                <figure>
+                    <img src="~/Images/Gui/Overview/Gui.Savings.jpg" alt="@OverviewStrings.Savings">
+                </figure>
+                <span>
+                    <span class="numero">@Model.TotalCash</span>
+                    <span class="leyenda">@OverviewStrings.Savings</span>
+                </span>
+            </li>
+        </ul>
+        <em>@OverviewStrings.Equivalence.ToUpper()</em>
+    </aside>
+</div>
+
+<span class="tituloGrafica">
+    <h2>
+        <img src="~/Images/Gui/Gui.Trophy.jpg">@RewardsStrings.UnlockedRewards.ToUpper()
+    </h2>
+    <hr>
+</span>
+
+<div id="recompensasLiberadas">
+    @foreach ( var reward in Model.UnlockedRewards ) {
+        <article class="itemLiberada">
+            <div class="info">
+                <figure><img src="@reward.IconUri" alt="@reward.Title"></figure>
+                <h3>@reward.TriggerDistance @(RegionInfo.CurrentRegion.IsMetric ? "KMS" : "MI")</h3>
+                <h4>@reward.Title</h4>
+                <p>
+                    <small>
+                        @String.Format(
+                            RewardsStrings.UnlockedOnDate,
+                            reward.UnlockDate.ToShortDateString()
+                        )
+                    </small>
+                </p>
+        </div>
+
+        @if ( reward.SponsorIcon.HasValue ) {
+            <div class="empresa">
+                <figure><img src="@reward.SponsorIcon.Value.AbsoluteUri" alt="@reward.SponsorName"></figure>
+            </div>
+        }
+
+        </article>
+    }
+</div>
