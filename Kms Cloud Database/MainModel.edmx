@@ -365,7 +365,7 @@
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="CreationDate" Type="datetime" StoreGeneratedPattern="None" Nullable="false" />
+    <Property Name="CreationDate" Type="datetime" Nullable="false" />
     <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
     <Property Name="MotionLevel_Guid" Type="uniqueidentifier" Nullable="false" />
   </EntityType>
@@ -373,7 +373,7 @@
     <Key>
       <PropertyRef Name="Guid" />
     </Key>
-    <Property Name="Guid" Type="uniqueidentifier" StoreGeneratedPattern="None" Nullable="false" />
+    <Property Name="Guid" Type="uniqueidentifier" Nullable="false" />
     <Property Name="CreationDate" Type="datetime" Nullable="false" />
     <Property Name="Discarded" Type="bit" Nullable="false" />
     <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
@@ -836,7 +836,9 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="UserUserMotionLevelHistory">
-    <End Role="User" Type="MainModel.Store.UserSet" Multiplicity="1" />
+    <End Role="User" Type="MainModel.Store.UserSet" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
     <End Role="UserMotionLevelHistory" Type="MainModel.Store.UserMotionLevelHistorySet" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="User">
@@ -953,7 +955,9 @@
   </Association>
   <Association Name="UserTipHistoryUser">
     <End Role="UserTipHistory" Type="MainModel.Store.UserTipHistorySet" Multiplicity="*" />
-    <End Role="User" Type="MainModel.Store.UserSet" Multiplicity="1" />
+    <End Role="User" Type="MainModel.Store.UserSet" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
     <ReferentialConstraint>
       <Principal Role="User">
         <PropertyRef Name="Guid" />
@@ -1109,7 +1113,9 @@
   </Association>
   <Association Name="DeviceUser">
     <End Role="Device" Type="MainModel.Store.DeviceSet" Multiplicity="*" />
-    <End Role="User" Type="MainModel.Store.UserSet" Multiplicity="0..1" />
+    <End Role="User" Type="MainModel.Store.UserSet" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
     <ReferentialConstraint>
       <Principal Role="User">
         <PropertyRef Name="Guid" />
@@ -1120,7 +1126,9 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="TokenWebAutoLoginToken">
-    <End Role="Token" Type="MainModel.Store.TokenSet" Multiplicity="1" />
+    <End Role="Token" Type="MainModel.Store.TokenSet" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
     <End Role="WebAutoLoginToken" Type="MainModel.Store.WebAutoLoginTokenSet" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Token">

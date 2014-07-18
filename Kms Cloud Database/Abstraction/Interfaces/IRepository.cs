@@ -160,7 +160,7 @@ namespace Kms.Cloud.Database.Abstraction.Interfaces {
         ///     Devuelve la Entidad asignada éste GUID , en representación de cadena compacta, o ID.
         /// </summary>
         /// <param name="guidString">
-        ///     Cadena de Representación Compacta del GUID, o ID.</param>
+        ///     Cadena de Representación Compacta del GUID, GUID completo (con o sin guiones) o ID.</param>
         /// <returns>Entidad</returns>
         public virtual TEntity Get(string guidString) {
             var guid = new Guid().FromBase64String(guidString);
@@ -168,10 +168,22 @@ namespace Kms.Cloud.Database.Abstraction.Interfaces {
             if ( guid != default(Guid) )
                 return this.Get(guid);
 
+            if ( Guid.TryParse(guidString, out guid) )
+                return this.Get(guid);
+
             Int64 idLong;
             if ( Int64.TryParse(guidString, out idLong) ) {
                 try {
                     return this.Get(idLong);
+                } catch {
+                    return null;
+                }
+            }
+
+            Int32 idInt;
+            if ( Int32.TryParse(guidString, out idInt) ) {
+                try {
+                    return this.Get(idInt);
                 } catch {
                     return null;
                 }
