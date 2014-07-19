@@ -17,7 +17,7 @@ namespace Kms.Cloud.WebApp {
 
             return _cultures[culture];
         }
-            
+        
         public static DictionaryRouteValueTranslationProvider ControllerGlobalization
             = new DictionaryRouteValueTranslationProvider(
                 new List<RouteValueTranslation> {
