@@ -59,47 +59,8 @@
 							}
 						)
 					</li>
-					<li>
-						@Html.ActionLink(
-							LayoutStrings.Friends,
-							"Index",
-							"Friends",
-							null,
-							new {
-								@class = layoutValues.Section == LayoutValues.MainSection.Friends ? "active" : ""
-							}
-						)
-					</li>
 				</ul>
 			</nav>
-
-			<div class="alertas-header">
-				@if ( layoutValues.Notifications.Where(w => w.Discarded == false).Count() > 0 ) {
-					<span>@layoutValues.UnreadMessages</span>
-				}
-				
-				<ul class="notificacionesPop ocultar">
-					@foreach ( LayoutNotification notification in layoutValues.Notifications ) {
-						<li>
-							<figure>
-								<img src="@notification.IconUri.AbsoluteUri" alt="@notification.Title">
-							</figure>
-							<div class="info">
-								<h4>@notification.Title</h4>
-								<p>@notification.Description</p>
-							</div>
-						</li>
-					}
-				</ul>
-			</div>
-			<a href="@Url.Action("Entry", "Index")" class="configuracion-header"></a>
-
-			<div class="buscador-header">
-				@using ( Html.BeginForm("Index", "Search", FormMethod.Get) ) {
-					<input type="search" name="kms-q" placeholder="@LayoutStrings.SearchPlaceholder" />
-					<input type="submit" class="submit" value="">
-				}
-			</div>
 		</div>
 	</header>
 
