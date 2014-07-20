@@ -14,17 +14,17 @@ namespace Kms.Cloud.WebApp {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
             
             routes.MapRoute(
-                "DynamicResources",
-                "{controller}/{action}/{filename}.{ext}"
+                "LoginWeb",
+                "Login/Web",
+                new {
+                    controller = "Login",
+                    action = "Web"
+                }
             );
 
             routes.MapRoute(
-                "LoginCreateSessionLanguageless",
-                "Login/CreateSession",
-                new {
-                    controller = "Login",
-                    action = "CreateSession"
-                }
+                "DynamicResources",
+                "{controller}/{action}/{filename}.{ext}"
             );
 
             routes.MapTranslatedRoute(

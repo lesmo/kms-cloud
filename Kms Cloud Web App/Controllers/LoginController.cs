@@ -13,11 +13,11 @@ namespace Kms.Cloud.WebApp.Controllers {
 	public class LoginController : BaseController {
 		// GET: /Login/
 		public ActionResult Index() {
-			return Redirect("http://www.kms.me/#login");
+			return View();
 		}
 
 		[AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
-		public ActionResult Auto(string k, string h) {
+		public ActionResult Auto(string k, string h, string d = null) {
 			// Parsear Key de Token de Auto-Login
 			Int64 key;
 
@@ -56,7 +56,7 @@ namespace Kms.Cloud.WebApp.Controllers {
 			var consumerSecret = autologinToken.Token.ApiKey.Secret.ToString("N");
 			var tokenSecret    = autologinToken.Token.Secret.ToString("N");
 
-			// Calcular hash HMAC-SHA1 de Token
+			// Calcular hash HMAC-SHA1 de Secreto de Token de Auto-Login
 			var hmacSha1Key = consumerSecret + "&" + tokenSecret;
 			var hmacSha1    = new HMACSHA1(Encoding.UTF8.GetBytes(hmacSha1Key));
 			var hmacSha1Bytes = hmacSha1.ComputeHash(
@@ -80,20 +80,27 @@ namespace Kms.Cloud.WebApp.Controllers {
 			FormsAuthentication.SetAuthCookie(user.Guid.ToBase64String(), true);
 
 			Database.WebAutoLoginTokenStore.Delete(autologinToken.Id);
+
+			if ( d == "token" )
+				Database.TokenStore.Delete(autologinToken.Token);
+
 			Database.SaveChanges();
 
 			// Redirigir a Dashboard
 			return Redirect("~/Overview");
-
 		}
 
-		// POST: /Login/
-		// TODO: Re-enable AntiForgeryToken check
-		//[ValidateAntiForgeryToken]
-		[AcceptVerbs(HttpVerbs.Post)]
-		public ActionResult CreateSession(string email, string password, string returnUrl = null) {
-			if ( User.Identity.IsAuthenticated )
-				return Redirect("~/Overview");
+		public JsonResult Web(string email, string password, string nonce, string apikey) {
+			// > Validar que los campos no vengan vacíos
+			if ( String.IsNullOrEmpty(email) || String.IsNullOrEmpty(password) || String.IsNullOrEmpty(password) || string.IsNullOrEmpty(apikey) )
+				return Json(new {
+					error = "A field is empty"
+				}, JsonRequestBehavior.AllowGet);
+
+			// > Validar que el API-Key sea válido
+			var apiKey = Database.ApiKeyStore.Get(apikey);
+			if ( apiKey == null || apiKey.BasicLoginEnabled == false )
+				throw new HttpException(403, "Invalid API-Key");
 
 			// > Buscar al Usuario en BD por su Email
 			email = email.ToLower();
@@ -104,22 +111,54 @@ namespace Kms.Cloud.WebApp.Controllers {
 
 			// > Validar que el Usuario exista y las contraseñas coincidan
 			if ( user == null || ! user.PasswordMatches(password) )
-				return Redirect("http://www.kms.me/#loginfail");
-			
-			// > Crear sesión y redirigir a donde aplique
-			FormsAuthentication.SetAuthCookie(user.Guid.ToBase64String(), true);
-			
-			if ( returnUrl == null )
-				return RedirectToAction("Index", "Overview");
-			else
-				return Redirect(returnUrl);
+				return Json(new {
+					error = "User not found"
+				}, JsonRequestBehavior.AllowGet);
+
+			// > Generar nuevo Token y WebAutoLoginToken
+			var token = new Token {
+				ApiKey = apiKey,
+				ExpirationDate = DateTime.UtcNow.AddMinutes(-5),
+				IPAddress = null,
+				Secret = Guid.NewGuid(),
+				User = user
+			};
+
+			var autologinToken = new WebAutoLoginToken {
+				IPAddress = null,
+				Key = (Int64)(new Random().NextDouble() * 10000000000000000000),
+				Secret = Guid.NewGuid(),
+				Token = token
+			};
+
+			// > Almacenar componentes en BD
+			Database.TokenStore.Add(token);
+			Database.WebAutoLoginTokenStore.Add(autologinToken);
+			Database.SaveChanges();
+
+			// > Calcular hash HMAC-SHA1 de Secreto de Token de Auto-Login
+			var hmacSha1Key = apiKey.Secret + "&" + token.Secret;
+			var hmacSha1 = new HMACSHA1(Encoding.UTF8.GetBytes(hmacSha1Key));
+			var hmacSha1Bytes = hmacSha1.ComputeHash(
+				Encoding.UTF8.GetBytes(autologinToken.Secret.ToString("N"))
+			);
+			var hmacSha1String = new StringBuilder(hmacSha1Bytes.Length * 2);
+
+			for ( int i = 0; i < hmacSha1Bytes.Length; i++ )
+				hmacSha1String.Append(hmacSha1Bytes[i].ToString("x2"));
+
+			// > Devolver componentes de la URL
+			return Json(new {
+				k = new Base36Encoder().Encode(autologinToken.Key),
+				h = hmacSha1String.ToString()
+			}, JsonRequestBehavior.AllowGet);
 		}
 
-		public ActionResult Facebook(string oauth_token) {
+		public ActionResult WebFacebook(string oauth_token) {
 			return Redirect("http://www.kms.me/#loginfail");
 		}
 
-		public ActionResult Twitter() {
+		public ActionResult WebTwitter() {
 			return Redirect("http://www.kms.me/#loginfail");
 		}
 	}
