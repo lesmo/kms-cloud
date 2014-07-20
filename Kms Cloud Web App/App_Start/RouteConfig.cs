@@ -27,7 +27,7 @@ namespace Kms.Cloud.WebApp {
                 "Login/Auto",
                 new {
                     controller = "Login",
-                    action = "Web"
+                    action = "Auto"
                 }
             );
 
