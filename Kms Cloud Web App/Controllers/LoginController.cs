@@ -13,7 +13,7 @@ namespace Kms.Cloud.WebApp.Controllers {
 	public class LoginController : BaseController {
 		// GET: /Login/
 		public ActionResult Index() {
-			return View();
+			return Redirect("http://www.kms.me/#login");
 		}
 
 		[AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
@@ -90,6 +90,7 @@ namespace Kms.Cloud.WebApp.Controllers {
 			return Redirect("~/Overview");
 		}
 
+		[AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
 		public JsonResult Web(string email, string password, string nonce, string apikey) {
 			// > Validar que los campos no vengan vacíos
 			if ( String.IsNullOrEmpty(email) || String.IsNullOrEmpty(password) || String.IsNullOrEmpty(password) || string.IsNullOrEmpty(apikey) )

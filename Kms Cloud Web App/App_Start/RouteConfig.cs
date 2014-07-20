@@ -23,6 +23,15 @@ namespace Kms.Cloud.WebApp {
             );
 
             routes.MapRoute(
+                "LoginAuto",
+                "Login/Auto",
+                new {
+                    controller = "Login",
+                    action = "Web"
+                }
+            );
+
+            routes.MapRoute(
                 "DynamicResources",
                 "{controller}/{action}/{filename}.{ext}"
             );
