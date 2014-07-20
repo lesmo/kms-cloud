@@ -80,8 +80,8 @@ function doKMS_populateGraph() {
                 "walking": 0,
                 "sleep": 0
             };
-            var activityDataRaw = [];
-
+            var activityDataRaw    = [];
+            
             $.each(data.activity, function (i, item) {
                 if ( item.activity != "sleep" )
                     dataTotal += item.totalDistance;
@@ -96,6 +96,8 @@ function doKMS_populateGraph() {
                     value: item,
                     color: activityColors[i]
                 });
+
+                $('#datos .' + i).text(item.toFixed() + '%');
             });
 
             new Chart(

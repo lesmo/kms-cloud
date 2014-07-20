@@ -18,6 +18,15 @@ namespace Kms.Cloud.WebApp {
                 "{controller}/{action}/{filename}.{ext}"
             );
 
+            routes.MapRoute(
+                "LoginCreateSessionLanguageless",
+                "Login/CreateSession",
+                new {
+                    controller = "Login",
+                    action = "CreateSession"
+                }
+            );
+
             routes.MapTranslatedRoute(
                 "AjaxGlobalization",
                 "{lang}/DynamicResources/Ajax/{action}.json",

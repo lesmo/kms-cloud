@@ -13,7 +13,7 @@ namespace Kms.Cloud.WebApp.Controllers {
 	public class LoginController : BaseController {
 		// GET: /Login/
 		public ActionResult Index() {
-			return View();
+			return Redirect("http://www.kms.me/#login");
 		}
 
 		[AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
@@ -24,7 +24,7 @@ namespace Kms.Cloud.WebApp.Controllers {
 			try {
 				key = new Base36Encoder().Decode(k);
 			} catch {
-				return Redirect("~/Login");
+				return Redirect("http://www.kms.me/#login");
 			}
 
 			// Buscar Token de Auto-Login por su llave
@@ -36,7 +36,7 @@ namespace Kms.Cloud.WebApp.Controllers {
 			);
 
 			if ( autologinToken == null )
-				return Redirect("~/Login");
+				return Redirect("http://www.kms.me/#login");
 
 			// Determinar si aún es vigente el Token y la IP de origen coincide
 			if (
@@ -49,7 +49,7 @@ namespace Kms.Cloud.WebApp.Controllers {
 				Database.WebAutoLoginTokenStore.Delete(autologinToken.Id);
 				Database.SaveChanges();
 
-				return Redirect("~/Login");
+				return Redirect("http://www.kms.me/#login");
 			}
 
 			// Obtener Consumer Secret y Token Secret
@@ -72,7 +72,7 @@ namespace Kms.Cloud.WebApp.Controllers {
 				Database.WebAutoLoginTokenStore.Delete(autologinToken.Id);
 				Database.SaveChanges();
 
-				return Redirect("~/Login");
+				return Redirect("http://www.kms.me/#login");
 			}
 
 			// Crear sesión y eliminar Token de Auto-Login
@@ -116,11 +116,11 @@ namespace Kms.Cloud.WebApp.Controllers {
 		}
 
 		public ActionResult Facebook(string oauth_token) {
-			return View();
+			return Redirect("http://www.kms.me/#loginfail");
 		}
 
 		public ActionResult Twitter() {
-			return View();
+			return Redirect("http://www.kms.me/#loginfail");
 		}
 	}
 }
