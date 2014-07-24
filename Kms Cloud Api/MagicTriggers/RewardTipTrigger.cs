@@ -21,9 +21,7 @@ namespace Kms.Cloud.Api.MagicTriggers {
             Database = database ?? new Kms.Cloud.Database.Abstraction.WorkUnit();
 
             // --- Obtener objeto de Usuario ---
-            CurrentUser = database == null
-                ? currentUser
-                : Database.UserStore.Get(currentUser.Guid);
+            CurrentUser = Database.UserStore.Get(currentUser.Guid);
 
             if ( CurrentUser == null)
                 return;
