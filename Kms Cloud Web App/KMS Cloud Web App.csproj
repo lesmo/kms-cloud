@@ -42,10 +42,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http.Formatting, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -193,6 +200,24 @@
     <Compile Include="Routing\TranslatedRouteCollectionExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Friends.js">
+      <DependentUpon>Friends.js.bundler</DependentUpon>
+    </Content>
+    <Content Include="Assets\Friends.min.js">
+      <DependentUpon>Friends.js.bundler</DependentUpon>
+    </Content>
+    <Content Include="Assets\Javascript.js">
+      <DependentUpon>Javascript.js.bundler</DependentUpon>
+    </Content>
+    <Content Include="Assets\Javascript.min.js">
+      <DependentUpon>Javascript.js.bundler</DependentUpon>
+    </Content>
+    <Content Include="Assets\Overview.js">
+      <DependentUpon>Overview.js.bundler</DependentUpon>
+    </Content>
+    <Content Include="Assets\Overview.min.js">
+      <DependentUpon>Overview.js.bundler</DependentUpon>
+    </Content>
     <Content Include="Assets\Scripts\Friends\FriendList.js" />
     <Content Include="Assets\Scripts\Friends\FriendRequests.js" />
     <Content Include="Assets\Scripts\Overview\PopulateGraphs.js" />
@@ -219,6 +244,12 @@
     <Content Include="Assets\Scripts\Shared\Lib\sprintf.min.js" />
     <Content Include="Assets\Scripts\Shared\Utils.Misc.js" />
     <Content Include="Assets\Scripts\Shared\_shared.js" />
+    <Content Include="Assets\Stylesheets.css">
+      <DependentUpon>Stylesheets.css.bundler</DependentUpon>
+    </Content>
+    <Content Include="Assets\Stylesheets.min.css">
+      <DependentUpon>Stylesheets.css.bundler</DependentUpon>
+    </Content>
     <Content Include="Bundler\bundler.js" />
     <Content Include="Bundler\node.exe" />
     <Content Include="Bundler\node_modules\clean-css\index.js" />
