@@ -87,6 +87,19 @@ namespace Kms.Cloud.Database.Abstraction {
         private GenericRepository<User> _userRepository = null;
 
         /// <summary>
+        /// Almacén de Fotografías de Usuario.
+        /// </summary>
+        public GenericRepository<UserPicture> UserPictureStore {
+            get {
+                if ( this._userPictureRepository == null )
+                    this._userPictureRepository = new GenericRepository<UserPicture>(this._context);
+
+                return this._userPictureRepository;
+            }
+        }
+        private GenericRepository<UserPicture> _userPictureRepository = null;
+
+        /// <summary>
         /// Almacén de Complexión Física de los Usuarios
         /// </summary>
         public GenericRepository<UserBody> UserBodyStore {
