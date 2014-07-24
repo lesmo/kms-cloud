@@ -13,7 +13,10 @@ namespace Kms.Cloud.WebApp.Controllers {
 	public class LoginController : BaseController {
 		// GET: /Login/
 		public ActionResult Index() {
-			return Redirect("http://www.kms.me/#login");
+			if ( CurrentUser == null )
+				return Redirect("http://www.kms.me/#login");
+			else
+				return Redirect("~/Overview");
 		}
 
 		[AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
@@ -81,7 +84,7 @@ namespace Kms.Cloud.WebApp.Controllers {
 
 			Database.WebAutoLoginTokenStore.Delete(autologinToken.Id);
 
-			if ( d == "token" )
+			if ( d == "token" && autologinToken.Token != null )
 				Database.TokenStore.Delete(autologinToken.Token);
 
 			Database.SaveChanges();
@@ -119,10 +122,14 @@ namespace Kms.Cloud.WebApp.Controllers {
 			// > Generar nuevo Token y WebAutoLoginToken
 			var token = new Token {
 				ApiKey = apiKey,
-				ExpirationDate = DateTime.UtcNow.AddMinutes(-5),
+				ExpirationDate = DateTime.UtcNow.AddMinutes(5),
+				LastUseDate = DateTime.UtcNow,
+				
 				IPAddress = null,
 				Secret = Guid.NewGuid(),
-				User = user
+				User = user,
+				LoginAttempts = 0,
+				CallbackUri = "oob"
 			};
 
 			var autologinToken = new WebAutoLoginToken {
@@ -135,10 +142,11 @@ namespace Kms.Cloud.WebApp.Controllers {
 			// > Almacenar componentes en BD
 			Database.TokenStore.Add(token);
 			Database.WebAutoLoginTokenStore.Add(autologinToken);
+			var res = Database.GetValidationErrors();
 			Database.SaveChanges();
-
+	   
 			// > Calcular hash HMAC-SHA1 de Secreto de Token de Auto-Login
-			var hmacSha1Key = apiKey.Secret + "&" + token.Secret;
+			var hmacSha1Key = apiKey.Secret.ToString("N") + "&" + token.Secret.ToString("N");
 			var hmacSha1 = new HMACSHA1(Encoding.UTF8.GetBytes(hmacSha1Key));
 			var hmacSha1Bytes = hmacSha1.ComputeHash(
 				Encoding.UTF8.GetBytes(autologinToken.Secret.ToString("N"))
