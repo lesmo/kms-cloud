@@ -84,7 +84,7 @@ function doKMS_populateGraph() {
             
             $.each(data.activity, function (i, item) {
                 if ( item.activity != "sleep" )
-                    dataTotal += item.totalDistance;
+                    activityTotal += item.totalDistance;
             });
 
             $.each(data.activity, function (i, item) {  
