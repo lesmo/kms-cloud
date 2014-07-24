@@ -170,5 +170,10 @@ namespace Kms.Cloud.WebApp.Controllers {
 		public ActionResult WebTwitter() {
 			return Redirect("http://www.kms.me/#loginfail");
 		}
+
+		public ActionResult Logout() {
+			FormsAuthentication.SignOut();
+			return Redirect("http://www.kms.me");
+		}
 	}
 }

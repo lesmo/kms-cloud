@@ -157,6 +157,9 @@
     <value>Friends</value>
     <comment>Navigation "Friends"</comment>
   </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Logout</value>
+  </data>
   <data name="MyProfile" xml:space="preserve">
     <value>My Profile</value>
     <comment>Navigation "My Profile"</comment>
