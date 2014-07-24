@@ -78,7 +78,7 @@
 			<section id="Usuario">
 				<h2>@layoutValues.UserName @layoutValues.UserLastname</h2>
 				<figure>
-					<img src="@layoutValues.UserPicture.AbsoluteUri">
+					<img onclick="setKMS_userPicture()" src="@layoutValues.UserPicture.AbsoluteUri">
 				</figure>
 				<span class="distancia">
 					@layoutValues.TotalDistance @(RegionInfo.CurrentRegion.IsMetric ? "kms" : "mi")
@@ -86,6 +86,9 @@
 				<span class="origen">
 					@layoutValues.LocationString.ToUpper()
 				</span>
+				@using ( Html.BeginForm("UploadPicture", "Account") ) {
+					<input type="file" name="file" />
+				}
 			</section>
 
 			@* - Próxima Recompensa (o última recompensa ganada) - *@

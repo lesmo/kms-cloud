@@ -28,31 +28,5 @@ namespace Kms.Cloud.WebApp.Properties {
             // Add code to handle the SettingsSaving event here.
         }
 
-        public List<Byte[]> AllowedUploadHeadersBytes {
-            get {
-                if ( mAllowedUploadHeadersBytes != null )
-                    return mAllowedUploadHeadersBytes;
-
-                mAllowedUploadHeadersBytes = new List<Byte[]>();
-
-                foreach ( var bytesString in AllowedUploadHeadersHex ) {
-                    if ( bytesString.Length < 2 || bytesString.Length % 2 != 0 )
-                        throw new InvalidCastException(
-                            "Allowed file upload byte header is invalid: " + bytesString
-                        );
-
-                    var byteChars = bytesString.ToCharArray();
-                    var bytes     = new Byte[byteChars.Length / 2];
-
-                    for ( int s = 0, i = 0, n = 1; s < bytes.Length; s++, i += 2, n += 2 )
-                        bytes[s] = Convert.ToByte(byteChars[i] + byteChars[n]);
-
-                    mAllowedUploadHeadersBytes.Add(bytes);
-                }
-
-                return mAllowedUploadHeadersBytes;
-            }
-        }
-        private List<Byte[]> mAllowedUploadHeadersBytes;
     }
 }
