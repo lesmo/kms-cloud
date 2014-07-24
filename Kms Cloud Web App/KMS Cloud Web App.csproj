@@ -132,6 +132,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Images\Gui\Friends\" />
+    <Folder Include="Views\Account\" />
     <Folder Include="Views\DynamicResources\" />
   </ItemGroup>
   <ItemGroup>
@@ -140,6 +141,10 @@
     <Compile Include="App_Start\RouteTranslationConfig.cs" />
     <Compile Include="App_Start\SupportedCultures.cs" />
     <Compile Include="Bundler\Bundler.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\DynamicResourcesControllers\AjaxController.Account.cs">
+      <DependentUpon>AjaxController.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controllers\BaseController\CurrentUserBase.cs" />
     <Compile Include="Controllers\BaseController\KmsAuthorize.cs" />
     <Compile Include="Controllers\BaseController\LayoutBase.cs" />
@@ -198,6 +203,7 @@
     <Compile Include="Routing\RouteValueTranslation.cs" />
     <Compile Include="Routing\TranslatedRoute.cs" />
     <Compile Include="Routing\TranslatedRouteCollectionExtensions.cs" />
+    <Compile Include="Settings.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Friends.js">

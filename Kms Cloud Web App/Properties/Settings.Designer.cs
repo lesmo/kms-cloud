@@ -40,5 +40,14 @@ namespace Kms.Cloud.WebApp.Properties {
                 return ((global::System.Guid)(this["KmsNoPicturMale"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("512")]
+        public int KmsUserPictureSquareSize {
+            get {
+                return ((int)(this["KmsUserPictureSquareSize"]));
+            }
+        }
     }
 }
