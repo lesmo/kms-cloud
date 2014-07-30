@@ -201,7 +201,7 @@ namespace Kms.Cloud.Api.Controllers {
             var finalDataPost = new List<DataPost>();
 
             foreach ( DataPost i in dataPost ) {
-                if ( i.Timestamp > lastDataTimestamp )
+                if ( i.Timestamp > lastDataTimestamp && i.Timestamp < DateTime.UtcNow )
                     finalDataPost.Add(i);
             }
 
@@ -292,7 +292,7 @@ namespace Kms.Cloud.Api.Controllers {
 
             if ( activityId == 0 )
                 throw new HttpBadRequestException(
-                    "301" + ControllerStrings.Warning301_ActivityInvalid
+                    "301 " + ControllerStrings.Warning301_ActivityInvalid
                 );
 
             var dataActivity = (DataActivity)activityId;
