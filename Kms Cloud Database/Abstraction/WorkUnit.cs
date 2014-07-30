@@ -414,15 +414,15 @@ namespace Kms.Cloud.Database.Abstraction {
         #endregion
 
         #region Regionalization Storage
-        public GenericRepository<Region> RegionStore {
+        public RegionRepository RegionStore {
             get {
                 if ( this._regionRepository == null )
-                    this._regionRepository = new GenericRepository<Region>(this._context);
+                    this._regionRepository = new RegionRepository(this._context);
 
                 return this._regionRepository;
             }
         }
-        private GenericRepository<Region> _regionRepository = null;
+        private RegionRepository _regionRepository = null;
 
         public GenericRepository<RegionSubdivision> RegionSubdivisionStore {
             get {

@@ -26,6 +26,20 @@ namespace Kms.Cloud.Api.Controllers {
         [Route("my/account")]
         public AccountResponse GetAccount() {
             // TODO: Añadir funcionalidad de If-Modified-Since
+
+            var regionMetadata = Database.RegionStore.GetRegionMetadata(CurrentUser.RegionCode);
+            var regionString   = "";
+            
+            if ( regionMetadata.Region != null && regionMetadata.RegionSubdivision != null ) {
+                regionString = String.Format(
+                    "{0}, {1}",
+                    regionMetadata.RegionSubdivision.Name,
+                    regionMetadata.Region.Name
+                );
+            } else {
+                regionString = "Tikal";
+            }
+
             return new AccountResponse() {
                 AccountCreationDate
                     = CurrentUser.CreationDate,
@@ -39,12 +53,16 @@ namespace Kms.Cloud.Api.Controllers {
                     = CurrentUser.Name,
                 LastName
                     = CurrentUser.LastName,
+                FullName
+                    = CurrentUser.FullName,
                 Email
                     = CurrentUser.Email,
                 PreferredCultureCode
                     = CurrentUser.PreferredCultureInfo.Name,
                 RegionCode
-                    = CurrentUser.RegionCode
+                    = CurrentUser.RegionCode,
+                RegionFull
+                    = regionString
             };
         }
 

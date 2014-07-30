@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -175,5 +176,20 @@ namespace Kms.Cloud.Database {
             }
         }
         private MotionLevel _currentMotionLevel;
+
+        /// <summary>
+        ///     Devuelve el nombre completo del Usuario en Title Casing
+        /// </summary>
+        public String FullName {
+            get {
+                if ( ! String.IsNullOrEmpty(this._fullName) )
+                    return this._fullName;
+
+                this._fullName = CultureInfo.CurrentUICulture.TextInfo.ToTitleCase(this.Name + " " +this.LastName);
+                return this._fullName;
+            }
+        }
+        private String _fullName;
+
     }
 }

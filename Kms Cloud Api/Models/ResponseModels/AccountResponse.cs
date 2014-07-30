@@ -25,14 +25,25 @@ namespace Kms.Cloud.Api.Models.ResponseModels {
         public string LastName { get; set; }
 
         /// <summary>
+        ///     Nombre Completo del Usuario. Es el Nombre + Apellido con
+        ///     mayúscula en las primeras letras.
+        /// </summary>
+        public string FullName { get; set; }
+
+        /// <summary>
         ///     Dirección de E-mail del Usuario.
         /// </summary>
         public string Email { get; set; }
 
         /// <summary>
-        ///     Código de Región del Usuario.
+        ///     Código de Región del Usuario (por ejemplo "MX-DIF").
         /// </summary>
         public string RegionCode { get; set; }
+
+        /// <summary>
+        ///     Región del Usuario en texto (por ejemplo "Distrito Federal, México").
+        /// </summary>
+        public string RegionFull { get; set; }
 
         /// <summary>
         ///     Código de Cultura preferido por el Usuario.
