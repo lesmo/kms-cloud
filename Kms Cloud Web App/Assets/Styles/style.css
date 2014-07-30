@@ -615,10 +615,15 @@ footer nav ul li a {
   display: block;
 }
 #actividad #graficas #datos span.actividadColor {
-  border-bottom: 5px solid #c2f27b;
   margin-bottom: 1em;
 }
-#actividad #graficas #datos span.suenoColor {
+#actividad #graficas #datos span.actividadColor.running {
+  border-bottom: 5px solid #c2f27b;
+}
+#actividad #graficas #datos span.actividadColor.walking {
+  border-bottom: 5px solid #b4e172;
+}
+#actividad #graficas #datos span.actividadColor.sleep {
   border-bottom: 5px solid #a7d06a;
 }
 .tipGodin {

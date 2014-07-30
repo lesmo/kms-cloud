@@ -71,7 +71,7 @@ function doKMS_populateGraph() {
             // --- Distribución de actividad --
             var activityTotal = 3; // inicialización en 3 para evitar error de división por cero
             var activityColors = {
-                "running": $('#datos .walking').css('border-bottom-color'),
+                "running": $('#datos .running').css('border-bottom-color'),
                 "walking": $('#datos .walking').css('border-bottom-color'),
                 "sleep": $('#datos .sleep').css('border-bottom-color')
             };
