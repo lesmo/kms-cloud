@@ -13116,6 +13116,19 @@ function getKMS_ajaxUri(file) {
     );
 }
 
+function setKMS_userPicture() {
+    $('#Usuario input[type=file]').trigger('click');
+}
+
+$(function () {
+    var $fileInput = $('#Usuario input[type=file]');
+    $('#Usuario input[type=file]').change(function () {
+        if ($fileInput.val().length < 1)
+            return;
+        else
+            $fileInput.parent().trigger('submit');
+    });
+});
 ;$(function () {
     // Establece el alto del Sidebar al alto de los Contenidos
     $('#sidebar').height(
