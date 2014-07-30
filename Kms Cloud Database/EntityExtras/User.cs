@@ -105,6 +105,8 @@ namespace Kms.Cloud.Database {
                                 = d.User.Guid
                         } into g
                         select new UserDataTotalDistance {
+                            Timestamp
+                                = g.Max(s => s.Timestamp),
                             TotalDistance
                                 = g.Sum(s => s.TotalDistance),
                             TotalSteps
@@ -121,6 +123,8 @@ namespace Kms.Cloud.Database {
                 if ( this._userDataTotalDistanceSum == null )
                     this._userDataTotalDistanceSum
                         = new UserDataTotalDistance() {
+                            Timestamp
+                                = default(DateTime),
                             TotalDistance
                                 = 0,
                             TotalSteps
