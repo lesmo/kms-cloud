@@ -91,12 +91,12 @@ namespace Kms.Cloud.Api.Controllers {
                 };
 
             // Calcular zancada a partir del género y altura
-            if ( userBody.Sex == "f" ) {
+            if ( userBody.Sex == "F" ) {
                 userBody.StrideLengthWalking
                     = (int)(userBody.Height * 0.413);//* 2; stride != step length
                 userBody.StrideLengthRunning
                     = (int)(userBody.Height * 1.13);
-            } else if ( userBody.Sex == "m" ) {
+            } else if ( userBody.Sex == "M" ) {
                 userBody.StrideLengthRunning
                     = (int)(userBody.Height * 0.415);//* 2;
                 userBody.StrideLengthRunning

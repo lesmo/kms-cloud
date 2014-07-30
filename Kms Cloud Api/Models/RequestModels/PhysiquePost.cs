@@ -21,7 +21,7 @@ namespace Kms.Cloud.Api.Models.RequestModels{
         public int Weight { get; set; }
 
         /// <summary>
-        ///     Género del Usuario. Puede ser "m" para Masculino o "f" para Femenino.
+        ///     Género del Usuario. Puede ser "M" para Masculino o "M" para Femenino.
         /// </summary>
         public string Sex { get; set; }
 

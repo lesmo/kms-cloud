@@ -1204,7 +1204,7 @@
         </member>
         <member name="P:Kms.Cloud.Api.Models.ResponseModels.PhysiqueResponse.Sex">
             <summary>
-                Género del Usuario. Puede ser "m" para Masculino o "f" para Femenino.
+                Género del Usuario. Puede ser "M" para Masculino o "F" para Femenino.
             </summary>
         </member>
         <member name="P:Kms.Cloud.Api.Models.ResponseModels.PhysiqueResponse.StrideLengthWalking">
@@ -1359,7 +1359,7 @@
         </member>
         <member name="P:Kms.Cloud.Api.Models.RequestModels.PhysiquePost.Sex">
             <summary>
-                Género del Usuario. Puede ser "m" para Masculino o "f" para Femenino.
+                Género del Usuario. Puede ser "M" para Masculino o "M" para Femenino.
             </summary>
         </member>
         <member name="P:Kms.Cloud.Api.Models.RequestModels.PhysiquePost.StrideLengthWalking">
