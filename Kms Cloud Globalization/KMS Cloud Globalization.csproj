@@ -108,38 +108,48 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="API\ControllerStrings.es-MX.resx" />
     <EmbeddedResource Include="API\ControllerStrings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ControllerStrings.designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="API\MessageHandlerStrings.es-MX.resx" />
+    <EmbeddedResource Include="Database\EntityValidationStrings.es-MX.resx" />
     <EmbeddedResource Include="Database\EntityValidationStrings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>EntityValidationStrings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Database\NotificationStrings.es-MX.resx" />
     <EmbeddedResource Include="Database\NotificationStrings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>NotificationStrings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="WebApp\FriendsStrings.es-MX.resx" />
     <EmbeddedResource Include="WebApp\FriendsStrings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>FriendsStrings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="WebApp\LayoutStrings.es-MX.resx" />
     <EmbeddedResource Include="WebApp\LayoutStrings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>LayoutStrings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="WebApp\LoginStrings.es-MX.resx" />
     <EmbeddedResource Include="WebApp\LoginStrings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>LoginStrings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="WebApp\OverviewStrings.es-MX.resx" />
     <EmbeddedResource Include="WebApp\OverviewStrings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>OverviewStrings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="WebApp\RewardsStrings.es-MX.resx" />
     <EmbeddedResource Include="WebApp\RewardsStrings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>RewardsStrings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="WebApp\TipsStrings.es-MX.resx" />
     <EmbeddedResource Include="WebApp\TipsStrings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>TipsStrings.Designer.cs</LastGenOutput>
