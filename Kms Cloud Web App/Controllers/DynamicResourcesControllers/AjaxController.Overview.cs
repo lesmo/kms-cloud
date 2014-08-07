@@ -20,6 +20,7 @@ namespace Kms.Cloud.WebApp.Controllers {
         private class MonthlyDataPoint {
             public Int32 year;
             public String month;
+            public Int32 monthNumeric;
             public Double distance;
             public Int64 steps;
         }
@@ -82,13 +83,14 @@ namespace Kms.Cloud.WebApp.Controllers {
             var lastMonthsStart = DateTime.UtcNow.AddMonths(-6);
             var monthlyActivityFallback = new List<MonthlyDataPoint>();
 
-            for ( var i = lastMonthsStart; i < DateTime.UtcNow; i = i.AddMonths(1) )
+            for ( var i = lastMonthsStart; i <= DateTime.UtcNow; i = i.AddMonths(1) )
                 monthlyActivityFallback.Add(new MonthlyDataPoint {
                     year = i.Year,
                     month = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(
                         CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(i.Month)
                         + (i.Year == DateTime.UtcNow.Year ? "" : " " + i.Year.ToString(CultureInfo.InvariantCulture))
                     ),
+                    monthNumeric = i.Month,
                     distance = 0,
                     steps = 0
                 });
@@ -107,6 +109,7 @@ namespace Kms.Cloud.WebApp.Controllers {
                         CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(g.Key.month)
                         + (g.Key.year == DateTime.UtcNow.Year ? "" : " " + g.Key.year.ToString(CultureInfo.InvariantCulture))
                     ),
+                    monthNumeric =  g.Key.month,
                     distance = RegionInfo.CurrentRegion.IsMetric
                         ? g.Sum(s => s.Distance).CentimetersToKilometers()
                         : g.Sum(s => s.Distance).CentimetersToMiles(),
@@ -118,7 +121,7 @@ namespace Kms.Cloud.WebApp.Controllers {
                 monthlyActivityFallback.Where(
                     w => ! monthlyActivity.Any(a => a.month == w.month && a.year == w.year)
                 )
-            );
+            ).OrderBy(b => b.year).ThenBy(b => b.monthNumeric);
 
             return Json(
                 new {
