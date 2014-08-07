@@ -309,6 +309,8 @@
     <Content Include="Scripts\highstock.src.js" />
     <Content Include="Scripts\jquery-ui-1.10.4.js" />
     <Content Include="Scripts\jquery-ui-1.10.4.min.js" />
+    <Content Include="Scripts\jquery-ui-i18n.js" />
+    <Content Include="Scripts\jquery-ui-i18n.min.js" />
     <Content Include="Scripts\prefix.js" />
     <Content Include="Scripts\prefix.min.js" />
     <None Include="Scripts\_lib.js" />
