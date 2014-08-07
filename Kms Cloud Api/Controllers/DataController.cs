@@ -339,8 +339,8 @@ namespace Kms.Cloud.Api.Controllers {
                                 (strideLength * dataPost.Steps).CentimetersToKilometers()
                                 // [/] Kilómetros por Litro de Gasoilna
                                 / 10d
-                            // [x] Precio por Litro de Gasolina en Dólares
-                            ) * 1.0d
+                            // [x] Precio por Litro de Gasolina en Centavos de Dólar
+                            ) * 100.0d
                         )
                 };
 
