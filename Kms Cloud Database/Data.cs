@@ -19,9 +19,9 @@ namespace Kms.Cloud.Database
         public int Steps { get; set; }
         public DataActivity Activity { get; set; }
         public int StrideLength { get; set; }
-        public int EqualsKcal { get; set; }
-        public int EqualsCo2 { get; set; }
-        public int EqualsCash { get; set; }
+        public double EqualsKcal { get; set; }
+        public double EqualsCo2 { get; set; }
+        public double EqualsCash { get; set; }
     
         public virtual User User { get; set; }
     }

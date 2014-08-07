@@ -52,7 +52,7 @@
         <AssociationConnector Association="MainModel.RegionRegionSubdivision" />
         <AssociationConnector Association="MainModel.ApiKeyHistory" />
         <AssociationConnector Association="MainModel.UserData" />
-        <EntityTypeShape EntityType="MainModel.UserTipHistory" Width="1.5" PointX="10" PointY="7.25" />
+        <EntityTypeShape EntityType="MainModel.UserTipHistory" Width="1.5" PointX="10" PointY="7" />
         <AssociationConnector Association="MainModel.UserTipHistoryUser" />
         <AssociationConnector Association="MainModel.UserTipHistoryTip" />
         <AssociationConnector Association="MainModel.RewardGiftRewardGiftPictures" />

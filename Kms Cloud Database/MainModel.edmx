@@ -310,10 +310,10 @@
       <PropertyRef Name="Guid" />
     </Key>
     <Property Name="Guid" Type="uniqueidentifier" Nullable="false" />
-    <Property Name="DistanceThresholdStart" Type="int" Nullable="false" />
-    <Property Name="DistanceThresholdEnd" Type="int" Nullable="false" />
-    <Property Name="DaysThresholdStart" Type="smallint" Nullable="false" />
-    <Property Name="DaysThresholdEnd" Type="smallint" Nullable="false" />
+    <Property Name="DistanceThresholdStart" Type="bigint" Nullable="false" />
+    <Property Name="DistanceThresholdEnd" Type="bigint" Nullable="false" />
+    <Property Name="DaysThresholdStart" Type="bigint" Nullable="true" />
+    <Property Name="DaysThresholdEnd" Type="bigint" Nullable="true" />
   </EntityType>
   <EntityType Name="DataSet">
     <Key>
@@ -324,9 +324,9 @@
     <Property Name="Steps" Type="int" Nullable="false" />
     <Property Name="Activity" Type="smallint" Nullable="false" />
     <Property Name="StrideLength" Type="int" Nullable="false" />
-    <Property Name="EqualsKcal" Type="int" Nullable="false" />
-    <Property Name="EqualsCo2" Type="int" Nullable="false" />
-    <Property Name="EqualsCash" Type="int" Nullable="false" />
+    <Property Name="EqualsKcal" Type="float" Nullable="false" />
+    <Property Name="EqualsCo2" Type="float" Nullable="false" />
+    <Property Name="EqualsCash" Type="float" Nullable="false" />
     <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
   </EntityType>
   <EntityType Name="UserBodySet">
@@ -425,6 +425,7 @@
     </Key>
     <Property Name="Guid" Type="uniqueidentifier" Nullable="false" />
     <Property Name="CreationDate" Type="datetime" Nullable="false" />
+    <Property Name="Favoriteddate" Type="datetime" Nullable="true" />
     <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
     <Property Name="Tip_Guid" Type="uniqueidentifier" Nullable="false" />
   </EntityType>
@@ -485,9 +486,9 @@
     <Property Name="Timestamp" Type="datetime" Nullable="false" />
     <Property Name="Steps" Type="bigint" Nullable="false" />
     <Property Name="Distance" Type="bigint" Nullable="false" />
-    <Property Name="Kcal" Type="bigint" Nullable="false" />
-    <Property Name="Co2" Type="bigint" Nullable="false" />
-    <Property Name="Cash" Type="bigint" Nullable="false" />
+    <Property Name="Kcal" Type="float" Nullable="false" />
+    <Property Name="Co2" Type="float" Nullable="false" />
+    <Property Name="Cash" Type="float" Nullable="false" />
     <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
   </EntityType>
   <EntityType Name="UserDataTotalDistance">
@@ -499,9 +500,9 @@
     <Property Name="Timestamp" Type="datetime" Nullable="false" />
     <Property Name="TotalSteps" Type="bigint" Nullable="false" />
     <Property Name="TotalDistance" Type="bigint" Nullable="false" />
-    <Property Name="TotalKcal" Type="bigint" Nullable="false" />
-    <Property Name="TotalCo2" Type="bigint" Nullable="false" />
-    <Property Name="TotalCash" Type="bigint" Nullable="false" />
+    <Property Name="TotalKcal" Type="float" Nullable="false" />
+    <Property Name="TotalCo2" Type="float" Nullable="false" />
+    <Property Name="TotalCash" Type="float" Nullable="false" />
     <Property Name="User_Guid" Type="uniqueidentifier" Nullable="false" />
   </EntityType>
   <EntityType Name="UserFriendSet">
@@ -1740,10 +1741,10 @@
             <PropertyRef Name="Guid" />
           </Key>
           <Property Type="Guid" Name="Guid" Nullable="false" annotation:StoreGeneratedPattern="None" />
-          <Property Type="Int32" Name="DistanceThresholdStart" Nullable="false" />
-          <Property Name="DistanceThresholdEnd" Nullable="false" Type="Int32" />
-          <Property Type="Int16" Name="DaysThresholdStart" Nullable="false" />
-          <Property Type="Int16" Name="DaysThresholdEnd" Nullable="false" />
+          <Property Type="Int64" Name="DistanceThresholdStart" Nullable="false" />
+          <Property Name="DistanceThresholdEnd" Nullable="false" Type="Int64" />
+          <Property Type="Int64" Name="DaysThresholdStart" Nullable="true" />
+          <Property Type="Int64" Name="DaysThresholdEnd" Nullable="true" />
           <NavigationProperty Name="MotionLevelGlobalization" Relationship="MainModel.TipMotionLevelTipMotionLevelGlobalization" FromRole="TipMotionLevel" ToRole="TipMotionLevelGlobalization" />
           <NavigationProperty Name="UserMotionLevelHistory" Relationship="MainModel.UserMotionLevelHistoryMotionLevel" FromRole="MotionLevel" ToRole="UserMotionLevelHistory" />
           <NavigationProperty Name="Tip" Relationship="MainModel.MotionLevelTip" FromRole="MotionLevel" ToRole="Tip" />
@@ -1829,9 +1830,9 @@
           <NavigationProperty Name="User" Relationship="MainModel.UserData" FromRole="Data" ToRole="User" />
           <Property Name="Activity" Type="MainModel.DataActivity" Nullable="false" />
           <Property Name="StrideLength" Type="Int32" Nullable="false" />
-          <Property Name="EqualsKcal" Type="Int32" Nullable="false" />
-          <Property Name="EqualsCo2" Type="Int32" Nullable="false" />
-          <Property Name="EqualsCash" Type="Int32" Nullable="false" />
+          <Property Name="EqualsKcal" Type="Double" Nullable="false" />
+          <Property Name="EqualsCo2" Type="Double" Nullable="false" />
+          <Property Name="EqualsCash" Type="Double" Nullable="false" />
         </EntityType>
         <EntityType Name="UserBody">
           <Documentation>
@@ -2191,6 +2192,7 @@
           <NavigationProperty Name="User" Relationship="MainModel.UserTipHistoryUser" FromRole="UserTipHistory" ToRole="User" />
           <NavigationProperty Name="Tip" Relationship="MainModel.UserTipHistoryTip" FromRole="UserTipHistory" ToRole="Tip" />
           <Property Name="CreationDate" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="None" Precision="3" />
+          <Property Name="Favoriteddate" Type="DateTime" Nullable="true" />
         </EntityType>
         <Association Name="UserTipHistoryUser">
           <End Type="MainModel.UserTipHistory" Role="UserTipHistory" Multiplicity="*" >
@@ -2300,9 +2302,9 @@
           <Property Name="Steps" Type="Int64" Nullable="false" />
           <Property Name="Distance" Type="Int64" Nullable="false" />
           <NavigationProperty Name="User" Relationship="MainModel.UserDataHourlyDistanceUser" FromRole="UserDataHourlyDistance" ToRole="User" />
-          <Property Name="Kcal" Type="Int64" Nullable="false" />
-          <Property Name="Co2" Type="Int64" Nullable="false" />
-          <Property Name="Cash" Type="Int64" Nullable="false" />
+          <Property Name="Kcal" Type="Double" Nullable="false" />
+          <Property Name="Co2" Type="Double" Nullable="false" />
+          <Property Name="Cash" Type="Double" Nullable="false" />
         </EntityType>
         <EntityType Name="UserDataTotalDistance">
           <Key>
@@ -2314,9 +2316,9 @@
           <Property Name="TotalSteps" Type="Int64" Nullable="false" />
           <Property Name="TotalDistance" Type="Int64" Nullable="false" />
           <NavigationProperty Name="User" Relationship="MainModel.UserUserDataTotalDistance" FromRole="UserDataTotalDistance" ToRole="User" />
-          <Property Name="TotalKcal" Type="Int64" Nullable="false" />
-          <Property Name="TotalCo2" Type="Int64" Nullable="false" />
-          <Property Name="TotalCash" Type="Int64" Nullable="false" />
+          <Property Name="TotalKcal" Type="Double" Nullable="false" />
+          <Property Name="TotalCo2" Type="Double" Nullable="false" />
+          <Property Name="TotalCash" Type="Double" Nullable="false" />
         </EntityType>
         <EntityType Name="UserFriend">
           <Key>
@@ -2613,6 +2615,7 @@
         <MappingFragment StoreEntitySet="UserTipHistorySet">
           <ScalarProperty Name="Guid" ColumnName="Guid" />
           <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+          <ScalarProperty Name="Favoriteddate" ColumnName="Favoriteddate" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

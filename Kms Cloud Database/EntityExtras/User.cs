@@ -113,11 +113,11 @@ namespace Kms.Cloud.Database {
                             TotalSteps
                                 = g.Sum(s => s.TotalSteps),
                             TotalKcal
-                                = g.Sum(s => s.TotalKcal),
+                                = (double)g.Sum(s => s.TotalKcal),
                             TotalCo2
-                                = g.Sum(s => s.TotalCo2),
+                                = (double)g.Sum(s => s.TotalCo2),
                             TotalCash
-                                = g.Sum(s => s.TotalCash)
+                                = (double)g.Sum(s => s.TotalCash)
                         }
                     ).FirstOrDefault();
 

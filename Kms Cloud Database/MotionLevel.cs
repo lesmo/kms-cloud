@@ -22,10 +22,10 @@ namespace Kms.Cloud.Database
         }
     
         public System.Guid Guid { get; set; }
-        public int DistanceThresholdStart { get; set; }
-        public int DistanceThresholdEnd { get; set; }
-        public short DaysThresholdStart { get; set; }
-        public short DaysThresholdEnd { get; set; }
+        public long DistanceThresholdStart { get; set; }
+        public long DistanceThresholdEnd { get; set; }
+        public Nullable<long> DaysThresholdStart { get; set; }
+        public Nullable<long> DaysThresholdEnd { get; set; }
     
         public virtual ICollection<MotionLevelGlobalization> MotionLevelGlobalization { get; set; }
         public virtual ICollection<UserMotionLevelHistory> UserMotionLevelHistory { get; set; }

@@ -16,6 +16,7 @@ namespace Kms.Cloud.Database
     {
         public System.Guid Guid { get; set; }
         public System.DateTime CreationDate { get; set; }
+        public Nullable<System.DateTime> Favoriteddate { get; set; }
     
         public virtual User User { get; set; }
         public virtual Tip Tip { get; set; }

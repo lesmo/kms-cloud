@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 07/12/2014 20:00:47
+-- Date Created: 08/05/2014 16:27:44
 -- Generated from EDMX file: E:\KMS Invent\KMS Cloud\Kms Cloud Database\MainModel.edmx
 -- --------------------------------------------------
 
@@ -358,10 +358,10 @@ GO
 -- Creating table 'MotionLevelSet'
 CREATE TABLE [dbo].[MotionLevelSet] (
     [Guid] uniqueidentifier  NOT NULL,
-    [DistanceThresholdStart] int  NOT NULL,
-    [DistanceThresholdEnd] int  NOT NULL,
-    [DaysThresholdStart] smallint  NOT NULL,
-    [DaysThresholdEnd] smallint  NOT NULL
+    [DistanceThresholdStart] bigint  NOT NULL,
+    [DistanceThresholdEnd] bigint  NOT NULL,
+    [DaysThresholdStart] bigint  NULL,
+    [DaysThresholdEnd] bigint  NULL
 );
 GO
 
@@ -372,9 +372,9 @@ CREATE TABLE [dbo].[DataSet] (
     [Steps] int  NOT NULL,
     [Activity] smallint  NOT NULL,
     [StrideLength] int  NOT NULL,
-    [EqualsKcal] int  NOT NULL,
-    [EqualsCo2] int  NOT NULL,
-    [EqualsCash] int  NOT NULL,
+    [EqualsKcal] float  NOT NULL,
+    [EqualsCo2] float  NOT NULL,
+    [EqualsCash] float  NOT NULL,
     [User_Guid] uniqueidentifier  NOT NULL
 );
 GO
@@ -473,6 +473,7 @@ GO
 CREATE TABLE [dbo].[UserTipHistorySet] (
     [Guid] uniqueidentifier  NOT NULL,
     [CreationDate] datetime  NOT NULL,
+    [Favoriteddate] datetime  NULL,
     [User_Guid] uniqueidentifier  NOT NULL,
     [Tip_Guid] uniqueidentifier  NOT NULL
 );
@@ -532,9 +533,9 @@ CREATE TABLE [dbo].[UserDataHourlyDistance] (
     [Timestamp] datetime  NOT NULL,
     [Steps] bigint  NOT NULL,
     [Distance] bigint  NOT NULL,
-    [Kcal] bigint  NOT NULL,
-    [Co2] bigint  NOT NULL,
-    [Cash] bigint  NOT NULL,
+    [Kcal] float  NOT NULL,
+    [Co2] float  NOT NULL,
+    [Cash] float  NOT NULL,
     [User_Guid] uniqueidentifier  NOT NULL
 );
 GO
@@ -545,9 +546,9 @@ CREATE TABLE [dbo].[UserDataTotalDistance] (
     [Timestamp] datetime  NOT NULL,
     [TotalSteps] bigint  NOT NULL,
     [TotalDistance] bigint  NOT NULL,
-    [TotalKcal] bigint  NOT NULL,
-    [TotalCo2] bigint  NOT NULL,
-    [TotalCash] bigint  NOT NULL,
+    [TotalKcal] float  NOT NULL,
+    [TotalCo2] float  NOT NULL,
+    [TotalCash] float  NOT NULL,
     [User_Guid] uniqueidentifier  NOT NULL
 );
 GO
@@ -1155,7 +1156,7 @@ ADD CONSTRAINT [FK_UserUserMotionLevelHistory]
     FOREIGN KEY ([User_Guid])
     REFERENCES [dbo].[UserSet]
         ([Guid])
-    ON DELETE NO ACTION ON UPDATE NO ACTION;
+    ON DELETE CASCADE ON UPDATE NO ACTION;
 GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_UserUserMotionLevelHistory'
@@ -1290,7 +1291,7 @@ ADD CONSTRAINT [FK_UserTipHistoryUser]
     FOREIGN KEY ([User_Guid])
     REFERENCES [dbo].[UserSet]
         ([Guid])
-    ON DELETE NO ACTION ON UPDATE NO ACTION;
+    ON DELETE CASCADE ON UPDATE NO ACTION;
 GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_UserTipHistoryUser'
@@ -1509,7 +1510,7 @@ ADD CONSTRAINT [FK_DeviceUser]
     FOREIGN KEY ([User_Guid])
     REFERENCES [dbo].[UserSet]
         ([Guid])
-    ON DELETE NO ACTION ON UPDATE NO ACTION;
+    ON DELETE CASCADE ON UPDATE NO ACTION;
 GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_DeviceUser'
@@ -1524,7 +1525,7 @@ ADD CONSTRAINT [FK_TokenWebAutoLoginToken]
     FOREIGN KEY ([Token_Guid])
     REFERENCES [dbo].[TokenSet]
         ([Guid])
-    ON DELETE NO ACTION ON UPDATE NO ACTION;
+    ON DELETE CASCADE ON UPDATE NO ACTION;
 GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_TokenWebAutoLoginToken'
