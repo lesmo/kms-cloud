@@ -105,7 +105,7 @@
 						<div class="progreso" style="width: @((layoutValues.TotalDistanceCentimeters / layoutValues.NextRewardDistanceCentimeters) * 100)%;"></div>
 					</div>
 				} else {
-					<img src="img/medalla.png" alt="">
+					<img src="@layoutValues.RecentlyUnlockedReward.IconUri" alt="@layoutValues.RecentlyUnlockedReward.Title">
 					<a href="@Url.Action("Detail", "Rewards", new { id = layoutValues.RecentlyUnlockedReward.RewardId })" class="botonDorado">
 						@LayoutStrings.ViewReward.ToUpper()
 					</a>
