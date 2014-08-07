@@ -1,18 +1,32 @@
 ﻿function doKMS_setupGraphs() {
+    var lang = $('html').attr('lang');
+    var i18n = $.datepicker.regional[""];
+
+    if (Object.has($.datepicker.regional, lang))
+        i18n = $.datepicker.regional[lang];
+
     Highcharts.setOptions({
         global: {
             useUTC: false
         },
         lang: {
-            months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-            shortMonths: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
-            weekdays: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+            months: i18n.monthNames,
+            shortMonths: i18n.monthNamesShort,
+            weekdays: i18n.dayNames,
             resetZoom: 'Restablecer Zoom',
             resetZoomTitle: 'Restablecer Zoom a 1:1',
             rangeSelectorZoom: 'Zoom',
             rangeSelectorFrom: 'Desde',
             rangeSelectorTo: 'Hasta',
             loading: 'Cargando ...'
+        }
+    });
+
+    $.datepicker.setDefaults({
+        dateFormat: 'yy-mm-dd',
+        onSelect: function () {
+            this.onchange();
+            this.onblur();
         }
     });
 }

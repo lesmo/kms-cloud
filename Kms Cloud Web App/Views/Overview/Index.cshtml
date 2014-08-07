@@ -87,8 +87,5 @@
 
 @section FooterScripts {
 	@Html.RenderJsBundle("~/Assets/Overview.js.bundle", BundleOptions.Combined)
-	<script type="text/javascript">
-		doKMS_setupGraphs();
-		doKMS_populateGraph();
-	</script>
+	<script type="text/javascript">doKMS_populateGraph();</script>
 }

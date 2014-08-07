@@ -1,7 +1,7 @@
 ﻿@{ LayoutValues layoutValues = ViewBag.Layout as LayoutValues; }
 
 <!DOCTYPE html>
-<html lang="@CultureInfo.CurrentCulture.TwoLetterISOLanguageName.ToLower()">
+<html lang="@CultureInfo.CurrentCulture.TwoLetterISOLanguageName.ToLower()" data-culture-code="@CultureInfo.CurrentCulture.Name">
 <head>
 	<meta charset="utf-8" />
 	<meta name="description" content="The description of my page" />
@@ -73,7 +73,7 @@
 
 	<div id="wrap">
 		@* -- Left Sidebar --- *@
-		<aside id="sidebar">
+		<aside id="sidebar" style="visibility:collapse;opacity:0">
 		@* - Datos generales del Usuario - *@
 			<section id="Usuario">
 				<h2>@layoutValues.UserName @layoutValues.UserLastname</h2>

@@ -3704,14 +3704,20 @@ discardElement:Ua,css:K,each:p,extend:s,map:za,merge:x,pick:q,splat:na,extendCla
 }).call(this);
 
 ;function doKMS_setupGraphs() {
+    var lang = $('html').attr('lang');
+    var i18n = $.datepicker.regional[""];
+
+    if (Object.has($.datepicker.regional, lang))
+        i18n = $.datepicker.regional[lang];
+
     Highcharts.setOptions({
         global: {
             useUTC: false
         },
         lang: {
-            months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-            shortMonths: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
-            weekdays: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+            months: i18n.monthNames,
+            shortMonths: i18n.monthNamesShort,
+            weekdays: i18n.dayNames,
             resetZoom: 'Restablecer Zoom',
             resetZoomTitle: 'Restablecer Zoom a 1:1',
             rangeSelectorZoom: 'Zoom',
@@ -3720,11 +3726,23 @@ discardElement:Ua,css:K,each:p,extend:s,map:za,merge:x,pick:q,splat:na,extendCla
             loading: 'Cargando ...'
         }
     });
+
+    $.datepicker.setDefaults({
+        dateFormat: 'yy-mm-dd',
+        onSelect: function () {
+            this.onchange();
+            this.onblur();
+        }
+    });
 }
 ;/// <reference path="../Shared/_shared.js" />
+/// <reference path="HighchartsSetup.js"/>
 
 function doKMS_populateGraph() {
     $(function () {
+        // > Configurar algunas cosas globales de las gráficas (idioma)
+        doKMS_setupGraphs();
+
         // > Descargar información de Gráfica Principal
         $.getJSON(
             getKMS_ajaxUri("OverviewHourlyData.json")
@@ -3757,8 +3775,8 @@ function doKMS_populateGraph() {
                             count: 1,
                             text: '1d'
                         }, {
-                            type: 'week',
-                            count: 1,
+                            type: 'day',
+                            count: 7,
                             text: '7d'
                         }, {
                             type: 'month',
@@ -3825,10 +3843,16 @@ function doKMS_populateGraph() {
                     },
                     name: 'Distancia recorrida'
                 }]
+            }, function () {
+                setTimeout(function () {
+                    $('#chartDiario .highcharts-range-selector').datepicker();
+                }, 0);
             });
 
             if (data.allData.count() < 3)
                 $('#chartDiario').highcharts().showLoading("¡No hay datos!");
+
+            doKMS_redimSidebar();
         });
 
         // > Descargar información de Gráfica Mensual
@@ -3862,6 +3886,8 @@ function doKMS_populateGraph() {
             }, {
                 scaleLabel: "<%=value%> " + $('body').data('distance-unit')
             });
+
+            doKMS_redimSidebar();
         });
 
         // > Descargar información de Gráfica de Distribución de Actividades
@@ -3918,12 +3944,11 @@ function doKMS_populateGraph() {
                 $('#datos .' + i).text(item.toFixed() + '%');
             });
 
-            console.log(data);
-            console.log(activityData);
-
-            return new Chart(
+            new Chart(
                 document.getElementById("chartActividad").getContext("2d")
             ).Doughnut(activityDataRaw);
+
+            doKMS_redimSidebar();
         });
     });
 }

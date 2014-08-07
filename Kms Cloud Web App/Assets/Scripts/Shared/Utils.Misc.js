@@ -6,7 +6,7 @@ function getKMS_ajaxUri(file) {
         "%s//%s/%s/DynamicResources/Ajax/%s",
         location.protocol,
         location.host,
-        $('html').attr('lang'),
+        $('html').data('culture-code'),
         file
     );
 }
