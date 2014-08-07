@@ -3,4 +3,10 @@
     $('#sidebar').height(
         $('#contenidos').height()
     );
+
+    // Establece el idioma de jQuery DatePicker
+    var lang = $('html').attr('lang');
+
+    if ( Object.has($.datepicker.regional, lang) )
+        $.datepicker.setDefaults($.datepicker.regional[lang]);
 });
