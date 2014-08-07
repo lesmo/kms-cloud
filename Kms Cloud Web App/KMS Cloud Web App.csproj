@@ -235,10 +235,11 @@
     </CodeAnalysisDictionary>
     <None Include="Assets\Friends.js.bundler" />
     <None Include="Assets\Overview.js.bundler" />
-    <Content Include="Content\images\ui-icons_00C6DD_0.png" />
-    <Content Include="Content\images\ui-icons_444444_0.png" />
-    <Content Include="Content\images\ui-icons_F2F2F2_0.png" />
-    <Content Include="Content\images\ui-icons_ffffff_0.png" />
+    <Content Include="Assets\Styles\jquery-ui-override.css" />
+    <Content Include="Images\ui-icons_00C6DD_0.png" />
+    <Content Include="Images\ui-icons_444444_0.png" />
+    <Content Include="Images\ui-icons_F2F2F2_0.png" />
+    <Content Include="Images\ui-icons_ffffff_0.png" />
     <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\normalize.css" />
     <Content Include="Content\themes\base\images\animated-overlay.gif" />
