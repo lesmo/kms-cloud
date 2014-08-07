@@ -68,24 +68,24 @@ namespace Kms.Cloud.WebApp.Models.Views {
             }
         }
 
-        public long TotalKcal {
+        public double TotalKcal {
             get;
             set;
         }
 
-        public long TotalCo2 {
+        public double TotalCo2 {
             get;
             set;
         }
 
-        public long TotalCashRaw {
+        public double TotalCashRaw {
             get;
             set;
         }
 
         public string TotalCash {
             get {
-                return this.TotalCashRaw.ToCurrencyString();
+                return this.TotalCashRaw.DollarCentsToDollars().ToCurrencyString();
             }
         }
     }

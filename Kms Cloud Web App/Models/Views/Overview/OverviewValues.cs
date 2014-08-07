@@ -46,7 +46,7 @@ namespace Kms.Cloud.WebApp.Models.Views {
         /// <summary>
         /// Equiavalencia de CO2 ahorrada por el Usuario en las últimas 24hrs.
         /// </summary>
-        public int EquivalentCo2Grams {
+        public double EquivalentCo2Grams {
             get;
             set;
         }
@@ -68,7 +68,7 @@ namespace Kms.Cloud.WebApp.Models.Views {
         /// <summary>
         /// Equiavalencia de CO2 ahorrada por el Usuario en las últimas 24hrs.
         /// </summary>
-        public int EquivalentKcalRaw {
+        public double EquivalentKcalRaw {
             get;
             set;
         }
@@ -85,7 +85,7 @@ namespace Kms.Cloud.WebApp.Models.Views {
         /// <summary>
         /// Equivalencia de Dinero ahorrado por el Usuario.
         /// </summary>
-        public int EquivalentCashRaw {
+        public double EquivalentCashRaw {
             get;
             set;
         }
