@@ -226,6 +226,7 @@
     </Content>
     <Content Include="Assets\Scripts\Friends\FriendList.js" />
     <Content Include="Assets\Scripts\Friends\FriendRequests.js" />
+    <Content Include="Assets\Scripts\Overview\HighchartsSetup.js" />
     <Content Include="Assets\Scripts\Overview\PopulateGraphs.js" />
     <Content Include="Assets\Scripts\Profiles\FriendRequest.js" />
     <Content Include="Assets\Scripts\Shared\Gui.Fix.js" />

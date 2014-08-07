@@ -3703,19 +3703,21 @@ discardElement:Ua,css:K,each:p,extend:s,map:za,merge:x,pick:q,splat:na,extendCla
 
 }).call(this);
 
+;function doKMS_setupGraphs() {
+    Highcharts.setOptions({
+        useUTC: false
+    });
+}
 ;/// <reference path="../Shared/_shared.js" />
 
 function doKMS_populateGraph() {
     $(function () {
-        // > Descargar información de Gráficas de AJAX de Overview
+        // > Descargar información de Gráfica Principal
         $.getJSON(
-            getKMS_ajaxUri("Overview.json")
-        ).fail(function () {
-            console.log("[!] - Error de descarga de datos");
-        }).done(function (data) {
-            console.log(data);
-
-            // --- Gráfica machingona ---
+            getKMS_ajaxUri("OverviewHourlyData.json")
+        ).fail(function() {
+            console.log("[!] - Error de descarga de datos (OverviewHourlyData.json)");
+        }).done(function(data) {
             $('#chartDiario').highcharts('StockChart', {
                 chart: {
                     type: 'spline',
@@ -3783,34 +3785,53 @@ function doKMS_populateGraph() {
                 },
                 tooltip: {
                     valueDecimals: 2,
-                    valueSuffix: $('body').data('distance-unit')
+                    valueSuffix: ' ' + $('body').data('distance-unit')
                 },
                 xAxis: {
                     minRange: 3600000 * 24
                 },
+                yAxis: {
+                    labels: {
+                        format: '{value} ' + $('body').data('distance-unit')
+                    },
+                    min: 0
+                },
+
                 series: [{
-                    data: data.minuteGraph,
+                    data: data.allData,
+                    dataGrouping: {
+                        approximation: 'sum',
+                        groupPixelWidth: 10
+                    },
                     color: '#00C6DD',
                     lineWidth: 3,
                     marker: {
+                        radius: 5,
                         lineWidth: 2,
-                        lineColor: '#00C6DD'
-                    }
+                        lineColor: '#FFFFFF'
+                    },
+                    name: 'Distancia recorrida'
                 }]
             });
 
-            if (data.minuteGraph.count() < 3)
+            if (data.allData.count() < 3)
                 $('#chartDiario').highcharts().showLoading("¡No hay datos!");
+        });
 
-            // --- Gráfica por mes ---
+        // > Descargar información de Gráfica Mensual
+        $.getJSON(
+            getKMS_ajaxUri("OverviewMonthlyData.json")
+        ).fail(function() {
+            console.log("[!] - Error de descarga de datos (OverviewMonthlyData.json)");
+        }).done(function (data) {
             // Inicializar variables
             var graphLabels = [];
             var graphDataDistance = [];
 
             // Obtener datos
-            $.each(data.monthlyGraph, function (i, item) {
+            $.each(data.allData, function (i, item) {
                 graphLabels.push(item.month);
-                graphDataDistance.push(item.distance);
+                graphDataDistance.push(Math.floor(item.distance));
             });
 
             // Generar gráfica
@@ -3828,9 +3849,15 @@ function doKMS_populateGraph() {
             }, {
                 scaleLabel: "<%=value%> " + $('body').data('distance-unit')
             });
+        });
 
-            // --- Distribución de actividad --
-            var activityTotal  = 1; // inicialización en 1 para evitar error de división por cero
+        // > Descargar información de Gráfica de Distribución de Actividades
+        $.getJSON(
+            getKMS_ajaxUri("OverviewYearlyData.json")
+        ).fail(function () {
+            console.log("[!] - Error de descarga de datos (OverviewYearlyData.json)");
+        }).done(function (data) {
+            var activityTotal  = 0;
             var activityColors = {
                 "running": $('#datos .running').css('border-bottom-color'),
                 "walking": $('#datos .walking').css('border-bottom-color'),
@@ -3843,14 +3870,31 @@ function doKMS_populateGraph() {
             };
             var activityDataRaw = [];
             
-            $.each(data.yearActivity, function (i, item) {
-                if ( item.activity != "sleep" )
-                    activityTotal += item.distance;
+            $.each(data.allData, function (i, item) {
+                activityTotal += item.steps;
             });
 
-            $.each(data.yearActivity, function (i, item) {
-                activityData[item.activity] = (item.totalDistance / activityTotal) * 100;
+            if (activityTotal < 1) {
+                $('#datos .running').text('0%');
+                $('#datos .walking').text('0%');
+                $('#datos .sleep').text('100%');
+
+                return new Chart(
+                    document.getElementById("chartActividad").getContext("2d")
+                ).Doughnut([{
+                    value: 100,
+                    color: activityColors["sleep"]
+                }]);
+            }
+
+            var percentTotal = 0;
+            $.each(data.allData, function (i, item) {
+                activityData[item.activity] = Math.floor((item.steps / activityTotal) * 100);
+                percentTotal += activityData[item.activity];
             });
+
+            if (percentTotal < 100)
+                activityData["sleep"] += 100 - percentTotal;
 
             $.each(activityData, function (i, item) {
                 activityDataRaw.push({
@@ -3861,7 +3905,10 @@ function doKMS_populateGraph() {
                 $('#datos .' + i).text(item.toFixed() + '%');
             });
 
-            new Chart(
+            console.log(data);
+            console.log(activityData);
+
+            return new Chart(
                 document.getElementById("chartActividad").getContext("2d")
             ).Doughnut(activityDataRaw);
         });

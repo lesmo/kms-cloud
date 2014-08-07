@@ -10,6 +10,7 @@ using System.Web;
 using System.Web.Mvc;
 
 namespace Kms.Cloud.WebApp.Controllers {
+	[AllowAnonymous]
 	public class DynamicResourcesController : BaseController {
 		// GET: /DynamicResources/Images/{filename}.{ext}
 		public FileResult Images(string filename, string ext) {

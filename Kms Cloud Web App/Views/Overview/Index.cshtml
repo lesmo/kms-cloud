@@ -58,7 +58,7 @@
 				<h2>@OverviewStrings.Last24hrsGraph.ToUpper()</h2>
 				<hr />
 			</span>
-			<canvas id="chartDiario" width="700" height="300"></canvas>
+			<div id="chartDiario" style="width:700px;height:300px"></div>
 		</article>
 		<article id="graficaMensual">
 			<span class="tituloGrafica">
@@ -87,5 +87,8 @@
 
 @section FooterScripts {
 	@Html.RenderJsBundle("~/Assets/Overview.js.bundle", BundleOptions.Combined)
-	<script type="text/javascript">doKMS_populateGraph();</script>
+	<script type="text/javascript">
+		doKMS_setupGraphs();
+		doKMS_populateGraph();
+	</script>
 }

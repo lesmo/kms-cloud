@@ -1,3 +1,4 @@
 ﻿../Scripts/highstock.js
 ../Scripts/chart.js
+Scripts/Overview/HighchartsSetup.js
 Scripts/Overview/PopulateGraphs.js
