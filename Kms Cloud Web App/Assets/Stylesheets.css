@@ -472,6 +472,10 @@ header h1 {
   display: inline-block;
   vertical-align: middle;
 }
+header h1 img {
+  margin: 7px 7px 7x 18px;
+  width: 80px;
+}
 header nav {
   display: inline-block;
   vertical-align: middle;

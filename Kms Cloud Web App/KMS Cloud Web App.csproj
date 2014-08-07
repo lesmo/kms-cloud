@@ -228,26 +228,21 @@
     <Content Include="Assets\Scripts\Friends\FriendRequests.js" />
     <Content Include="Assets\Scripts\Overview\PopulateGraphs.js" />
     <Content Include="Assets\Scripts\Profiles\FriendRequest.js" />
-    <Content Include="Assets\Scripts\Shared\Lib\chart.js" />
-    <Content Include="Assets\Scripts\Shared\Lib\chart.min.js" />
     <Content Include="Assets\Scripts\Shared\Gui.Fix.js" />
     <CodeAnalysisDictionary Include="..\KMS Cloud Code Analysis.ruleset">
       <Link>KMS Cloud Code Analysis.ruleset</Link>
     </CodeAnalysisDictionary>
     <None Include="Assets\Friends.js.bundler" />
     <None Include="Assets\Overview.js.bundler" />
-    <None Include="Assets\Scripts\Shared\Lib\jquery-1.10.2.intellisense.js" />
-    <Content Include="Assets\Scripts\Shared\Lib\jquery-1.10.2.js" />
-    <Content Include="Assets\Scripts\Shared\Lib\jquery-1.10.2.min.js" />
-    <Content Include="Assets\Scripts\Shared\Lib\modernizr-2.6.2.js" />
-    <Content Include="Assets\Scripts\Shared\Lib\modernizr-2.6.2.min.js" />
-    <Content Include="Assets\Scripts\Shared\Lib\prefix.js" />
-    <Content Include="Assets\Scripts\Shared\Lib\prefix.min.js" />
-    <Content Include="Assets\Scripts\Shared\Lib\respond.js" />
-    <Content Include="Assets\Scripts\Shared\Lib\respond.min.js" />
-    <None Include="Assets\Scripts\Shared\Lib\_lib.js" />
-    <Content Include="Assets\Scripts\Shared\Lib\sprintf.js" />
-    <Content Include="Assets\Scripts\Shared\Lib\sprintf.min.js" />
+    <Content Include="Scripts\chart.js" />
+    <Content Include="Scripts\chart.min.js" />
+    <Content Include="Scripts\highstock.js" />
+    <Content Include="Scripts\highstock.src.js" />
+    <Content Include="Scripts\prefix.js" />
+    <Content Include="Scripts\prefix.min.js" />
+    <None Include="Scripts\_lib.js" />
+    <Content Include="Scripts\sprintf.js" />
+    <Content Include="Scripts\sprintf.min.js" />
     <Content Include="Assets\Scripts\Shared\Utils.Misc.js" />
     <Content Include="Assets\Scripts\Shared\_shared.js" />
     <Content Include="Assets\Stylesheets.css">
@@ -1028,6 +1023,15 @@
     <Content Include="Images\Sidebar\Sidebar.Shadow.Down.png" />
     <Content Include="Images\Sidebar\Sidebar.Shadow.Up.png" />
     <Content Include="README.txt" />
+    <None Include="Scripts\jquery-2.1.1.intellisense.js" />
+    <Content Include="Scripts\jquery-2.1.1.js" />
+    <Content Include="Scripts\jquery-2.1.1.min.js" />
+    <Content Include="Scripts\modernizr-2.7.2.js" />
+    <Content Include="Scripts\respond.js" />
+    <Content Include="Scripts\respond.matchmedia.addListener.js" />
+    <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
+    <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\sugar.min.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -1051,8 +1055,6 @@
     <Content Include="Views\Rewards\Index.cshtml" />
     <Content Include="Views\Friends\Index.cshtml" />
     <Content Include="Assets\Styles\grid.styl" />
-    <Content Include="Assets\Scripts\Shared\Lib\jquery-1.10.2.min.js.map" />
-    <Content Include="Assets\Scripts\Shared\Lib\jquery-1.10.2.min.map" />
     <Content Include="KMS Cloud Web App SNK.pfx" />
     <None Include="Properties\PublishProfiles\kms-web-app.pubxml" />
     <None Include="Properties\Settings.settings">
@@ -1061,6 +1063,7 @@
     </None>
     <Content Include="Views\Search\Index.cshtml" />
     <Content Include="Views\Profiles\Index.cshtml" />
+    <Content Include="Scripts\jquery-2.1.1.min.map" />
     <None Include="Web.RemoteDebug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -1,9 +1,9 @@
-﻿Scripts/Shared/Lib/jquery-1.10.2.js
-Scripts/Shared/Lib/modernizr-2.6.2.js
-Scripts/Shared/Lib/respond.js
-Scripts/Shared/Lib/prefix.js
-Scripts/Shared/Lib/chart.js
-Scripts/Shared/Lib/sprintf.js
+﻿../Scripts/respond.js
+../Scripts/prefix.js
+../Scripts/jquery-2.1.1.js
+../Scripts/modernizr-2.7.2.js
+../Scripts/sprintf.js
+../Scripts/sugar.min.js
 Scripts/Shared/Utils.Misc.js
 Scripts/Shared/Gui.Fix.js
 Scripts/Shared/Gui.Alerts.js
