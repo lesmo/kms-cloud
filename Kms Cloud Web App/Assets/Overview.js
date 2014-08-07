@@ -3705,7 +3705,20 @@ discardElement:Ua,css:K,each:p,extend:s,map:za,merge:x,pick:q,splat:na,extendCla
 
 ;function doKMS_setupGraphs() {
     Highcharts.setOptions({
-        useUTC: false
+        global: {
+            useUTC: false
+        },
+        lang: {
+            months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            shortMonths: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+            weekdays: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+            resetZoom: 'Restablecer Zoom',
+            resetZoomTitle: 'Restablecer Zoom a 1:1',
+            rangeSelectorZoom: 'Zoom',
+            rangeSelectorFrom: 'Desde',
+            rangeSelectorTo: 'Hasta',
+            loading: 'Cargando ...'
+        }
     });
 }
 ;/// <reference path="../Shared/_shared.js" />

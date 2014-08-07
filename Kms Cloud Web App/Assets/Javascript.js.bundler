@@ -1,9 +1,10 @@
 ﻿../Scripts/respond.js
-../Scripts/prefix.js
-../Scripts/jquery-2.1.1.js
 ../Scripts/modernizr-2.7.2.js
 ../Scripts/sprintf.js
 ../Scripts/sugar.min.js
+../Scripts/prefix.js
+../Scripts/jquery-2.1.1.js
+../Scripts/jquery-ui-1.10.4.js
 Scripts/Shared/Utils.Misc.js
 Scripts/Shared/Gui.Fix.js
 Scripts/Shared/Gui.Alerts.js

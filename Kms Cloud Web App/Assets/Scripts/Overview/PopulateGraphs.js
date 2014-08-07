@@ -106,6 +106,11 @@ function doKMS_populateGraph() {
 
             if (data.allData.count() < 3)
                 $('#chartDiario').highcharts().showLoading("¡No hay datos!");
+        }, function(chart) {
+            setTimeout(function () {
+                $('input.highcharts-range-selector', $(chart.container).parent())
+                    .datepicker();
+            }, 0);
         });
 
         // > Descargar información de Gráfica Mensual
