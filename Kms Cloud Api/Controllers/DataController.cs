@@ -110,7 +110,7 @@ namespace Kms.Cloud.Api.Controllers {
 
             if ( ifModifiedSince.HasValue ) {
                 if ( CurrentUser.UserDataTotalDistanceSum.Timestamp != default(DateTime) ) {
-                    if ( ifModifiedSince.Value.DateTime > CurrentUser.UserDataTotalDistanceSum.Timestamp )
+                    if ( ifModifiedSince.Value.DateTime < CurrentUser.UserDataTotalDistanceSum.Timestamp )
                         throw new HttpNotModifiedException();
                 }
             }
@@ -130,12 +130,18 @@ namespace Kms.Cloud.Api.Controllers {
                 };
             }
 
-            var distanceRunning = CurrentUser.UserDataTotalDistance.Where(
-                w => w.Activity == DataActivity.Running
-            ).FirstOrDefault();
-            var distanceWalking = CurrentUser.UserDataTotalDistance.Where(
-                w => w.Activity == DataActivity.Walking
-            ).FirstOrDefault();
+            var distanceRunning = CurrentUser.UserDataTotalDistance.FirstOrDefault(w => w.Activity == DataActivity.Running)
+                ?? new UserDataTotalDistance {
+                    Timestamp = DateTime.UtcNow,
+                    TotalDistance = 0,
+                    TotalSteps = 0
+                };
+            var distanceWalking = CurrentUser.UserDataTotalDistance.FirstOrDefault(w => w.Activity == DataActivity.Walking)
+                ?? new UserDataTotalDistance {
+                    Timestamp = DateTime.UtcNow,
+                    TotalDistance = 0,
+                    TotalSteps = 0
+                };
 
             // --- Preparar y devolver respuesta ---
             return new DataTotalResponse {

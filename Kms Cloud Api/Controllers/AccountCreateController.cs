@@ -104,17 +104,38 @@ namespace Kms.Cloud.Api.Controllers {
             }
 
             // --- Crear un Data Point en 0 ---
-            Data data
-                = new Data {
+            var data = new Data[] {
+                new Data {
                     Timestamp = DateTime.UtcNow,
                     Steps = 0,
-                    Activity = 0,
+                    Activity = DataActivity.Running,
                     StrideLength = 0,
                     EqualsKcal = 0,
                     EqualsCo2 = 0,
                     EqualsCash = 0,
                     User = user
-                };
+                },
+                new Data {
+                    Timestamp = DateTime.UtcNow,
+                    Steps = 0,
+                    Activity = DataActivity.Walking,
+                    StrideLength = 0,
+                    EqualsKcal = 0,
+                    EqualsCo2 = 0,
+                    EqualsCash = 0,
+                    User = user
+                },
+                new Data {
+                    Timestamp = DateTime.UtcNow,
+                    Steps = 0,
+                    Activity = DataActivity.Sleep,
+                    StrideLength = 0,
+                    EqualsKcal = 0,
+                    EqualsCo2 = 0,
+                    EqualsCash = 0,
+                    User = user
+                }
+            };
 
             // --- Crear MotionLevelHistory ---
             MotionLevel motionLevel
@@ -144,7 +165,10 @@ namespace Kms.Cloud.Api.Controllers {
             Database.UserStore.Add(user);
             Database.UserBodyStore.Add(userBody);
             Database.UserMotionLevelStore.Add(motionLevelHistory);
-            Database.DataStore.Add(data);
+            
+            foreach ( var d in data )
+                Database.DataStore.Add(d);
+
             Database.TokenStore.Add(token);
             Database.TokenStore.Delete(OAuth.Token);
 
