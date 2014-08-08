@@ -86,7 +86,7 @@
 				<span class="origen">
 					@layoutValues.LocationString.ToUpper()
 				</span>
-				@using ( Html.BeginForm("UploadPicture", "Account") ) {
+				@using ( Html.BeginForm("UploadPicture", "Account", FormMethod.Post, new { enctype = "multipart/form-data" }) ) {
 					<input type="file" name="file" />
 				}
 			</section>

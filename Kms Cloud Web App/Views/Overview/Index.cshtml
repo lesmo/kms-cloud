@@ -4,17 +4,17 @@
 	<div class="recorridoSueno">
 		<aside class="tresCol">
 			<p>
-				@Model.TodaySleepTime.Hours <span class="peque">hrs</span>
-				@Model.TodaySleepTime.Minutes <span class="peque">min</span>
-			</p>
-			<em>@OverviewStrings.TodaySleepTime.ToUpper()</em>
-		</aside>
-		<aside class="tresCol">
-			<p>
 				@Model.TodayDistance
 				<span class="peque">@(RegionInfo.CurrentRegion.IsMetric ? "kms" : "mi")</span>
 			</p>
 			<em>@OverviewStrings.TodayTraveled.ToUpper()</em>
+		</aside>
+		<aside class="tresCol">
+			<p>
+				@Model.TodaySleepTime.Hours <span class="peque">hrs</span>
+				@Model.TodaySleepTime.Minutes <span class="peque">min</span>
+			</p>
+			<em>@OverviewStrings.TodaySleepTime.ToUpper()</em>
 		</aside>
 	</div>
 
