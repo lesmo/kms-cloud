@@ -11,15 +11,15 @@ namespace Kms.Cloud.Api.Models.ResponseModels {
         /// <summary>
         ///     Distancia total alcanzada corriendo.
         /// </summary>
-        public long RunningTotalDistance { get; set; }
+        public double RunningTotalDistance { get; set; }
         /// <summary>
         ///     Distancia total alcanzada caminando.
         /// </summary>
-        public long WalkingTotalDistance { get; set; }
+        public double WalkingTotalDistance { get; set; }
         /// <summary>
         ///     Distancia total alcanzada.
         /// </summary>
-        public long TotalDistance { get; set; }
+        public double TotalDistance { get; set; }
 
         /// <summary>
         ///     Pasos totales dados corriendo.

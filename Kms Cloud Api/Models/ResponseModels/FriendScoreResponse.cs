@@ -14,7 +14,7 @@ namespace Kms.Cloud.Api.Models.ResponseModels {
         ///     Distancia Total recorrida por el Usuario representado en el
         ///     objeto Friend EN CENTÍMETROS.
         /// </summary>
-        public long TotalDistance { get; set; }
+        public double TotalDistance { get; set; }
 
         /// <summary>
         ///     Indica si el objeto Friend de éste elemento en la lista es
