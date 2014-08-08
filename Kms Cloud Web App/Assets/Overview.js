@@ -3752,7 +3752,7 @@ function doKMS_populateGraph() {
 			$('#chartDiario').highcharts('StockChart', {
 				chart: {
 					type: 'spline',
-					zoomType: 'xy'
+					zoomType: 'x'
 				},
 				credits: {
 					enabled: false
@@ -3788,7 +3788,6 @@ function doKMS_populateGraph() {
 						fill: 'none',
 						stroke: 'none',
 						'stroke-width': 0,
-						r: 8,
 						style: {
 							color: '#00C6DD',
 							fontWeight: 'bold'
@@ -3843,8 +3842,11 @@ function doKMS_populateGraph() {
 					name: 'Distancia recorrida'
 				}]
 			}, function () {
-				setTimeout(function () {
-					$('#chartDiario .highcharts-range-selector').datepicker();
+			    setTimeout(function () {
+			        $('#chartDiario .highcharts-range-selector').datepicker({
+					    minDate: new Date(data.allData[0][0]),
+					    maxDate: new Date(data.allData.last()[0])
+					});
 				}, 0);
 			});
 

@@ -105,8 +105,11 @@ function doKMS_populateGraph() {
 					name: 'Distancia recorrida'
 				}]
 			}, function () {
-				setTimeout(function () {
-					$('#chartDiario .highcharts-range-selector').datepicker();
+			    setTimeout(function () {
+			        $('#chartDiario .highcharts-range-selector').datepicker({
+					    minDate: new Date(data.allData[0][0]),
+					    maxDate: new Date(data.allData.last()[0])
+					});
 				}, 0);
 			});
 
