@@ -88,10 +88,7 @@ namespace Kms.Cloud.WebApp.Controllers {
                             = nextReward.DistanceTrigger - CurrentUser.UserDataTotalDistanceSum.TotalDistance;
                 } else {
                     this._layoutValues.RecentlyUnlockedReward
-                        = new RewardModel() {
-                            RewardId
-                                = lastReward.Guid.ToBase64String()
-                        };
+                        = new RewardModel(lastReward, this);
                 }
 
                 // > Obtener el Tip del Día
