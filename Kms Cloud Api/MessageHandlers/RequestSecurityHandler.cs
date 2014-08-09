@@ -82,7 +82,7 @@ namespace Kms.Cloud.Api.MessageHandlers {
             var httpOAuthValidRequest = await httpOAuth.ValidateRequestAsync(request);
             if ( httpOAuthValidRequest ) {
                 // Actualizar LastUseDate de Token
-                if ( httpOAuth.Token != null ) {
+                if ( httpOAuth.Token != null && httpOAuth.Token.LastUseDate < DateTime.UtcNow.AddMinutes(-1) ) {
                     httpOAuth.Token.IPAddress = request.GetClientIpAddress();
                     Database.TokenStore.Update(httpOAuth.Token);
                 }
