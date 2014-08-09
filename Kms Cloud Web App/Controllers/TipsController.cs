@@ -20,7 +20,7 @@ namespace Kms.Cloud.WebApp.Controllers {
 				page--;
 
 			// > Obtener las Categorías de Tips
-			var tipCategories = Database.TipCategoryStore.GetAll();
+			var tipCategories = Database.TipCategoryStore.GetAll().ToList();
 
 			TipCategory tipCategory;
 			

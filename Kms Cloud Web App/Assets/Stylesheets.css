@@ -1630,12 +1630,14 @@ footer nav ul li a {
   display: inline-block;
   margin: 0 1em;
 }
-#tipsGodines #Navegacion-Tips #contenidosAjax {
+img #contenidosAjax,
+height: 72px #contenidosAjax {
   padding-top: 1em;
   height: 800px;
   overflow-y: auto;
 }
-#tipsGodines #Navegacion-Tips #contenidosAjax figure {
+img #contenidosAjax figure,
+height: 72px #contenidosAjax figure {
   display: inline;
   float: left;
   width: 10.714285714285714%;
@@ -1646,7 +1648,8 @@ footer nav ul li a {
   display: inline-block;
   vertical-align: top;
 }
-#tipsGodines #Navegacion-Tips #contenidosAjax article {
+img #contenidosAjax article,
+height: 72px #contenidosAjax article {
   display: inline;
   float: left;
   width: 48.214285714285715%;
@@ -1658,10 +1661,12 @@ footer nav ul li a {
   vertical-align: top;
   text-align: left;
 }
-#tipsGodines #Navegacion-Tips #contenidosAjax article em {
+img #contenidosAjax article em,
+height: 72px #contenidosAjax article em {
   color: #ff6168;
 }
-#tipsGodines #Navegacion-Tips #contenidosAjax article strong {
+img #contenidosAjax article strong,
+height: 72px #contenidosAjax article strong {
   color: #00c5db;
 }
 #recorridoSueno {

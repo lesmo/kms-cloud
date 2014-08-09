@@ -16,7 +16,7 @@ namespace Kms.Cloud.WebApp.Models.Views {
             RewardId = earnedReward.Guid.ToBase64String();
             IconUri  = controller.GetDynamicResourceUri(earnedReward.Reward);
 
-            var globalization = earnedReward.Reward.GetGlobalization(CultureInfo.CurrentUICulture);
+            var globalization = earnedReward.Reward.GetGlobalization();
             Title = globalization.Title;
             Text  = globalization.Text;
 
