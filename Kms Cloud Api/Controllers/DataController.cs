@@ -18,6 +18,7 @@ using System.Threading;
 using Kms.Cloud.Api.MagicTriggers;
 using System.Globalization;
 using System.Diagnostics.CodeAnalysis;
+using WebGrease.Css.Extensions;
 
 namespace Kms.Cloud.Api.Controllers {
     /// <summary>
@@ -195,24 +196,19 @@ namespace Kms.Cloud.Api.Controllers {
                     : lastData.Timestamp;
 
             // --- Determinar los registros que si se almacenarán en BD ---
-            // Especificar que fechas son UTC
-            foreach ( DataPost i in dataPost )
-                i.Timestamp = DateTime.SpecifyKind(
-                    i.Timestamp,
-                    DateTimeKind.Utc
-                );
-
-            // TODO: Incluir un algoritmo que mejore la solución al problema
-            //       de datos replicados y sincronía.
-            var finalDataPost = new List<DataPost>();
-
-            foreach ( DataPost i in dataPost ) {
-                if ( i.Timestamp > lastDataTimestamp && i.Timestamp < DateTime.UtcNow )
-                    finalDataPost.Add(i);
-            }
+            // TODO: Incluir un algoritmo que mejore la solución al problema de datos replicados y sincronía.
+            var finalDataPost = dataPost.Where(
+                i => i.Timestamp > lastDataTimestamp && i.Timestamp < DateTime.UtcNow
+            ).Select(
+                s => new DataPost {
+                    Timestamp = DateTime.SpecifyKind(s.Timestamp, DateTimeKind.Utc),
+                    Activity  = s.Activity,
+                    Steps     = s.Steps
+                } 
+            ).ToList();
 
             // --- Almacenar los nuevos Datos ---
-            foreach ( DataPost i in dataPost )
+            foreach ( var i in finalDataPost )
                 this.PrepareDataInsert(i);
 
             Database.SaveChanges();
