@@ -232,6 +232,7 @@
     <Compile Include="Controllers\GiftsController.cs" />
     <Compile Include="Controllers\RewardsController.cs" />
     <Compile Include="Controllers\OAuth3rdPartyLoginController.cs" />
+    <Compile Include="Controllers\SchedulerController.cs" />
     <Compile Include="Controllers\TipsController.cs" />
     <Compile Include="Controllers\WebAutoLoginController.cs" />
     <Compile Include="Controllers\WorldController.cs" />

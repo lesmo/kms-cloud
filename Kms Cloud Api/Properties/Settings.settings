@@ -17,5 +17,8 @@
     <Setting Name="KmsWebAppUriMask" Type="System.String" Scope="Application">
       <Value Profile="(Default)">https://app.kms.me/Login/Auto?k={0}&amp;h={{0}}</Value>
     </Setting>
+    <Setting Name="SchedulerKey" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">c047741054fb491186d28dca981953854b4acc4a5cfc435ea5065587fb6ce763</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

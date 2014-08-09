@@ -67,5 +67,14 @@ namespace Kms.Cloud.Api.Properties {
                 return ((string)(this["KmsWebAppUriMask"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("c047741054fb491186d28dca981953854b4acc4a5cfc435ea5065587fb6ce763")]
+        public string SchedulerKey {
+            get {
+                return ((string)(this["SchedulerKey"]));
+            }
+        }
     }
 }
