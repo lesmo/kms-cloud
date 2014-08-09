@@ -21,7 +21,7 @@ namespace Kms.Cloud.Database.EntityLocalization {
         internal virtual GT GetGlobalization<GT>(CultureInfo culture) where GT : IGlobalization, new() {
             // > Determinar si no se tiene ya en memoria la Globalización de ésta Entidad
             if ( culture == null )
-                culture = CultureInfo.CurrentCulture;
+                culture = CultureInfo.CurrentUICulture;
 
             int hashCode
                 = culture.LCID;
