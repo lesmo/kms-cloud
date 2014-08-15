@@ -93,14 +93,14 @@ namespace Kms.Cloud.Api.Controllers {
             // Calcular zancada a partir del género y altura
             if ( userBody.Sex == "F" ) {
                 userBody.StrideLengthWalking
-                    = (int)(userBody.Height * 0.413);//* 2; stride != step length
+                    = (int)(userBody.Height * 0.413d);
                 userBody.StrideLengthRunning
-                    = (int)(userBody.Height * 1.13);
+                    = (int)(userBody.Height * 0.613d);
             } else if ( userBody.Sex == "M" ) {
+                userBody.StrideLengthWalking
+                    = (int)(userBody.Height * 0.415d);
                 userBody.StrideLengthRunning
-                    = (int)(userBody.Height * 0.415);//* 2;
-                userBody.StrideLengthRunning
-                    = (int)(userBody.Height * 1.15);
+                    = (int)(userBody.Height * 0.615d);
             }
 
             // --- Crear un Data Point en 0 ---
