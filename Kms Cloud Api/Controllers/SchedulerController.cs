@@ -10,9 +10,8 @@ using System.Web.Http;
 using Kms.Cloud.Database.Abstraction;
 
 namespace Kms.Cloud.Api.Controllers {
-    public class SchedulerController : ApiController {
-        private readonly WorkUnit Database = (WorkUnit)HttpContext.Current.Items["Database"]; 
-        
+    [AllowAnonymous]
+    public class SchedulerController : BaseController {
         [HttpGet, Route("scheduler/{key}/tips")]
         public IHttpActionResult Tips(string key) {
             if ( key != Settings.Default.SchedulerKey )

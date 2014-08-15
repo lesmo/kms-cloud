@@ -42,9 +42,17 @@ namespace Kms.Cloud.Api.MessageHandlers {
             #endif
 
             // --- Validar que no ésta URI no esté en lista de ByPass ---
+            var comparableUri = request.RequestUri.AbsolutePath.TrimStart(
+                new char[] {
+                    '/'
+                });
             if (
-                WebApiConfig.KmsOAuthConfig.BypassOAuthAbsoluteUris.Contains(
-                    request.RequestUri.AbsolutePath.TrimEnd(new char[] { '/' })
+                WebApiConfig.KmsOAuthConfig.BypassOAuthAbsoluteUris.Any(a =>
+                    a == comparableUri
+                    || (
+                        a.EndsWith("*") &&
+                        comparableUri.StartsWith(a.Remove(a.Length - 1))
+                    )
                 )
             ) {
                 // Crear Principal Anónimo y continuar ejecución

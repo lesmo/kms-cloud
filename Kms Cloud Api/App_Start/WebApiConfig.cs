@@ -21,7 +21,9 @@ namespace Kms.Cloud.Api {
 
             public const string ApiRealm = "api.kms.me";
 
-            public static readonly HashSet<string> BypassOAuthAbsoluteUris = new HashSet<string>();
+            public static readonly HashSet<string> BypassOAuthAbsoluteUris = new HashSet<string> {
+                "scheduler/*"
+            };
         }
         
         public static void Register(HttpConfiguration config) {
