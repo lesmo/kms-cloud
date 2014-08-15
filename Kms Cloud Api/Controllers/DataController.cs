@@ -110,10 +110,8 @@ namespace Kms.Cloud.Api.Controllers {
                 = Request.Headers.IfModifiedSince;
 
             if ( ifModifiedSince.HasValue ) {
-                if ( CurrentUser.UserDataTotalDistanceSum.Timestamp != default(DateTime) ) {
-                    if ( ifModifiedSince.Value.DateTime < CurrentUser.UserDataTotalDistanceSum.Timestamp )
-                        throw new HttpNotModifiedException();
-                }
+                if ( CurrentUser.UserDataTotalDistanceSum.Timestamp == default(DateTime) || ifModifiedSince.Value.DateTime < CurrentUser.UserDataTotalDistanceSum.Timestamp )
+                    throw new HttpNotModifiedException();
             }
 
             if ( CurrentUser.UserDataTotalDistanceSum.Timestamp == default(DateTime) ) {
@@ -126,20 +124,22 @@ namespace Kms.Cloud.Api.Controllers {
                     WalkingTotalSteps = 0,
                     TotalSteps        = 0,
 
-                    // TODO: Cambiar con fecha en la que se lanza KMS.
-                    LastModified = new DateTime(2014, 1, 1, 0, 0, 0, DateTimeKind.Utc)
+                    LastModified = CurrentUser.CreationDate
                 };
             }
 
-            var distanceRunning = CurrentUser.UserDataTotalDistance.FirstOrDefault(w => w.Activity == DataActivity.Running)
+            var distanceRunning = 
+                CurrentUser.UserDataTotalDistance.FirstOrDefault(w => w.Activity == DataActivity.Running)
                 ?? new UserDataTotalDistance {
-                    Timestamp = DateTime.UtcNow,
+                    Timestamp = CurrentUser.CreationDate,
                     TotalDistance = 0,
                     TotalSteps = 0
                 };
-            var distanceWalking = CurrentUser.UserDataTotalDistance.FirstOrDefault(w => w.Activity == DataActivity.Walking)
+
+            var distanceWalking = 
+                CurrentUser.UserDataTotalDistance.FirstOrDefault(w => w.Activity == DataActivity.Walking)
                 ?? new UserDataTotalDistance {
-                    Timestamp = DateTime.UtcNow,
+                    Timestamp = CurrentUser.CreationDate,
                     TotalDistance = 0,
                     TotalSteps = 0
                 };
@@ -193,12 +193,20 @@ namespace Kms.Cloud.Api.Controllers {
             var lastDataTimestamp =
                 lastData == null
                     ? DateTime.MinValue
-                    : lastData.Timestamp;
+                    : DateTime.SpecifyKind(lastData.Timestamp, DateTimeKind.Utc);
 
             // --- Determinar los registros que si se almacenarán en BD ---
             // TODO: Incluir un algoritmo que mejore la solución al problema de datos replicados y sincronía.
             var finalDataPost = dataPost.Where(
-                i => i.Timestamp > lastDataTimestamp && i.Timestamp < DateTime.UtcNow
+                i =>
+                    i.Activity != null
+                    && (
+                        i.Activity.ToUpper() == "SLEEP"
+                        || i.Activity.ToUpper() == "RUNNING"
+                        || i.Activity.ToUpper() == "WALKING"
+                    )
+                    && DateTime.SpecifyKind(i.Timestamp, DateTimeKind.Utc) > lastDataTimestamp
+                    && DateTime.SpecifyKind(i.Timestamp, DateTimeKind.Utc) <= DateTime.UtcNow
             ).Select(
                 s => new DataPost {
                     Timestamp = DateTime.SpecifyKind(s.Timestamp, DateTimeKind.Utc),
