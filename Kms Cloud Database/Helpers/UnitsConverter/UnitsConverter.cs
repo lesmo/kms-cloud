@@ -17,5 +17,9 @@ namespace Kms.Cloud.Database.Helpers {
         public static Int64 ToJavascriptEpoch(this DateTime @this) {
             return @this.AddTicks(-LinuxEpochTicks).Ticks / 10000;
         }
+
+        public static DateTime DateFromJavascriptEpoch(this Int64 @this) {
+            return new DateTime(LinuxEpochTicks + @this * 10000, DateTimeKind.Utc);
+        }
     }
 }
