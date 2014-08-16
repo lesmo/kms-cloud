@@ -33,14 +33,23 @@ namespace Kms.Cloud.WebApp.Controllers {
 				TipId    = lastTip.Guid.ToBase64String()
 			};
 			
-			// > Obtener registro de actividades de las últimas 24 hrs
-			//   [MUST REVIEW + OPTIMIZE]
-			var lowerBound  = DateTime.UtcNow.AddHours(-24);
+			// > Obtener registro de actividades del día de hoy
+			var lowerBound = DateTime.UtcNow.Add(+ClientUtcOffset);
+			lowerBound = new DateTime(
+				lowerBound.Year, 
+				lowerBound.Month, 
+				lowerBound.Day,
+				0,
+				0,
+				0,
+				DateTimeKind.Utc
+			).Add(-ClientUtcOffset);
+
 			var lastDayData =  Database.DataStore.GetAll(
 				filter: f =>
 					f.User.Guid == CurrentUser.Guid
-					&& f.Timestamp < DateTime.UtcNow
-					&& f.Timestamp > lowerBound,
+					&& f.Timestamp <= DateTime.UtcNow
+					&& f.Timestamp >= lowerBound,
 				orderBy: o =>
 					o.OrderBy(b => b.Timestamp)
 			).ToArray();
@@ -52,19 +61,22 @@ namespace Kms.Cloud.WebApp.Controllers {
 
 			// Inicialización de variables de propiedades
 			modelValues.TodayDistanceCentimeters = 0;
-			modelValues.EquivalentCo2Grams = 0;
+			modelValues.EquivalentCo2Grams       = 0;
+			modelValues.TodaySleepTime           = new TimeSpan(0);
 
 			foreach ( var data in lastDayData ) {
-				if ( data.Activity == Kms.Cloud.Database.DataActivity.Sleep ) {
+				if ( data.Activity == DataActivity.Sleep ) {
 					// + Si no hay Timestamp inicial, establecerlo
-					if ( !tmpTimestamp.HasValue )
-						tmpTimestamp = data.Timestamp;                        
+					if ( ! tmpTimestamp.HasValue )
+						tmpTimestamp = data.Timestamp;
+
+					
 				} else {
 					// + Si hay Timestamp inicial se calcula la diferencia temporal,
 					//   se añade al total de Horas de Sueño y se "blanquea" el
 					//   Timestamp inicial
 					if ( tmpTimestamp.HasValue ) {
-						modelValues.TodaySleepTime.Add(
+						modelValues.TodaySleepTime = modelValues.TodaySleepTime.Add(
 							data.Timestamp - tmpTimestamp.Value
 						);
 
