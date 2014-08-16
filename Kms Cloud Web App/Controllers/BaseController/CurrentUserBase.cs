@@ -15,7 +15,7 @@ namespace Kms.Cloud.WebApp.Controllers {
             get {
                 if ( this._currentUser != null )
                     return this._currentUser;
-
+                    
                 if ( !User.Identity.IsAuthenticated )
                     return null;
 
