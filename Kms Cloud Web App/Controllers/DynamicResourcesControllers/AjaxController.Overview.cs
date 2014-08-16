@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel;
+using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
 using Kms.Cloud.Database;
 using Kms.Cloud.Database.Helpers;
 using System;
@@ -10,7 +12,7 @@ using System.Web.Mvc;
 
 namespace Kms.Cloud.WebApp.Controllers {
     public partial class AjaxController {
-
+        
         private struct TotalDataPoint {
             public String activity;
             public Int64 distance;
@@ -26,63 +28,137 @@ namespace Kms.Cloud.WebApp.Controllers {
         }
 
         // GET: /DynamicResources/Ajax/OverviewHourlyData.json
-        public JsonResult OverviewHourlyData() {
-            // > Obtener lecturas
-            //   [MUST REVIEW] Las lecturas deberían distinguir entre la actividad {Correr},
-            //                 {Caminar} y {Sueño}. Actualmente se "agregan" todas las actividades
-            //                 que no correspondan a {Sueño}, puesto que la vista NO dispone de
-            //                 ésta diferenciación en la Gráfica del día de Hoy.
-            var lastYearStart = DateTime.UtcNow.AddYears(-1);
-            var lastData =
-                CurrentUser.UserDataHourlyDistance.OrderByDescending(b => b.Timestamp).FirstOrDefault()
-                ?? new UserDataHourlyDistance {
-                    Activity = DataActivity.Walking,
-                    Steps = 0,
-                    Timestamp = DateTime.UtcNow.AddMinutes(-2),
-                    User = CurrentUser
-                };
+        public JsonResult OverviewDailyData(Int64? date) {
+            // > Determinar límite inferior de fecha, de acuerdo a Zona horaria del Cliente
+            var lowerBound = date.HasValue
+                ? date.Value.DateFromJavascriptEpoch().Add(+ClientUtcOffset) // ajustar a zona horaria de cliente
+                : DateTime.UtcNow.Add(+ClientUtcOffset); // ajustar a zona horaria de cliente
+            
+            lowerBound = new DateTime(
+                lowerBound.Year,
+                lowerBound.Month,
+                lowerBound.Day,
+                0,
+                0, 
+                0, 
+                DateTimeKind.Utc
+            ).Add(-ClientUtcOffset); // ajustar a zona horaria UTC
 
+            var higherRound = lowerBound.AddDays(1);
+
+            // > Obtener lecturas
             var data = (
-                from d in CurrentUser.UserDataHourlyDistance
+                from d in CurrentUser.Data
                 where
                     d.Activity != DataActivity.Sleep
-                    && d.Timestamp > lastYearStart
+                    && d.Timestamp >= lowerBound
+                    && d.Timestamp <= higherRound
                 group d by new {
-                    year = d.Timestamp.Year,
+                    year  = d.Timestamp.Year,
                     month = d.Timestamp.Month,
-                    day = d.Timestamp.Day,
-                    hour = d.Timestamp.Hour,
-                    minute = d.Timestamp.Minute
+                    day   = d.Timestamp.Day,
+                    hour  = d.Timestamp.Hour,
+                    part  = (int)Math.Floor(d.Timestamp.Hour / 5d)
                 } into g
-                orderby g.Key.year, g.Key.month, g.Key.day, g.Key.hour, g.Key.minute
+                orderby g.Key.year, g.Key.month, g.Key.day, g.Key.part
                 select new object[] {
-                    new DateTime(g.Key.year, g.Key.month, g.Key.day, g.Key.hour, g.Key.minute, 0).ToJavascriptEpoch(),
+                    new DateTime(g.Key.year, g.Key.month, g.Key.day, g.Key.hour, g.Key.part * 5, 0, DateTimeKind.Utc)
+                        .ToJavascriptEpoch(),
                     RegionInfo.CurrentRegion.IsMetric
-                        ? g.Sum(s => s.Distance).CentimetersToKilometers()
-                        : g.Sum(s => s.Distance).CentimetersToMiles()
+                        ? g.Sum(s => s.Steps * s.StrideLength).CentimetersToKilometers()
+                        : g.Sum(s => s.Steps * s.StrideLength).CentimetersToMiles()
                 }
             );
 
-            var paddingData = new List<object[]>();
-            for ( var i = lastData.Timestamp.AddMinutes(2); i < DateTime.UtcNow; i = i.AddMinutes(2) )
-                paddingData.Add(new object[] {
+            var dataFallback = new List<object[]>();
+            for ( var i = lowerBound; i <= higherRound; i = i.AddMinutes(5) ) {
+                dataFallback.Add(new object[] {
                     i.ToJavascriptEpoch(),
-                    null
+                    0
                 });
+            }
+
+            var dataFinal = data.Concat(
+                dataFallback.Where(w => ! data.Any(a => a[0] == w[0]))
+            ).OrderBy(b => b[0]);
 
             return Json(
                 new {
-                    allData = paddingData.Concat(data).OrderBy(b => b[0])
+                    allData = dataFinal
                 },
                 JsonRequestBehavior.AllowGet
             );
         }
 
-        public JsonResult OverviewMonthlyData() {
-            // Obtener sumatoria por mes de los últimos 6 meses
-            var lastMonthsStart = DateTime.UtcNow.AddMonths(-6);
-            var monthlyActivityFallback = new List<MonthlyDataPoint>();
+        public JsonResult OverviewMonthlyData(Int64? date) {
+            // > Determinar límite inferior de fecha, de acuerdo a Zona horaria del Cliente
+            var lowerBound = date.HasValue
+                ? date.Value.DateFromJavascriptEpoch().Add(+ClientUtcOffset) // ajustar a zona horaria de cliente
+                : DateTime.UtcNow.Add(+ClientUtcOffset); // ajustar a zona horaria de cliente
 
+            lowerBound = new DateTime(
+                lowerBound.Year,
+                lowerBound.Month,
+                1,
+                0,
+                0,
+                0,
+                DateTimeKind.Utc
+            ).Add(-ClientUtcOffset); // ajustar a zona horaria UTC
+
+            var higherRound = lowerBound.AddMonths(1);
+
+            // > Obtener lecturas
+            var data = (
+                from d in Database.UserDataHourlyDistance.GetQueryable(f => f.User.Guid == CurrentUser.Guid)
+                where
+                    d.Activity != DataActivity.Sleep
+                    && d.Timestamp >= lowerBound
+                    && d.Timestamp <= higherRound
+                group d by new {
+                    // ReSharper disable PossibleInvalidOperationException (nunca ocurre porque en BD la columna nunca es NULL)
+                    year  = DbFunctions.AddMinutes(d.Timestamp, (Int32)ClientUtcOffset.TotalMinutes).Value.Year,
+                    month = DbFunctions.AddMinutes(d.Timestamp, (Int32)ClientUtcOffset.TotalMinutes).Value.Month,
+                    day   = DbFunctions.AddMinutes(d.Timestamp, (Int32)ClientUtcOffset.TotalMinutes).Value.Day
+                    // ReSharper restore PossibleInvalidOperationException
+                } into g
+                orderby g.Key.year, g.Key.month, g.Key.day
+                select new {
+                    timestamp = new DateTime(g.Key.year, g.Key.month, g.Key.day, 0, 0, 0, DateTimeKind.Utc),
+                    distance  = g.Sum(s => s.Distance)
+                }
+            ).ToList().Select(s => new object[] {
+                s.timestamp.Add(-ClientUtcOffset).ToJavascriptEpoch(), // Se debe ajustar a UTC debido a que el agrupado arriba
+                RegionInfo.CurrentRegion.IsMetric
+                    ? s.distance.CentimetersToKilometers()
+                    : s.distance.CentimetersToMiles(),
+            });
+
+            var dataFallback = new List<object[]>();
+            for ( var i = lowerBound; i <= higherRound; i = i.AddDays(1) ) {
+                dataFallback.Add(new object[] {
+                    i.ToJavascriptEpoch(),
+                    0
+                });
+            }
+
+            var dataFinal = data.Concat(
+                dataFallback.Where(w => !data.Any(a => a[0] == w[0]))
+            ).OrderBy(b => b[0]);
+
+            return Json(
+                new {
+                    allData = dataFinal
+                },
+                JsonRequestBehavior.AllowGet
+            );
+        }
+
+        public JsonResult OverviewMonthlyComparisonData() {
+            // Obtener sumatoria por mes de los últimos 6 meses
+            var lastMonthsStart = DateTime.UtcNow.AddMonths(-5).Add(+ClientUtcOffset);
+            var monthlyActivityFallback = new List<MonthlyDataPoint>();
+            
             for ( var i = lastMonthsStart; i <= DateTime.UtcNow; i = i.AddMonths(1) )
                 monthlyActivityFallback.Add(new MonthlyDataPoint {
                     year = i.Year,
@@ -91,31 +167,39 @@ namespace Kms.Cloud.WebApp.Controllers {
                         + (i.Year == DateTime.UtcNow.Year ? "" : " " + i.Year.ToString(CultureInfo.InvariantCulture))
                     ),
                     monthNumeric = i.Month,
-                    distance = 0,
-                    steps = 0
+                    distance     = 0,
+                    steps        = 0
                 });
-
+            
             var monthlyActivity = (
-                from d in CurrentUser.UserDataHourlyDistance
+                from d in Database.UserDataHourlyDistance.GetQueryable(f => f.User.Guid == CurrentUser.Guid)
                 where d.Timestamp > lastMonthsStart
                 group d by new {
-                    year  = d.Timestamp.Year,
-                    month = d.Timestamp.Month
+                    // ReSharper disable PossibleInvalidOperationException (nunca ocurre porque en BD la columna nunca es NULL)
+                    year  = DbFunctions.AddMinutes(d.Timestamp, (Int32)ClientUtcOffset.TotalMinutes).Value.Year,
+                    month = DbFunctions.AddMinutes(d.Timestamp, (Int32)ClientUtcOffset.TotalMinutes).Value.Month
+                    // ReSharper restore PossibleInvalidOperationException
                 } into g
                 orderby g.Key.year, g.Key.month
-                select new MonthlyDataPoint {
-                    year = g.Key.year,
-                    month = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(
-                        CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(g.Key.month)
-                        + (g.Key.year == DateTime.UtcNow.Year ? "" : " " + g.Key.year.ToString(CultureInfo.InvariantCulture))
-                    ),
-                    monthNumeric =  g.Key.month,
-                    distance = RegionInfo.CurrentRegion.IsMetric
-                        ? g.Sum(s => s.Distance).CentimetersToKilometers()
-                        : g.Sum(s => s.Distance).CentimetersToMiles(),
-                    steps = g.Sum(s => s.Steps)
+                select new {
+                    year     = g.Key.year,
+                    month    = g.Key.month,
+                    distance = g.Sum(s => s.Distance),
+                    steps    = g.Sum(s => s.Steps)
                 }
-            );
+            ).ToList().Select(s => new MonthlyDataPoint {
+                year         = s.year,
+                monthNumeric = s.month,
+
+                month = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(
+                    CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(s.month)
+                    + (s.year == DateTime.UtcNow.Year ? "" : " " + s.year.ToString(CultureInfo.InvariantCulture))
+                ),
+                distance = RegionInfo.CurrentRegion.IsMetric
+                    ? s.distance.CentimetersToKilometers()
+                    : s.distance.CentimetersToMiles(),
+                steps = s.steps
+            });
 
             var monthlyActivityFinal = monthlyActivity.Concat(
                 monthlyActivityFallback.Where(
@@ -134,9 +218,9 @@ namespace Kms.Cloud.WebApp.Controllers {
         // GET: /DynamicResources/Ajax/Overview.json
         public JsonResult OverviewYearlyData() {
             // > Obtener sumatoria total por actividad
-            var lastYearStart = DateTime.UtcNow.AddYears(-1);
+            var lastYearStart = DateTime.UtcNow.AddYears(-1).Add(+ClientUtcOffset);
             var yearActivity = (
-                from d in CurrentUser.UserDataTotalDistance
+                from d in Database.UserDataTotalDistance.GetQueryable(f => f.User.Guid == CurrentUser.Guid)
                 where d.Timestamp >= lastYearStart && d.Activity != 0
                 group d by new {
                     activity = d.Activity
@@ -147,7 +231,7 @@ namespace Kms.Cloud.WebApp.Controllers {
                     steps    = g.Sum(s => s.TotalSteps)
                 }
             );
-
+            
             // > Preparar respuesta en JSON
             return Json(
                 new {

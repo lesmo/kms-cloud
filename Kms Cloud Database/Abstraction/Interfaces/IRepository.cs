@@ -55,7 +55,7 @@ namespace Kms.Cloud.Database.Abstraction.Interfaces {
             this._dbSet = dbContext.Set<TEntity>();
         }
 
-        private IQueryable<TEntity> GetQueryable(
+        public IQueryable<TEntity> GetQueryable(
             Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             Func<IQueryable<TEntity>, IQueryable<TEntity>> extra = null,
