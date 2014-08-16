@@ -53,12 +53,24 @@
 		<em>@OverviewStrings.Equivalence.ToUpper()</em>
 	</aside>
 	<section id="graficas">
-		<article id="graficaDiaria">
+		<article id="graficaPrincipal">
 			<span class="tituloGrafica">
 				<h2>@OverviewStrings.Last24hrsGraph.ToUpper()</h2>
 				<hr />
 			</span>
-			<div id="chartDiario" style="width:700px;height:300px"></div>
+			<div id="graficaPrincipalTabs">
+				<ul>
+					<li><a href="#graficaDiaria">Diaria</a></li>
+					<li><a href="#graficaMensual">Mensual</a></li>
+				</ul>
+				
+				<div id="graficaDiaria">
+					<div class="graph"></div>
+				</div>
+				<div id="graficaMensual">
+					<div class="graph"></div>
+				</div>
+			</div>
 		</article>
 		<article id="graficaMensual">
 			<span class="tituloGrafica">
@@ -87,5 +99,4 @@
 
 @section FooterScripts {
 	@Html.RenderJsBundle("~/Assets/Overview.js.bundle", BundleOptions.Combined)
-	<script type="text/javascript">doKMS_populateGraph();</script>
 }

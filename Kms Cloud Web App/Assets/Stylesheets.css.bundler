@@ -1,4 +1,5 @@
 ﻿../Content/normalize.css
 ../Content/jquery-ui.css
+../Content/cropper.css
 Styles/style.styl
 Styles/jquery-ui-override.css

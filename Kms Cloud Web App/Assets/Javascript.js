@@ -26102,6 +26102,677 @@ $.widget( "ui.tooltip", {
 
 }( jQuery ) );
 
+;/*
+https://github.com/KidSysco/jquery-ui-month-picker/
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Lesser General Public
+License as published by the Free Software Foundation;
+version 3.0. This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+Lesser General Public License for more details.
+You should have received a copy of the GNU Lesser General Public
+License along with this library; if not, visit
+http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
+*/
+;
+(function ($, window, document, undefined) {
+    var _markup;
+    var _speed = 500;
+    var _disabledClass = 'month-picker-disabled';
+    var _inputMask = '99/9999';
+
+    $.MonthPicker = {
+        i18n: {
+            year: "Year",
+            prevYear: "Previous Year",
+            nextYear: "Next Year",
+            jumpYears: "Jump Years",
+            months: ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'June', 'July', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.']
+        }
+    };
+
+    _markup =
+        '<div class="ui-widget-header ui-helper-clearfix ui-corner-all">' +
+            '<table class="month-picker-year-table" width="100%" border="0" cellspacing="1" cellpadding="2">' +
+                '<tr>' +
+                    '<td class="previous-year"><button>&nbsp;</button></td>' +
+                    '<td class="year-container-all">' +
+                        '<div class="year-title"></div>' +
+                        '<div id="year-container"><span class="year"></span></div>' +
+                    '</td>' +
+                    '<td class="next-year"><button>&nbsp;</button></td>' +
+                '</tr>' +
+            '</table>' +
+        '</div>' +
+        '<div class="ui-widget ui-widget-content ui-helper-clearfix ui-corner-all">' +
+            '<table class="month-picker-month-table" width="100%" border="0" cellspacing="1" cellpadding="2">' +
+                '<tr>' +
+                    '<td><button type="button" class="button-1"></button></td>' +
+                    '<td><button class="button-2" type="button"></button></td>' +
+                    '<td><button class="button-3" type="button"></button></td>' +
+                '</tr>' +
+                '<tr>' +
+                    '<td><button class="button-4" type="button"></button></td>' +
+                    '<td><button class="button-5" type="button"></button></td>' +
+                    '<td><button class="button-6" type="button"></button></td>' +
+                '</tr>' +
+                '<tr>' +
+                    '<td><button class="button-7" type="button"></button></td>' +
+                    '<td><button class="button-8" type="button"></button></td>' +
+                    '<td><button class="button-9" type="button"></button></td>' +
+                '</tr>' +
+                '<tr>' +
+                    '<td><button class="button-10" type="button"></button></td>' +
+                    '<td><button class="button-11" type="button"></button></td>' +
+                    '<td><button class="button-12" type="button"></button></td>' +
+                '</tr>' +
+            '</table>' +
+        '</div>';
+
+    $.widget("KidSysco.MonthPicker", {
+
+        /******* Properties *******/
+
+        options: {
+            i18n: null,
+            StartYear: null,
+            ShowIcon: true,
+            UseInputMask: false,
+            ValidationErrorMessage: null,
+            Disabled: false,
+            OnAfterMenuOpen: null,
+            OnAfterMenuClose: null,
+            OnAfterNextYear: null,
+            OnAfterNextYears: null,
+            OnAfterPreviousYear: null,
+            OnAfterPreviousYears: null,
+            OnAfterChooseMonth: null,
+            OnAfterChooseYear: null,
+            OnAfterChooseYears: null,
+            OnAfterChooseMonths: null
+        },
+
+        _monthPickerMenu: null,
+
+        _monthPickerButton: null,
+
+        _validationMessage: null,
+
+        _yearContainer: null,
+
+        _isMonthInputType: null,
+
+        _enum: {
+            _overrideStartYear: 'MonthPicker_OverrideStartYear'
+        },
+
+        /******* jQuery UI Widget Factory Overrides ********/
+
+        _destroy: function () {
+            if (jQuery.mask && this.options.UseInputMask) {
+                this.element.unmask();
+            }
+
+            this.element.val('')
+                .css('color', '')
+                .removeClass('month-year-input')
+                .removeData(this._enum._overrideStartYear)
+                .unbind();
+
+            $(document).unbind('click.MonthPicker' + this.element.attr('id'), $.proxy(this._hide, this));
+
+            this._monthPickerMenu.remove();
+            this._monthPickerMenu = null;
+
+            if (this.monthPickerButton) {
+                this._monthPickerButton.remove();
+                this._monthPickerButton = null;
+            }
+
+            if (this._validationMessage) {
+                this._validationMessage.remove();
+                this._validationMessage = null;
+            }
+        },
+
+        _setOption: function (key, value) {
+            // In jQuery UI 1.8, manually invoke the _setOption method from the base widget.
+            //$.Widget.prototype._setOption.apply(this, arguments);
+            // In jQuery UI 1.9 and above, you use the _super method instead.
+            this._super("_setOption", key, value);
+            switch (key) {
+                case 'i18n':
+                    this.options.i18n = $.extend({}, value);
+                    break;
+                case 'Disabled':
+                    this.options.Disabled = value;
+                    this._setDisabledState();
+                    break;
+                case 'OnAfterChooseMonth':
+                    this.options.OnAfterChooseMonth = value;
+                    break;
+                case 'OnAfterChooseMonths':
+                    this.options.OnAfterChooseMonths = value;
+                    break;
+                case 'OnAfterChooseYear':
+                    this.options.OnAfterChooseYear = value;
+                    break;
+                case 'OnAfterChooseYears':
+                    this.options.OnAfterChooseYears = value;
+                    break;
+                case 'OnAfterMenuClose':
+                    this.options.OnAfterMenuClose = value;
+                    break;
+                case 'OnAfterMenuOpen':
+                    this.options.OnAfterMenuOpen = value;
+                    break;
+                case 'OnAfterNextYear':
+                    this.options.OnAfterNextYear = value;
+                    break;
+                case 'OnAfterNextYears':
+                    this.options.OnAfterNextYears = value;
+                    break;
+                case 'OnAfterPreviousYear':
+                    this.options.OnAfterPreviousYear = value;
+                    break;
+                case 'OnAfterPreviousYears':
+                    this.options.OnAfterPreviousYears = value;
+                    break;
+                case 'UseInputMask':
+                    this.options.UseInputMask = value;
+                    this._setUseInputMask();
+                    break;
+                case 'StartYear':
+                    this.options.StartYear = value;
+                    this._setStartYear();
+                    if (value !== null) {
+                        this._setPickerYear(value);
+                    }
+                    break;
+                case 'ShowIcon':
+                    this.options.ShowIcon = value;
+                    this._showIcon();
+                    break;
+                case 'ValidationErrorMessage':
+                    this.options.ValidationErrorMessage = value;
+                    if (this.options.ValidationErrorMessage !== null) {
+                        this._createValidationMessage();
+                    } else {
+                        this._removeValidationMessage();
+                    }
+
+                    break;
+            }
+        },
+
+        _init: function () {
+            if (!jQuery.ui || !jQuery.ui.button || !jQuery.ui.datepicker) {
+                alert('MonthPicker Setup Error: The jQuery UI button and datepicker plug-ins must be loaded before MonthPicker is called.');
+                return false;
+            }
+
+            if (!(this.element.is('input[type="text"]') || this.element.is('input[type="month"]'))) {
+                alert('MonthPicker Setup Error: MonthPicker can only be called on text or month inputs. ' + this.element.attr('id') + ' is not a text or month input.');
+                return false;
+            }
+
+            if (!jQuery.mask && this.options.UseInputMask) {
+                alert('MonthPicker Setup Error: The UseInputMask option is set but the Digital Bush Input Mask jQuery Plugin is not loaded. Get the plugin from http://digitalbush.com/');
+                return false;
+            }
+
+            if (this.element.is('input[type="month"]')) {
+                this.element.css('width', 'auto');
+                this._isMonthInputType = true;
+            } else {
+                this._isMonthInputType = false;
+            }
+
+            this.element.addClass('month-year-input');
+
+            this._setStartYear();
+
+            this._monthPickerMenu = $('<div id="MonthPicker_' + this.element.attr('id') + '" class="month-picker ui-helper-clearfix"></div>');
+
+            $(_markup).appendTo(this._monthPickerMenu);
+            $('body').append(this._monthPickerMenu);
+
+            this._monthPickerMenu.find('.year-title').text(this._i18n('year'));
+            this._monthPickerMenu.find('.year-container-all').attr('title', this._i18n('jumpYears'));
+
+            this._showIcon();
+
+            this._createValidationMessage();
+
+            this._yearContainer = $('.year', this._monthPickerMenu);
+
+            $('.previous-year button', this._monthPickerMenu)
+                .button({
+                    icons: {
+                        primary: 'ui-icon-circle-triangle-w'
+                    },
+                    text: false
+                });
+
+            $('.next-year button', this._monthPickerMenu)
+                .button({
+                    icons: {
+                        primary: 'ui-icon-circle-triangle-e'
+                    },
+                    text: false
+                });
+
+            $('.month-picker-month-table td button', this._monthPickerMenu).button();
+
+            $('.year-container-all', this._monthPickerMenu).click($.proxy(this._showYearsClickHandler, this));
+
+            $(document).bind('click.MonthPicker' + this.element.attr('id'), $.proxy(this._hide, this));
+            this._monthPickerMenu.bind('click.MonthPicker', function (event) {
+                return false;
+            });
+
+            this._setUseInputMask();
+            this._setDisabledState();
+        },
+
+        /****** Misc. Utility functions ******/
+
+        _i18n: function (str) {
+            return $.extend({}, $.MonthPicker.i18n, this.options.i18n)[str];
+        },
+
+        _isFunction: function (func) {
+            return typeof (func) === 'function';
+        },
+
+        /****** Publicly Accessible API functions ******/
+
+        GetSelectedYear: function () {
+            return this._validateYear(this.element.val());
+        },
+
+        GetSelectedMonth: function () {
+            return this._validateMonth(this.element.val());
+        },
+
+        GetSelectedMonthYear: function () {
+            var _month = this._validateMonth(this.element.val()),
+                _year = this._validateYear(this.element.val()),
+                _date;
+
+            if (!isNaN(_year) && !isNaN(_month)) {
+                if (this.options.ValidationErrorMessage !== null && !this.options.Disabled) {
+                    $('#MonthPicker_Validation_' + this.element.attr('id')).hide();
+                }
+
+                if (this._isMonthInputType) {
+                    _date = _year + '-' + _month;
+                } else {
+                    _date = _month + '/' + _year;
+                }
+
+                $(this).val(_date);
+                return _date;
+            } else {
+                if (this.options.ValidationErrorMessage !== null && !this.options.Disabled) {
+                    $('#MonthPicker_Validation_' + this.element.attr('id')).show();
+                }
+
+                return null;
+            }
+        },
+
+        Disable: function () {
+            this._setOption("Disabled", true);
+        },
+
+        Enable: function () {
+            this._setOption("Disabled", false);
+        },
+
+        ClearAllCallbacks: function () {
+            this.options.OnAfterChooseMonth = null;
+            this.options.OnAfterChooseMonths = null;
+            this.options.OnAfterChooseYear = null;
+            this.options.OnAfterChooseYears = null;
+            this.options.OnAfterMenuClose = null;
+            this.options.OnAfterMenuOpen = null;
+            this.options.OnAfterNextYear = null;
+            this.options.OnAfterNextYears = null;
+            this.options.OnAfterPreviousYear = null;
+            this.options.OnAfterPreviousYears = null;
+        },
+
+        Clear: function () {
+            this.element.val('');
+
+            if (this._validationMessage !== null) {
+                this._validationMessage.hide();
+            }
+        },
+
+        /****** Private functions ******/
+
+        _showIcon: function () {
+            if (this._monthPickerButton === null) {
+                if (this.options.ShowIcon) {
+                    this._monthPickerButton = $('<span id="MonthPicker_Button_' + this.element.attr('id') + '" class="month-picker-open-button">Open Month Chooser</span>').insertAfter(this.element);
+                    this._monthPickerButton.button({
+                        text: false,
+                        icons: {
+                            primary: 'ui-icon-calculator'
+                        }
+                    })
+                        .click($.proxy(this._show, this));
+                } else {
+                    this.element.bind('click.MonthPicker', $.proxy(this._show, this));
+                }
+            } else {
+                if (!this.options.ShowIcon) {
+                    this._monthPickerButton.remove();
+                    this._monthPickerButton = null;
+                    this.element.bind('click.MonthPicker', $.proxy(this._show, this));
+                }
+            }
+        },
+
+        _createValidationMessage: function () {
+            if (this.options.ValidationErrorMessage !== null && this.options.ValidationErrorMessage !== '') {
+                this._validationMessage = $('<span id="MonthPicker_Validation_' + this.element.attr('id') + '" class="month-picker-invalid-message">' + this.options.ValidationErrorMessage + '</span>');
+
+                this._validationMessage.insertAfter(this.options.ShowIcon ? this.element.next() : this.element);
+
+                this.element.blur($.proxy(this.GetSelectedMonthYear, this));
+            }
+        },
+
+        _removeValidationMessage: function () {
+            if (this.options.ValidationErrorMessage === null) {
+                this._validationMessage.remove();
+                this._validationMessage = null;
+            }
+        },
+
+        _show: function () {
+            var _selectedYear = this.GetSelectedYear();
+            if (this.element.data(this._enum._overrideStartYear) !== undefined) {
+                this._setPickerYear(this.options.StartYear);
+            } else if (!isNaN(_selectedYear)) {
+                this._setPickerYear(_selectedYear);
+            } else {
+                this._setPickerYear(new Date().getFullYear());
+            }
+
+            if (this._monthPickerMenu.css('display') === 'none') {
+                var _top = this.element.offset().top + this.element.height() + 7;
+                var _left = this.element.offset().left;
+
+                this._monthPickerMenu.css({
+                    top: _top + 'px',
+                    left: _left + 'px'
+                })
+                    .slideDown(_speed, $.proxy(function () {
+                        if (this._isFunction(this.options.OnAfterMenuOpen)) {
+                            this.options.OnAfterMenuOpen();
+                        }
+                    }, this));
+            }
+
+            this._showMonths();
+
+            return false;
+        },
+
+        _hide: function () {
+            if (this._monthPickerMenu.css('display') === 'block') {
+                this._monthPickerMenu.slideUp(_speed, $.proxy(function () {
+                    if (this._isFunction(this.options.OnAfterMenuClose)) {
+                        this.options.OnAfterMenuClose();
+                    }
+                }, this));
+            }
+        },
+
+        _setUseInputMask: function () {
+            if (!this._isMonthInputType) {
+                try {
+                    if (this.options.UseInputMask) {
+                        this.element.mask(_inputMask);
+                    } else {
+                        this.element.unmask();
+                    }
+                } catch (e) { }
+            }
+        },
+
+        _setDisabledState: function () {
+            if (this.options.Disabled) {
+                this.element.prop('disabled', true);
+                this.element.addClass(_disabledClass);
+                if (this._monthPickerButton !== null) {
+                    this._monthPickerButton.button('option', 'disabled', true);
+                }
+
+                if (this._validationMessage !== null) {
+                    this._validationMessage.hide();
+                }
+
+            } else {
+                this.element.prop('disabled', false);
+                this.element.removeClass(_disabledClass);
+                if (this._monthPickerButton !== null) {
+                    this._monthPickerButton.button('option', 'disabled', false);
+                }
+            }
+        },
+
+        _setStartYear: function () {
+            if (this.options.StartYear !== null) {
+                this.element.data(this._enum._overrideStartYear, true);
+            } else {
+                this.element.removeData(this._enum._overrideStartYear);
+            }
+        },
+
+        _getPickerYear: function () {
+            return parseInt(this._yearContainer.text(), 10);
+        },
+
+        _setPickerYear: function (year) {
+            this._yearContainer.text(year);
+        },
+
+        _validateMonth: function (text) {
+            if (text === '') {
+                return NaN;
+            }
+
+            if (text.indexOf('/') != -1) {
+                var _month = parseInt(text.split('/')[0], 10);
+                if (!isNaN(_month)) {
+                    if (_month >= 1 && _month <= 12) {
+                        return _month;
+                    }
+                }
+            }
+
+            if (text.indexOf('-') != -1) {
+                var _month = parseInt(text.split('-')[1], 10);
+                if (!isNaN(_month)) {
+                    if (_month >= 1 && _month <= 12) {
+                        return _month;
+                    }
+                }
+            }
+
+            return NaN;
+        },
+
+        _validateYear: function (text) {
+            if (text === '') {
+                return NaN;
+            }
+
+            if (text.indexOf('/') != -1) {
+                var _year = parseInt(text.split('/')[1], 10);
+
+                if (!isNaN(_year)) {
+                    if (_year >= 1800 && _year <= 3000) {
+                        return _year;
+                    }
+                }
+            }
+
+            if (text.indexOf('-') != -1) {
+                var _year = parseInt(text.split('-')[0], 10);
+
+                if (!isNaN(_year)) {
+                    if (_year >= 1800 && _year <= 3000) {
+                        return _year;
+                    }
+                }
+            }
+
+            return NaN;
+        },
+
+        _chooseMonth: function (month) {
+            if (month > 0 && month < 10) {
+                month = '0' + month;
+            }
+
+            if (this.element.is('input[type="month"]')) {
+                this.element.val(this._getPickerYear() + '-' + month).change();
+            } else {
+                this.element.val(month + '/' + this._getPickerYear()).change();
+            }
+
+            this.element.blur();
+            if (this._isFunction(this.options.OnAfterChooseMonth)) {
+                this.options.OnAfterChooseMonth();
+            }
+        },
+
+        _chooseYear: function (year) {
+            this._setPickerYear(year);
+            this._showMonths();
+            if (this._isFunction(this.options.OnAfterChooseYear)) {
+                this.options.OnAfterChooseYear();
+            }
+
+        },
+
+        _showMonths: function () {
+            var _months = this._i18n('months');
+
+            $('.previous-year button', this._monthPickerMenu)
+                .attr('title', this._i18n('prevYear'))
+                .unbind('click')
+                .bind('click.MonthPicker', $.proxy(this._previousYear, this));
+
+            $('.next-year button', this._monthPickerMenu)
+                .attr('title', this._i18n('nextYear'))
+                .unbind('click')
+                .bind('click.MonthPicker', $.proxy(this._nextYear, this));
+
+            $('.year-container-all', this._monthPickerMenu).css('cursor', 'pointer');
+            $('.month-picker-month-table button', this._monthPickerMenu).unbind('.MonthPicker');
+
+            for (var _month in _months) {
+                var _counter = parseInt(_month, 10) + 1;
+                $('.button-' + _counter, this._monthPickerMenu)
+                    .bind('click.MonthPicker', {
+                        _month: _counter
+                    }, $.proxy(function (event) {
+                        this._chooseMonth(event.data._month);
+                        this._hide();
+                    }, this));
+
+                $('.button-' + _counter, this._monthPickerMenu).button('option', 'label', _months[_month]);
+            }
+        },
+
+        _showYearsClickHandler: function () {
+
+            this._showYears();
+            if (this._isFunction(this.options.OnAfterChooseYears)) {
+                this.options.OnAfterChooseYears();
+            }
+        },
+
+        _showYears: function () {
+            var _year = this._getPickerYear();
+
+            $('.previous-year button', this._monthPickerMenu)
+                .attr('title', 'Jump Back 5 Years')
+                .unbind('click')
+                .bind('click', $.proxy(function () {
+                    this._previousYears();
+                    return false;
+                }, this));
+
+            $('.next-year button', this._monthPickerMenu)
+                .attr('title', 'Jump Forward 5 Years')
+                .unbind('click')
+                .bind('click', $.proxy(function () {
+                    this._nextYears();
+                    return false;
+                }, this));
+
+            $('.year-container-all', this._monthPickerMenu).css('cursor', 'default');
+            $('.month-picker-month-table button', this._monthPickerMenu).unbind('.MonthPicker');
+
+            var _yearDifferential = -4;
+            for (var _counter = 1; _counter <= 12; _counter++) {
+                $('.button-' + _counter, this._monthPickerMenu)
+                    .bind('click.MonthPicker', {
+                        _yearDiff: _yearDifferential
+                    }, $.proxy(function (event) {
+                        this._chooseYear(_year + event.data._yearDiff);
+                    }, this));
+
+                $('.button-' + _counter, this._monthPickerMenu).button('option', 'label', _year + _yearDifferential);
+
+                _yearDifferential++;
+            }
+        },
+
+        _nextYear: function () {
+            var _year = $('.month-picker-year-table .year', this._monthPickerMenu);
+            _year.text(parseInt(_year.text()) + 1, 10);
+            if (this._isFunction(this.options.OnAfterNextYear)) {
+                this.options.OnAfterNextYear();
+            }
+        },
+
+        _nextYears: function () {
+            var _year = $('.month-picker-year-table .year', this._monthPickerMenu);
+            _year.text(parseInt(_year.text()) + 5, 10);
+            this._showYears();
+            if (this._isFunction(this.options.OnAfterNextYears)) {
+                this.options.OnAfterNextYears();
+            }
+        },
+
+        _previousYears: function () {
+            var _year = $('.month-picker-year-table .year', this._monthPickerMenu);
+            _year.text(parseInt(_year.text()) - 5, 10);
+            this._showYears();
+            if (this._isFunction(this.options.OnAfterPreviousYears)) {
+                this.options.OnAfterPreviousYears();
+            }
+        },
+
+        _previousYear: function () {
+            var _year = $('.month-picker-year-table .year', this._monthPickerMenu);
+            _year.text(parseInt(_year.text()) - 1, 10);
+            if (this._isFunction(this.options.OnAfterPreviousYear)) {
+                this.options.OnAfterPreviousYear();
+            }
+        }
+    });
+}(jQuery, window, document));
 ;/*! jQuery UI - v1.10.2 - 2013-03-14
 * http://jqueryui.com
 * Includes: jquery.ui.datepicker-af.js, jquery.ui.datepicker-ar-DZ.js, jquery.ui.datepicker-ar.js, jquery.ui.datepicker-az.js, jquery.ui.datepicker-be.js, jquery.ui.datepicker-bg.js, jquery.ui.datepicker-bs.js, jquery.ui.datepicker-ca.js, jquery.ui.datepicker-cs.js, jquery.ui.datepicker-cy-GB.js, jquery.ui.datepicker-da.js, jquery.ui.datepicker-de.js, jquery.ui.datepicker-el.js, jquery.ui.datepicker-en-AU.js, jquery.ui.datepicker-en-GB.js, jquery.ui.datepicker-en-NZ.js, jquery.ui.datepicker-eo.js, jquery.ui.datepicker-es.js, jquery.ui.datepicker-et.js, jquery.ui.datepicker-eu.js, jquery.ui.datepicker-fa.js, jquery.ui.datepicker-fi.js, jquery.ui.datepicker-fo.js, jquery.ui.datepicker-fr-CA.js, jquery.ui.datepicker-fr-CH.js, jquery.ui.datepicker-fr.js, jquery.ui.datepicker-gl.js, jquery.ui.datepicker-he.js, jquery.ui.datepicker-hi.js, jquery.ui.datepicker-hr.js, jquery.ui.datepicker-hu.js, jquery.ui.datepicker-hy.js, jquery.ui.datepicker-id.js, jquery.ui.datepicker-is.js, jquery.ui.datepicker-it.js, jquery.ui.datepicker-ja.js, jquery.ui.datepicker-ka.js, jquery.ui.datepicker-kk.js, jquery.ui.datepicker-km.js, jquery.ui.datepicker-ko.js, jquery.ui.datepicker-ky.js, jquery.ui.datepicker-lb.js, jquery.ui.datepicker-lt.js, jquery.ui.datepicker-lv.js, jquery.ui.datepicker-mk.js, jquery.ui.datepicker-ml.js, jquery.ui.datepicker-ms.js, jquery.ui.datepicker-nb.js, jquery.ui.datepicker-nl-BE.js, jquery.ui.datepicker-nl.js, jquery.ui.datepicker-nn.js, jquery.ui.datepicker-no.js, jquery.ui.datepicker-pl.js, jquery.ui.datepicker-pt-BR.js, jquery.ui.datepicker-pt.js, jquery.ui.datepicker-rm.js, jquery.ui.datepicker-ro.js, jquery.ui.datepicker-ru.js, jquery.ui.datepicker-sk.js, jquery.ui.datepicker-sl.js, jquery.ui.datepicker-sq.js, jquery.ui.datepicker-sr-SR.js, jquery.ui.datepicker-sr.js, jquery.ui.datepicker-sv.js, jquery.ui.datepicker-ta.js, jquery.ui.datepicker-th.js, jquery.ui.datepicker-tj.js, jquery.ui.datepicker-tr.js, jquery.ui.datepicker-uk.js, jquery.ui.datepicker-vi.js, jquery.ui.datepicker-zh-CN.js, jquery.ui.datepicker-zh-HK.js, jquery.ui.datepicker-zh-TW.js
@@ -27896,6 +28567,966 @@ jQuery(function($){
 	$.datepicker.setDefaults($.datepicker.regional['zh-TW']);
 });
 
+;/*!
+ * Cropper v0.4.4
+ * https://github.com/fengyuanchen/cropper
+ *
+ * Copyright 2014 Fengyuan Chen
+ * Released under the MIT license
+ */
+
+(function (factory) {
+    if (typeof define === "function" && define.amd) {
+        // AMD. Register as anonymous module.
+        define(["jquery"], factory);
+    } else {
+        // Browser globals.
+        factory(jQuery);
+    }
+})(function ($) {
+
+    "use strict";
+
+    var $window = $(window),
+
+        // Helper RegExp
+        regexpDirection = /^(\+|\*|e|n|w|s|ne|nw|sw|se)$/i,
+        regexpOption = /^(x|y|width|height)$/i,
+
+        // Helper classes
+        hiddenClass = "cropper-hidden",
+        invisibleClass = "cropper-invisible",
+
+        // Helper functions
+        isNumber = function (n) {
+            return typeof n === "number";
+        },
+
+        // Construstor
+        Cropper = function (element, options) {
+            this.$image = $(element);
+            this.setDefaults(options);
+            this.init();
+        },
+
+        // Others
+        round = Math.round,
+        min = Math.min,
+        max = Math.max,
+        abs = Math.abs,
+        num = parseFloat;
+
+    Cropper.prototype = {
+        construstor: Cropper,
+
+        setDefaults: function (options) {
+            options = $.extend({}, Cropper.defaults, options);
+
+            $.each(options, function (i, n) {
+                switch (i) {
+                    case "aspectRatio":
+                        options[i] = abs(num(n)) || NaN; // 0 -> NaN
+                        break;
+
+                    case "minWidth":
+                    case "minHeight":
+                        options[i] = abs(num(n)) || 0; // NaN -> 0
+                        break;
+
+                    case "maxWidth":
+                    case "maxHeight":
+                        options[i] = abs(num(n)) || Infinity; // NaN -> Infinity
+                        break;
+
+                    // No default
+                }
+            });
+
+            this.defaults = options;
+        },
+
+        init: function () {
+            var _this = this,
+                src = this.$image.attr("src"),
+                $clone = $('<img src="' + src + '">'),
+                image = {};
+
+            this.$clone && this.$clone.remove();
+            this.$clone = $clone;
+
+            $clone.one("load", function () {
+                image.naturalWidth = this.naturalWidth || $clone.width();
+                image.naturalHeight = this.naturalHeight || $clone.height();
+                image.aspectRatio = image.naturalWidth / image.naturalHeight;
+
+                _this.active = true;
+                _this.src = src;
+                _this.image = image;
+                _this.build();
+            });
+
+            // Hide and prepend the clone iamge to the document body (Don't append to).
+            $clone.addClass(invisibleClass).prependTo("body");
+        },
+
+        build: function () {
+            var defaults = this.defaults,
+                buildEvent,
+                $cropper;
+
+            if (this.built) {
+                this.unbuild();
+            }
+
+            buildEvent = $.Event("build.cropper");
+            this.$image.trigger(buildEvent);
+
+            if (buildEvent.isDefaultPrevented()) {
+                return;
+            }
+
+            // Create cropper elements
+            this.$cropper = ($cropper = $(Cropper.template));
+
+            // Hide the original image
+            this.$image.addClass(hiddenClass);
+
+            // Show and prepend the clone iamge to the cropper
+            this.$clone.removeClass(invisibleClass).prependTo($cropper);
+
+            this.$container = this.$image.parent();
+            this.$container.append($cropper);
+
+            this.$modal = $cropper.find(".cropper-modal");
+            this.$canvas = $cropper.find(".cropper-canvas");
+            this.$dragger = $cropper.find(".cropper-dragger");
+            this.$viewer = $cropper.find(".cropper-viewer");
+
+            // Init default settings
+            this.cropped = true;
+
+            if (!defaults.autoCrop) {
+                this.$dragger.addClass(hiddenClass);
+                this.cropped = false;
+            }
+
+            this.$modal.toggleClass(hiddenClass, !defaults.modal);
+            !defaults.dragCrop && this.$canvas.addClass(hiddenClass);
+            !defaults.moveable && this.$dragger.find(".cropper-face").addClass(hiddenClass);
+            !defaults.resizeable && this.$dragger.find(".cropper-line, .cropper-point").addClass(hiddenClass);
+
+            this.addListener();
+            this.initPreview();
+
+            this.built = true;
+            this.update();
+            this.$image.trigger("built.cropper");
+        },
+
+        unbuild: function () {
+            if (!this.built) {
+                return;
+            }
+
+            this.built = false;
+            this.removeListener();
+
+            this.$preview.empty();
+            this.$preview = null;
+
+            this.$dragger = null;
+            this.$canvas = null;
+            this.$modal = null;
+            this.$container = null;
+
+            this.$cropper.remove();
+            this.$cropper = null;
+        },
+
+        update: function (data) {
+            this.initContainer();
+            this.initCropper();
+            this.initDragger();
+
+            if (data) {
+                this.setData(data, true);
+            } else {
+                this.setData(this.defaults.data);
+            }
+        },
+
+        resize: function () {
+            clearTimeout(this.resizing);
+            this.resizing = setTimeout($.proxy(this.update, this, this.getData()), 200);
+        },
+
+        reset: function (deep) {
+            if (!this.cropped) {
+                return;
+            }
+
+            if (deep) {
+                this.defaults.data = {};
+            }
+
+            this.dragger = this.cloneDragger();
+            this.setData(this.defaults.data);
+        },
+
+        release: function () {
+            if (!this.cropped) {
+                return;
+            }
+
+            this.cropped = false;
+
+            this.defaults.done({
+                x: 0,
+                y: 0,
+                width: 0,
+                height: 0
+            });
+
+            this.$dragger.addClass(hiddenClass);
+        },
+
+        destroy: function () {
+            if (!this.active) {
+                return;
+            }
+
+            this.unbuild();
+            this.$image.removeClass(hiddenClass);
+            this.$image.removeData("cropper");
+            this.$image = null;
+        },
+
+        preview: function () {
+            var cropper = this.cropper,
+                dragger = this.dragger;
+
+            this.$viewer.find("img").css({
+                height: round(cropper.height),
+                marginLeft: - round(dragger.left),
+                marginTop: - round(dragger.top),
+                width: round(cropper.width)
+            });
+
+            this.$preview.each(function () {
+                var $this = $(this),
+                    ratio = $this.width() / dragger.width,
+                    styles = {
+                        height: round(cropper.height * ratio),
+                        marginLeft: - round(dragger.left * ratio),
+                        marginTop: - round(dragger.top * ratio),
+                        width: round(cropper.width * ratio)
+                    };
+
+                $this.find("img").css(styles);
+            });
+        },
+
+        addListener: function () {
+            var defaults = this.defaults;
+
+            this.$image.on({
+                "build.cropper": defaults.build,
+                "built.cropper": defaults.built,
+                "render.cropper": defaults.render
+            });
+
+            this.$cropper.on({
+                "mousedown touchstart": $.proxy(this.dragstart, this),
+                "mousemove touchmove": $.proxy(this.dragmove, this),
+                "mouseup mouseleave touchend touchleave": $.proxy(this.dragend, this)
+            });
+
+            $window.on("resize", $.proxy(this.resize, this));
+        },
+
+        removeListener: function () {
+            var defaults = this.defaults;
+
+            this.$image.off({
+                "build.cropper": defaults.build,
+                "built.cropper": defaults.built,
+                "render.cropper": defaults.render
+            });
+
+            this.$cropper.off({
+                "mousedown touchstart": this.dragstart,
+                "mousemove touchmove": this.dragmove,
+                "mouseup mouseleave touchend touchleave": this.dragend
+            });
+
+            $window.off("resize", this.resize);
+        },
+
+        initPreview: function () {
+            var img = '<img src="' + this.src + '">';
+
+            this.$preview = $(this.defaults.preview);
+            this.$preview.html(img);
+            this.$viewer.html(img);
+        },
+
+        initContainer: function () {
+            var $container = this.$container;
+
+            this.container = {
+                width: $container.width(),
+                height: $container.height()
+            };
+        },
+
+        initCropper: function () {
+            var container = this.container,
+                image = this.image,
+                cropper;
+
+            if (((image.naturalWidth * container.height / image.naturalHeight) - container.width) >= 0) {
+                cropper = {
+                    height: container.width / image.aspectRatio,
+                    width: container.width,
+                    left: 0
+                };
+
+                cropper.top = (container.height - cropper.height) / 2;
+            } else {
+                cropper = {
+                    height: container.height,
+                    width: container.height * image.aspectRatio,
+                    top: 0
+                };
+
+                cropper.left = (container.width - cropper.width) / 2;
+            }
+
+            image.ratio = cropper.width / image.naturalWidth;
+            image.height = cropper.height;
+            image.width = cropper.width;
+
+            this.$cropper.css({
+                height: round(cropper.height),
+                left: round(cropper.left),
+                top: round(cropper.top),
+                width: round(cropper.width)
+            });
+
+            this.cropper = cropper;
+        },
+
+        initDragger: function () {
+            var defaults = this.defaults,
+                cropper = this.cropper,
+                // If not set, use the original aspect ratio of the image.
+                aspectRatio = defaults.aspectRatio || this.image.aspectRatio,
+                ratio = this.image.ratio,
+                dragger;
+
+            if (((cropper.height * aspectRatio) - cropper.width) >= 0) {
+                dragger = {
+                    height: cropper.width / aspectRatio,
+                    width: cropper.width,
+                    left: 0,
+                    top: (cropper.height - (cropper.width / aspectRatio)) / 2,
+                    maxWidth: cropper.width,
+                    maxHeight: cropper.width / aspectRatio
+                };
+            } else {
+                dragger = {
+                    height: cropper.height,
+                    width: cropper.height * aspectRatio,
+                    left: (cropper.width - (cropper.height * aspectRatio)) / 2,
+                    top: 0,
+                    maxWidth: cropper.height * aspectRatio,
+                    maxHeight: cropper.height
+                };
+            }
+
+            dragger.minWidth = 0;
+            dragger.minHeight = 0;
+
+            if (defaults.aspectRatio) {
+                if (isFinite(defaults.maxWidth)) {
+                    dragger.maxWidth = min(dragger.maxWidth, defaults.maxWidth * ratio);
+                    dragger.maxHeight = dragger.maxWidth / aspectRatio;
+                } else if (isFinite(defaults.maxHeight)) {
+                    dragger.maxHeight = min(dragger.maxHeight, defaults.maxHeight * ratio);
+                    dragger.maxWidth = dragger.maxHeight * aspectRatio;
+                }
+
+                if (defaults.minWidth > 0) {
+                    dragger.minWidth = max(0, defaults.minWidth * ratio);
+                    dragger.minHeight = dragger.minWidth / aspectRatio;
+                } else if (defaults.minHeight > 0) {
+                    dragger.minHeight = max(0, defaults.minHeight * ratio);
+                    dragger.minWidth = dragger.minHeight * aspectRatio;
+                }
+            } else {
+                dragger.maxWidth = min(dragger.maxWidth, defaults.maxWidth * ratio);
+                dragger.maxHeight = min(dragger.maxHeight, defaults.maxHeight * ratio);
+                dragger.minWidth = max(0, defaults.minWidth * ratio);
+                dragger.minHeight = max(0, defaults.minHeight * ratio);
+            }
+
+            // minWidth can't be greater than maxWidth, and minHeight too.
+            dragger.minWidth = min(dragger.maxWidth, dragger.minWidth);
+            dragger.minHeight = min(dragger.maxHeight, dragger.minHeight);
+
+            // Center the dragger by default
+            dragger.height *= 0.8;
+            dragger.width *= 0.8;
+            dragger.left = (cropper.width - dragger.width) / 2;
+            dragger.top = (cropper.height - dragger.height) / 2;
+
+            this.defaultDragger = dragger;
+            this.dragger = this.cloneDragger();
+            this.draggerLeft = dragger.left;
+            this.draggerTop = dragger.top;
+        },
+
+        cloneDragger: function () {
+            return $.extend({}, this.defaultDragger);
+        },
+
+        renderDragger: function () {
+            var dragger = this.dragger,
+                cropper = this.cropper,
+                left = this.draggerLeft,
+                top = this.draggerTop,
+                maxLeft,
+                maxTop,
+                renderEvent;
+
+            if (dragger.width > dragger.maxWidth) {
+                dragger.width = dragger.maxWidth;
+                dragger.left = left;
+            } else if (dragger.width < dragger.minWidth) {
+                dragger.width = dragger.minWidth;
+                dragger.left = left;
+            }
+
+            if (dragger.height > dragger.maxHeight) {
+                dragger.height = dragger.maxHeight;
+                dragger.top = top;
+            } else if (dragger.height < dragger.minHeight) {
+                dragger.height = dragger.minHeight;
+                dragger.top = top;
+            }
+
+            maxLeft = cropper.width - dragger.width;
+            maxTop = cropper.height - dragger.height;
+            dragger.left = dragger.left > maxLeft ? maxLeft : dragger.left < 0 ? 0 : dragger.left;
+            dragger.top = dragger.top > maxTop ? maxTop : dragger.top < 0 ? 0 : dragger.top;
+
+            // Trigger the render event
+            renderEvent = $.Event("render.cropper");
+            this.$image.trigger(renderEvent);
+
+            if (renderEvent.isDefaultPrevented()) {
+                return;
+            }
+
+            // Re-render the dragger
+            this.dragger = dragger;
+            this.draggerLeft = dragger.left;
+            this.draggerTop = dragger.top;
+            this.defaults.done(this.getData());
+
+            this.$dragger.css({
+                height: round(dragger.height),
+                left: round(dragger.left),
+                top: round(dragger.top),
+                width: round(dragger.width)
+            });
+
+            this.preview();
+        },
+
+        setData: function (data, once) {
+            var cropper = this.cropper,
+                dragger = this.dragger,
+                aspectRatio = this.defaults.aspectRatio;
+
+            if (!this.built || typeof data === "undefined") {
+                return;
+            }
+
+            if (data === null || $.isEmptyObject(data)) {
+                dragger = this.cloneDragger();
+            }
+
+            if ($.isPlainObject(data) && !$.isEmptyObject(data)) {
+
+                if (!once) {
+                    this.defaults.data = data;
+                }
+
+                data = this.transformData(data);
+
+                if (isNumber(data.x) && data.x <= cropper.width) {
+                    dragger.left = data.x;
+                }
+
+                if (isNumber(data.y) && data.y <= cropper.height) {
+                    dragger.top = data.y;
+                }
+
+                if (aspectRatio) {
+                    if (isNumber(data.width) && data.width <= dragger.maxWidth && data.width >= dragger.minWidth) {
+                        dragger.width = data.width;
+                        dragger.height = dragger.width / aspectRatio;
+                    } else if (isNumber(data.height) && data.height <= dragger.maxHeight && data.height >= dragger.minHeight) {
+                        dragger.height = data.height;
+                        dragger.width = dragger.height * aspectRatio;
+                    }
+                } else {
+                    if (isNumber(data.width) && data.width <= dragger.maxWidth && data.width >= dragger.minWidth) {
+                        dragger.width = data.width;
+                    }
+
+                    if (isNumber(data.height) && data.height <= dragger.maxHeight && data.height >= dragger.minHeight) {
+                        dragger.height = data.height;
+                    }
+                }
+            }
+
+            this.dragger = dragger;
+            this.renderDragger();
+        },
+
+        getData: function () {
+            var dragger = this.dragger,
+                data = {};
+
+            if (this.built) {
+                data = {
+                    x: dragger.left,
+                    y: dragger.top,
+                    width: dragger.width,
+                    height: dragger.height
+                };
+
+                data = this.transformData(data, true);
+            }
+
+            return data;
+        },
+
+        transformData: function (data, reverse) {
+            var ratio = this.image.ratio,
+                result = {};
+
+            $.each(data, function (i, n) {
+                n = num(n);
+
+                if (regexpOption.test(i) && !isNaN(n)) {
+                    // Not round when set data.
+                    result[i] = reverse ? round(n / ratio) : n * ratio;
+                }
+            });
+
+            return result;
+        },
+
+        setAspectRatio: function (aspectRatio) {
+            var freeRatio = aspectRatio === "auto";
+
+            aspectRatio = num(aspectRatio);
+
+            if (freeRatio || (!isNaN(aspectRatio) && aspectRatio > 0)) {
+                this.defaults.aspectRatio = freeRatio ? NaN : aspectRatio;
+
+                if (this.built) {
+                    this.initDragger();
+                    this.renderDragger();
+                }
+            }
+        },
+
+        setImgSrc: function (src) {
+            if (src && src !== this.src) {
+                this.$image.attr("src", src);
+                this.init();
+            }
+        },
+
+        getImgInfo: function () {
+            return this.image || {};
+        },
+
+        dragstart: function (event) {
+            var touches = (event.originalEvent || event).touches,
+                e = event,
+                touching,
+                direction;
+
+            if (touches && touches.length === 1) {
+                e = touches[0];
+                this.touchId = e.identifier;
+                touching = true;
+            }
+
+            direction = $(e.target).data("direction");
+
+            if (regexpDirection.test(direction)) {
+                this.direction = direction;
+                this.startX = e.pageX;
+                this.startY = e.pageY;
+
+                if (direction === "+") {
+                    this.cropping = true;
+                    this.$modal.removeClass(hiddenClass);
+                }
+
+                // Prevent the default effect on mobile browser
+                touching && event.preventDefault();
+            }
+        },
+
+        dragmove: function (event) {
+            var touches = (event.originalEvent || event).changedTouches,
+                e = event,
+                touching;
+
+            if (touches && touches.length === 1) {
+                e = touches[0];
+                touching = true;
+
+                if (e.identifier !== this.touchId) {
+                    return;
+                }
+            }
+
+            if (this.direction) {
+                this.endX = e.pageX;
+                this.endY = e.pageY;
+
+                // Prevent the default effect on mobile browser
+                touching && event.preventDefault();
+                this.dragging();
+            }
+        },
+
+        dragend: function (event) {
+            var touches = (event.originalEvent || event).changedTouches,
+                e = event,
+                touching;
+
+            if (touches && touches.length === 1) {
+                e = touches[0];
+                touching = true;
+
+                if (e.identifier !== this.touchId) {
+                    return;
+                }
+            }
+
+            if (this.direction) {
+
+                if (this.cropping) {
+                    this.cropping = false;
+                    this.$modal.toggleClass(hiddenClass, !this.defaults.modal);
+                }
+
+                this.direction = "";
+
+                // Prevent the default effect on mobile browser
+                touching && event.preventDefault();
+            }
+        },
+
+        dragging: function () {
+            var direction = this.direction,
+                dragger = this.dragger,
+                aspectRatio = this.defaults.aspectRatio,
+                range = {
+                    x: this.endX - this.startX,
+                    y: this.endY - this.startY
+                },
+                offset;
+
+            if (aspectRatio) {
+                range.X = range.y * aspectRatio;
+                range.Y = range.x / aspectRatio;
+            }
+
+            switch (direction) {
+
+                // cropping
+                case "+":
+                    if (range.x && range.y) {
+                        offset = this.$cropper.offset();
+                        dragger.left = this.startX - offset.left;
+                        dragger.top = this.startY - offset.top;
+                        dragger.width = dragger.minWidth;
+                        dragger.height = dragger.minHeight;
+
+                        if (range.x > 0) {
+                            if (range.y > 0) {
+                                this.direction = "se";
+                            } else {
+                                this.direction = "ne";
+                                dragger.top -= dragger.height;
+                            }
+                        } else {
+                            if (range.y > 0) {
+                                this.direction = "sw";
+                                dragger.left -= dragger.width;
+                            } else {
+                                this.direction = "nw";
+                                dragger.left -= dragger.width;
+                                dragger.top -= dragger.height;
+                            }
+                        }
+
+                        // Show the dragger if is hidden
+                        if (!this.cropped) {
+                            this.cropped = true;
+                            this.$dragger.removeClass(hiddenClass);
+                        }
+                    }
+
+                    break;
+
+                // moving
+                case "*":
+                    dragger.left += range.x;
+                    dragger.top += range.y;
+
+                    break;
+
+                // resizing
+                case "e":
+                    dragger.width += range.x;
+
+                    if (aspectRatio) {
+                        dragger.height = dragger.width / aspectRatio;
+                        dragger.top -= range.Y / 2;
+                    }
+
+                    if (dragger.width < 0) {
+                        this.direction = "w";
+                        dragger.width = 0;
+                    }
+
+                    break;
+
+                case "n":
+                    dragger.height -= range.y;
+                    dragger.top += range.y;
+
+                    if (aspectRatio) {
+                        dragger.width = dragger.height * aspectRatio;
+                        dragger.left += range.X / 2;
+                    }
+
+                    if (dragger.height < 0) {
+                        this.direction = "s";
+                        dragger.height = 0;
+                    }
+
+                    break;
+
+                case "w":
+                    dragger.width -= range.x;
+                    dragger.left += range.x;
+
+                    if (aspectRatio) {
+                        dragger.height = dragger.width / aspectRatio;
+                        dragger.top += range.Y / 2;
+                    }
+
+                    if (dragger.width < 0) {
+                        this.direction = "e";
+                        dragger.width = 0;
+                    }
+
+                    break;
+
+                case "s":
+                    dragger.height += range.y;
+
+                    if (aspectRatio) {
+                        dragger.width = dragger.height * aspectRatio;
+                        dragger.left -= range.X / 2;
+                    }
+
+                    if (dragger.height < 0) {
+                        this.direction = "n";
+                        dragger.height = 0;
+                    }
+
+                    break;
+
+                case "ne":
+                    dragger.height -= range.y;
+                    dragger.top += range.y;
+
+                    if (aspectRatio) {
+                        dragger.width = dragger.height * aspectRatio;
+                    } else {
+                        dragger.width += range.x;
+                    }
+
+                    if (dragger.height < 0) {
+                        this.direction = "sw";
+                        dragger.height = 0;
+                        dragger.width = 0;
+                    }
+
+                    break;
+
+                case "nw":
+                    dragger.height -= range.y;
+                    dragger.top += range.y;
+
+                    if (aspectRatio) {
+                        dragger.width = dragger.height * aspectRatio;
+                        dragger.left += range.X;
+                    } else {
+                        dragger.width -= range.x;
+                        dragger.left += range.x;
+                    }
+
+                    if (dragger.height < 0) {
+                        this.direction = "se";
+                        dragger.height = 0;
+                        dragger.width = 0;
+                    }
+
+                    break;
+
+                case "sw":
+                    dragger.width -= range.x;
+                    dragger.left += range.x;
+
+                    if (aspectRatio) {
+                        dragger.height = dragger.width / aspectRatio;
+                    } else {
+                        dragger.height += range.y;
+                    }
+
+                    if (dragger.width < 0) {
+                        this.direction = "ne";
+                        dragger.height = 0;
+                        dragger.width = 0;
+                    }
+
+                    break;
+
+                case "se":
+                    dragger.width += range.x;
+
+                    if (aspectRatio) {
+                        dragger.height = dragger.width / aspectRatio;
+                    } else {
+                        dragger.height += range.y;
+                    }
+
+                    if (dragger.width < 0) {
+                        this.direction = "nw";
+                        dragger.height = 0;
+                        dragger.width = 0;
+                    }
+
+                    break;
+
+                // No default
+            }
+
+            this.renderDragger();
+
+            // Override
+            this.startX = this.endX;
+            this.startY = this.endY;
+        }
+    };
+
+    Cropper.template = [
+        '<div class="cropper-container">',
+            '<div class="cropper-modal"></div>',
+            '<div class="cropper-canvas" data-direction="+"></div>',
+            '<div class="cropper-dragger">',
+                '<span class="cropper-viewer"></span>',
+                '<span class="cropper-dashed dashed-h"></span>',
+                '<span class="cropper-dashed dashed-v"></span>',
+                '<span class="cropper-face" data-direction="*"></span>',
+                '<span class="cropper-line line-e" data-direction="e"></span>',
+                '<span class="cropper-line line-n" data-direction="n"></span>',
+                '<span class="cropper-line line-w" data-direction="w"></span>',
+                '<span class="cropper-line line-s" data-direction="s"></span>',
+                '<span class="cropper-point point-e" data-direction="e"></span>',
+                '<span class="cropper-point point-n" data-direction="n"></span>',
+                '<span class="cropper-point point-w" data-direction="w"></span>',
+                '<span class="cropper-point point-s" data-direction="s"></span>',
+                '<span class="cropper-point point-ne" data-direction="ne"></span>',
+                '<span class="cropper-point point-nw" data-direction="nw"></span>',
+                '<span class="cropper-point point-sw" data-direction="sw"></span>',
+                '<span class="cropper-point point-se" data-direction="se"></span>',
+            '</div>',
+        '</div>'
+    ].join("");
+
+    Cropper.defaults = {
+        // Basic
+        aspectRatio: "auto",
+        data: {}, // Allow options: x, y, width, height
+        done: $.noop,
+        // preview: undefined,
+
+        // Toggles
+        autoCrop: true,
+        dragCrop: true,
+        modal: true,
+        moveable: true,
+        resizeable: true,
+
+        // Dimensions
+        maxWidth: Infinity,
+        maxHeight: Infinity,
+        minWidth: 0,
+        minHeight: 0
+    };
+
+    Cropper.setDefaults = function (options) {
+        $.extend(Cropper.defaults, options);
+    };
+
+    // Reference the old cropper
+    Cropper.other = $.fn.cropper;
+
+    // Register as jQuery plugin
+    $.fn.cropper = function (options, settings) {
+        var result = this;
+
+        this.each(function () {
+            var $this = $(this),
+                data = $this.data("cropper");
+
+            if (!data && $.isPlainObject(options)) {
+                $this.data("cropper", (data = new Cropper(this, options)));
+            }
+
+            if (typeof options === "string" && $.isFunction(data[options])) {
+                result = data[options](settings);
+            }
+        });
+
+        return (typeof result !== "undefined" ? result : this);
+    };
+
+    $.fn.cropper.constructor = Cropper;
+    $.fn.cropper.setDefaults = Cropper.setDefaults;
+
+    // No conflict
+    $.fn.cropper.noConflict = function () {
+        $.fn.cropper = Cropper.other;
+        return this;
+    };
+});
+
 ;/// <reference path="_shared.js" />
 
 // Genera una URL hacia el Recurso AJAX del Servidor
@@ -27913,15 +29544,32 @@ function setKMS_userPicture() {
     $('#Usuario input[type=file]').trigger('click');
 }
 
-$(function () {
+$(function() {
     var $fileInput = $('#Usuario input[type=file]');
-    $('#Usuario input[type=file]').change(function () {
+    $('#Usuario input[type=file]').change(function() {
         if ($fileInput.val().length < 1)
             return;
         else
             $fileInput.parent().trigger('submit');
     });
 });
+
+function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+    var expires = "expires=" + d.toGMTString();
+    document.cookie = cname + "=" + cvalue + "; " + expires;
+}
+
+
+var now = new Date();
+var later = new Date();
+
+// Set time for how long the cookie should be saved
+later.setTime(now.getTime() + 365 * 24 * 60 * 60 * 1000);
+
+// Set cookie for the time zone offset in minutes
+setCookie("tzom", now.getTimezoneOffset(), later, "/");
 ;/**
  * Redimensiona la barra lateral al tamaño del contenido. Debería llamarse
  * cada vez que se modifica la altura del contenido.

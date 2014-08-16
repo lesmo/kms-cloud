@@ -452,14 +452,15 @@ footer nav ul li a {
   display: inline-block;
   margin: 0 1em;
 }
-img #contenidosAjax,
-height: 72px #contenidosAjax {
+#tipsGodines #Navegacion-Tips nav ul li img {
+  height: 72px;
+}
+#tipsGodines #Navegacion-Tips #contenidosAjax {
   padding-top: 1em;
   height: 800px;
   overflow-y: auto;
 }
-img #contenidosAjax figure,
-height: 72px #contenidosAjax figure {
+#tipsGodines #Navegacion-Tips #contenidosAjax figure {
   display: inline;
   float: left;
   width: 10.714285714285714%;
@@ -470,8 +471,7 @@ height: 72px #contenidosAjax figure {
   display: inline-block;
   vertical-align: top;
 }
-img #contenidosAjax article,
-height: 72px #contenidosAjax article {
+#tipsGodines #Navegacion-Tips #contenidosAjax article {
   display: inline;
   float: left;
   width: 48.214285714285715%;
@@ -483,12 +483,10 @@ height: 72px #contenidosAjax article {
   vertical-align: top;
   text-align: left;
 }
-img #contenidosAjax article em,
-height: 72px #contenidosAjax article em {
+#tipsGodines #Navegacion-Tips #contenidosAjax article em {
   color: #ff6168;
 }
-img #contenidosAjax article strong,
-height: 72px #contenidosAjax article strong {
+#tipsGodines #Navegacion-Tips #contenidosAjax article strong {
   color: #00c5db;
 }
 #recorridoSueno {
@@ -566,7 +564,12 @@ height: 72px #contenidosAjax article strong {
   clear: both;
   padding: 1em 0;
 }
-#actividad #graficas #graficaDiaria {
+#actividad #graficas #graficaPrincipalTabs .graph {
+  padding: 0;
+  width: 100%;
+  height: 300px;
+}
+#actividad #graficas #graficaPrincipal {
   display: inline;
   float: left;
   width: 98.21428571428571%;
@@ -574,7 +577,7 @@ height: 72px #contenidosAjax article strong {
   *width: 98.16313244047619%;
   *margin: 0 0.892392113095238%;
 }
-#actividad #graficas #graficaDiaria h2:before {
+#actividad #graficas #graficaPrincipal h2:before {
   content: url("../../Images/Gui/Gui.Graph.jpg");
   margin-right: 1em;
   vertical-align: middle;
