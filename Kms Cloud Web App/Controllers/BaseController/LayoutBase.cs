@@ -1,4 +1,5 @@
-﻿using Kms.Cloud.WebApp.Models.Views;
+﻿using Kms.Cloud.Database.Helpers;
+using Kms.Cloud.WebApp.Models.Views;
 using Kilometros_WebGlobalization.Database;
 using Kms.Cloud.Database;
 using System;
@@ -51,6 +52,10 @@ namespace Kms.Cloud.WebApp.Controllers {
 
                     TotalDistanceCentimeters
                         = CurrentUser.UserDataTotalDistanceSum.TotalDistance,
+                    AjaxCache
+                        = CurrentUser.UserDataTotalDistanceSum.Timestamp.ToJavascriptEpoch(),
+                    UserSignup
+                        = CurrentUser.CreationDate.ToJavascriptEpoch()
                 };
 
                 // > Obtener la última recompensa obtenida por el Usuario

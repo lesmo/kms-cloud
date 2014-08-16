@@ -10,6 +10,28 @@ using System.Web;
 
 namespace Kms.Cloud.WebApp.Controllers {
     public abstract partial class BaseController {
+        /// <summary>
+        ///     Devuelve un TimeSpan que representa el Offset UTC del Cliente.
+        ///     El valor se determina vía JavaScript y se establece en una Cookie
+        ///     que se obtiene para devolver éste valor
+        /// </summary>
+        public TimeSpan ClientUtcOffset {
+            get {
+                if ( mClientUtcOffset.HasValue )
+                    return mClientUtcOffset.Value;
+
+                var cookie = Request.Cookies["tzom"];
+                var minutesOffset = 0;
+
+                if ( cookie != null )
+                    Int32.TryParse(cookie.Value, out minutesOffset);
+
+                mClientUtcOffset = new TimeSpan(0, 0, -minutesOffset, 0);
+                return mClientUtcOffset.Value;
+            }
+        }
+        private TimeSpan? mClientUtcOffset;
+
         public Uri GetDynamicResourceUri(IPicture pictureObject) {
             return this.GetDynamicResourceUri(
                 "Images",
