@@ -1,4 +1,4 @@
-﻿@{ LayoutValues layoutValues = ViewBag.Layout as LayoutValues; }
+﻿@{ LayoutValues layoutValues = (LayoutValues)ViewBag.Layout; }
 
 <!DOCTYPE html>
 <html lang="@CultureInfo.CurrentCulture.TwoLetterISOLanguageName.ToLower()" data-culture-code="@CultureInfo.CurrentCulture.Name">
@@ -15,7 +15,7 @@
 	@* Scripts *@
 	@Html.RenderJsBundle("~/Assets/Javascript.js.bundle", BundleOptions.Combined)
 </head>
-<body data-distance-unit="@(RegionInfo.CurrentRegion.IsMetric ? "kms" : "mi")" data-weight-unit="@(RegionInfo.CurrentRegion.IsMetric ? "kg" : "lb")">
+<body data-distance-unit="@(RegionInfo.CurrentRegion.IsMetric ? "kms" : "mi")" data-weight-unit="@(RegionInfo.CurrentRegion.IsMetric ? "kg" : "lb")" data-ajax-cache="@layoutValues.AjaxCache" data-user-signup="@layoutValues.UserSignup">
 	<header>
 		<div class="contenedor2">
 			<a href="@Url.Action("Index", "Overview", new { lang = CultureInfo.CurrentCulture.Name })">

@@ -49,6 +49,18 @@ namespace Kms.Cloud.WebApp.Models.Views {
         }
 
         /// <summary>
+        /// Un número arbitrario que evita que el browser genere caché para resultados
+        /// en peticiones AJAX para alimentar las gráficas. Normalmente tiene un valor
+        /// de la fecha del último registro en "Javascript Epoch".
+        /// </summary>
+        public Int64 AjaxCache { get; set; }
+
+        /// <summary>
+        /// Fecha de Creación de la Cuenta del Usuario, en milisegundos en Javascript Epoch.
+        /// </summary>
+        public Int64 UserSignup { get; set; }
+
+        /// <summary>
         /// Distancia Total recorrida por el Usuario en las unidades de la región del Usuario
         /// </summary>
         public string TotalDistance {
