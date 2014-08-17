@@ -10,8 +10,8 @@ $(function () {
 	).fail(function() {
 		console.log("[!] - Error de descarga de datos (OverviewHourlyData.json)");
 	}).done(function (data) {
-		$("#graficaDiaria .graph").highcharts().series[0].setData(data.allData);
-		$("#graficaDiaria .graph").highcharts().hideLoading();
+		$("#graficaPorHora .graph").highcharts().series[0].setData(data.allData);
+		$("#graficaPorHora .graph").highcharts().hideLoading();
 
 		doKMS_redimSidebar();
 	});
@@ -23,8 +23,8 @@ $(function () {
 	).fail(function () {
 		console.log("[!] - Error de descarga de datos (OverviewHourlyData.json)");
 	}).done(function (data) {
-		$("#graficaMensual .graph").highcharts().series[0].setData(data.allData);
-		$("#graficaMensual .graph").highcharts().hideLoading();
+	    $("#graficaPorDia .graph").highcharts().series[0].setData(data.allData);
+	    $("#graficaPorDia .graph").highcharts().hideLoading();
 
 		doKMS_redimSidebar();
 	});
@@ -67,7 +67,7 @@ $(function () {
 
 	// > Descargar información de Gráfica de Distribución de Actividades
 	$.getJSON(
-		getKMS_ajaxUri("OverviewYearlyData.json"),
+		getKMS_ajaxUri("OverviewActivityComparisonData.json"),
 		{ c: $("body").data("ajax-cache") }
 	).fail(function () {
 		console.log("[!] - Error de descarga de datos (OverviewYearlyData.json)");

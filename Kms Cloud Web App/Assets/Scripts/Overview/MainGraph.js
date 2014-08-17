@@ -29,7 +29,10 @@
 
     // > Crear las tabs
     $('#graficaPrincipalTabs').tabs({
-        heightStyle: "auto"
+        heightStyle: "auto",
+        activate: function(e, ui) {
+            ui.newPanel.children(".graph").highcharts().reflow();
+        }
     });
 
     // > Crear datepickers
@@ -93,7 +96,7 @@
     });
     
     // > Crear las gráficas
-    $("#graficaDiaria .graph, #graficaMensual .graph").each(function() {
+    $("#graficaPorHora .graph, #graficaPorDia .graph").each(function () {
         $(this).highcharts("StockChart", {
             title: {
                 text: null
@@ -112,16 +115,18 @@
             navigator: {
                 enabled: false
             },
+            rangeSelector: {
+                enabled: false
+            },
             tooltip: {
                 valueDecimals: 2,
                 valueSuffix: " " + $("body").data("distance-unit")
             },
             xAxis: {
-                minRange: 3 * 3600 * 1000,
-                type: "datetime"
+                minRange: 3 * 3600 * 1000
             },
             yAxis: {
-                title: null,
+                aligh: "left",
                 labels: {
                     format: "{value} " + $("body").data("distance-unit")
                 },

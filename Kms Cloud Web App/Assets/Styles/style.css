@@ -569,6 +569,9 @@ footer nav ul li a {
   width: 100%;
   height: 300px;
 }
+#actividad #graficas #graficaPrincipalTabs > div {
+  margin-left: 0;
+}
 #actividad #graficas #graficaPrincipal {
   display: inline;
   float: left;

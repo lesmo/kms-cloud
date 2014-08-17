@@ -13,12 +13,6 @@ using System.Web.Mvc;
 namespace Kms.Cloud.WebApp.Controllers {
     public partial class AjaxController {
         
-        private struct TotalDataPoint {
-            public String activity;
-            public Int64 distance;
-            public Int64 steps;
-        }
-
         private class MonthlyDataPoint {
             public Int32 year;
             public String month;
@@ -48,7 +42,7 @@ namespace Kms.Cloud.WebApp.Controllers {
 
             // > Obtener lecturas
             var data = (
-                from d in CurrentUser.Data
+                from d in Database.DataStore.GetQueryable(s => s.User.Guid == CurrentUser.Guid)
                 where
                     d.Activity != DataActivity.Sleep
                     && d.Timestamp >= lowerBound
@@ -60,21 +54,28 @@ namespace Kms.Cloud.WebApp.Controllers {
                     hour  = d.Timestamp.Hour,
                     part  = (int)Math.Floor(d.Timestamp.Hour / 5d)
                 } into g
-                orderby g.Key.year, g.Key.month, g.Key.day, g.Key.part
-                select new object[] {
-                    new DateTime(g.Key.year, g.Key.month, g.Key.day, g.Key.hour, g.Key.part * 5, 0, DateTimeKind.Utc)
-                        .ToJavascriptEpoch(),
-                    RegionInfo.CurrentRegion.IsMetric
-                        ? g.Sum(s => s.Steps * s.StrideLength).CentimetersToKilometers()
-                        : g.Sum(s => s.Steps * s.StrideLength).CentimetersToMiles()
+                orderby g.Key.year, g.Key.month, g.Key.day, g.Key.hour, g.Key.part
+                select new {
+                    year     = g.Key.year,
+                    month    = g.Key.month,
+                    day      = g.Key.day,
+                    hour     = g.Key.hour,
+                    minute   = g.Key.part * 5,
+                    distance = g.Sum(s => s.Steps * s.StrideLength)
                 }
-            );
+            ).ToList().Select(s => new object[] {
+                new DateTime(s.year, s.month, s.day, s.hour, s.minute, 0, DateTimeKind.Utc)
+                    .ToJavascriptEpoch(),
+                RegionInfo.CurrentRegion.IsMetric
+                    ? s.distance.CentimetersToKilometers()
+                    : s.distance.CentimetersToMiles()
+            });
 
             var dataFallback = new List<object[]>();
             for ( var i = lowerBound; i <= higherRound; i = i.AddMinutes(5) ) {
                 dataFallback.Add(new object[] {
                     i.ToJavascriptEpoch(),
-                    0
+                    0d
                 });
             }
 
@@ -110,7 +111,7 @@ namespace Kms.Cloud.WebApp.Controllers {
 
             // > Obtener lecturas
             var data = (
-                from d in Database.UserDataHourlyDistance.GetQueryable(f => f.User.Guid == CurrentUser.Guid)
+                from d in Database.DataStore.GetQueryable(f => f.User.Guid == CurrentUser.Guid)
                 where
                     d.Activity != DataActivity.Sleep
                     && d.Timestamp >= lowerBound
@@ -124,26 +125,30 @@ namespace Kms.Cloud.WebApp.Controllers {
                 } into g
                 orderby g.Key.year, g.Key.month, g.Key.day
                 select new {
-                    timestamp = new DateTime(g.Key.year, g.Key.month, g.Key.day, 0, 0, 0, DateTimeKind.Utc),
-                    distance  = g.Sum(s => s.Distance)
+                    year     = g.Key.year,
+                    month    = g.Key.month,
+                    day      = g.Key.day,
+                    distance = g.Sum(s => s.Steps * s.StrideLength)
                 }
             ).ToList().Select(s => new object[] {
-                s.timestamp.Add(-ClientUtcOffset).ToJavascriptEpoch(), // Se debe ajustar a UTC debido a que el agrupado arriba
+                new DateTime(s.year, s.month, s.day, 0, 0, 0, DateTimeKind.Utc)
+                    .Add(-ClientUtcOffset) // Se debe ajustar a UTC debido a que el agrupado arriba
+                    .ToJavascriptEpoch(), 
                 RegionInfo.CurrentRegion.IsMetric
                     ? s.distance.CentimetersToKilometers()
-                    : s.distance.CentimetersToMiles(),
+                    : s.distance.CentimetersToMiles()
             });
 
             var dataFallback = new List<object[]>();
             for ( var i = lowerBound; i <= higherRound; i = i.AddDays(1) ) {
                 dataFallback.Add(new object[] {
                     i.ToJavascriptEpoch(),
-                    0
+                    0d
                 });
             }
 
             var dataFinal = data.Concat(
-                dataFallback.Where(w => !data.Any(a => a[0] == w[0]))
+                dataFallback.Where(w => ! data.Any(a => a[0] == w[0]))
             ).OrderBy(b => b[0]);
 
             return Json(
@@ -216,21 +221,21 @@ namespace Kms.Cloud.WebApp.Controllers {
         }
 
         // GET: /DynamicResources/Ajax/Overview.json
-        public JsonResult OverviewYearlyData() {
+        public JsonResult OverviewActivityComparisonData() {
             // > Obtener sumatoria total por actividad
             var lastYearStart = DateTime.UtcNow.AddYears(-1).Add(+ClientUtcOffset);
             var yearActivity = (
                 from d in Database.UserDataTotalDistance.GetQueryable(f => f.User.Guid == CurrentUser.Guid)
-                where d.Timestamp >= lastYearStart && d.Activity != 0
+                where d.Timestamp >= lastYearStart
                 group d by new {
                     activity = d.Activity
                 } into g
-                select new TotalDataPoint {
+                select new {
                     activity = g.Key.activity.ToString().ToLower(),
                     distance = g.Sum(s => s.TotalDistance),
                     steps    = g.Sum(s => s.TotalSteps)
                 }
-            );
+            ).ToList();
             
             // > Preparar respuesta en JSON
             return Json(

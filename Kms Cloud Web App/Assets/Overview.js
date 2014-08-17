@@ -3734,7 +3734,10 @@ discardElement:Ua,css:K,each:p,extend:s,map:za,merge:x,pick:q,splat:na,extendCla
 
     // > Crear las tabs
     $('#graficaPrincipalTabs').tabs({
-        heightStyle: "auto"
+        heightStyle: "auto",
+        activate: function(e, ui) {
+            ui.newPanel.children(".graph").highcharts().reflow();
+        }
     });
 
     // > Crear datepickers
@@ -3798,7 +3801,7 @@ discardElement:Ua,css:K,each:p,extend:s,map:za,merge:x,pick:q,splat:na,extendCla
     });
     
     // > Crear las gráficas
-    $("#graficaDiaria .graph, #graficaMensual .graph").each(function() {
+    $("#graficaPorHora .graph, #graficaPorDia .graph").each(function () {
         $(this).highcharts("StockChart", {
             title: {
                 text: null
@@ -3817,16 +3820,18 @@ discardElement:Ua,css:K,each:p,extend:s,map:za,merge:x,pick:q,splat:na,extendCla
             navigator: {
                 enabled: false
             },
+            rangeSelector: {
+                enabled: false
+            },
             tooltip: {
                 valueDecimals: 2,
                 valueSuffix: " " + $("body").data("distance-unit")
             },
             xAxis: {
-                minRange: 3 * 3600 * 1000,
-                type: "datetime"
+                minRange: 3 * 3600 * 1000
             },
             yAxis: {
-                title: null,
+                aligh: "left",
                 labels: {
                     format: "{value} " + $("body").data("distance-unit")
                 },
@@ -3881,8 +3886,8 @@ $(function () {
 	).fail(function() {
 		console.log("[!] - Error de descarga de datos (OverviewHourlyData.json)");
 	}).done(function (data) {
-		$("#graficaDiaria .graph").highcharts().series[0].setData(data.allData);
-		$("#graficaDiaria .graph").highcharts().hideLoading();
+		$("#graficaPorHora .graph").highcharts().series[0].setData(data.allData);
+		$("#graficaPorHora .graph").highcharts().hideLoading();
 
 		doKMS_redimSidebar();
 	});
@@ -3894,8 +3899,8 @@ $(function () {
 	).fail(function () {
 		console.log("[!] - Error de descarga de datos (OverviewHourlyData.json)");
 	}).done(function (data) {
-		$("#graficaMensual .graph").highcharts().series[0].setData(data.allData);
-		$("#graficaMensual .graph").highcharts().hideLoading();
+	    $("#graficaPorDia .graph").highcharts().series[0].setData(data.allData);
+	    $("#graficaPorDia .graph").highcharts().hideLoading();
 
 		doKMS_redimSidebar();
 	});
@@ -3938,7 +3943,7 @@ $(function () {
 
 	// > Descargar información de Gráfica de Distribución de Actividades
 	$.getJSON(
-		getKMS_ajaxUri("OverviewYearlyData.json"),
+		getKMS_ajaxUri("OverviewActivityComparisonData.json"),
 		{ c: $("body").data("ajax-cache") }
 	).fail(function () {
 		console.log("[!] - Error de descarga de datos (OverviewYearlyData.json)");
