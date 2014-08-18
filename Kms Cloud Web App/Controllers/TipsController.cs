@@ -30,9 +30,9 @@ namespace Kms.Cloud.WebApp.Controllers {
 				if ( tipCategory == null)
 					throw new HttpException(591, "No tip categories are defined!");
 			} else {
-				tipCategory = tipCategories.Where(w =>
-					w.Guid == new Guid().FromBase64String(cat)
-				).FirstOrDefault();
+				tipCategory = tipCategories.FirstOrDefault(
+					w => w.Guid == new Guid().FromBase64String(cat)
+				);
 				
 				if ( tipCategory == null )
 					return RedirectToAction("Index", new { page = page });
@@ -40,7 +40,7 @@ namespace Kms.Cloud.WebApp.Controllers {
 			
 			// > Obtener los Tips desbloqueados por el Usuario en la Categoría
 			//   y Página solicitadas
-			var tipHistoryTemp = Database.UserTipHistoryStore.GetAll(
+			var tipHistory = Database.UserTipHistoryStore.GetAll(
 				filter: f =>
 					f.User.Guid == CurrentUser.Guid
 					&& f.Tip.TipCategory.Guid == tipCategory.Guid,
@@ -50,49 +50,59 @@ namespace Kms.Cloud.WebApp.Controllers {
 					x.Skip(page * TipsPerPage).Take(TipsPerPage),
 				include:
 					new string[] { "Tip.TipCategory" }
-			).Select(s => s.Tip);
-
-			// > Obtener las cadenas de Globalización de los Tips y sus Categorías
-			var tipHistory = new List<TipModel>();
-
-			foreach ( Tip tip in tipHistoryTemp ) {
-				tipHistory.Add(new TipModel {
-					TipId = tip.Guid.ToBase64String(),
-					Text = tip.GetGlobalization().Text,
-					Category = tipCategory.GetGlobalization().Name,
-					IconUri = GetDynamicResourceUri(tip.TipCategory)
-				});
-			}
+			).Select(s => new TipModel {
+				TipId    = s.Guid.ToBase64String(),
+				Text     = s.Tip.GetGlobalization().Text,
+				Category = tipCategory.GetGlobalization().Name,
+				IconUri  = GetDynamicResourceUri(s.Tip.TipCategory)
+			});
 
 			// > Preparar valores para Vista
-			var tipsValues = new TipsValues();
+			var tipsValues = new TipsValues {
+				// + Categorías
+				Categories = tipCategories.Select(s => new TipCategoryModel {
+					CategoryId = s.Guid.ToBase64String(),
+					Name = s.GetGlobalization().Name,
+					IconUri = GetDynamicResourceUri(s)
+				}).ToArray(),
 
-			// + Categorías
-			tipsValues.Categories = tipCategories.Select(s => new TipCategoryModel() {
-				CategoryId = s.Guid.ToBase64String(),
-				Name       = s.GetGlobalization().Name,
-				IconUri    = GetDynamicResourceUri(s)
-			}).ToArray();
+				// + Tips
+				CurrentCategoryTips = tipHistory.ToArray(),
 
-			// + Tips
-			tipsValues.CurrentCategoryTips = tipHistory.ToArray();
+				// + Categoría actual
+				CurrentCategory = new TipCategoryModel {
+					CategoryId = tipCategory.Guid.ToBase64String(),
+					Name = tipCategory.GetGlobalization().Name,
+					IconUri = GetDynamicResourceUri(tipCategory)
+				},
 
-			// + Categoría actual
-			tipsValues.CurrentCategory = new TipCategoryModel {
-				CategoryId = tipCategory.Guid.ToBase64String(),
-				Name       = tipCategory.GetGlobalization().Name,
-				IconUri    = GetDynamicResourceUri(tipCategory)
+				// + Páginas totales disponibles
+				CurrentCategoryTipsTotalPages = (int)Math.Ceiling(
+					(double)Database.UserTipHistoryStore.GetCount(
+						f => f.User.Guid == CurrentUser.Guid
+					) / TipsPerPage
+				)
 			};
-
-			// + Páginas totales disponibles
-			tipsValues.CurrentCategoryTipsTotalPages = (int)Math.Ceiling(
-				(float)Database.UserTipHistoryStore.GetCount(
-					filter: f => f.User.Guid == CurrentUser.Guid
-				) / TipsPerPage
-			);
 
 			// > Render de Vista
 			return View(tipsValues);
+		}
+
+		// GET: /Tips/Detail
+		public ActionResult Detail(string id) {
+			var tipHistory = Database.UserTipHistoryStore.Get(id);
+
+			if ( tipHistory == null || tipHistory.User.Guid != CurrentUser.Guid )
+				return HttpNotFound();
+
+		    var tipModel = new TipModel {
+		        TipId    = tipHistory.Guid.ToBase64String(),
+		        Text     = tipHistory.Tip.GetGlobalization().Text,
+		        Category = tipHistory.Tip.TipCategory.GetGlobalization().Name,
+		        IconUri  = GetDynamicResourceUri(tipHistory.Tip.TipCategory)
+		    };
+
+		    return View(tipModel);
 		}
 	}
 }

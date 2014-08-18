@@ -232,6 +232,24 @@ namespace Kilometros_WebGlobalization.WebApp {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to View last reward.
+        /// </summary>
+        public static string ViewLastReward {
+            get {
+                return ResourceManager.GetString("ViewLastReward", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View next reward.
+        /// </summary>
+        public static string ViewNextReward {
+            get {
+                return ResourceManager.GetString("ViewNextReward", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to View reward.
         /// </summary>
         public static string ViewReward {

@@ -1,4 +1,5 @@
-﻿using Kms.Cloud.Database;
+﻿using System.Web.Http.Results;
+using Kms.Cloud.Database;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -8,6 +9,18 @@ using System.Web.Mvc;
 
 namespace Kms.Cloud.WebApp.Controllers {
     public partial class AjaxController {
+        public HttpStatusCodeResult TipFavorite(string id) {
+            var tip = Database.UserTipHistoryStore.Get(id);
+
+            if ( tip == null || tip.User.Guid != CurrentUser.Guid )
+                return new HttpStatusCodeResult(404);
+
+            tip.Favoriteddate = DateTime.UtcNow;
+            Database.SaveChanges();
+
+            return new HttpStatusCodeResult(200);
+        }
+
         public JsonResult Tips(string cat, int page = 1, int perPage = 10) {
             // > Validar items por Página
             if ( perPage > 40 )

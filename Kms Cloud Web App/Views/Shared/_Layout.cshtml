@@ -93,7 +93,16 @@
 
 			@* - Próxima Recompensa (o última recompensa ganada) - *@
 			<section id="recompensaDash">
-				@if ( layoutValues.RecentlyUnlockedReward == null ) {
+				<div id="recompensaDashReciente" style="@(layoutValues.RecentlyUnlockedReward.Discarded ? "display:none" : "")" data-discarded="@(layoutValues.RecentlyUnlockedReward.Discarded ? "1" : "0")" data-id="@layoutValues.RecentlyUnlockedReward.RewardId">
+					<img src="@layoutValues.RecentlyUnlockedReward.IconUri" alt="@layoutValues.RecentlyUnlockedReward.Title">
+				    <h3>@layoutValues.RecentlyUnlockedReward.Title</h3>
+				    <article>
+				        @layoutValues.RecentlyUnlockedReward.Text
+				    </article>
+					<a href="#" class="botonDorado">@LayoutStrings.ViewNextReward.ToUpper()</a>
+				</div>    
+
+				<div id="recompensaDashSiguiente" style="@(layoutValues.RecentlyUnlockedReward.Discarded ? "" : "display:none")">
 					<span class="proxRecomp">@LayoutStrings.NextRewardIn.ToUpper(CultureInfo.CurrentCulture)</span>
 					<span class="bandera">
 						<img src="~/Images/Sidebar/Sidebar.Medal.gif" alt="">
@@ -102,14 +111,10 @@
 						@layoutValues.NextRewardsDistanceRemaining @(RegionInfo.CurrentRegion.IsMetric ? "kms" : "mi")
 					</span>
 					<div id="barra">
-						<div class="progreso" style="width: @((layoutValues.TotalDistanceCentimeters / layoutValues.NextRewardDistanceCentimeters) * 100)%;"></div>
+						<div class="progreso" style="width:@((layoutValues.TotalDistanceCentimeters / layoutValues.NextRewardDistanceCentimeters) * 100)%;"></div>
 					</div>
-				} else {
-					<img src="@layoutValues.RecentlyUnlockedReward.IconUri" alt="@layoutValues.RecentlyUnlockedReward.Title">
-					<a href="@Url.Action("Detail", "Rewards", new { id = layoutValues.RecentlyUnlockedReward.RewardId })" class="botonDorado">
-						@LayoutStrings.ViewReward.ToUpper()
-					</a>
-				}
+					<a href="#" class="botonDorado">@LayoutStrings.ViewLastReward.ToUpper()</a>
+				</div>
 			</section>
 
 			<section id="tipDelDia">

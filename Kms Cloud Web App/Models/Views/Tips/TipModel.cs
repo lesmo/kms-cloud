@@ -5,6 +5,11 @@ using System.Web;
 
 namespace Kms.Cloud.WebApp.Models.Views {
     public class TipModel {
+        public bool Favorite {
+            get;
+            set;
+        }
+
         public string TipId {
             get;
             set;

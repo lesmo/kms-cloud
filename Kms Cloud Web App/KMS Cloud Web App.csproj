@@ -235,6 +235,7 @@
     </CodeAnalysisDictionary>
     <None Include="Assets\Friends.js.bundler" />
     <None Include="Assets\Overview.js.bundler" />
+    <Content Include="Assets\Scripts\Shared\Gui.RewardsSidebar.js" />
     <Content Include="Content\cropper.css" />
     <Content Include="Assets\Styles\jquery-ui-override.css" />
     <Content Include="Images\ui-icons_00C6DD_0.png" />
@@ -1146,6 +1147,8 @@
     <Content Include="Views\Search\Index.cshtml" />
     <Content Include="Views\Profiles\Index.cshtml" />
     <Content Include="Scripts\jquery-2.1.1.min.map" />
+    <Content Include="Views\Tips\Detail.cshtml" />
+    <Content Include="Views\Rewards\Detail.cshtml" />
     <None Include="Web.RemoteDebug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

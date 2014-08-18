@@ -29326,3 +29326,24 @@ $(function () {
         $('.notificacionesPop').toggleClass('ocultar');
     });
 });
+;$(function() {
+    $("#recompensaDashReciente .botonDorado").click(function() {
+        var $parent = $(this).parent();
+        $parent.slideUp().siblings().slideDown();
+
+        if ($parent.data("discarded") != "1") {
+            $.get(
+                getKMS_ajaxUri("DiscardReward.json"),
+                { id: $parent.data("id") }
+            ).fail(function () {
+                $parent.data("discarded", "0");
+                console.log("[!] - Error: no fue posible descartar Recompensa con ID [" + $parent.data("id") + "]");
+            });
+
+            $parent.data("discarded", "1");
+        }
+    });
+    $("#recompensaDashSiguiente .botonDorado").click(function () {
+        $(this).parent().slideUp().siblings().slideDown();
+    });
+});

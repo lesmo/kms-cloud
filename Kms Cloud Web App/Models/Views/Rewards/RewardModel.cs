@@ -28,8 +28,9 @@ namespace Kms.Cloud.WebApp.Models.Views {
             SponsorName = earnedReward.Reward.RewardSponsor.Name;
             SponsorIcon = controller.GetDynamicResourceUri(earnedReward.Reward.RewardSponsor);
             SponsorUri  = new Uri(earnedReward.Reward.RewardSponsor.WebsiteUri);
+            Discarded   = earnedReward.Discarded;
         }
-
+        
         public string RewardId {
             get;
             set;
@@ -66,5 +67,7 @@ namespace Kms.Cloud.WebApp.Models.Views {
         }
 
         public Uri SponsorUri { get; set; }
+
+        public Boolean Discarded { get; set; }
     }
 }

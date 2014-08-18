@@ -76,5 +76,30 @@ namespace Kms.Cloud.WebApp.Controllers {
 			// > Devolver la vista
 			return View(modelValues);
 		}
+
+		public ActionResult Detail(string id) {
+			var earnedReward = Database.UserEarnedRewardStore.Get(id);
+
+			if ( earnedReward == null )
+				return HttpNotFound();
+
+		    var rewardModel = new RewardModel {
+		        IconUri = GetDynamicResourceUri(earnedReward.Reward),
+		        SponsorIcon = earnedReward.Reward.RewardSponsor == null
+		                          ? null
+		                          : GetDynamicResourceUri(earnedReward.Reward),
+		        SponsorName = earnedReward.Reward.RewardSponsor == null
+		                          ? null
+		                          : earnedReward.Reward.RewardSponsor.Name,
+
+		        TriggerDistanceCentimeters = earnedReward.Reward.DistanceTrigger,
+		        UnlockDate = earnedReward.CreationDate,
+
+		        Title = earnedReward.Reward.GetGlobalization().Title,
+		        Text = earnedReward.Reward.GetGlobalization().Text
+		    };
+
+		    return View(rewardModel);
+		}
 	}
 }

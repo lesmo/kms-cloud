@@ -191,6 +191,14 @@
     <value>Tips</value>
     <comment>Navigation "Tips"</comment>
   </data>
+  <data name="ViewLastReward" xml:space="preserve">
+    <value>View last reward</value>
+    <comment>"View last reward" button on Sidebar</comment>
+  </data>
+  <data name="ViewNextReward" xml:space="preserve">
+    <value>View next reward</value>
+    <comment>"View next rewad" button on Sidebar</comment>
+  </data>
   <data name="ViewReward" xml:space="preserve">
     <value>View reward</value>
     <comment>"View reward" button on Sidebar</comment>
