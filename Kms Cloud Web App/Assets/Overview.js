@@ -3889,7 +3889,7 @@ discardElement:Ua,css:K,each:p,extend:s,map:za,merge:x,pick:q,splat:na,extendCla
                 {
                     data: [],
                     dataGrouping: {
-                        groupPixelWidth: 10,
+                        groupPixelWidth: 7,
                         approximation: "sum",
                         units: [
                             [
