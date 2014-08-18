@@ -44,7 +44,7 @@
         <AssociationConnector Association="MainModel.UserEarnedRewardReward" />
         <EntityTypeShape EntityType="MainModel.ContactInfo" Width="1.5" PointX="4.25" PointY="5.5" />
         <AssociationConnector Association="MainModel.ContactInfoUser" />
-        <EntityTypeShape EntityType="MainModel.ShippingInformation" Width="2.25" PointX="3.375" PointY="10.75" />
+        <EntityTypeShape EntityType="MainModel.ShippingInformation" Width="2.25" PointX="3.5" PointY="10.625" />
         <AssociationConnector Association="MainModel.UserShippingInformation" />
         <EntityTypeShape EntityType="MainModel.RewardGiftPicture" Width="1.875" PointX="11.5" PointY="20.625" IsExpanded="false" />
         <EntityTypeShape EntityType="MainModel.Region" Width="1.875" PointX="3.375" PointY="24.5" />

@@ -34,7 +34,8 @@ namespace Kms.Cloud.Database
         public System.Guid Guid { get; set; }
         public System.DateTime CreationDate { get; set; }
         public string Email { get; set; }
-        public byte[] Password { get; set; }
+        internal byte[] Password { get; set; }
+        internal byte[] PasswordSalt { get; set; }
         public string RegionCode { get; set; }
         public string PreferredCultureCode { get; set; }
         public Nullable<short> UtcOffset { get; set; }

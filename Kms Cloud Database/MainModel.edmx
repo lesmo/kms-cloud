@@ -1526,12 +1526,13 @@
               <Summary>Email del Usuario (en minúsculas)</Summary>
             </Documentation>
           </Property>
-          <Property Type="Binary" Name="Password" Nullable="true" MaxLength="40" FixedLength="false" >
+          <Property Type="Binary" Name="Password" Nullable="true" MaxLength="Max" FixedLength="false" cg:GetterAccess="Internal" cg:SetterAccess="Internal" >
             <Documentation>
               <Summary>Contraseña del Usuario (SHA-256)</Summary>
               <LongDescription>El Hash SHA-256 se genera a partir de la cadena en codificación UTF-8, y se almacena en Byte[]</LongDescription>
             </Documentation>
           </Property>
+          <Property Name="PasswordSalt" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="true" cg:GetterAccess="Internal" cg:SetterAccess="Internal" />
           <NavigationProperty Name="Token" Relationship="MainModel.UserToken" FromRole="User" ToRole="Token" >
             <Documentation>
               <Summary>Token(s) de Sesión del Usuario.</Summary>

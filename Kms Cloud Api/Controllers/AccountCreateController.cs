@@ -66,8 +66,6 @@ namespace Kms.Cloud.Api.Controllers {
 
                     Email
                         = dataPost.Email.ToLower(CultureInfo.InvariantCulture),
-                    PasswordString
-                        = dataPost.Password,
 
                     PreferredCultureCode
                         = dataPost.CultureCode,
@@ -76,6 +74,7 @@ namespace Kms.Cloud.Api.Controllers {
                     UtcOffset
                         = dataPost.UtcOffset
                 };
+            user.SetPassword(dataPost.Password);
 
             // --- Crear perfil Físico del Usuario ---
             UserBody userBody

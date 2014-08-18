@@ -47,6 +47,9 @@
     <AssemblyOriginatorKeyFile>KMS Cloud Database SNK.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CryptSharp">
+      <HintPath>..\packages\CryptSharpOfficial.2.0.0.0\lib\CryptSharp.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.dll</HintPath>

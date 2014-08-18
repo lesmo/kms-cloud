@@ -6,6 +6,8 @@ using System.Security.AccessControl;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using CryptSharp;
+using CryptSharp.Utility;
 
 namespace Kms.Cloud.Database {
     public partial class User {
@@ -25,44 +27,68 @@ namespace Kms.Cloud.Database {
             }
         }
 
-        private byte[] ComputePasswordHash(string password) {
-            SHA256 hashing
-                    = new SHA256CryptoServiceProvider();
-            byte[] stringBytes
-                = Encoding.UTF8.GetBytes(password);
-            byte[] computedHash
-                = hashing.ComputeHash(stringBytes);
-            byte[] computedHash2
-                = hashing.ComputeHash(computedHash);
-
+        private byte[] ComputeSha256PasswordHash(string password) {
+            var hashing      = new SHA256CryptoServiceProvider();
+            var stringBytes  = Encoding.UTF8.GetBytes(password);
+            var computedHash = hashing.ComputeHash(stringBytes);
+            
             return computedHash;
         }
 
         /// <summary>
-        /// Genera el Hash de la cadena que se asigne, o devuelve la representación
-        /// en Texto del Hash en {User.Password}. La contraseña se trata como UTF-8.
+        /// Establece la contraseña del Usuario. 
         /// </summary>
-        public string PasswordString {
-            get {
-                // > Convertir el Hash en byte[] a Texto si se necesita
-                if ( this._passwordHashString == null ) {
-                    StringBuilder hashString = new StringBuilder();
+        public void SetPassword(string password) {
+            // > Validar la nueva contraseña
+            if ( String.IsNullOrEmpty(password) || password.Length < 6 )
+                throw new ArgumentException("Password cannot be less than 6 characters long");
 
-                    foreach ( byte b in this.Password )
-                        hashString.Append(b.ToString("X2"));
+            // > Generar Salt + Hash
+            var salt = Crypter.Blowfish.GenerateSalt(new CrypterOptions {
+                { CrypterOption.Rounds, 9 }
+            });
+            var bcrypt = Crypter.Blowfish.Crypt(password, salt);
 
-                    this._passwordHashString = hashString.ToString();
-                }
+            // > Establecer la contraseña en la Entidad
+            this.Password = Encoding.UTF8.GetBytes(bcrypt);
+            this.PasswordSalt = Encoding.UTF8.GetBytes(salt);
+        }
 
-                return this._passwordHashString;
-            }
-            set {
-                // > Almacenar nuevos valores
-                this.Password = this.ComputePasswordHash(value);
-                this._passwordHashString = null; // Forzar la re-conversión del Hash a Texto
+        /// <summary>
+        /// Determina si la contraseña del Usuario coincide con ésta especificada.
+        /// </summary>
+        /// <param name="password">Contraseña contra la cual se comparará la Contraseña del Usuario.</param>
+        /// <returns>Si la contraseña coincide.</returns>
+        public bool PasswordMatches(string password) {
+            if ( this.Password == null )
+                return false;
+
+            // > Determinar si el hash almacenado es BCRYPT o SHA256
+            var storedPasswordHash = Encoding.UTF8.GetString(this.Password);
+            if ( storedPasswordHash.StartsWith("$2a$") ) {
+                // Si no está almacenado el salt, preceder como si no coincidieran
+                if ( this.PasswordSalt == null )
+                    return false;
+
+                // Re-generar hash con salt almacenado
+                var salt   = Encoding.UTF8.GetString(this.PasswordSalt);
+                var bcrypt = Crypter.Blowfish.Crypt(password, salt);
+                    
+                // Devolver si los hashes coinciden
+                return storedPasswordHash == bcrypt;
+            } else {
+                // Validar contraseña
+                var shaBytes = this.ComputeSha256PasswordHash(password);
+                var matches  = shaBytes.SequenceEqual(this.Password);
+
+                if ( ! matches )
+                    return false;
+
+                // Si la contraseña coincide, la "upgradeamos" a BCRYPT
+                this.SetPassword(password);
+                return true;
             }
         }
-        private string _passwordHashString = null;
 
         /// <summary>
         /// Información de la Cultura (Idioma) preferido por el Usuario
@@ -142,18 +168,6 @@ namespace Kms.Cloud.Database {
             }
         }
         private UserDataTotalDistance _userDataTotalDistanceSum = null;
-
-        /// <summary>
-        /// Determina si la contraseña del Usuario coincide con ésta especificada.
-        /// </summary>
-        /// <param name="password">Contraseña contra la cual se comparará la Contraseña del Usuario.</param>
-        /// <returns>Si la contraseña coincide.</returns>
-        public bool PasswordMatches(string password) {
-            byte[] passwordHash
-                = this.ComputePasswordHash(password);
-
-            return passwordHash.SequenceEqual(this.Password);
-        }
 
         public MotionLevel CurrentMotionLevel {
             get {
