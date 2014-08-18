@@ -44,13 +44,12 @@ namespace Kms.Cloud.Database {
                 throw new ArgumentException("Password cannot be less than 6 characters long");
 
             // > Generar Salt + Hash
-            var salt = Crypter.Blowfish.GenerateSalt(new CrypterOptions {
-                { CrypterOption.Rounds, 9 }
-            });
-            var bcrypt = Crypter.Blowfish.Crypt(password, salt);
+            var passwordBytes = Encoding.UTF8.GetBytes(password);
+            var salt          = Crypter.Blowfish.GenerateSalt(9);
+            var bcrypt        = Crypter.Blowfish.Crypt(passwordBytes, salt);
 
             // > Establecer la contraseña en la Entidad
-            this.Password = Encoding.UTF8.GetBytes(bcrypt);
+            this.Password     = Encoding.UTF8.GetBytes(bcrypt);
             this.PasswordSalt = Encoding.UTF8.GetBytes(salt);
         }
 
@@ -71,9 +70,10 @@ namespace Kms.Cloud.Database {
                     return false;
 
                 // Re-generar hash con salt almacenado
-                var salt   = Encoding.UTF8.GetString(this.PasswordSalt);
-                var bcrypt = Crypter.Blowfish.Crypt(password, salt);
-                    
+                var passwordBytes = Encoding.UTF8.GetBytes(password);
+                var salt          = Encoding.UTF8.GetString(this.PasswordSalt);
+                var bcrypt        = Crypter.Blowfish.Crypt(passwordBytes, salt);
+                
                 // Devolver si los hashes coinciden
                 return storedPasswordHash == bcrypt;
             } else {
@@ -139,11 +139,11 @@ namespace Kms.Cloud.Database {
                             TotalSteps
                                 = g.Sum(s => s.TotalSteps),
                             TotalKcal
-                                = (double)g.Sum(s => s.TotalKcal),
+                                = g.Sum(s => s.TotalKcal),
                             TotalCo2
-                                = (double)g.Sum(s => s.TotalCo2),
+                                = g.Sum(s => s.TotalCo2),
                             TotalCash
-                                = (double)g.Sum(s => s.TotalCash)
+                                = g.Sum(s => s.TotalCash)
                         }
                     ).FirstOrDefault();
 

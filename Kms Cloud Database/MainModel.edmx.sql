@@ -8,7 +8,7 @@
 
 SET QUOTED_IDENTIFIER OFF;
 GO
-USE [kms-db-dev];
+USE [kms-db-dev2];
 GO
 IF SCHEMA_ID(N'dbo') IS NULL EXECUTE(N'CREATE SCHEMA [dbo]');
 GO
