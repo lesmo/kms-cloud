@@ -595,7 +595,7 @@
     <Key>
       <PropertyRef Name="Guid" />
     </Key>
-    <Property Name="DistanceTrigger" Type="bigint" Nullable="false" />
+    <Property Name="DistanceTrigger" Type="bigint" Nullable="true" />
     <Property Name="ContinuousSyncDaysTrigger" Type="int" Nullable="true" />
     <Property Name="WeeklyActivityDeltaTrigger" Type="smallint" Nullable="true" />
     <Property Name="Guid" Type="uniqueidentifier" Nullable="false" />
@@ -1902,7 +1902,7 @@
           </Documentation>
           <NavigationProperty Name="RewardGift" Relationship="MainModel.RewardRewardGift" FromRole="Reward" ToRole="RewardGift" />
           <NavigationProperty Name="RewardGlobalization" Relationship="MainModel.RewardRewardGlobalization" FromRole="Reward" ToRole="RewardGlobalization" />
-          <Property Type="Int64" Name="DistanceTrigger" Nullable="false" />
+          <Property Type="Int64" Name="DistanceTrigger" Nullable="true" />
           <NavigationProperty Name="RewardRegionalization" Relationship="MainModel.RewardRewardRegionalization" FromRole="Reward" ToRole="RewardRegionalization" />
           <NavigationProperty Name="UserEarnedReward" Relationship="MainModel.UserEarnedRewardReward" FromRole="Reward" ToRole="UserEarnedReward" />
           <NavigationProperty Name="RewardSponsor" Relationship="MainModel.FK_RewardSponsorReward" FromRole="Reward" ToRole="RewardSponsor" />

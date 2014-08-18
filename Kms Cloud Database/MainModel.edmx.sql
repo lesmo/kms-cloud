@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 08/18/2014 02:45:16
+-- Date Created: 08/18/2014 16:50:07
 -- Generated from EDMX file: E:\KMS Invent\KMS Cloud\Kms Cloud Database\MainModel.edmx
 -- --------------------------------------------------
 
@@ -641,7 +641,7 @@ GO
 
 -- Creating table 'IPictureSet_Reward'
 CREATE TABLE [dbo].[IPictureSet_Reward] (
-    [DistanceTrigger] bigint  NOT NULL,
+    [DistanceTrigger] bigint  NULL,
     [ContinuousSyncDaysTrigger] int  NULL,
     [WeeklyActivityDeltaTrigger] smallint  NULL,
     [Guid] uniqueidentifier  NOT NULL,

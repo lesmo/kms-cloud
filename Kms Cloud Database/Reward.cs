@@ -22,7 +22,7 @@ namespace Kms.Cloud.Database
             this.UserEarnedReward = new HashSet<UserEarnedReward>();
         }
     
-        public long DistanceTrigger { get; set; }
+        public Nullable<long> DistanceTrigger { get; set; }
         public Nullable<int> ContinuousSyncDaysTrigger { get; set; }
         public Nullable<short> WeeklyActivityDeltaTrigger { get; set; }
     
