@@ -45,7 +45,7 @@ namespace Kms.Cloud.WebApp.Controllers {
 				DateTimeKind.Utc
 			).Add(-ClientUtcOffset);
 
-			var lastDayData =  Database.DataStore.GetAll(
+			var lastDayData = Database.DataStore.GetAll(
 				filter: f =>
 					f.User.Guid == CurrentUser.Guid
 					&& f.Timestamp <= DateTime.UtcNow
@@ -93,6 +93,18 @@ namespace Kms.Cloud.WebApp.Controllers {
 
 			// > Establecer Tip del Día
 			modelValues.TipOfTheDay = this.LayoutValues.TipOfTheDay;
+
+			// > Establecer fecha de última sincronización
+		    var lastData = Database.DataStore.GetFirst(
+		        filter: f =>
+		            f.User.Guid == CurrentUser.Guid,
+		        orderBy: o =>
+		            o.OrderByDescending(b => b.CreationDate)
+		    );
+
+		    modelValues.LastSyncDateTime = lastData == null
+		        ? default(DateTime)
+		        : lastData.CreationDate.Add(+ClientUtcOffset);
 
 			// > Devolver la vista
 			return View(modelValues);

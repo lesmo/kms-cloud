@@ -58,15 +58,51 @@
 				<h2>@OverviewStrings.Last24hrsGraph.ToUpper()</h2>
 				<hr />
 			</span>
+
+			@if ( Model.LastSyncDateTime < DateTime.UtcNow.AddDays(-7) ) {
+				<div class="ui-widget">
+					<div class="ui-state-error ui-corner-all">
+						<p>
+							<span class="ui-icon ui-icon-alert" style="margin-right: 0.3em; float: left"></span>
+							<strong>¡ATENCIÓN!</strong> No has sincronizado tu pulsera desde hace
+							@Math.Floor((Model.LastSyncDateTime - DateTime.UtcNow).TotalDays) días, todos los
+							kilómetros que sumaste antes del @DateTime.UtcNow.AddDays(-7).ToString("m", CultureInfo.CurrentUICulture)
+							y que no sincronizaste se han perdido por completo. Sincroniza ahora para evitar
+							seguir perdiendo kilómetros.
+						</p>
+					</div>
+				</div>
+			} else if ( Model.LastSyncDateTime < DateTime.UtcNow.AddDays(-6) ) {
+				<div class="ui-widget">
+					<div class="ui-state-error ui-corner-all">
+						<p>
+							<span class="ui-icon ui-icon-alert" style="margin-right: 0.3em; float: left"></span>
+							<strong>¡CUIDADO!</strong> No has sincronizado tu pulsera desde hace casi una semana. Los
+							kilómetros que hayas acumulado el @CultureInfo.CurrentUICulture.DateTimeFormat.GetDayName(DateTime.UtcNow.DayOfWeek)
+							pasado <strong>se perderán si no sincronizas hoy</strong>.
+						</p>
+					</div>
+				</div>
+			} else if ( Model.LastSyncDateTime < DateTime.UtcNow.Date.AddDays(-1) ) {
+				<div class="ui-widget">
+					<div class="ui-state-highlight ui-corner-all">
+						<p>
+							<span class="ui-icon ui-icon-info" style="margin-right: 0.3em; float: left"></span>
+							Parece que no has sincronizado tu pulsera el día de hoy. ¡Recuerda que cada kilómetro cuenta!
+						</p>
+					</div>
+				</div>
+			}
+
 			<div id="graficaPrincipalTabs">
 				<ul>
 					<li><a href="#graficaPorHora">Por Hora</a></li>
 					<li><a href="#graficaPorDia">Por Día</a></li>
 				</ul>
-				
+
 				<div id="graficaPorHora">
 					<div class="graph-button">
-						Visualizando detalle para el día: 
+						Visualizando detalle para el día:
 						<input type="text" />
 						<button>...</button>
 					</div>
@@ -74,7 +110,7 @@
 				</div>
 				<div id="graficaPorDia">
 					<div class="graph-button">
-						Visualizando detalle para el mes de: 
+						Visualizando detalle para el mes de:
 						<input type="text" />
 						<button>...</button>
 					</div>

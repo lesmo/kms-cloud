@@ -11,6 +11,14 @@ namespace Kms.Cloud.WebApp.Models.Views {
             this.TodaySleepTime
                 = new TimeSpan(0, 0, 0);
         }
+
+       /// <summary>
+       /// Fecha de última sincronización
+       /// </summary>
+        public DateTime LastSyncDateTime {
+            get;
+            set;
+        }
         
         /// <summary>
         ///     Horas de Sueño del las últimas 24hrs.
