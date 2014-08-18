@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 08/05/2014 16:27:44
+-- Date Created: 08/18/2014 02:45:16
 -- Generated from EDMX file: E:\KMS Invent\KMS Cloud\Kms Cloud Database\MainModel.edmx
 -- --------------------------------------------------
 
@@ -302,7 +302,8 @@ CREATE TABLE [dbo].[UserSet] (
     [Guid] uniqueidentifier  NOT NULL,
     [CreationDate] datetime  NOT NULL,
     [Email] varchar(255)  NOT NULL,
-    [Password] varbinary(40)  NULL,
+    [Password] varbinary(max)  NULL,
+    [PasswordSalt] varbinary(max)  NULL,
     [RegionCode] varchar(32)  NULL,
     [PreferredCultureCode] varchar(16)  NULL,
     [UtcOffset] smallint  NULL,
@@ -368,6 +369,7 @@ GO
 -- Creating table 'DataSet'
 CREATE TABLE [dbo].[DataSet] (
     [Id] bigint IDENTITY(1,1) NOT NULL,
+    [CreationDate] datetime  NOT NULL,
     [Timestamp] datetime  NOT NULL,
     [Steps] int  NOT NULL,
     [Activity] smallint  NOT NULL,

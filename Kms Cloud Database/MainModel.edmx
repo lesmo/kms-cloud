@@ -254,7 +254,8 @@
     <Property Name="Guid" Type="uniqueidentifier" Nullable="false" />
     <Property Name="CreationDate" Type="datetime" Nullable="false" />
     <Property Name="Email" Type="varchar" Nullable="false" MaxLength="255" />
-    <Property Name="Password" Type="varbinary" Nullable="true" MaxLength="40" />
+    <Property Name="Password" Type="varbinary(max)" Nullable="true" />
+    <Property Name="PasswordSalt" Type="varbinary(max)" Nullable="true" />
     <Property Name="RegionCode" Type="varchar" Nullable="true" MaxLength="32" />
     <Property Name="PreferredCultureCode" Type="varchar" Nullable="true" MaxLength="16" />
     <Property Name="UtcOffset" Type="smallint" Nullable="true" />
@@ -320,6 +321,7 @@
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CreationDate" Type="datetime" Nullable="false" />
     <Property Name="Timestamp" Type="datetime" Nullable="false" />
     <Property Name="Steps" Type="int" Nullable="false" />
     <Property Name="Activity" Type="smallint" Nullable="false" />
@@ -1826,6 +1828,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CreationDate" Type="DateTime" Nullable="false" />
           <Property Type="DateTime" Name="Timestamp" Nullable="false" cg:SetterAccess="Public" annotation:StoreGeneratedPattern="None" Precision="3" />
           <Property Type="Int32" Name="Steps" Nullable="false" />
           <NavigationProperty Name="User" Relationship="MainModel.UserData" FromRole="Data" ToRole="User" />
@@ -2446,6 +2449,7 @@
           <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
           <ScalarProperty Name="Email" ColumnName="Email" />
           <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="PasswordSalt" ColumnName="PasswordSalt" />
           <ScalarProperty Name="RegionCode" ColumnName="RegionCode" />
           <ScalarProperty Name="PreferredCultureCode" ColumnName="PreferredCultureCode" />
           <ScalarProperty Name="UtcOffset" ColumnName="UtcOffset" />
@@ -2512,6 +2516,7 @@
       <EntityTypeMapping TypeName="IsTypeOf(MainModel.Data)">
         <MappingFragment StoreEntitySet="DataSet">
           <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
           <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
           <ScalarProperty Name="Steps" ColumnName="Steps" />
           <ScalarProperty Name="Activity" ColumnName="Activity" />

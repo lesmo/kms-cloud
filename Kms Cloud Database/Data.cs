@@ -15,6 +15,7 @@ namespace Kms.Cloud.Database
     public partial class Data
     {
         public long Id { get; set; }
+        public System.DateTime CreationDate { get; set; }
         public System.DateTime Timestamp { get; set; }
         public int Steps { get; set; }
         public DataActivity Activity { get; set; }

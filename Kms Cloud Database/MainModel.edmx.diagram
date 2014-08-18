@@ -18,7 +18,7 @@
         <AssociationConnector Association="MainModel.TipCategoryTip" />
         <EntityTypeShape EntityType="MainModel.TipGlobalization" Width="2.25" PointX="17.625" PointY="7.625" />
         <AssociationConnector Association="MainModel.TipTipGlobalization" />
-        <EntityTypeShape EntityType="MainModel.Data" Width="2" PointX="9.125" PointY="9.625" />
+        <EntityTypeShape EntityType="MainModel.Data" Width="2" PointX="9" PointY="9.5" />
         <EntityTypeShape EntityType="MainModel.UserBody" Width="1.875" PointX="9" PointY="3.75" />
         <AssociationConnector Association="MainModel.UserUserBody" />
         <EntityTypeShape EntityType="MainModel.MotionLevelGlobalization" Width="2.25" PointX="17.625" PointY="10.75" />
