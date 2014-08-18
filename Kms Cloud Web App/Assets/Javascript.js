@@ -1897,6 +1897,87 @@ function(b,c){return J(a,c)?a[c]:b})}});H(s,!0,!0,{insert:s.prototype.add});
 (function(a){if(ba.btoa)Nc=ba.btoa,Oc=ba.atob;else{var b=/[^A-Za-z0-9\+\/\=]/g;Nc=function(b){var d="",e,g,f,h,l,n,x=0;do e=b.charCodeAt(x++),g=b.charCodeAt(x++),f=b.charCodeAt(x++),h=e>>2,e=(e&3)<<4|g>>4,l=(g&15)<<2|f>>6,n=f&63,isNaN(g)?l=n=64:isNaN(f)&&(n=64),d=d+a.charAt(h)+a.charAt(e)+a.charAt(l)+a.charAt(n);while(x<b.length);return d};Oc=function(c){var d="",e,g,f,h,l,n=0;if(c.match(b))throw Error("String contains invalid base64 characters");c=c.replace(/[^A-Za-z0-9\+\/\=]/g,"");do e=a.indexOf(c.charAt(n++)),
 g=a.indexOf(c.charAt(n++)),h=a.indexOf(c.charAt(n++)),l=a.indexOf(c.charAt(n++)),e=e<<2|g>>4,g=(g&15)<<4|h>>2,f=(h&3)<<6|l,d+=s.fromCharCode(e),64!=h&&(d+=s.fromCharCode(g)),64!=l&&(d+=s.fromCharCode(f));while(n<c.length);return d}}})("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=");})();
 
+;/*
+ *
+ * Sugar.Date.addLocale(<code>) adds this locale to Sugar.
+ * To set the locale globally, simply call:
+ *
+ * Sugar.Date.setLocale('es');
+ *
+ * var locale = Sugar.Date.getLocale(<code>) will return this object, which
+ * can be tweaked to change the behavior of parsing/formatting in the locales.
+ *
+ * locale.addFormat adds a date format (see this file for examples).
+ * Special tokens in the date format will be parsed out into regex tokens:
+ *
+ * {0} is a reference to an entry in locale.tokens. Output: (?:the)?
+ * {unit} is a reference to all units. Output: (day|week|month|...)
+ * {unit3} is a reference to a specific unit. Output: (hour)
+ * {unit3-5} is a reference to a subset of the units array. Output: (hour|day|week)
+ * {unit?} "?" makes that token optional. Output: (day|week|month)?
+ *
+ * {day} Any reference to tokens in the modifiers array will include all with the same name. Output: (yesterday|today|tomorrow)
+ *
+ * All spaces are optional and will be converted to "\s*"
+ *
+ * Locale arrays months, weekdays, units, numbers, as well as the "src" field for
+ * all entries in the modifiers array follow a special format indicated by a colon:
+ *
+ * minute:|s  = minute|minutes
+ * thicke:n|r = thicken|thicker
+ *
+ * Additionally in the months, weekdays, units, and numbers array these will be added at indexes that are multiples
+ * of the relevant number for retrieval. For example having "sunday:|s" in the units array will result in:
+ *
+ * units: ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sundays']
+ *
+ * When matched, the index will be found using:
+ *
+ * units.indexOf(match) % 7;
+ *
+ * Resulting in the correct index with any number of alternates for that entry.
+ *
+ */
+
+Date.addLocale('es', {
+    'plural': true,
+    'months': 'enero,febrero,marzo,abril,mayo,junio,julio,agosto,septiembre,octubre,noviembre,diciembre',
+    'weekdays': 'domingo,lunes,martes,miércoles|miercoles,jueves,viernes,sábado|sabado',
+    'units': 'milisegundo:|s,segundo:|s,minuto:|s,hora:|s,día|días|dia|dias,semana:|s,mes:|es,año|años|ano|anos',
+    'numbers': 'uno,dos,tres,cuatro,cinco,seis,siete,ocho,nueve,diez',
+    'tokens': 'el,la,de',
+    'short': '{d} {month} {yyyy}',
+    'long': '{d} {month} {yyyy} {H}:{mm}',
+    'full': '{Weekday} {d} {month} {yyyy} {H}:{mm}:{ss}',
+    'past': '{sign} {num} {unit}',
+    'future': '{sign} {num} {unit}',
+    'duration': '{num} {unit}',
+    'timeMarker': 'a las',
+    'ampm': 'am,pm',
+    'modifiers': [
+      { 'name': 'day', 'src': 'anteayer', 'value': -2 },
+      { 'name': 'day', 'src': 'ayer', 'value': -1 },
+      { 'name': 'day', 'src': 'hoy', 'value': 0 },
+      { 'name': 'day', 'src': 'mañana|manana', 'value': 1 },
+      { 'name': 'sign', 'src': 'hace', 'value': -1 },
+      { 'name': 'sign', 'src': 'dentro de', 'value': 1 },
+      { 'name': 'shift', 'src': 'pasad:o|a', 'value': -1 },
+      { 'name': 'shift', 'src': 'próximo|próxima|proximo|proxima', 'value': 1 }
+    ],
+    'dateParse': [
+      '{sign} {num} {unit}',
+      '{num} {unit} {sign}',
+      '{0?}{1?} {unit=5-7} {shift}',
+      '{0?}{1?} {shift} {unit=5-7}'
+    ],
+    'timeParse': [
+      '{shift} {weekday}',
+      '{weekday} {shift}',
+      '{date?} {2?} {month} {2?} {year?}'
+    ]
+});
+
+
 ;/**
  * StyleFix 1.0.3 & PrefixFree 1.0.7
  * @author Lea Verou
@@ -26103,676 +26184,321 @@ $.widget( "ui.tooltip", {
 }( jQuery ) );
 
 ;/*
-https://github.com/KidSysco/jquery-ui-month-picker/
-This library is free software; you can redistribute it and/or
-modify it under the terms of the GNU Lesser General Public
-License as published by the Free Software Foundation;
-version 3.0. This library is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-Lesser General Public License for more details.
-You should have received a copy of the GNU Lesser General Public
-License along with this library; if not, visit
-http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
-*/
-;
-(function ($, window, document, undefined) {
-    var _markup;
-    var _speed = 500;
-    var _disabledClass = 'month-picker-disabled';
-    var _inputMask = '99/9999';
+ * jQuery UI Monthpicker
+ *
+ * @licensed MIT <see below>
+ * @licensed GPL <see below>
+ *
+ * @author Luciano Costa
+ * http://lucianocosta.info/jquery.mtz.monthpicker/
+ *
+ * Depends:
+ *  jquery.ui.core.js
+ */
 
-    $.MonthPicker = {
-        i18n: {
-            year: "Year",
-            prevYear: "Previous Year",
-            nextYear: "Next Year",
-            jumpYears: "Jump Years",
-            months: ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'June', 'July', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.']
-        }
-    };
+/**
+ * MIT License
+ * Copyright (c) 2011, Luciano Costa
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy 
+ * of this software and associated documentation files (the "Software"), to deal 
+ * in the Software without restriction, including without limitation the rights 
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
+ * copies of the Software, and to permit persons to whom the Software is 
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+/**
+ * GPL LIcense
+ * Copyright (c) 2011, Luciano Costa
+ * 
+ * This program is free software: you can redistribute it and/or modify it 
+ * under the terms of the GNU General Public License as published by the 
+ * Free Software Foundation, either version 3 of the License, or 
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but 
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License 
+ * for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along 
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 
-    _markup =
-        '<div class="ui-widget-header ui-helper-clearfix ui-corner-all">' +
-            '<table class="month-picker-year-table" width="100%" border="0" cellspacing="1" cellpadding="2">' +
-                '<tr>' +
-                    '<td class="previous-year"><button>&nbsp;</button></td>' +
-                    '<td class="year-container-all">' +
-                        '<div class="year-title"></div>' +
-                        '<div id="year-container"><span class="year"></span></div>' +
-                    '</td>' +
-                    '<td class="next-year"><button>&nbsp;</button></td>' +
-                '</tr>' +
-            '</table>' +
-        '</div>' +
-        '<div class="ui-widget ui-widget-content ui-helper-clearfix ui-corner-all">' +
-            '<table class="month-picker-month-table" width="100%" border="0" cellspacing="1" cellpadding="2">' +
-                '<tr>' +
-                    '<td><button type="button" class="button-1"></button></td>' +
-                    '<td><button class="button-2" type="button"></button></td>' +
-                    '<td><button class="button-3" type="button"></button></td>' +
-                '</tr>' +
-                '<tr>' +
-                    '<td><button class="button-4" type="button"></button></td>' +
-                    '<td><button class="button-5" type="button"></button></td>' +
-                    '<td><button class="button-6" type="button"></button></td>' +
-                '</tr>' +
-                '<tr>' +
-                    '<td><button class="button-7" type="button"></button></td>' +
-                    '<td><button class="button-8" type="button"></button></td>' +
-                    '<td><button class="button-9" type="button"></button></td>' +
-                '</tr>' +
-                '<tr>' +
-                    '<td><button class="button-10" type="button"></button></td>' +
-                    '<td><button class="button-11" type="button"></button></td>' +
-                    '<td><button class="button-12" type="button"></button></td>' +
-                '</tr>' +
-            '</table>' +
-        '</div>';
+; (function ($) {
 
-    $.widget("KidSysco.MonthPicker", {
+    var methods = {
+        init: function (options) {
+            return this.each(function () {
+                var
+                    $this = $(this),
+                    data = $this.data('monthpicker'),
+                    year = (options && options.year) ? options.year : (new Date()).getFullYear(),
+                    settings = $.extend({
+                        pattern: 'mm/yyyy',
+                        selectedMonth: null,
+                        selectedMonthName: '',
+                        selectedYear: year,
+                        startYear: year - 10,
+                        finalYear: year + 10,
+                        monthNames: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                        id: "monthpicker_" + (Math.random() * Math.random()).toString().replace('.', ''),
+                        openOnFocus: true,
+                        disabledMonths: []
+                    }, options);
 
-        /******* Properties *******/
+                settings.dateSeparator = settings.pattern.replace(/(mmm|mm|m|yyyy|yy|y)/ig, '');
 
-        options: {
-            i18n: null,
-            StartYear: null,
-            ShowIcon: true,
-            UseInputMask: false,
-            ValidationErrorMessage: null,
-            Disabled: false,
-            OnAfterMenuOpen: null,
-            OnAfterMenuClose: null,
-            OnAfterNextYear: null,
-            OnAfterNextYears: null,
-            OnAfterPreviousYear: null,
-            OnAfterPreviousYears: null,
-            OnAfterChooseMonth: null,
-            OnAfterChooseYear: null,
-            OnAfterChooseYears: null,
-            OnAfterChooseMonths: null
-        },
+                // If the plugin hasn't been initialized yet for this element
+                if (!data) {
 
-        _monthPickerMenu: null,
+                    $(this).data('monthpicker', {
+                        'target': $this,
+                        'settings': settings
+                    });
 
-        _monthPickerButton: null,
-
-        _validationMessage: null,
-
-        _yearContainer: null,
-
-        _isMonthInputType: null,
-
-        _enum: {
-            _overrideStartYear: 'MonthPicker_OverrideStartYear'
-        },
-
-        /******* jQuery UI Widget Factory Overrides ********/
-
-        _destroy: function () {
-            if (jQuery.mask && this.options.UseInputMask) {
-                this.element.unmask();
-            }
-
-            this.element.val('')
-                .css('color', '')
-                .removeClass('month-year-input')
-                .removeData(this._enum._overrideStartYear)
-                .unbind();
-
-            $(document).unbind('click.MonthPicker' + this.element.attr('id'), $.proxy(this._hide, this));
-
-            this._monthPickerMenu.remove();
-            this._monthPickerMenu = null;
-
-            if (this.monthPickerButton) {
-                this._monthPickerButton.remove();
-                this._monthPickerButton = null;
-            }
-
-            if (this._validationMessage) {
-                this._validationMessage.remove();
-                this._validationMessage = null;
-            }
-        },
-
-        _setOption: function (key, value) {
-            // In jQuery UI 1.8, manually invoke the _setOption method from the base widget.
-            //$.Widget.prototype._setOption.apply(this, arguments);
-            // In jQuery UI 1.9 and above, you use the _super method instead.
-            this._super("_setOption", key, value);
-            switch (key) {
-                case 'i18n':
-                    this.options.i18n = $.extend({}, value);
-                    break;
-                case 'Disabled':
-                    this.options.Disabled = value;
-                    this._setDisabledState();
-                    break;
-                case 'OnAfterChooseMonth':
-                    this.options.OnAfterChooseMonth = value;
-                    break;
-                case 'OnAfterChooseMonths':
-                    this.options.OnAfterChooseMonths = value;
-                    break;
-                case 'OnAfterChooseYear':
-                    this.options.OnAfterChooseYear = value;
-                    break;
-                case 'OnAfterChooseYears':
-                    this.options.OnAfterChooseYears = value;
-                    break;
-                case 'OnAfterMenuClose':
-                    this.options.OnAfterMenuClose = value;
-                    break;
-                case 'OnAfterMenuOpen':
-                    this.options.OnAfterMenuOpen = value;
-                    break;
-                case 'OnAfterNextYear':
-                    this.options.OnAfterNextYear = value;
-                    break;
-                case 'OnAfterNextYears':
-                    this.options.OnAfterNextYears = value;
-                    break;
-                case 'OnAfterPreviousYear':
-                    this.options.OnAfterPreviousYear = value;
-                    break;
-                case 'OnAfterPreviousYears':
-                    this.options.OnAfterPreviousYears = value;
-                    break;
-                case 'UseInputMask':
-                    this.options.UseInputMask = value;
-                    this._setUseInputMask();
-                    break;
-                case 'StartYear':
-                    this.options.StartYear = value;
-                    this._setStartYear();
-                    if (value !== null) {
-                        this._setPickerYear(value);
-                    }
-                    break;
-                case 'ShowIcon':
-                    this.options.ShowIcon = value;
-                    this._showIcon();
-                    break;
-                case 'ValidationErrorMessage':
-                    this.options.ValidationErrorMessage = value;
-                    if (this.options.ValidationErrorMessage !== null) {
-                        this._createValidationMessage();
-                    } else {
-                        this._removeValidationMessage();
+                    if (settings.openOnFocus === true) {
+                        $this.on('focus', function () {
+                            $this.monthpicker('show');
+                        });
                     }
 
-                    break;
-            }
+                    $this.monthpicker('parseInputValue', settings);
+
+                    $this.monthpicker('mountWidget', settings);
+
+                    $this.on('monthpicker-click-month', function (e, month, year) {
+                        $this.monthpicker('setValue', settings);
+                        $this.monthpicker('hide');
+                    });
+
+                    // hide widget when user clicks elsewhere on page
+                    $this.addClass("mtz-monthpicker-widgetcontainer");
+                    $(document).unbind("mousedown.mtzmonthpicker").on("mousedown.mtzmonthpicker", function (e) {
+                        if (!e.target.className || e.target.className.toString().indexOf('mtz-monthpicker') < 0) {
+                            $(this).monthpicker('hideAll');
+                        }
+                    });
+                }
+            });
         },
 
-        _init: function () {
-            if (!jQuery.ui || !jQuery.ui.button || !jQuery.ui.datepicker) {
-                alert('MonthPicker Setup Error: The jQuery UI button and datepicker plug-ins must be loaded before MonthPicker is called.');
-                return false;
-            }
-
-            if (!(this.element.is('input[type="text"]') || this.element.is('input[type="month"]'))) {
-                alert('MonthPicker Setup Error: MonthPicker can only be called on text or month inputs. ' + this.element.attr('id') + ' is not a text or month input.');
-                return false;
-            }
-
-            if (!jQuery.mask && this.options.UseInputMask) {
-                alert('MonthPicker Setup Error: The UseInputMask option is set but the Digital Bush Input Mask jQuery Plugin is not loaded. Get the plugin from http://digitalbush.com/');
-                return false;
-            }
-
-            if (this.element.is('input[type="month"]')) {
-                this.element.css('width', 'auto');
-                this._isMonthInputType = true;
+        show: function () {
+            $(this).monthpicker('hideAll');
+            var widget = $('#' + this.data('monthpicker').settings.id);
+            widget.css("top", this.offset().top + this.outerHeight());
+            if ($(window).width() > (widget.width() + this.offset().left)) {
+                widget.css("left", this.offset().left);
             } else {
-                this._isMonthInputType = false;
+                widget.css("left", this.offset().left - widget.width());
+            }
+            widget.show();
+            widget.find('select').focus();
+            this.trigger('monthpicker-show');
+        },
+
+        hide: function () {
+            var widget = $('#' + this.data('monthpicker').settings.id);
+            if (widget.is(':visible')) {
+                widget.hide();
+                this.trigger('monthpicker-hide');
+            }
+        },
+
+        hideAll: function () {
+            $(".mtz-monthpicker-widgetcontainer").each(function () {
+                if (typeof ($(this).data("monthpicker")) != "undefined") {
+                    $(this).monthpicker('hide');
+                }
+            });
+        },
+
+        setValue: function (settings) {
+            var
+                month = settings.selectedMonth,
+                year = settings.selectedYear;
+
+            if (settings.pattern.indexOf('mmm') >= 0) {
+                month = settings.selectedMonthName;
+            } else if (settings.pattern.indexOf('mm') >= 0 && settings.selectedMonth < 10) {
+                month = '0' + settings.selectedMonth;
             }
 
-            this.element.addClass('month-year-input');
+            if (settings.pattern.indexOf('yyyy') < 0) {
+                year = year.toString().substr(2, 2);
+            }
 
-            this._setStartYear();
+            if (settings.pattern.indexOf('y') > settings.pattern.indexOf(settings.dateSeparator)) {
+                this.val(month + settings.dateSeparator + year);
+            } else {
+                this.val(year + settings.dateSeparator + month);
+            }
 
-            this._monthPickerMenu = $('<div id="MonthPicker_' + this.element.attr('id') + '" class="month-picker ui-helper-clearfix"></div>');
+            this.change();
+        },
 
-            $(_markup).appendTo(this._monthPickerMenu);
-            $('body').append(this._monthPickerMenu);
+        disableMonths: function (months) {
+            var
+                settings = this.data('monthpicker').settings,
+                container = $('#' + settings.id);
 
-            this._monthPickerMenu.find('.year-title').text(this._i18n('year'));
-            this._monthPickerMenu.find('.year-container-all').attr('title', this._i18n('jumpYears'));
+            settings.disabledMonths = months;
 
-            this._showIcon();
+            container.find('.mtz-monthpicker-month').each(function () {
+                var m = parseInt($(this).data('month'));
+                if ($.inArray(m, months) >= 0) {
+                    $(this).addClass('ui-state-disabled');
+                } else {
+                    $(this).removeClass('ui-state-disabled');
+                }
+            });
+        },
 
-            this._createValidationMessage();
+        mountWidget: function (settings) {
+            var
+                monthpicker = this,
+                container = $('<div id="' + settings.id + '" class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all" />'),
+                header = $('<div class="ui-datepicker-header ui-widget-header ui-helper-clearfix ui-corner-all mtz-monthpicker" />'),
+                combo = $('<select class="mtz-monthpicker mtz-monthpicker-year" />'),
+                table = $('<table class="mtz-monthpicker" />'),
+                tbody = $('<tbody class="mtz-monthpicker" />'),
+                tr = $('<tr class="mtz-monthpicker" />'),
+                td = '',
+                selectedYear = settings.selectedYear,
+                option = null,
+                attrSelectedYear = $(this).data('selected-year'),
+                attrStartYear = $(this).data('start-year'),
+                attrFinalYear = $(this).data('final-year');
 
-            this._yearContainer = $('.year', this._monthPickerMenu);
+            if (attrSelectedYear) {
+                settings.selectedYear = attrSelectedYear;
+            }
 
-            $('.previous-year button', this._monthPickerMenu)
-                .button({
-                    icons: {
-                        primary: 'ui-icon-circle-triangle-w'
-                    },
-                    text: false
-                });
+            if (attrStartYear) {
+                settings.startYear = attrStartYear;
+            }
 
-            $('.next-year button', this._monthPickerMenu)
-                .button({
-                    icons: {
-                        primary: 'ui-icon-circle-triangle-e'
-                    },
-                    text: false
-                });
+            if (attrFinalYear) {
+                settings.finalYear = attrFinalYear;
+            }
 
-            $('.month-picker-month-table td button', this._monthPickerMenu).button();
-
-            $('.year-container-all', this._monthPickerMenu).click($.proxy(this._showYearsClickHandler, this));
-
-            $(document).bind('click.MonthPicker' + this.element.attr('id'), $.proxy(this._hide, this));
-            this._monthPickerMenu.bind('click.MonthPicker', function (event) {
-                return false;
+            container.css({
+                position: 'absolute',
+                zIndex: 999999,
+                whiteSpace: 'nowrap',
+                width: '250px',
+                overflow: 'hidden',
+                textAlign: 'center',
+                display: 'none',
+                top: monthpicker.offset().top + monthpicker.outerHeight(),
+                left: monthpicker.offset().left
             });
 
-            this._setUseInputMask();
-            this._setDisabledState();
-        },
-
-        /****** Misc. Utility functions ******/
-
-        _i18n: function (str) {
-            return $.extend({}, $.MonthPicker.i18n, this.options.i18n)[str];
-        },
-
-        _isFunction: function (func) {
-            return typeof (func) === 'function';
-        },
-
-        /****** Publicly Accessible API functions ******/
-
-        GetSelectedYear: function () {
-            return this._validateYear(this.element.val());
-        },
-
-        GetSelectedMonth: function () {
-            return this._validateMonth(this.element.val());
-        },
-
-        GetSelectedMonthYear: function () {
-            var _month = this._validateMonth(this.element.val()),
-                _year = this._validateYear(this.element.val()),
-                _date;
-
-            if (!isNaN(_year) && !isNaN(_month)) {
-                if (this.options.ValidationErrorMessage !== null && !this.options.Disabled) {
-                    $('#MonthPicker_Validation_' + this.element.attr('id')).hide();
+            combo.on('change', function () {
+                var months = $(this).parent().parent().find('td[data-month]');
+                months.removeClass('ui-state-active');
+                if ($(this).val() == settings.selectedYear) {
+                    months.filter('td[data-month=' + settings.selectedMonth + ']').addClass('ui-state-active');
                 }
+                monthpicker.trigger('monthpicker-change-year', $(this).val());
+            });
 
-                if (this._isMonthInputType) {
-                    _date = _year + '-' + _month;
-                } else {
-                    _date = _month + '/' + _year;
+            // mount years combo
+            for (var i = settings.startYear; i <= settings.finalYear; i++) {
+                var option = $('<option class="mtz-monthpicker" />').attr('value', i).append(i);
+                if (settings.selectedYear == i) {
+                    option.attr('selected', 'selected');
                 }
+                combo.append(option);
+            }
+            header.append(combo).appendTo(container);
 
-                $(this).val(_date);
-                return _date;
+            // mount months table
+            for (var i = 1; i <= 12; i++) {
+                td = $('<td class="ui-state-default mtz-monthpicker mtz-monthpicker-month" style="padding:5px;cursor:pointer;" />').attr('data-month', i);
+                if (settings.selectedMonth == i) {
+                    td.addClass('ui-state-active');
+                }
+                td.append(settings.monthNames[i - 1]);
+                tr.append(td).appendTo(tbody);
+                if (i % 3 === 0) {
+                    tr = $('<tr class="mtz-monthpicker" />');
+                }
+            }
+
+            tbody.find('.mtz-monthpicker-month').on('click', function () {
+                var m = parseInt($(this).data('month'));
+                if ($.inArray(m, settings.disabledMonths) < 0) {
+                    settings.selectedYear = $(this).closest('.ui-datepicker').find('.mtz-monthpicker-year').first().val();
+                    settings.selectedMonth = $(this).data('month');
+                    settings.selectedMonthName = $(this).text();
+                    monthpicker.trigger('monthpicker-click-month', $(this).data('month'));
+                    $(this).closest('table').find('.ui-state-active').removeClass('ui-state-active');
+                    $(this).addClass('ui-state-active');
+                }
+            });
+
+            table.append(tbody).appendTo(container);
+
+            container.appendTo('body');
+        },
+
+        destroy: function () {
+            return this.each(function () {
+                $(this).removeClass('mtz-monthpicker-widgetcontainer').unbind('focus').removeData('monthpicker');
+            });
+        },
+
+        getDate: function () {
+            var settings = this.data('monthpicker').settings;
+            if (settings.selectedMonth && settings.selectedYear) {
+                return new Date(settings.selectedYear, settings.selectedMonth - 1);
             } else {
-                if (this.options.ValidationErrorMessage !== null && !this.options.Disabled) {
-                    $('#MonthPicker_Validation_' + this.element.attr('id')).show();
-                }
-
                 return null;
             }
         },
 
-        Disable: function () {
-            this._setOption("Disabled", true);
-        },
-
-        Enable: function () {
-            this._setOption("Disabled", false);
-        },
-
-        ClearAllCallbacks: function () {
-            this.options.OnAfterChooseMonth = null;
-            this.options.OnAfterChooseMonths = null;
-            this.options.OnAfterChooseYear = null;
-            this.options.OnAfterChooseYears = null;
-            this.options.OnAfterMenuClose = null;
-            this.options.OnAfterMenuOpen = null;
-            this.options.OnAfterNextYear = null;
-            this.options.OnAfterNextYears = null;
-            this.options.OnAfterPreviousYear = null;
-            this.options.OnAfterPreviousYears = null;
-        },
-
-        Clear: function () {
-            this.element.val('');
-
-            if (this._validationMessage !== null) {
-                this._validationMessage.hide();
-            }
-        },
-
-        /****** Private functions ******/
-
-        _showIcon: function () {
-            if (this._monthPickerButton === null) {
-                if (this.options.ShowIcon) {
-                    this._monthPickerButton = $('<span id="MonthPicker_Button_' + this.element.attr('id') + '" class="month-picker-open-button">Open Month Chooser</span>').insertAfter(this.element);
-                    this._monthPickerButton.button({
-                        text: false,
-                        icons: {
-                            primary: 'ui-icon-calculator'
-                        }
-                    })
-                        .click($.proxy(this._show, this));
-                } else {
-                    this.element.bind('click.MonthPicker', $.proxy(this._show, this));
-                }
-            } else {
-                if (!this.options.ShowIcon) {
-                    this._monthPickerButton.remove();
-                    this._monthPickerButton = null;
-                    this.element.bind('click.MonthPicker', $.proxy(this._show, this));
-                }
-            }
-        },
-
-        _createValidationMessage: function () {
-            if (this.options.ValidationErrorMessage !== null && this.options.ValidationErrorMessage !== '') {
-                this._validationMessage = $('<span id="MonthPicker_Validation_' + this.element.attr('id') + '" class="month-picker-invalid-message">' + this.options.ValidationErrorMessage + '</span>');
-
-                this._validationMessage.insertAfter(this.options.ShowIcon ? this.element.next() : this.element);
-
-                this.element.blur($.proxy(this.GetSelectedMonthYear, this));
-            }
-        },
-
-        _removeValidationMessage: function () {
-            if (this.options.ValidationErrorMessage === null) {
-                this._validationMessage.remove();
-                this._validationMessage = null;
-            }
-        },
-
-        _show: function () {
-            var _selectedYear = this.GetSelectedYear();
-            if (this.element.data(this._enum._overrideStartYear) !== undefined) {
-                this._setPickerYear(this.options.StartYear);
-            } else if (!isNaN(_selectedYear)) {
-                this._setPickerYear(_selectedYear);
-            } else {
-                this._setPickerYear(new Date().getFullYear());
-            }
-
-            if (this._monthPickerMenu.css('display') === 'none') {
-                var _top = this.element.offset().top + this.element.height() + 7;
-                var _left = this.element.offset().left;
-
-                this._monthPickerMenu.css({
-                    top: _top + 'px',
-                    left: _left + 'px'
-                })
-                    .slideDown(_speed, $.proxy(function () {
-                        if (this._isFunction(this.options.OnAfterMenuOpen)) {
-                            this.options.OnAfterMenuOpen();
-                        }
-                    }, this));
-            }
-
-            this._showMonths();
-
-            return false;
-        },
-
-        _hide: function () {
-            if (this._monthPickerMenu.css('display') === 'block') {
-                this._monthPickerMenu.slideUp(_speed, $.proxy(function () {
-                    if (this._isFunction(this.options.OnAfterMenuClose)) {
-                        this.options.OnAfterMenuClose();
-                    }
-                }, this));
-            }
-        },
-
-        _setUseInputMask: function () {
-            if (!this._isMonthInputType) {
-                try {
-                    if (this.options.UseInputMask) {
-                        this.element.mask(_inputMask);
+        parseInputValue: function (settings) {
+            if (this.val()) {
+                if (settings.dateSeparator) {
+                    var val = this.val().toString().split(settings.dateSeparator);
+                    if (settings.pattern.indexOf('m') === 0) {
+                        settings.selectedMonth = val[0];
+                        settings.selectedYear = val[1];
                     } else {
-                        this.element.unmask();
-                    }
-                } catch (e) { }
-            }
-        },
-
-        _setDisabledState: function () {
-            if (this.options.Disabled) {
-                this.element.prop('disabled', true);
-                this.element.addClass(_disabledClass);
-                if (this._monthPickerButton !== null) {
-                    this._monthPickerButton.button('option', 'disabled', true);
-                }
-
-                if (this._validationMessage !== null) {
-                    this._validationMessage.hide();
-                }
-
-            } else {
-                this.element.prop('disabled', false);
-                this.element.removeClass(_disabledClass);
-                if (this._monthPickerButton !== null) {
-                    this._monthPickerButton.button('option', 'disabled', false);
-                }
-            }
-        },
-
-        _setStartYear: function () {
-            if (this.options.StartYear !== null) {
-                this.element.data(this._enum._overrideStartYear, true);
-            } else {
-                this.element.removeData(this._enum._overrideStartYear);
-            }
-        },
-
-        _getPickerYear: function () {
-            return parseInt(this._yearContainer.text(), 10);
-        },
-
-        _setPickerYear: function (year) {
-            this._yearContainer.text(year);
-        },
-
-        _validateMonth: function (text) {
-            if (text === '') {
-                return NaN;
-            }
-
-            if (text.indexOf('/') != -1) {
-                var _month = parseInt(text.split('/')[0], 10);
-                if (!isNaN(_month)) {
-                    if (_month >= 1 && _month <= 12) {
-                        return _month;
+                        settings.selectedMonth = val[1];
+                        settings.selectedYear = val[0];
                     }
                 }
-            }
-
-            if (text.indexOf('-') != -1) {
-                var _month = parseInt(text.split('-')[1], 10);
-                if (!isNaN(_month)) {
-                    if (_month >= 1 && _month <= 12) {
-                        return _month;
-                    }
-                }
-            }
-
-            return NaN;
-        },
-
-        _validateYear: function (text) {
-            if (text === '') {
-                return NaN;
-            }
-
-            if (text.indexOf('/') != -1) {
-                var _year = parseInt(text.split('/')[1], 10);
-
-                if (!isNaN(_year)) {
-                    if (_year >= 1800 && _year <= 3000) {
-                        return _year;
-                    }
-                }
-            }
-
-            if (text.indexOf('-') != -1) {
-                var _year = parseInt(text.split('-')[0], 10);
-
-                if (!isNaN(_year)) {
-                    if (_year >= 1800 && _year <= 3000) {
-                        return _year;
-                    }
-                }
-            }
-
-            return NaN;
-        },
-
-        _chooseMonth: function (month) {
-            if (month > 0 && month < 10) {
-                month = '0' + month;
-            }
-
-            if (this.element.is('input[type="month"]')) {
-                this.element.val(this._getPickerYear() + '-' + month).change();
-            } else {
-                this.element.val(month + '/' + this._getPickerYear()).change();
-            }
-
-            this.element.blur();
-            if (this._isFunction(this.options.OnAfterChooseMonth)) {
-                this.options.OnAfterChooseMonth();
-            }
-        },
-
-        _chooseYear: function (year) {
-            this._setPickerYear(year);
-            this._showMonths();
-            if (this._isFunction(this.options.OnAfterChooseYear)) {
-                this.options.OnAfterChooseYear();
-            }
-
-        },
-
-        _showMonths: function () {
-            var _months = this._i18n('months');
-
-            $('.previous-year button', this._monthPickerMenu)
-                .attr('title', this._i18n('prevYear'))
-                .unbind('click')
-                .bind('click.MonthPicker', $.proxy(this._previousYear, this));
-
-            $('.next-year button', this._monthPickerMenu)
-                .attr('title', this._i18n('nextYear'))
-                .unbind('click')
-                .bind('click.MonthPicker', $.proxy(this._nextYear, this));
-
-            $('.year-container-all', this._monthPickerMenu).css('cursor', 'pointer');
-            $('.month-picker-month-table button', this._monthPickerMenu).unbind('.MonthPicker');
-
-            for (var _month in _months) {
-                var _counter = parseInt(_month, 10) + 1;
-                $('.button-' + _counter, this._monthPickerMenu)
-                    .bind('click.MonthPicker', {
-                        _month: _counter
-                    }, $.proxy(function (event) {
-                        this._chooseMonth(event.data._month);
-                        this._hide();
-                    }, this));
-
-                $('.button-' + _counter, this._monthPickerMenu).button('option', 'label', _months[_month]);
-            }
-        },
-
-        _showYearsClickHandler: function () {
-
-            this._showYears();
-            if (this._isFunction(this.options.OnAfterChooseYears)) {
-                this.options.OnAfterChooseYears();
-            }
-        },
-
-        _showYears: function () {
-            var _year = this._getPickerYear();
-
-            $('.previous-year button', this._monthPickerMenu)
-                .attr('title', 'Jump Back 5 Years')
-                .unbind('click')
-                .bind('click', $.proxy(function () {
-                    this._previousYears();
-                    return false;
-                }, this));
-
-            $('.next-year button', this._monthPickerMenu)
-                .attr('title', 'Jump Forward 5 Years')
-                .unbind('click')
-                .bind('click', $.proxy(function () {
-                    this._nextYears();
-                    return false;
-                }, this));
-
-            $('.year-container-all', this._monthPickerMenu).css('cursor', 'default');
-            $('.month-picker-month-table button', this._monthPickerMenu).unbind('.MonthPicker');
-
-            var _yearDifferential = -4;
-            for (var _counter = 1; _counter <= 12; _counter++) {
-                $('.button-' + _counter, this._monthPickerMenu)
-                    .bind('click.MonthPicker', {
-                        _yearDiff: _yearDifferential
-                    }, $.proxy(function (event) {
-                        this._chooseYear(_year + event.data._yearDiff);
-                    }, this));
-
-                $('.button-' + _counter, this._monthPickerMenu).button('option', 'label', _year + _yearDifferential);
-
-                _yearDifferential++;
-            }
-        },
-
-        _nextYear: function () {
-            var _year = $('.month-picker-year-table .year', this._monthPickerMenu);
-            _year.text(parseInt(_year.text()) + 1, 10);
-            if (this._isFunction(this.options.OnAfterNextYear)) {
-                this.options.OnAfterNextYear();
-            }
-        },
-
-        _nextYears: function () {
-            var _year = $('.month-picker-year-table .year', this._monthPickerMenu);
-            _year.text(parseInt(_year.text()) + 5, 10);
-            this._showYears();
-            if (this._isFunction(this.options.OnAfterNextYears)) {
-                this.options.OnAfterNextYears();
-            }
-        },
-
-        _previousYears: function () {
-            var _year = $('.month-picker-year-table .year', this._monthPickerMenu);
-            _year.text(parseInt(_year.text()) - 5, 10);
-            this._showYears();
-            if (this._isFunction(this.options.OnAfterPreviousYears)) {
-                this.options.OnAfterPreviousYears();
-            }
-        },
-
-        _previousYear: function () {
-            var _year = $('.month-picker-year-table .year', this._monthPickerMenu);
-            _year.text(parseInt(_year.text()) - 1, 10);
-            if (this._isFunction(this.options.OnAfterPreviousYear)) {
-                this.options.OnAfterPreviousYear();
             }
         }
-    });
-}(jQuery, window, document));
+
+    };
+
+    $.fn.monthpicker = function (method) {
+        if (methods[method]) {
+            return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
+        } else if (typeof method === 'object' || !method) {
+            return methods.init.apply(this, arguments);
+        } else {
+            $.error('Method ' + method + ' does not exist on jQuery.mtz.monthpicker');
+        }
+    };
+
+})(jQuery);
+
+
 ;/*! jQuery UI - v1.10.2 - 2013-03-14
 * http://jqueryui.com
 * Includes: jquery.ui.datepicker-af.js, jquery.ui.datepicker-ar-DZ.js, jquery.ui.datepicker-ar.js, jquery.ui.datepicker-az.js, jquery.ui.datepicker-be.js, jquery.ui.datepicker-bg.js, jquery.ui.datepicker-bs.js, jquery.ui.datepicker-ca.js, jquery.ui.datepicker-cs.js, jquery.ui.datepicker-cy-GB.js, jquery.ui.datepicker-da.js, jquery.ui.datepicker-de.js, jquery.ui.datepicker-el.js, jquery.ui.datepicker-en-AU.js, jquery.ui.datepicker-en-GB.js, jquery.ui.datepicker-en-NZ.js, jquery.ui.datepicker-eo.js, jquery.ui.datepicker-es.js, jquery.ui.datepicker-et.js, jquery.ui.datepicker-eu.js, jquery.ui.datepicker-fa.js, jquery.ui.datepicker-fi.js, jquery.ui.datepicker-fo.js, jquery.ui.datepicker-fr-CA.js, jquery.ui.datepicker-fr-CH.js, jquery.ui.datepicker-fr.js, jquery.ui.datepicker-gl.js, jquery.ui.datepicker-he.js, jquery.ui.datepicker-hi.js, jquery.ui.datepicker-hr.js, jquery.ui.datepicker-hu.js, jquery.ui.datepicker-hy.js, jquery.ui.datepicker-id.js, jquery.ui.datepicker-is.js, jquery.ui.datepicker-it.js, jquery.ui.datepicker-ja.js, jquery.ui.datepicker-ka.js, jquery.ui.datepicker-kk.js, jquery.ui.datepicker-km.js, jquery.ui.datepicker-ko.js, jquery.ui.datepicker-ky.js, jquery.ui.datepicker-lb.js, jquery.ui.datepicker-lt.js, jquery.ui.datepicker-lv.js, jquery.ui.datepicker-mk.js, jquery.ui.datepicker-ml.js, jquery.ui.datepicker-ms.js, jquery.ui.datepicker-nb.js, jquery.ui.datepicker-nl-BE.js, jquery.ui.datepicker-nl.js, jquery.ui.datepicker-nn.js, jquery.ui.datepicker-no.js, jquery.ui.datepicker-pl.js, jquery.ui.datepicker-pt-BR.js, jquery.ui.datepicker-pt.js, jquery.ui.datepicker-rm.js, jquery.ui.datepicker-ro.js, jquery.ui.datepicker-ru.js, jquery.ui.datepicker-sk.js, jquery.ui.datepicker-sl.js, jquery.ui.datepicker-sq.js, jquery.ui.datepicker-sr-SR.js, jquery.ui.datepicker-sr.js, jquery.ui.datepicker-sv.js, jquery.ui.datepicker-ta.js, jquery.ui.datepicker-th.js, jquery.ui.datepicker-tj.js, jquery.ui.datepicker-tr.js, jquery.ui.datepicker-uk.js, jquery.ui.datepicker-vi.js, jquery.ui.datepicker-zh-CN.js, jquery.ui.datepicker-zh-HK.js, jquery.ui.datepicker-zh-TW.js

@@ -564,13 +564,21 @@ footer nav ul li a {
   clear: both;
   padding: 1em 0;
 }
+#actividad #graficas #graficaPrincipalTabs > div {
+  margin-left: 0;
+}
 #actividad #graficas #graficaPrincipalTabs .graph {
   padding: 0;
   width: 100%;
   height: 300px;
 }
-#actividad #graficas #graficaPrincipalTabs > div {
-  margin-left: 0;
+#actividad #graficas #graficaPrincipalTabs .graph-button {
+  margin: 0 7px;
+  text-align: center;
+}
+#actividad #graficas #graficaPrincipalTabs .graph-button input {
+  visibility: hidden;
+  width: 0px;
 }
 #actividad #graficas #graficaPrincipal {
   display: inline;

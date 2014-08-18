@@ -80,7 +80,7 @@ namespace Kms.Cloud.WebApp.Controllers {
             }
 
             var dataFinal = data.Concat(
-                dataFallback.Where(w => ! data.Any(a => a[0] == w[0]))
+                dataFallback.Where(w => !data.Any(a => (Int64)a[0] == (Int64)w[0]))
             ).OrderBy(b => b[0]);
 
             return Json(
@@ -107,7 +107,7 @@ namespace Kms.Cloud.WebApp.Controllers {
                 DateTimeKind.Utc
             ).Add(-ClientUtcOffset); // ajustar a zona horaria UTC
 
-            var higherRound = lowerBound.AddMonths(1);
+            var higherRound = lowerBound.AddMonths(1).AddDays(-1);
 
             // > Obtener lecturas
             var data = (
@@ -148,7 +148,7 @@ namespace Kms.Cloud.WebApp.Controllers {
             }
 
             var dataFinal = data.Concat(
-                dataFallback.Where(w => ! data.Any(a => a[0] == w[0]))
+                dataFallback.Where(w => !data.Any(a => (Int64)a[0] == (Int64)w[0]))
             ).OrderBy(b => b[0]);
 
             return Json(

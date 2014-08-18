@@ -8,7 +8,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	@* user-scalable=no << Eliminado de {viewport} cuz' then it's not responsive *@
 	
-	<title>KMS :: @(ViewBag.Title ?? LayoutStrings.DefaultTitle)</title>
+	<title>KMS@(String.IsNullOrEmpty(ViewBag.Title) ? "" : " :: " + ViewBag.Title)</title>
 
 	@* Styles *@
 	@Html.RenderCssBundle("~/Assets/Stylesheets.css.bundle", BundleOptions.Combined)

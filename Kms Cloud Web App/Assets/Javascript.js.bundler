@@ -2,10 +2,11 @@
 ../Scripts/modernizr-2.7.2.js
 ../Scripts/sprintf.js
 ../Scripts/sugar.min.js
+../Scripts/sugarjs/locales/es.js
 ../Scripts/prefix.js
 ../Scripts/jquery-2.1.1.js
 ../Scripts/jquery-ui-1.10.4.js
-../Scripts/jquery-ui-monthpicker-2.1.js
+../Scripts/jquery-ui-monthpicker.js
 ../Scripts/jquery-ui-i18n.js
 ../Scripts/cropper.js
 Scripts/Shared/Utils.Misc.js

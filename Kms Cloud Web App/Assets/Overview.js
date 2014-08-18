@@ -3711,6 +3711,8 @@ discardElement:Ua,css:K,each:p,extend:s,map:za,merge:x,pick:q,splat:na,extendCla
     if (Object.has($.datepicker.regional, lang))
         i18n = $.datepicker.regional[lang];
 
+    Date.setLocale(lang);
+
     Highcharts.setOptions({
         global: {
             useUTC: false
@@ -3729,7 +3731,7 @@ discardElement:Ua,css:K,each:p,extend:s,map:za,merge:x,pick:q,splat:na,extendCla
     });
 
     $.datepicker.setDefaults({
-        dateFormat: "DD, M d, yy"
+        dateFormat: "MM d, yy"
     });
 
     // > Crear las tabs
@@ -3742,64 +3744,110 @@ discardElement:Ua,css:K,each:p,extend:s,map:za,merge:x,pick:q,splat:na,extendCla
 
     // > Crear datepickers
     var dayCurrentDate = null, dayCurrentReq  = null;
-    $("#graficaDiaria2 .datepicker input").datepicker({
+    $("#graficaPorHora .graph-button input").datepicker({
         minDate: new Date(parseInt($("body").data("user-signup"))),
-        maxDate: new Date()
-    }).datepicker("setDate", new Date()).select(function () {
-        if (dayCurrentDate != null && dayCurrentDate == $(this).datepicker("getDate"))
-            return;
+        maxDate: new Date(),
+        onSelect: function() {
+            if (dayCurrentDate != null && dayCurrentDate == $(this).datepicker("getDate"))
+                return;
 
-        dayCurrentDate = $(this).datepicker("getDate");
+            dayCurrentDate = $(this).datepicker("getDate");
 
-        if (dayCurrentReq != null)
-            dayCurrentReq.abort();
+            if (dayCurrentReq != null)
+                dayCurrentReq.abort();
 
-        $("#graficaDiaria2 .graph").highcharts().showLoading();
+            $("#graficaPorHora .graph-button button").button("option", "label", $(this).val());
+            $("#graficaPorHora .graph").highcharts().showLoading();
 
-        dayCurrentReq = $.getJSON(
-            getKMS_ajaxUri("OverviewDailyData.json"),
-            {
-                date: $(this).datepicker("getDate").getTime(),
-                _: $("body").data("ajax-cache")
-            }
-        ).fail(function() {
-            $("#graficaDiaria2 .graph").highcharts().showLoading("Ocurrió un problema durante la descarga, intenta de nuevo");
-        }).done(function (data) {
-            $("#graficaDiaria2 .graph").highcharts().series[0].setData(data.allData);
-            $("#graficaDiaria2 .graph").highcharts().hideLoading();
-        });
+            dayCurrentReq = $.getJSON(
+                getKMS_ajaxUri("OverviewDailyData.json"),
+                {
+                    date: $(this).datepicker("getDate").getTime(),
+                    _: $("body").data("ajax-cache")
+                }
+            ).fail(function () {
+                $("#graficaPorHora .graph").highcharts().showLoading("Ocurrió un problema durante la descarga, intenta de nuevo");
+            }).done(function (data) {
+                $("#graficaPorHora .graph").highcharts().series[0].setData(data.allData);
+                $("#graficaPorHora .graph").highcharts().hideLoading();
+            });
+        }
+    }).datepicker("setDate", new Date());
+    $("#graficaPorHora .graph-button button").button({
+        icons: {
+            primary: "ui-icon-calendar",
+            secondary: "ui-icon-triangle-1-s"
+        },
+        label: $("#graficaPorHora .graph-button input").val()
+    }).click(function() {
+        $("#graficaPorHora .graph-button input").datepicker("show");
     });
 
-    var monthCurrentString = null, monthCurrentReq = null;
-    $("#graficaMensual2 .datepicker input").MonthPicker({
-        StartYear: new Date().getFullYear()
-    }).val(new Date().format("{MM}/{yyyy}")).change(function() {
-        if (monthCurrentString != null && monthCurrentString == $(this).val())
-            return $(this).val(new Date().format("{MM}/{yyyy}"));
+    var selectedYear = null, monthCurrentDate = null, monthCurrentReq = null;
+    $("#graficaPorDia .graph-button input").monthpicker({
+        selectedYear: new Date().getFullYear(),
+        pattern: "mmm yyyy",
+        startYear: new Date(parseInt($("body").data("user-signup"))).getFullYear(),
+        finalYear: new Date().getFullYear(),
+        monthNames: i18n.monthNames
+    }).bind("monthpicker-change-year", function(e, year) {
+        var disabledMonths = [];
+        selectedYear = year;
 
-        var userSignupDate = new Date(parseInt($("body").data("user-signup")));
-        if ($(this).MonthPicker('GetSelectedYear') < userSignupDate.getYear() || $(this).MonthPicker('GetSelectedYear') > new Date().getYear())
-            return $(this).val(new Date().format("{MM}/{yyyy}"));
+        if (year === new Date().getFullYear().toString()) {
+            for (var i = new Date().getMonth() + 2; i < 12; i++)
+                disabledMonths.push(i);
+            if (new Date().getMonth() + 1 < 12)
+                disabledMonths.push(12);
+        } else if (parseInt(year) > new Date().getFullYear()) {
+            for (var i = 1; i <= 12; i++)
+                disabledMonths.push(i);
+        }
+
+        if (year === new Date(parseInt($("body").data("user-signup"))).getFullYear().toString()) {
+            for (var i = 1; i < new Date(parseInt($("body").data("user-signup"))).getMonth(); i++)
+                disabledMonths.push(i);
+        }
+
+        $(this).monthpicker("disableMonths", disabledMonths);
+    }).bind("monthpicker-click-month", function() {
+        if (monthCurrentDate != null && monthCurrentDate == $(this).monthpicker("getDate"))
+            return;
+
+        monthCurrentDate = $(this).monthpicker("getDate");
+        console.log(monthCurrentDate);
 
         if (monthCurrentReq != null)
             monthCurrentReq.abort();
 
-        $("#graficaMensual2 .graph").highcharts().showLoading();
+        $("#graficaPorDia .graph-button button").button("option", "label", $(this).val());
+        $("#graficaPorDia .graph").highcharts().showLoading();
 
         monthCurrentReq = $.getJSON(
             getKMS_ajaxUri("OverviewMonthlyData.json"),
             {
-                date: new Date().getTime(),
+                date: monthCurrentDate.getTime(),
                 _: $("body").data("ajax-cache")
             }
-        ).fail(function () {
-            $("#graficaMensual2 .graph").highcharts().showLoading("Ocurrió un problema durante la descarga, intenta de nuevo");
-        }).done(function (data) {
-            $("#graficaMensual2 .graph").highcharts().series[0].setData(data.allData);
-            $("#graficaMensual2 .graph").highcharts().hideLoading();
+        ).fail(function() {
+            $("#graficaPorDia .graph").highcharts().showLoading("Ocurrió un problema durante la descarga, intenta de nuevo");
+        }).done(function(data) {
+            $("#graficaPorDia .graph").highcharts().series[0].setData(data.allData);
+            $("#graficaPorDia .graph").highcharts().hideLoading();
         });
+    }).val(
+        Date.create().format("{Month} {yyyy}")
+    ).trigger("monthpicker-change-year", Date.create().format("{yyyy}"));
+    $("#graficaPorDia .graph-button button").button({
+        icons: {
+            primary: "ui-icon-calendar",
+            secondary: "ui-icon-triangle-1-s"
+        },
+        label: $("#graficaPorDia .graph-button input").val()
+    }).click(function() {
+        $("#graficaPorDia .graph-button input").monthpicker("show");
     });
-    
+
     // > Crear las gráficas
     $("#graficaPorHora .graph, #graficaPorDia .graph").each(function () {
         $(this).highcharts("StockChart", {
@@ -3841,6 +3889,7 @@ discardElement:Ua,css:K,each:p,extend:s,map:za,merge:x,pick:q,splat:na,extendCla
                 {
                     data: [],
                     dataGrouping: {
+                        groupPixelWidth: 10,
                         approximation: "sum",
                         units: [
                             [
@@ -3873,6 +3922,14 @@ discardElement:Ua,css:K,each:p,extend:s,map:za,merge:x,pick:q,splat:na,extendCla
 
         $(this).highcharts().showLoading();
     });
+
+    $("#graficaPorHora .graph").highcharts().xAxis[0].update({
+        labels: {
+            formatter: function () {
+                return this.isLast ? "24:00" : Date.create(this.value).format("{HH}:{mm}");
+            }
+        }
+    }, true);
 });
 ;/// <reference path="../Shared/_shared.js" />
 /// <reference path="HighchartsSetup.js"/>
