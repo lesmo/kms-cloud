@@ -21,18 +21,14 @@ namespace Kms.Cloud.Database.Helpers {
         }
 
         public long Decode(string inputString) {
-            long result = 0;
-            var pow = 0;
-            for ( var i = inputString.Length - 1; i >= 0; i-- ) {
-                var c = inputString[i];
-                var pos = mCharMap.IndexOf(c);
-                if ( pos > -1 )
-                    result += pos * (long)Math.Pow(mCharMapArray.Length, pow);
-                else
-                    return -1;
-                pow++;
-            }
-            return result;
+            var inputArray = inputString.ToCharArray().Reverse();
+            var pos = -1;
+
+            return inputArray.Aggregate(
+                0,
+                (current, c) =>
+                    (int)(current + mCharMap.IndexOf(c) * (long)Math.Pow(inputString.Length, ++pos))
+            );
         }
 
         public string Encode(long inputNumber) {
