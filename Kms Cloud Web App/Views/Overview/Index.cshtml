@@ -63,7 +63,6 @@
 				<div class="ui-widget">
 					<div class="ui-state-error ui-corner-all">
 						<p>
-							<span class="ui-icon ui-icon-alert" style="margin-right: 0.3em; float: left"></span>
 							<strong>¡ATENCIÓN!</strong> No has sincronizado tu pulsera desde hace
 							@Math.Floor((Model.LastSyncDateTime - DateTime.UtcNow).TotalDays) días, todos los
 							kilómetros que sumaste antes del @DateTime.UtcNow.AddDays(-7).ToString("m", CultureInfo.CurrentUICulture)
@@ -76,7 +75,6 @@
 				<div class="ui-widget">
 					<div class="ui-state-error ui-corner-all">
 						<p>
-							<span class="ui-icon ui-icon-alert" style="margin-right: 0.3em; float: left"></span>
 							<strong>¡CUIDADO!</strong> No has sincronizado tu pulsera desde hace casi una semana. Los
 							kilómetros que hayas acumulado el @CultureInfo.CurrentUICulture.DateTimeFormat.GetDayName(DateTime.UtcNow.DayOfWeek)
 							pasado <strong>se perderán si no sincronizas hoy</strong>.
@@ -87,7 +85,6 @@
 				<div class="ui-widget">
 					<div class="ui-state-highlight ui-corner-all">
 						<p>
-							<span class="ui-icon ui-icon-info" style="margin-right: 0.3em; float: left"></span>
 							Parece que no has sincronizado tu pulsera el día de hoy. ¡Recuerda que cada kilómetro cuenta!
 						</p>
 					</div>

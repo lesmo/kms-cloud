@@ -29327,7 +29327,7 @@ $(function () {
     });
 });
 ;$(function() {
-    $("#recompensaDashReciente .botonDorado").click(function() {
+    $("#recompensaDashReciente .botonDorado").click(function(e) {
         var $parent = $(this).parent();
         $parent.slideUp().siblings().slideDown();
 
@@ -29342,8 +29342,13 @@ $(function () {
 
             $parent.data("discarded", "1");
         }
+
+        e.preventDefault();
+        return false;
     });
-    $("#recompensaDashSiguiente .botonDorado").click(function () {
+    $("#recompensaDashSiguiente .botonDorado").click(function (e) {
         $(this).parent().slideUp().siblings().slideDown();
+        e.preventDefault();
+        return false;
     });
 });
