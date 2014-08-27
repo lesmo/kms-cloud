@@ -43,7 +43,7 @@ namespace Kms.Cloud.WebApp.Controllers {
                 Title = s.Reward.GetGlobalization().Title,
                 Text = s.Reward.GetGlobalization().Text,
 
-                TriggerDistanceCentimeters = s.Reward.DistanceTrigger,
+                TriggerDistanceCentimeters = (long)s.Reward.DistanceTrigger,
                 UnlockDate = s.CreationDate
             });
 

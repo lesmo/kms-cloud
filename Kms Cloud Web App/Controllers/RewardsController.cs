@@ -36,9 +36,9 @@ namespace Kms.Cloud.WebApp.Controllers {
 					x.Take(6)
 			).Select(s => new RewardUnknownModel {
 				RemainingDistanceCentimeters =
-					s.DistanceTrigger - CurrentUser.UserDataTotalDistanceSum.TotalDistance,
+					(double)(s.DistanceTrigger - CurrentUser.UserDataTotalDistanceSum.TotalDistance),
 				TriggerDistanceCentimeters =
-					s.DistanceTrigger
+					(long)s.DistanceTrigger
 			}).ToArray();
 
 			// > Obtener las últimas recompensas
@@ -61,7 +61,7 @@ namespace Kms.Cloud.WebApp.Controllers {
 					? null
 					: s.Reward.RewardSponsor.Name,
 					
-				TriggerDistanceCentimeters = s.Reward.DistanceTrigger,
+				TriggerDistanceCentimeters = (long)s.Reward.DistanceTrigger,
 				UnlockDate                 = s.CreationDate,
 
 				Title = s.Reward.GetGlobalization().Title,
@@ -92,7 +92,7 @@ namespace Kms.Cloud.WebApp.Controllers {
 		                          ? null
 		                          : earnedReward.Reward.RewardSponsor.Name,
 
-		        TriggerDistanceCentimeters = earnedReward.Reward.DistanceTrigger,
+		        TriggerDistanceCentimeters = (long)earnedReward.Reward.DistanceTrigger,
 		        UnlockDate = earnedReward.CreationDate,
 
 		        Title = earnedReward.Reward.GetGlobalization().Title,

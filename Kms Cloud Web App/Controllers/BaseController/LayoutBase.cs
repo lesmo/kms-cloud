@@ -81,7 +81,7 @@ namespace Kms.Cloud.WebApp.Controllers {
                     );
 
                 this._layoutValues.NextRewardDistanceCentimeters = 
-                    nextReward.DistanceTrigger - CurrentUser.UserDataTotalDistanceSum.TotalDistance;
+                    (long)(nextReward.DistanceTrigger - CurrentUser.UserDataTotalDistanceSum.TotalDistance);
                 
                 // > Obtener el Tip del Día
                 var tipOfTheDay = Database.UserTipHistoryStore.GetFirst(
