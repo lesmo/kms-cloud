@@ -59,12 +59,24 @@
 				<hr />
 			</span>
 
-			@if ( Model.LastSyncDateTime < DateTime.UtcNow.AddDays(-7) ) {
+
+			@if ( Model.LastSyncDateTime == default(DateTime) ) {
+				<div class="ui-widget">
+					<div class="ui-state-highlight ui-corner-all">
+						<p>
+							<strong>Nota:</strong> estamos trabajando con los datos generados de tu
+							cuenta (ya sea por alguna mejora o fallo), por lo que podría ser que no veas
+							tus kilómetros reflejados en este panel. Si necesitas más información, ponte
+							en contacto con nosotros.
+						</p>
+					</div>
+				</div>
+			} else if ( Model.LastSyncDateTime < DateTime.UtcNow.AddDays(-7) ) {
 				<div class="ui-widget">
 					<div class="ui-state-error ui-corner-all">
 						<p>
 							<strong>¡ATENCIÓN!</strong> No has sincronizado tu pulsera desde hace
-							@Math.Floor((Model.LastSyncDateTime - DateTime.UtcNow).TotalDays) días, todos los
+							@Math.Floor((DateTime.UtcNow - Model.LastSyncDateTime).TotalDays) días, todos los
 							kilómetros que sumaste antes del @DateTime.UtcNow.AddDays(-7).ToString("m", CultureInfo.CurrentUICulture)
 							y que no sincronizaste se han perdido por completo. Sincroniza ahora para evitar
 							seguir perdiendo kilómetros.
@@ -85,7 +97,7 @@
 				<div class="ui-widget">
 					<div class="ui-state-highlight ui-corner-all">
 						<p>
-							Parece que no has sincronizado tu pulsera el día de hoy. ¡Recuerda que cada kilómetro cuenta!
+							Parece que no has sincronizado tu pulsera en los últimos días. ¡Recuerda que cada kilómetro cuenta!
 						</p>
 					</div>
 				</div>

@@ -64,7 +64,7 @@
             <div class="info">
                 <figure><img src="@reward.IconUri.AbsoluteUri" alt="@reward.Title"></figure>
                 <h3>@reward.TriggerDistance @(RegionInfo.CurrentRegion.IsMetric ? "KMS" : "MI")</h3>
-                <h4>@reward.Title.ToUpper()</h4>
+                <h4>@((reward.Title ?? "{NOPE}").ToUpper())</h4>
                 <p>
                     <small>
                         @string.Format(
