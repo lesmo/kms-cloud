@@ -342,10 +342,6 @@
     <Folder Include="Views\Geography\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\KMS Interop\Kms Interop\Kms Interop.csproj">
-      <Project>{599494b1-8d7f-44df-9d70-f0e2b8d118f0}</Project>
-      <Name>Kms Interop</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Kms Cloud Database\KMS Cloud Database.csproj">
       <Project>{af2a5b08-71b1-410a-9dfb-31a037851d33}</Project>
       <Name>KMS Cloud Database</Name>
