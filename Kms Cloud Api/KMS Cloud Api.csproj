@@ -350,10 +350,6 @@
       <Project>{9aaf5681-cf18-414d-9853-a20fffa64eba}</Project>
       <Name>KMS Cloud Globalization</Name>
     </ProjectReference>
-    <ProjectReference Include="..\KMS Interop Cloud\KMS Interop Cloud.csproj">
-      <Project>{1f4e4e4c-4e46-47cb-a3fc-d1dbf78246a3}</Project>
-      <Name>KMS Interop Cloud</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
