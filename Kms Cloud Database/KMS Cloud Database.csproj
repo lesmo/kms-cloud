@@ -47,6 +47,10 @@
     <AssemblyOriginatorKeyFile>KMS Cloud Database SNK.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CryptSharp, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\CryptSharp.1.2.0.1\lib\net35\CryptSharp.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.dll</HintPath>
@@ -270,10 +274,6 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CryptSharp\CryptSharp.csproj">
-      <Project>{5e33051d-1471-4e5a-b94e-bd0e8ffff99e}</Project>
-      <Name>CryptSharp</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Kms Cloud Globalization\KMS Cloud Globalization.csproj">
       <Project>{9aaf5681-cf18-414d-9853-a20fffa64eba}</Project>
       <Name>KMS Cloud Globalization</Name>
