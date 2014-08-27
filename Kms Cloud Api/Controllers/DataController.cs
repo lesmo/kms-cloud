@@ -144,6 +144,20 @@ namespace Kms.Cloud.Api.Controllers {
                     TotalSteps = 0
                 };
 
+            var distanceSleeping =
+                CurrentUser.UserDataTotalDistance.FirstOrDefault(w => w.Activity == DataActivity.Sleep)
+                ?? new UserDataTotalDistance {
+                    Timestamp = CurrentUser.CreationDate,
+                    TotalDistance = 0,
+                    TotalSteps = 0
+                };
+
+            var timestamps = new DateTime[] {
+                distanceWalking.Timestamp,
+                distanceRunning.Timestamp,
+                distanceSleeping.Timestamp
+            };
+
             // --- Preparar y devolver respuesta ---
             return new DataTotalResponse {
                 RunningTotalDistance = distanceRunning.TotalDistance,
@@ -154,9 +168,7 @@ namespace Kms.Cloud.Api.Controllers {
                 WalkingTotalSteps = distanceWalking.TotalSteps,
                 TotalSteps        = distanceRunning.TotalSteps + distanceWalking.TotalSteps,
 
-                LastModified = distanceRunning.Timestamp > distanceWalking.Timestamp
-                    ? distanceRunning.Timestamp
-                    : distanceWalking.Timestamp
+                LastModified = timestamps.Max()
             };
         }
 
