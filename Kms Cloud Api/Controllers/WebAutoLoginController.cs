@@ -3,10 +3,6 @@ using Kms.Cloud.Api.Properties;
 using Kms.Cloud.Database;
 using Kms.Cloud.Database.Helpers;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 
 namespace Kms.Cloud.Api.Controllers {

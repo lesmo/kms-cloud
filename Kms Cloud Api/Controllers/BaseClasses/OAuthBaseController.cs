@@ -6,13 +6,9 @@ using Kms.Cloud.Database;
 using Kms.Interop.OAuth;
 using Kms.Interop.OAuth.SocialClients;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Web;
-using System.Web.Http;
 
 namespace Kms.Cloud.Api.Controllers {
     public abstract class OAuthBaseController : BaseController {

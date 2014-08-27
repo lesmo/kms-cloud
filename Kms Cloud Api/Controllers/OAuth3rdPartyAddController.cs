@@ -1,15 +1,10 @@
 ﻿using Kilometros_WebGlobalization.API;
 using Kms.Cloud.Api.Exceptions;
 using Kms.Cloud.Api.Models.RequestModels;
-using Kms.Cloud.Api.Properties;
 using Kms.Cloud.Database;
 using Kms.Interop.OAuth;
 using Kms.Interop.OAuth.SocialClients;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 
 namespace Kms.Cloud.Api.Controllers {

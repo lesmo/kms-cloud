@@ -1,8 +1,6 @@
 ﻿using Kms.Cloud.Api.Models.ResponseModels;
 using Kms.Cloud.Api.Models.RequestModels;
-using Kms.Cloud.Api.Security;
 using Kms.Cloud.Database.Helpers;
-using Kms.Cloud.Database.Abstraction;
 using Kms.Cloud.Database;
 using System;
 using System.Collections.Generic;
@@ -10,15 +8,12 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using System.Web.Http.Results;
-using System.Data.Entity.Validation;
 using Kilometros_WebGlobalization.API;
 using Kms.Cloud.Api.Exceptions;
 using System.Threading;
 using Kms.Cloud.Api.MagicTriggers;
 using System.Globalization;
 using System.Diagnostics.CodeAnalysis;
-using WebGrease.Css.Extensions;
 
 namespace Kms.Cloud.Api.Controllers {
     /// <summary>

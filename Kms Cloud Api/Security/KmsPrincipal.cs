@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Principal;
 using System.Threading;
 using System.Web;
-using Kms.Cloud.Api;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Kms.Cloud.Api.Security {

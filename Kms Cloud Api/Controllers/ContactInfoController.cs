@@ -1,16 +1,11 @@
-﻿using Kms.Cloud.Api.Security;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Net;
 using System.Net.Http;
-using System.Web;
 using System.Web.Http;
 
 using Kms.Cloud.Api.Models.RequestModels;
 using Kms.Cloud.Api.Models.ResponseModels;
 using Kms.Cloud.Database;
-using System.Globalization;
 using Kms.Cloud.Api.Exceptions;
 using Kilometros_WebGlobalization.API;
 using System.Diagnostics.CodeAnalysis;

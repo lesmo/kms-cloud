@@ -1,13 +1,6 @@
-﻿using System.Web;
-using Kms.Cloud.Api.MagicTriggers;
+﻿using Kms.Cloud.Api.MagicTriggers;
 using Kms.Cloud.Api.Properties;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
-using Kms.Cloud.Database.Abstraction;
 
 namespace Kms.Cloud.Api.Controllers {
     [AllowAnonymous]

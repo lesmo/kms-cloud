@@ -1,9 +1,7 @@
-﻿using Kms.Cloud.Api.Areas.HelpPage.CustomSamples;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Web;
 using System.Web.Http;
 
 namespace Kms.Cloud.Api.Areas.HelpPage {

@@ -1,9 +1,6 @@
 ﻿using Kms.Cloud.Api.Models.ResponseModels;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Headers;
-using System.Web;
 using System.Web.Http;
 
 namespace Kms.Cloud.Api.Areas.HelpPage.CustomSamples {

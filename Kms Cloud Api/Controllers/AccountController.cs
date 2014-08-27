@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Web.Http;
 using Kms.Cloud.Api.Models.RequestModels;
 using Kms.Cloud.Api.Models.ResponseModels;
-using Kms.Cloud.Api.Security;
 using Kms.Cloud.Database;
 using System.Net;
 using System.Globalization;
-using Kilometros_WebGlobalization.API;
 using System.Diagnostics.CodeAnalysis;
-using System.Web;
 
 namespace Kms.Cloud.Api.Controllers {
     /// <summary>

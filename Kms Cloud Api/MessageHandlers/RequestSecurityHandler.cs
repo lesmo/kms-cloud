@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
@@ -7,16 +6,8 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Threading;
-
-using Kms.Cloud.Api;
-using Kms.Cloud.Database;
-using System.Text;
-using System.Security.Cryptography;
 using Kms.Cloud.Api.Security;
-using System.Security.Principal;
 using Kilometros_WebGlobalization.API;
-using System.IO;
-using System.Collections.Specialized;
 using Kms.Cloud.Database.Abstraction;
 
 namespace Kms.Cloud.Api.MessageHandlers {

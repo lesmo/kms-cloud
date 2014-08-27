@@ -1,14 +1,9 @@
 ﻿using Kms.Cloud.Api.Models;
-using Kms.Cloud.Api.Models.ResponseModels;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
 
 namespace Kms.Cloud.Api.MessageHandlers {
     public class ResponseLastModifiedHandler : DelegatingHandler {

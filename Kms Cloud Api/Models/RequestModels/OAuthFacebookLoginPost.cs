@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace Kms.Cloud.Api.Models.RequestModels {
+﻿namespace Kms.Cloud.Api.Models.RequestModels {
     public class OAuthFacebookLoginPost : IOAuthTokenPost {
         /// <summary>
         ///     ID del Usuario de Facebook, y es un número. Sin embargo, el número es enorme y

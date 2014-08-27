@@ -2,11 +2,6 @@
 using Kms.Cloud.Database;
 using Kms.Cloud.Database.Abstraction;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web;
 using System.Web.Http;
 

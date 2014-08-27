@@ -1,9 +1,4 @@
-﻿using Kms.Cloud.Database;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Principal;
-using System.Web;
+﻿using System.Security.Principal;
 
 namespace Kms.Cloud.Api.Security {
     public class KmsIdentity : IIdentity {

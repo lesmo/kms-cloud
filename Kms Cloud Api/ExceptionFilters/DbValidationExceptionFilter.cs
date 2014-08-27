@@ -1,14 +1,10 @@
-﻿using Kilometros_WebGlobalization.API;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity.Validation;
+﻿using System.Data.Entity.Validation;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Web;
 using System.Web.Http.Filters;
+using System.Linq;
 
 namespace Kms.Cloud.Api.ExceptionFilters {
     [SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]

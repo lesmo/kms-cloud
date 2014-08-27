@@ -1,9 +1,7 @@
 ﻿using Kms.Cloud.Database;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Web;
 
 namespace Kms.Cloud.Api.MagicTriggers {
     [SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly")]

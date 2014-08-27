@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace Kms.Cloud.Api.Models.RequestModels {
+﻿namespace Kms.Cloud.Api.Models.RequestModels {
     public class OAuth3rdLoginPost : IOAuthTokenSecretPost {
         /// <summary>
         ///     Token de Sesión generado por el servicio OAuth de Terceros.
