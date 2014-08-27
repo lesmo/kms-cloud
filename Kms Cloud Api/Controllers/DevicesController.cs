@@ -15,8 +15,7 @@ namespace Kms.Cloud.Api.Controllers {
     ///     Obtener y asociar Dispositivos KMS a la Cuenta del Usuario.
     /// </summary>
     public class DevicesController : BaseController {
-        private const String serialStringCharMap = "0123456789ACEFHJKLMNPRTVWXZ";
-        private BaseNumericEncoder SerialEncoder = new BaseNumericEncoder(serialStringCharMap);
+        private readonly KmsSerialEncoder SerialEncoder = new KmsSerialEncoder();
 
         /// <summary>
         ///     Obtener los dispositivos asociados con la Cuenta del Usuario.

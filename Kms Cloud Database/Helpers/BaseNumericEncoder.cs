@@ -5,49 +5,80 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Kms.Cloud.Database.Helpers {
-    public class Base36Encoder : BaseNumericEncoder {
-        private const string Base36 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        public Base36Encoder() : base(Base36) {
-        }
-    }
+	public class Base36Encoder : BaseNumericEncoder {
+		private const string Base36 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		public Base36Encoder() : base(Base36) {}
+	}
 
-    public class BaseNumericEncoder {
-        private readonly char[] mCharMapArray;// = Clist.ToCharArray();
-        private readonly string mCharMap;
+	public class KmsSerialEncoder : BaseNumericEncoder {
+		private const string Base27 = "0123456789ACEFHJKLMNPRTVWXZ";
 
-        public BaseNumericEncoder(String charMap) {
-            mCharMap      = charMap;
-            mCharMapArray = charMap.ToCharArray();
-        }
+		public KmsSerialEncoder() : base(Base27) {}
 
-        public long Decode(string inputString) {
-            var inputArray = inputString.ToCharArray().Reverse();
-            var pos = -1;
+		public override Int64 Decode(string inputString) {
+			long result = 0;
+			var pos = 0;
+			var inputArray = inputString.ToUpper().ToCharArray().Reverse().ToArray();
 
-            return inputArray.Aggregate(
-                0,
-                (current, c) =>
-                    (int)(current + mCharMap.IndexOf(c) * (long)Math.Pow(inputString.Length, ++pos))
-            );
-        }
+			foreach ( char c in inputArray ) {
+				result += mCharMap.IndexOf((char)c) * (long)Math.Pow(inputArray.Length, pos);
+				pos++;
+			}
 
-        public string Encode(long inputNumber) {
-            var sb = new StringBuilder();
+			return result;
+		}
 
-            inputNumber = Math.Abs(inputNumber);
-            do {
-                sb.Append(mCharMapArray[inputNumber % (long)mCharMapArray.Length]);
-                inputNumber /= (long)mCharMapArray.Length;
-            } while ( inputNumber != 0 );
+		public override String Encode(Int64 inputNumber) {
+			var sb = new StringBuilder();
+			
+			do {
+				var remainder = inputNumber % mCharMapArray.Length;
+				sb.Append(mCharMapArray[remainder]);
+				inputNumber = (inputNumber - remainder) / mCharMapArray.Length;
+			} while ( inputNumber > 0 );
 
-            return Reverse(sb.ToString());
-        }
+			return new String(sb.ToString().ToCharArray().Reverse().ToArray());
+		}
+	}
 
-        private static string Reverse(string s) {
-            var charArray = s.ToCharArray();
-            Array.Reverse(charArray);
-            return new string(charArray);
-        }
+	public class BaseNumericEncoder {
+		protected readonly char[] mCharMapArray;// = Clist.ToCharArray();
+		protected readonly string mCharMap;
 
-    }
+		public BaseNumericEncoder(String charMap) {
+			mCharMap      = charMap;
+			mCharMapArray = charMap.ToCharArray();
+		}
+
+		public virtual Int64 Decode(string inputString) {
+			long result = 0;
+			var pow = 0;
+
+			for ( var i = inputString.Length - 1; i >= 0; i-- ) {
+				var c   = inputString[i];
+				var pos = mCharMap.IndexOf(c);
+
+				if ( pos > -1 )
+					result += pos * (long)Math.Pow(mCharMapArray.Length, pow);
+				else
+					return -1;
+
+				pow++;
+			}
+			
+			return result;
+		}
+
+		public virtual String Encode(long inputNumber) {
+			var sb = new StringBuilder();
+			inputNumber = Math.Abs(inputNumber);
+
+			do {
+				sb.Append(mCharMapArray[inputNumber % (long)mCharMapArray.Length]);
+				inputNumber /= (long)mCharMapArray.Length;
+			} while ( inputNumber != 0 );
+
+			return new String(sb.ToString().ToCharArray().Reverse().ToArray());
+		}
+	}
 }
