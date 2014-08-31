@@ -40,7 +40,11 @@ namespace Kms.Cloud.Api {
                 if ( string.IsNullOrEmpty(WebApiApplication._assemblyName) )
                     WebApiApplication.LoadAssemblyMeta();
 
-                return WebApiApplication._assemblyName;
+                #if DEBUG
+                    return WebApiApplication._assemblyName + " (Desarrollo)";
+                #else
+                    return WebApiApplication._assemblyName;
+                #endif
             }
         }
 
