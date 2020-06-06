@@ -1,0 +1,3 @@
+[submodule "KMS Interop"]
+	path = KMS Interop
+	url = git@github.com:lesmo/kms-interop.git
